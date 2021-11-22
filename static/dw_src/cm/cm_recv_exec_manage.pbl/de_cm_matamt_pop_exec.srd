@@ -1,0 +1,99 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=20 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(40) updatewhereclause=yes name=const_code dbname="cm_exec_const.const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="cm_exec_const.const_name" )
+ column=(type=number updatewhereclause=yes name=mat_cost dbname="mat_cost" )
+ column=(type=number updatewhereclause=yes name=smat_cost dbname="smat_cost" )
+ column=(type=number updatewhereclause=yes name=fact_cost dbname="fact_cost" )
+ column=(type=number updatewhereclause=yes name=out_cost dbname="out_cost" )
+ column=(type=char(1) updatewhereclause=yes name=check_tag dbname="check_tag" values="	Y/	N" )
+ retrieve="SELECT A.CONST_CODE,
+       A.CONST_NAME,
+       NVL(B.MAT_AMT,0)    MAT_COST,
+       NVL(C.MAT_AMT,0)    SMAT_COST,
+       NVL(D.MAT_AMT,0)    FACT_COST,
+       NVL(F.OUT_AMT,0)    OUT_COST,
+       'N' AS CHECK_TAG  
+  FROM CM_EXEC_CONST A,
+       (SELECT A.CONST_CODE||'%' CONST_CODE,
+               SUM(A.MAT_AMT) MAT_AMT
+          FROM EM_EST_SUM A,
+               SM_CODE_MATERIAL B
+         WHERE A.USER_ID   = :as_user_id
+           AND A.BREAK_DIV = :as_break_div
+           AND A.EST_CODE  = :as_est_code
+           AND A.ITEM_CODE = B.ITEM_CODE(+)
+           AND NVL(B.ACNT_CODE,'00000000') NOT IN ('81101030','82450000','82467000','82461000','82101020','11202000')
+         GROUP BY A.CONST_CODE) B,
+      (SELECT '0190' CONST_CODE,
+               SUM(A.MAT_AMT) MAT_AMT
+          FROM EM_EST_SUM A,
+               SM_CODE_MATERIAL B
+         WHERE A.USER_ID   = :as_user_id
+           AND A.BREAK_DIV = :as_break_div
+           AND A.EST_CODE  = :as_est_code
+           AND A.ITEM_CODE = B.ITEM_CODE
+           AND B.ACNT_CODE = '81101030') C,
+       (SELECT A.CONST_CODE||'%' CONST_CODE,
+               SUM(A.MAT_AMT) MAT_AMT
+          FROM EM_EST_SUM A,
+               SM_CODE_MATERIAL B
+         WHERE A.USER_ID   = :as_user_id
+           AND A.BREAK_DIV = :as_break_div
+           AND A.EST_CODE  = :as_est_code
+           AND A.ITEM_CODE = B.ITEM_CODE
+           AND B.ACNT_CODE IN ('82450000','82467000','82461000','82101020','11202000')
+         GROUP BY A.CONST_CODE) D,
+       (SELECT A.CONST_CODE||'%' CONST_CODE,
+               SUM(A.OUT_AMT) OUT_AMT
+          FROM EM_EST_SUM A
+         WHERE A.USER_ID   = :as_user_id
+           AND A.BREAK_DIV = :as_break_div
+           AND A.EST_CODE  = :as_est_code           
+           AND A.OUT_AMT > 0           
+         GROUP BY A.CONST_CODE) F  
+ WHERE A.PROJ_CODE = :as_projcode   
+   AND A.LEVEL_NUM = '2'     
+   AND A.CONST_CODE LIKE B.CONST_CODE(+)
+   AND A.CONST_CODE = C.CONST_CODE(+)
+   AND A.CONST_CODE LIKE D.CONST_CODE(+)
+   AND A.CONST_CODE LIKE F.CONST_CODE(+)
+ORDER BY A.CONST_CODE" filter=" mat_cost <> 0 OR  smat_cost <>  0 or out_cost <> 0"arguments=(("as_user_id", string),("as_est_code", string),("as_break_div", string),("as_projcode", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="30" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주자재비" border="0" color="33554432" x="231" y="2" height="14" width="83" html.valueishtml="0"  name=mat_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="94" y="2" height="14" width="135" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="34" y="2" height="14" width="58" html.valueishtml="0"  name=const_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="573" y="2" height="14" width="32" html.valueishtml="0"  name=check_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소모품비" border="0" color="33554432" x="316" y="2" height="14" width="85" html.valueishtml="0"  name=smat_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공장자재비" border="0" color="33554432" x="403" y="2" height="14" width="81" html.valueishtml="0"  name=fact_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="외주비" border="0" color="33554432" x="486" y="2" height="14" width="85" html.valueishtml="0"  name=out_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="231" y="2" height="14" width="83" format="#,##0" html.valueishtml="0"  name=mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="94" y="2" height="14" width="135" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="34" y="2" height="14" width="58" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="316" y="2" height="14" width="85" format="#,##0" html.valueishtml="0"  name=smat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=30 border="0" color="33554432" x="573" y="2" height="14" width="32" format="[general]" html.valueishtml="0"  name=check_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="mat_cost + smat_cost"border="0" color="33554432" x="607" y="2" height="14" width="55" format="[GENERAL]" html.valueishtml="0"  name=tot_cost visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=10 border="0" color="33554432" x="403" y="2" height="14" width="81" format="#,##0" html.valueishtml="0"  name=fact_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=20 border="0" color="33554432" x="486" y="2" height="14" width="85" format="#,##0" html.valueishtml="0"  name=out_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=summary alignment="1" expression="sum(smat_cost)"border="0" color="33554432" x="316" y="3" height="14" width="85" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=summary alignment="1" expression="sum(mat_cost)"border="0" color="33554432" x="231" y="3" height="14" width="83" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=summary alignment="1" expression="sum(mat_cost) + sum(smat_cost) + sum(fact_cost)"border="0" color="33554432" x="94" y="3" height="14" width="135" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=summary alignment="1" text="합 계 : " border="0" color="33554432" x="34" y="3" height="14" width="58" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="1" expression="sum(fact_cost)"border="0" color="33554432" x="403" y="3" height="14" width="81" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=summary alignment="1" expression="sum(out_cost)"border="0" color="33554432" x="486" y="3" height="14" width="85" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

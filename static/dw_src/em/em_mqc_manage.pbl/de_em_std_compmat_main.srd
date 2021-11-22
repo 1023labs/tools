@@ -1,0 +1,60 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=item_code dbname="em_std_compmat_main.item_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=code_tag dbname="em_std_compmat_main.code_tag" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sort_seq dbname="em_std_compmat_main.sort_seq" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=large_code dbname="em_std_compmat_main.large_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=middle_code dbname="em_std_compmat_main.middle_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=small_code dbname="em_std_compmat_main.small_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=item_name dbname="em_std_compmat_main.item_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=item_std dbname="em_std_compmat_main.item_std" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=item_unit dbname="em_std_compmat_main.item_unit" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=mat_extra dbname="em_std_compmat_main.mat_extra" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=point dbname="em_std_compmat_main.point" values="반올림	R/절사	C/올림	U/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cipher dbname="em_std_compmat_main.cipher" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=remarks dbname="em_std_compmat_main.remarks" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=item_su_div dbname="em_std_compmat_main.item_su_div" )
+ retrieve="  SELECT ITEM_CODE,
+         CODE_TAG,
+         SORT_SEQ,
+         LARGE_CODE,
+         MIDDLE_CODE,
+         SMALL_CODE,
+         ITEM_NAME,
+         ITEM_STD,
+         ITEM_UNIT,
+         MAT_EXTRA,
+         POINT,
+         CIPHER,
+         REMARKS,
+         ITEM_SU_DIV
+    FROM EM_STD_COMPMAT_MAIN
+   WHERE LARGE_CODE LIKE :as_large
+     AND MIDDLE_CODE LIKE :as_middle
+     AND SMALL_CODE LIKE :as_small
+     AND ITEM_NAME LIKE '%'||:as_name||'%'
+ORDER BY LARGE_CODE, MIDDLE_CODE, SMALL_CODE, SORT_SEQ, ITEM_CODE" update="EM_STD_COMPMAT_MAIN" updatewhere=1 updatekeyinplace=no arguments=(("as_large", string),("as_middle", string),("as_small", string),("as_name", string)) )
+text(band=header alignment="2" text="명칭" border="0" color="8388608" x="2" y="4" height="14" width="274" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="8388608" x="278" y="4" height="14" width="178" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="8388608" x="458" y="4" height="14" width="55" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="소숫점" border="0" color="8388608" x="515" y="4" height="14" width="46" html.valueishtml="0"  name=point_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자릿수" border="0" color="8388608" x="563" y="4" height="14" width="47" html.valueishtml="0"  name=cipher_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주철관분류" border="0" color="8388608" x="612" y="4" height="14" width="151" html.valueishtml="0"  name=item_su_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="8388608" x="765" y="4" height="14" width="199" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=10 border="0" color="33554432" x="2" y="2" height="14" width="274" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=2  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=30 border="0" color="33554432" x="458" y="2" height="14" width="55" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=2  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=40 border="0" color="33554432" x="515" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=point visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=50 border="0" color="33554432" x="563" y="2" height="14" width="47" format="[general]" html.valueishtml="0"  name=cipher visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=20 border="0" color="33554432" x="278" y="1" height="14" width="178" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=2  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=60 border="0" color="33554432" x="612" y="2" height="14" width="151" format="[general]" html.valueishtml="0"  name=item_su_div visible="1" dddw.name=dw_sm_comcode_d dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="0" tabsequence=70 border="0" color="33554432" x="765" y="2" height="14" width="199" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

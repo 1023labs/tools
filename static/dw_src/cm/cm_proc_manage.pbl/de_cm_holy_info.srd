@@ -1,0 +1,39 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=19 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_holy_info.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_holy_info.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=holy_year dbname="cm_holy_info.holy_year" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=holy_date dbname="cm_holy_info.holy_date" )
+ column=(type=char(8) updatewhereclause=yes name=holy_day dbname="holy_day" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=holy_name dbname="cm_holy_info.holy_name" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=remark dbname="cm_holy_info.remark" )
+ retrieve="  SELECT COMPANY_CODE,
+         PROJ_CODE,
+         HOLY_YEAR,
+         HOLY_DATE,
+         SUBSTR(HOLY_DATE, 5, 4 ) HOLY_DAY, 
+         HOLY_NAME,
+         REMARK
+    FROM CM_HOLY_INFO
+   WHERE COMPANY_CODE = :as_compcode
+     AND PROJ_CODE = :as_projcode
+     AND HOLY_YEAR = :as_year
+ORDER BY HOLY_DATE" update="CM_HOLY_INFO" updatewhere=0 updatekeyinplace=yes arguments=(("as_compcode", string),("as_projcode", string),("as_year", string)) )
+rectangle(band=detail x="0" y="0" height="19" width="30"  name=c_row_bg visible="1" brush.hatch="6" brush.color="15780518" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="15780518" )
+compute(band=detail alignment="0" expression="getrow()"border="0" color="33554432" x="2" y="3" height="14" width="23" format="[GENERAL]" html.valueishtml="0"  name=c_row  tag="kor=순번" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="27" y="3" height="14" width="64" format="[general]" html.valueishtml="0"  name=holy_day visible="1" editmask.autoskip=yes editmask.mask="##.##" editmask.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=20 border="0" color="33554432" x="93" y="3" height="14" width="180" format="[general]" html.valueishtml="0"  name=holy_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=30 border="0" color="33554432" x="275" y="3" height="14" width="126" format="[general]" html.valueishtml="0"  name=remark visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용휴일" border="0" color="33554432" x="27" y="3" height="14" width="64" html.valueishtml="0"  name=holy_day_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용휴일명" border="0" color="33554432" x="93" y="3" height="14" width="180" html.valueishtml="0"  name=holy_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="275" y="3" height="14" width="126" html.valueishtml="0"  name=remark_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0  template=(comment="" encoding="euc-kr" name="a" xml="<?xml version=~"1.0~" encoding=~"euc-kr~" standalone=~"no~"?><untitled><untitled_row __pbband=~"detail~"><company_code/><holy_date/><holy_name>holy_name</holy_name><remark>remark</remark></untitled_row></untitled>"))
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

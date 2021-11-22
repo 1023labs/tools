@@ -1,0 +1,77 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="sm_code_project.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="sm_code_project.proj_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=ent_dept dbname="sm_code_project.ent_dept" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=open_date dbname="sm_code_project.open_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=close_date dbname="sm_code_project.close_date" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=pm_empno dbname="sm_code_project.pm_empno" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=head_empno dbname="sm_code_project.head_empno" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=continue_yn dbname="sm_code_project.continue_yn" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=dept_code dbname="sm_code_project.dept_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=zip_code dbname="sm_code_project.zip_code" )
+ column=(type=char(200) updatewhereclause=yes name=addr1 dbname="sm_code_project.addr1" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phone_no1 dbname="sm_code_project.phone_no1" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phone_no2 dbname="sm_code_project.phone_no2" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=fax_no dbname="sm_code_project.fax_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=card_no dbname="sm_code_project.card_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=card_qty dbname="sm_code_project.card_qty" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=reg_empno dbname="sm_code_project.reg_empno" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=bank_code dbname="sm_code_project.bank_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=bank_account dbname="sm_code_project.bank_account" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=gongje_div dbname="sm_code_project.gongje_div" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=ticket_div dbname="sm_code_project.ticket_div" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=reg_yn1 dbname="sm_code_project.reg_yn1" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=reg_yn2 dbname="sm_code_project.reg_yn2" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=reg_yn3 dbname="sm_code_project.reg_yn3" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=reg_yn4 dbname="sm_code_project.reg_yn4" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=specials dbname="sm_code_project.specials" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         A.PROJ_NAME, 
+         A.ENT_DEPT, 
+         A.OPEN_DATE, 
+         A.CLOSE_DATE, 
+         A.PM_EMPNO, 
+         A.HEAD_EMPNO, 
+         A.CONTINUE_YN,  
+         A.DEPT_CODE, 
+         A.ZIP_CODE, 
+         A.ADDR1, 
+         A.PHONE_NO1, 
+         A.PHONE_NO2, 
+         A.FAX_NO,    
+         A.CARD_NO, 
+         A.CARD_QTY, 
+         A.REG_EMPNO, 
+         A.BANK_CODE, 
+         A.BANK_ACCOUNT, 
+         A.GONGJE_DIV, 
+         A.TICKET_DIV, 
+         A.REG_YN1, 
+         A.REG_YN2, 
+         A.REG_YN3, 
+         A.REG_YN4, 
+         A.SPECIALS 
+    FROM SM_CODE_PROJECT A 
+   WHERE A.COMPANY_CODE   = :as_comp 
+     AND A.PROJECT_TAG LIKE :as_type
+ORDER BY A.COMPANY_CODE ASC, 
+         A.PROJ_CODE ASC" update="SM_CODE_PROJECT" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_type", string)) )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="34" y="2" height="14" width="77" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="113" y="2" height="14" width="249" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="30" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="34" y="2" height="14" width="77" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=20 border="0" color="33554432" x="113" y="2" height="14" width="249" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

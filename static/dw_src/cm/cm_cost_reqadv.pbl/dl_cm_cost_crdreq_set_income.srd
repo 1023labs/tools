@@ -1,0 +1,89 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=1 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes name=slip_date dbname="slip_date" )
+ column=(type=char(3) updatewhereclause=yes name=slip_comp dbname="ac_slip_main.slip_comp" )
+ column=(type=char(12) updatewhereclause=yes name=slip_dept dbname="ac_slip_main.slip_dept" )
+ column=(type=decimal(0) updatewhereclause=yes name=slip_seq dbname="ac_slip_main.slip_seq" )
+ column=(type=decimal(0) updatewhereclause=yes name=slip_item dbname="ac_slip_main.slip_item" )
+ column=(type=char(8) updatewhereclause=yes name=acnt_code dbname="ac_slip_main.acnt_code" )
+ column=(type=char(30) updatewhereclause=yes name=ac_code_acnt_acnt_name dbname="ac_code_acnt.acnt_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=db_amt dbname="ac_slip_main.db_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=db_cash dbname="ac_slip_main.db_cash" )
+ column=(type=decimal(0) updatewhereclause=yes name=cr_amt dbname="ac_slip_main.cr_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=cr_cash dbname="ac_slip_main.cr_cash" )
+ column=(type=char(40) updatewhereclause=yes name=remark1 dbname="ac_slip_main.remark1" )
+ column=(type=char(40) updatewhereclause=yes name=remark2 dbname="ac_slip_main.remark2" )
+ column=(type=datetime updatewhereclause=yes name=state_date dbname="ac_slip_main.state_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=state_no dbname="ac_slip_main.state_no" )
+ column=(type=char(2) updatewhereclause=yes name=vat_code dbname="ac_slip_main.vat_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=vat_amt dbname="ac_slip_main.vat_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=vat_item dbname="ac_slip_main.vat_item" )
+ column=(type=char(3) updatewhereclause=yes name=company_code dbname="ac_slip_main.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=dept_code dbname="ac_slip_main.dept_code" )
+ column=(type=decimal(0) updatewhereclause=yes name=item_seq dbname="ac_slip_main.item_seq" )
+ column=(type=char(1) updatewhereclause=yes name=div dbname="div" values="정기전도금	1/추가전도금	3/개설전도금	2/" )
+ retrieve="  SELECT TO_CHAR(A.SLIP_DATE, 'YYYYMMDD') SLIP_DATE,
+         A.SLIP_COMP,
+         A.SLIP_DEPT,
+         A.SLIP_SEQ,
+         A.SLIP_ITEM,
+         A.ACNT_CODE,
+         B.ACNT_NAME,
+         A.DB_AMT,
+         A.DB_CASH,
+         A.CR_AMT,
+         A.CR_CASH,
+         A.REMARK1,
+         A.REMARK2,
+         A.STATE_DATE,
+         A.STATE_NO,
+         A.VAT_CODE,
+         A.VAT_AMT,
+         A.VAT_ITEM,
+         A.COMPANY_CODE,
+         A.DEPT_CODE,
+         A.ITEM_SEQ,
+         CASE SUBSTR(A.REMARK1,5,2) WHEN '전' THEN '1'
+                                    WHEN '추' THEN '2'
+                                    WHEN '개' THEN '3' ELSE '1' END AS DIV
+    FROM AC_SLIP_MAIN A LEFT JOIN AC_CODE_ACNT B
+                               ON A.ACNT_CODE = B.ACNT_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.ACNT_CODE    = (  SELECT ACNT_CODE FROM SM_SLIP_KIND 
+                              WHERE  COMPANY_CODE = :as_comp_code
+                                AND SYS_ID = 'CM'
+                                AND KIND   = '전도금정산'
+                                AND ROWNUM = 1)
+     AND A.DB_AMT      <> 0
+     AND A.DEPT_CODE    = :as_proj_code
+     AND TO_CHAR(A.SLIP_DATE, 'YYYYMM') = :as_yyyymm
+     AND A.REMARK1 NOT LIKE '%외환%'
+     AND ( TRIM(TO_CHAR(A.SLIP_DATE, 'YYYYMMDD'))
+             ||'-'||TRIM(A.SLIP_COMP)
+             ||'-'||TRIM(A.SLIP_DEPT)
+             ||'-'||TRIM(TO_CHAR(A.SLIP_SEQ, '000'))
+             ||'-'||TRIM(TO_CHAR(A.ITEM_SEQ, '000')) )
+         NOT IN (:as_slip_no)
+" arguments=(("as_comp_code", string),("as_proj_code", string),("as_yyyymm", string),("as_slip_no", stringlist)) )
+text(band=header alignment="2" text="계정" border="0" color="33554432" x="622" y="1" height="14" width="93" html.valueishtml="0"  name=ac_code_acnt_acnt_name_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입금액" border="0" color="33554432" x="328" y="1" height="14" width="103" html.valueishtml="0"  name=db_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요" border="0" color="33554432" x="173" y="1" height="14" width="153" html.valueishtml="0"  name=remark1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전표번호" border="0" color="33554432" x="433" y="1" height="14" width="187" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="일자" border="0" color="33554432" x="2" y="1" height="14" width="84" html.valueishtml="0"  name=slip_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="88" y="1" height="14" width="83" html.valueishtml="0"  name=div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="14" width="84" format="@@@@-@@-@@" html.valueishtml="0"  name=slip_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="328" y="1" height="14" width="103" format="#,###" html.valueishtml="0"  name=db_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=20 border="0" color="33554432" x="173" y="1" height="14" width="153" format="[general]" html.valueishtml="0"  name=remark1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="slip_date  +  '-'  +  slip_comp  + '-'  +  slip_dept  + '-'  + string( slip_seq , '000' )  + '-'  + string( item_seq , '000' ) "border="0" color="33554432" x="433" y="1" height="14" width="187" format="[GENERAL]" html.valueishtml="0"  name=slip_no visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="622" y="1" height="14" width="93" format="[general]" html.valueishtml="0"  name=ac_code_acnt_acnt_name visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="0" tabsequence=10 border="0" color="33554432" x="88" y="1" height="14" width="83" format="[general]" html.valueishtml="0"  name=div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

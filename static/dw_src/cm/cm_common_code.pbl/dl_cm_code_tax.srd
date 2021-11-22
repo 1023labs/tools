@@ -1,0 +1,84 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="sm_code_tax.company_code" )
+ column=(type=datetime update=yes updatewhereclause=yes key=yes name=apply_date dbname="sm_code_tax.apply_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=deduct_amt dbname="sm_code_tax.deduct_amt" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=income_rate dbname="sm_code_tax.income_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=resident_rate dbname="sm_code_tax.resident_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=deduct_rate dbname="sm_code_tax.deduct_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=unemploy_rate dbname="sm_code_tax.unemploy_rate" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cut_code dbname="sm_code_tax.cut_code" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=medical_rate dbname="sm_code_tax.medical_rate" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=kukmin_rate dbname="sm_code_tax.kukmin_rate" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=medical_old_rate dbname="sm_code_tax.medical_old_rate" )
+ column=(type=datetime updatewhereclause=yes name=row_input_date dbname="sm_code_tax.row_input_date" )
+ column=(type=char(12) updatewhereclause=yes name=row_input_emp_no dbname="sm_code_tax.row_input_emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=row_input_ip dbname="sm_code_tax.row_input_ip" )
+ column=(type=datetime updatewhereclause=yes name=row_update_date dbname="sm_code_tax.row_update_date" )
+ column=(type=char(12) updatewhereclause=yes name=row_update_emp_no dbname="sm_code_tax.row_update_emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=row_update_ip dbname="sm_code_tax.row_update_ip" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=foreign_amt dbname="sm_code_tax.foreign_amt" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=acident_rate dbname="sm_code_tax.acident_rate" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.APPLY_DATE,   
+         A.DEDUCT_AMT,   
+         A.INCOME_RATE,   
+         A.RESIDENT_RATE,   
+         A.DEDUCT_RATE,   
+         A.UNEMPLOY_RATE,   
+         A.CUT_CODE,   
+         A.MEDICAL_RATE,   
+         A.KUKMIN_RATE,   
+         A.MEDICAL_OLD_RATE,   
+         A.ROW_INPUT_DATE,   
+         A.ROW_INPUT_EMP_NO,   
+         A.ROW_INPUT_IP,   
+         A.ROW_UPDATE_DATE,   
+         A.ROW_UPDATE_EMP_NO,   
+         A.ROW_UPDATE_IP,
+         A.FOREIGN_AMT,
+         A.ACIDENT_RATE
+    FROM SM_CODE_TAX A
+   WHERE A.COMPANY_CODE = :as_comp_code   
+" update="SM_CODE_TAX" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string)) )
+text(band=header alignment="2" text="적용일" border="0" color="33554432" x="201" y="8" height="56" width="599" html.valueishtml="0"  name=apply_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공제금액" border="0" color="33554432" x="809" y="8" height="56" width="329" html.valueishtml="0"  name=deduct_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="소득세율" border="0" color="33554432" x="1147" y="8" height="56" width="329" html.valueishtml="0"  name=income_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주민세율" border="0" color="33554432" x="1486" y="8" height="56" width="329" html.valueishtml="0"  name=resident_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공제세율" border="0" color="33554432" x="1824" y="8" height="56" width="329" html.valueishtml="0"  name=deduct_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="고용보험율" border="0" color="33554432" x="2162" y="8" height="56" width="329" html.valueishtml="0"  name=unemploy_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="절삭구분" border="0" color="33554432" x="2501" y="8" height="56" width="329" html.valueishtml="0"  name=cut_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건강보험율" border="0" color="33554432" x="2839" y="8" height="56" width="329" html.valueishtml="0"  name=medical_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="183" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="국민연금율" border="0" color="33554432" x="3177" y="8" height="56" width="329" html.valueishtml="0"  name=kukmin_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노인장기율" border="0" color="33554432" x="3515" y="8" height="56" width="329" html.valueishtml="0"  name=medical_old_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="해외비과세" border="0" color="33554432" x="4256" y="8" height="56" width="407" html.valueishtml="0"  name=foreign_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="산재보험율" border="0" color="33554432" x="3854" y="8" height="56" width="393" html.valueishtml="0"  name=acident_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=10 border="0" color="33554432" x="201" y="8" height="68" width="599" format="[shortdate] [time]" html.valueishtml="0"  name=apply_date visible="1" editmask.mask="yyyy-mm-dd" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=20 border="0" color="33554432" x="809" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=deduct_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=30 border="0" color="33554432" x="1147" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=income_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=40 border="0" color="33554432" x="1486" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=resident_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=50 border="0" color="33554432" x="1824" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=deduct_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=60 border="0" color="33554432" x="2162" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=unemploy_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=70 border="0" color="33554432" x="2501" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=cut_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=80 border="0" color="33554432" x="2839" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=medical_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="4" height="76" width="183" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=90 border="0" color="33554432" x="3177" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=kukmin_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=100 border="0" color="33554432" x="3515" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=medical_old_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=120 border="0" color="33554432" x="4256" y="8" height="68" width="407" format="#,###" html.valueishtml="0"  name=foreign_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="1" tabsequence=110 border="0" color="33554432" x="3854" y="8" height="68" width="393" format="#,###.###" html.valueishtml="0"  name=acident_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

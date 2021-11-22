@@ -1,0 +1,273 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=36 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(12) updatewhereclause=yes name=pay_yymm dbname="pay_yymm" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="emp_name" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="pay_tot" )
+ column=(type=number updatewhereclause=yes name=advance_amt dbname="advance_amt" )
+ column=(type=number updatewhereclause=yes name=incentive_amt dbname="incentive_amt" )
+ column=(type=number updatewhereclause=yes name=tot_food_amt dbname="tot_food_amt" )
+ column=(type=number updatewhereclause=yes name=oexe_amt dbname="oexe_amt" )
+ column=(type=number updatewhereclause=yes name=oexe_vat dbname="oexe_vat" )
+ column=(type=number updatewhereclause=yes name=tot_completed_amt dbname="tot_completed_amt" )
+ column=(type=number updatewhereclause=yes name=tot_precompleted_amt dbname="tot_precompleted_amt" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         A.PAY_YYMM,
+         A.PM_EMPNO,
+         A.PROJ_NAME,
+         A.EMP_NAME,
+         MAX(A.PAY_TOT) AS PAY_TOT,            
+         MAX(A.ADVANCE_AMT) AS ADVANCE_AMT,    
+         MAX(A.INCENTIVE_AMT) AS INCENTIVE_AMT,  
+         MAX(A.TOT_FOOD_AMT) AS TOT_FOOD_AMT,    
+         SUM(A.OEXE_AMT) AS OEXE_AMT,
+         SUM(A.OEXE_VAT) AS OEXE_VAT,
+         SUM(A.TOT_COMPLETED_AMT) AS TOT_COMPLETED_AMT,
+         MAX(A.TOT_PRECOMPLETED_AMT) AS TOT_PRECOMPLETED_AMT
+    FROM (
+         SELECT A.COMPANY_CODE, 
+                 A.PROJ_CODE, 
+                 A.PAY_YYMM,
+                 SUM(NVL(A.PAY_TOT,0)) AS PAY_TOT,     
+                 SUM(NVL(A.ADVANCE_AMT,0)) AS ADVANCE_AMT,  
+                 SUM(NVL(A.INCENTIVE_AMT,0)) AS INCENTIVE_AMT,  
+                 B.PM_EMPNO,
+                 B.PROJ_NAME,
+                 C.EMP_NAME,
+                 0 AS TOT_COMPLETED_AMT,
+                 0 AS TOT_FOOD_AMT,
+                 0 AS OEXE_AMT,        
+                 0 AS OEXE_VAT,
+                 0 AS TOT_PRECOMPLETED_AMT
+            FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B
+                                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                                               AND A.PROJ_CODE = B.PROJ_CODE   
+                                         LEFT JOIN HR_PERS_MASTER C
+                                                ON B.COMPANY_CODE = C.COMPANY_CODE
+                                               AND B.PM_EMPNO = C.EMP_NO
+           WHERE A.COMPANY_CODE = :as_comp
+             AND A.PAY_YYMM = :as_date
+--             AND B.MANAGE_TYPE = :as_manage
+             AND (B.MANAGE_TYPE IN(:as_manage,'4') OR A.PROJ_CODE = '910108000512')
+        GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, B.PM_EMPNO, B.PROJ_NAME, C.EMP_NAME
+        UNION ALL
+          SELECT A.COMPANY_CODE,
+                 A.PROJ_CODE,
+                 SUBSTR(A.COMPLETED_DATE,1,6) AS PAY_YYMM,
+                 0 AS PAY_TOT,
+                 0 AS ADVANCE_AMT,
+                 0 AS INCENTIVE_AMT,
+                 B.PM_EMPNO,
+                 B.PROJ_NAME,
+                 C.EMP_NAME,
+                 SUM(NVL(A.COMPLETED_AMT,0)) AS TOT_COMPLETED_AMT,
+                 0 AS TOT_FOOD_AMT,
+                 0 AS OEXE_AMT,        
+                 0 AS OEXE_VAT,
+                 0 AS TOT_PRECOMPLETED_AMT
+            FROM CM_CONSTRUCT_COMPLETED A INNER JOIN SM_CODE_PROJECT B
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                 AND A.PROJ_CODE = B.PROJ_CODE
+                                          INNER JOIN HR_PERS_MASTER C
+                                                  ON B.COMPANY_CODE = C.COMPANY_CODE
+                                                 AND B.PM_EMPNO = C.EMP_NO
+           WHERE A.COMPANY_CODE = :as_comp
+             AND A.COMPLETED_DATE LIKE :as_date||'%'
+--             AND B.MANAGE_TYPE = :as_manage
+             AND (B.MANAGE_TYPE IN(:as_manage,'4') OR A.PROJ_CODE = '910108000512')
+        GROUP BY A.COMPANY_CODE, A.PROJ_CODE, SUBSTR(A.COMPLETED_DATE,1,6), B.PM_EMPNO, B.PROJ_NAME, C.EMP_NAME
+             UNION ALL
+             SELECT A.COMPANY_CODE,
+                    A.PROJ_CODE,
+                    A.YYYYMM AS PAY_YYMM,
+                    0 AS PAY_TOT,
+                    0 AS ADVANCE_AMT,
+                    0 AS INCENTIVE_AMT,
+                    B.PM_EMPNO,
+                    B.PROJ_NAME,
+                    C.EMP_NAME,
+                    0 AS TOT_COMPLETED_AMT,
+                    SUM(NVL(A.SUPPLAY_AMT,0) ) AS TOT_FOOD_AMT,   
+                    0 AS OEXE_AMT,        
+                    0 AS OEXE_VAT,
+                    0 AS TOT_PRECOMPLETED_AMT
+               FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                AND A.PROJ_CODE = B.PROJ_CODE
+                                         INNER JOIN HR_PERS_MASTER C
+                                                 ON B.COMPANY_CODE = C.COMPANY_CODE
+                                                AND B.PM_EMPNO = C.EMP_NO
+              WHERE A.COMPANY_CODE = :as_comp
+                AND A.YYYYMM = :as_date     
+                AND A.CREATE_DIV = '2'
+--             AND B.MANAGE_TYPE = :as_manage
+             AND (B.MANAGE_TYPE IN(:as_manage,'4') OR A.PROJ_CODE = '910108000512')
+           GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.YYYYMM, B.PM_EMPNO, B.PROJ_NAME, C.EMP_NAME                    
+        UNION ALL
+            SELECT A.COMPANY_CODE,   
+                   A.PROJ_CODE,   
+                   SUBSTR(A.DEM_DATE,1,6) AS PAY_YYMM,
+                   0 AS PAY_TOT,
+                   0 AS ADVANCE_AMT,
+                   0 AS INCENTIVE_AMT, 
+                   B.PM_EMPNO,
+                   B.PROJ_NAME,
+                   C.EMP_NAME,
+                   0 AS TOT_COMPLETED_AMT,
+                   0 AS TOT_FOOD_AMT,
+                   SUM(NVL(A.HEAD_AMT,0) + NVL(A.CONSULT_AMT,0) + NVL(A.GEN_AMT,0)) AS OEXE_AMT,
+                   SUM(CASE WHEN NVL(A.VAT_AMT,0) <> 0 THEN NVL(A.VAT_AMT,0) ELSE
+                    (NVL(HEAD_AMT,0)  +  NVL(CONSULT_AMT,0) + NVL(GEN_AMT,0)) / 10 END) AS OEXE_VAT,
+                   0 AS TOT_PRECOMPLETED_AMT
+              FROM CM_OSCT_COMPLETED A INNER JOIN SM_CODE_PROJECT B
+                                               ON A.COMPANY_CODE = B.COMPANY_CODE
+                                              AND A.PROJ_CODE = B.PROJ_CODE
+                                       INNER JOIN HR_PERS_MASTER C
+                                               ON B.COMPANY_CODE = C.COMPANY_CODE
+                                              AND B.PM_EMPNO = C.EMP_NO
+             WHERE A.COMPANY_CODE = :as_comp
+               AND A.DEM_DATE LIKE :as_date||'%'  
+               AND A.OSCT_DIV     IN ('1','5')
+--             AND B.MANAGE_TYPE = :as_manage
+             AND (B.MANAGE_TYPE IN(:as_manage,'4') OR A.PROJ_CODE = '910108000512')
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, SUBSTR(A.DEM_DATE,1,6), B.PM_EMPNO, B.PROJ_NAME, C.EMP_NAME
+          UNION ALL
+          SELECT A.COMPANY_CODE,
+                 A.PROJ_CODE,
+                 A.PAY_YM,
+                 0 AS PAY_TOT,
+                 0 AS ADVANCE_AMT,
+                 0 AS INCENTIVE_AMT,
+                 B.PM_EMPNO,
+                 B.PROJ_NAME,
+                 C.EMP_NAME,
+                 0 AS TOT_COMPLETED_AMT,
+                 0 AS TOT_FOOD_AMT,
+                 SUM(A.PAY_AMT) AS OEXE_AMT,
+                 SUM(A.PAY_AMT / 10) AS OEXE_VAT,
+                 0 AS TOT_PRECOMPLETED_AMT
+            FROM CM_OCNT_PAY A LEFT JOIN SM_CODE_PROJECT B LEFT JOIN HR_PERS_MASTER C
+                                                                  ON B.COMPANY_CODE = C.COMPANY_CODE
+                                                                 AND B.PM_EMPNO     = C.EMP_NO
+                                      ON A.COMPANY_CODE = B.COMPANY_CODE
+                                     AND A.PROJ_CODE    = B.PROJ_CODE
+                               INNER JOIN CM_OCNT_CONSULT D
+                                       ON A.COMPANY_CODE = D.COMPANY_CODE
+                                      AND A.PROJ_CODE     = D.PROJ_CODE
+                                      AND A.CNST_CODE    = D.CNST_CODE
+                                      AND D.OSCT_DIV IN ('1','5')
+           WHERE A.STATUS_DIV >= '71'
+             AND A.PAY_YM = :as_date    
+             AND A.REJECT_NO = '0'
+        GROUP BY A.COMPANY_CODE,
+                 A.PROJ_CODE,
+                 A.PAY_YM,
+                 B.PM_EMPNO,
+                 B.PROJ_NAME,
+                 C.EMP_NAME                 
+          UNION ALL
+           SELECT A.COMPANY_CODE,
+                 A.PROJ_CODE,
+                 SUBSTR(TO_CHAR(ADD_MONTHS(TO_DATE(A.COMPLETED_DATE,'YYYYMM'),-1),'YYYYMM'),1,6) AS PAY_YYMM,
+                 0 AS PAY_TOT,
+                 0 AS ADVANCE_AMT,
+                 0 AS INCENTIVE_AMT,
+                 B.PM_EMPNO,
+                 B.PROJ_NAME,
+                 C.EMP_NAME,
+                 0 AS TOT_COMPLETED_AMT,
+                 0 AS TOT_FOOD_AMT,   
+                 0 AS OEXE_AMT,        
+                 0 AS OEXE_VAT,
+                 SUM(NVL(A.COMPLETED_AMT,0)) AS TOT_PRECOMPLETED_AMT
+            FROM CM_CONSTRUCT_COMPLETED A INNER JOIN SM_CODE_PROJECT B
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                 AND A.PROJ_CODE = B.PROJ_CODE
+                                          INNER JOIN HR_PERS_MASTER C
+                                                  ON B.COMPANY_CODE = C.COMPANY_CODE
+                                                 AND B.PM_EMPNO = C.EMP_NO
+           WHERE A.COMPANY_CODE = :as_comp
+--             AND A.INPUT_DATE BETWEEN ADD_MONTHS(:as_date||'01',1) AND ADD_MONTHS(:as_date||'15',1)
+               AND A.INPUT_DATE BETWEEN TO_CHAR(ADD_MONTHS(:as_date||'01',1),'YYYYMMDD') AND TO_CHAR(ADD_MONTHS(:as_date||'15',1),'YYYYMMDD') --20191209 조성찬
+--             AND B.MANAGE_TYPE = :as_manage
+             AND (B.MANAGE_TYPE IN(:as_manage,'4') OR A.PROJ_CODE = '910108000512')
+        GROUP BY A.COMPANY_CODE,
+                 A.PROJ_CODE,
+                 SUBSTR(TO_CHAR(ADD_MONTHS(TO_DATE(A.COMPLETED_DATE,'YYYYMM'),-1),'YYYYMM'),1,6),
+                 B.PM_EMPNO,
+                 B.PROJ_NAME,
+                 C.EMP_NAME) A
+GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.PM_EMPNO, A.PROJ_NAME, A.EMP_NAME             
+ORDER BY CASE A.COMPANY_CODE WHEN '100' THEN A.PM_EMPNO ELSE A.EMP_NAME END, A.PROJ_NAME" arguments=(("as_comp", string),("as_date", string),("as_manage", string)) )
+group(level=1 header.height=22 trailer.height=0 by=("emp_name" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="2" text="직    영" border="0" color="33554432" x="435" y="2" height="14" width="80" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업무위탁" border="0" color="33554432" x="741" y="2" height="14" width="81" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="10" height="14" width="29" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="33" y="10" height="14" width="245" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노임총계" border="0" color="33554432" x="280" y="20" height="14" width="78" html.valueishtml="0"  name=pay_tot_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="가불금" border="0" color="33554432" x="360" y="20" height="14" width="73" html.valueishtml="0"  name=advance_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성과급" border="0" color="33554432" x="435" y="20" height="14" width="80" html.valueishtml="0"  name=incentive_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="517" y="20" height="14" width="78" html.valueishtml="0"  name=t_1 pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="식대/숙식" border="0" color="33554432" x="597" y="20" height="14" width="66" html.valueishtml="0"  name=tot_food_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="665" y="20" height="14" width="74" html.valueishtml="0"  name=oexe_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세" border="0" color="33554432" x="741" y="20" height="14" width="81" html.valueishtml="0"  name=oexe_vat_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="824" y="20" height="14" width="82" html.valueishtml="0"  name=t_3 pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전체합계" border="0" color="33554432" x="908" y="10" height="14" width="97" html.valueishtml="0"  name=t_5 pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확정기성금액" border="0" color="33554432" x="1007" y="10" height="14" width="89" html.valueishtml="0"  name=tot_completed_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="예상기성액" border="0" color="33554432" x="1098" y="10" height="14" width="92" html.valueishtml="0"  name=tot_precompleted_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=header.1 alignment="0" expression="'PM  ' + emp_name"border="0" color="33554432" x="33" y="5" height="14" width="245" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( pay_tot for group 1)"border="0" color="33554432" x="280" y="2" height="18" width="78" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( advance_amt for group 1)"border="0" color="33554432" x="360" y="2" height="18" width="73" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( incentive_amt for group 1)"border="0" color="33554432" x="435" y="2" height="18" width="80" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( sum_tot for group 1)"border="0" color="33554432" x="517" y="2" height="18" width="78" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum ( tot_food_amt for group 1)"border="0" color="33554432" x="597" y="2" height="18" width="66" format="#,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( oexe_amt for group 1)"border="0" color="33554432" x="665" y="2" height="18" width="74" format="#,###" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( oexe_vat for group 1)"border="0" color="33554432" x="741" y="2" height="18" width="81" format="#,###" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( consult_sum for group 1)"border="0" color="33554432" x="824" y="2" height="18" width="82" format="#,###" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(compute_2 for group 1)"border="0" color="33554432" x="908" y="2" height="18" width="97" format="#,###" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( tot_completed_amt for group 1)"border="0" color="33554432" x="1007" y="2" height="18" width="89" format="#,###" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( tot_precompleted_amt for group 1)"border="0" color="33554432" x="1098" y="2" height="18" width="92" format="#,##0" html.valueishtml="0"  name=compute_25 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="sum_tot + consult_sum"border="0" color="33554432" x="908" y="2" height="14" width="97" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" pay_tot -  advance_amt +   incentive_amt "border="0" color="33554432" x="517" y="2" height="18" width="78" format="#,###" html.valueishtml="0"  name=sum_tot visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="280" y="2" height="18" width="78" format="#,###" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="360" y="2" height="18" width="73" format="#,###" html.valueishtml="0"  name=advance_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="435" y="2" height="18" width="80" format="#,###" html.valueishtml="0"  name=incentive_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="597" y="2" height="18" width="66" format="#,###" html.valueishtml="0"  name=tot_food_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="oexe_amt + oexe_vat"border="0" color="33554432" x="824" y="2" height="18" width="82" format="#,###" html.valueishtml="0"  name=consult_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="665" y="2" height="18" width="74" format="#,###" html.valueishtml="0"  name=oexe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="741" y="2" height="18" width="81" format="#,###" html.valueishtml="0"  name=oexe_vat visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="18" width="245" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="cumulativeSum( 1 for group 1 )"border="0" color="33554432" x="2" y="2" height="18" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="1007" y="6" height="14" width="89" format="#,###" html.valueishtml="0"  name=tot_completed_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="1098" y="6" height="14" width="92" format="#,##0" html.valueishtml="0"  name=tot_precompleted_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="0" expression="~"노임 총계 ( ~" + count(proj_name) +~"개 현장)~""border="0" color="33554432" x="33" y="2" height="18" width="245" format="[GENERAL]" html.valueishtml="0"  name=compute_14 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( pay_tot for all)"border="0" color="33554432" x="280" y="2" height="18" width="78" format="#,###" html.valueishtml="0"  name=compute_15 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( advance_amt for all)"border="0" color="33554432" x="360" y="2" height="18" width="73" format="#,###" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( incentive_amt for all)"border="0" color="33554432" x="435" y="2" height="18" width="80" format="#,###" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( sum_tot for all)"border="0" color="33554432" x="517" y="2" height="18" width="78" format="#,###" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(tot_food_amt for all)"border="0" color="33554432" x="597" y="2" height="18" width="66" format="#,###" html.valueishtml="0"  name=compute_19 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( oexe_amt for all)"border="0" color="33554432" x="665" y="2" height="18" width="74" format="#,###" html.valueishtml="0"  name=compute_20 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( oexe_vat for all)"border="0" color="33554432" x="741" y="2" height="18" width="81" format="#,###" html.valueishtml="0"  name=compute_21 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( consult_sum for all)"border="0" color="33554432" x="824" y="2" height="18" width="82" format="#,###" html.valueishtml="0"  name=compute_22 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( compute_2 for all)"border="0" color="33554432" x="908" y="2" height="18" width="97" format="#,###" html.valueishtml="0"  name=compute_23 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( tot_completed_amt for all)"border="0" color="33554432" x="1007" y="2" height="18" width="89" format="#,###" html.valueishtml="0"  name=compute_24 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( tot_precompleted_amt for all)"border="0" color="33554432" x="1098" y="2" height="18" width="92" format="#,##0" html.valueishtml="0"  name=compute_26 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

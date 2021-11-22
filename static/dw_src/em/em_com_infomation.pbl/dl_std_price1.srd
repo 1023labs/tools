@@ -1,0 +1,100 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=item_code dbname="sm_code_material.item_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=item_name dbname="sm_code_material.item_name" )
+ column=(type=char(30) updatewhereclause=yes name=item_std dbname="sm_code_material.item_std" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=item_unit dbname="sm_code_material.item_unit" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=acc_gb dbname="sm_code_material.acc_gb" )
+ column=(type=char(20) updatewhereclause=yes name=sptext dbname="sptext" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=mat_extra dbname="sm_code_material_plab.mat_extra" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=lab_extra dbname="sm_code_material_plab.lab_extra" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=pcode1 dbname="sm_code_material_plab.pcode1" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=pgong1 dbname="sm_code_material_plab.pgong1" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=pcode2 dbname="sm_code_material_plab.pcode2" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=pgong2 dbname="sm_code_material_plab.pgong2" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=pcode3 dbname="sm_code_material_plab.pcode3" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=pgong3 dbname="sm_code_material_plab.pgong3" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=pcode4 dbname="sm_code_material_plab.pcode4" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=pgong4 dbname="sm_code_material_plab.pgong4" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=pcode5 dbname="sm_code_material_plab.pcode5" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=pgong5 dbname="sm_code_material_plab.pgong5" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=pcode6 dbname="sm_code_material_plab.pcode6" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=pgong6 dbname="sm_code_material_plab.pgong6" )
+ retrieve="  SELECT A.ITEM_CODE,
+         A.ITEM_NAME,
+         A.ITEM_STD,
+         A.ITEM_UNIT,
+         A.ACC_GB,
+         nvl(rtrim(B.SPTEXT),'000') AS SPTEXT,
+         B.MAT_EXTRA,
+         B.LAB_EXTRA,
+         B.PCODE1,
+         B.PGONG1,
+         B.PCODE2,
+         B.PGONG2,
+         B.PCODE3,
+         B.PGONG3,
+         B.PCODE4,
+         B.PGONG4,
+         B.PCODE5,
+         B.PGONG5,
+         B.PCODE6,
+         B.PGONG6
+    FROM SM_CODE_MATERIAL A, 
+         SM_CODE_MATERIAL_PLAB B
+   WHERE A.ITEM_CODE = B.ITEM_CODE(+)
+     AND (:as_check = '0' OR B.PCODE1 IS NOT NULL)
+     AND A.LARGE_CODE = :as_large
+     AND A.MIDDLE_CODE = :as_middle
+     AND A.SMALL_CODE = :as_small
+     AND B.SPTEXT = :as_sptext
+   ORDER BY ITEM_CODE" arguments=(("as_sptext", string),("as_large", string),("as_middle", string),("as_small", string),("as_check", string)) )
+text(band=header alignment="2" text="단위" border="0" color="8388608" x="292" y="4" height="14" width="68" html.valueishtml="0"  name=item_unit_t  tag="item_unit" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재할증" border="0" color="8388608" x="362" y="4" height="14" width="57" html.valueishtml="0"  name=mat_extra_t  tag="mat_extra" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노임할증" border="0" color="8388608" x="421" y="4" height="14" width="57" html.valueishtml="0"  name=lab_extra_t  tag="lab_extra" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품셈1" border="0" color="8388608" x="480" y="4" height="14" width="46" html.valueishtml="0"  name=pcode1_t  tag="pcode1" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공량1" border="0" color="8388608" x="528" y="4" height="14" width="46" html.valueishtml="0"  name=pgong1_t  tag="pgong1" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공량2" border="0" color="8388608" x="624" y="4" height="14" width="46" html.valueishtml="0"  name=pgong2_t  tag="pgong2" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품셈3" border="0" color="8388608" x="672" y="4" height="14" width="46" html.valueishtml="0"  name=pcode3_t  tag="pcode3" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공량3" border="0" color="8388608" x="720" y="4" height="14" width="46" html.valueishtml="0"  name=pgong3_t  tag="pgong3" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품셈4" border="0" color="8388608" x="768" y="4" height="14" width="46" html.valueishtml="0"  name=pcode4_t  tag="pcode4" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공량4" border="0" color="8388608" x="816" y="4" height="14" width="46" html.valueishtml="0"  name=pgong4_t  tag="pgong4" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품셈5" border="0" color="8388608" x="864" y="4" height="14" width="46" html.valueishtml="0"  name=pcode5_t  tag="pcode5" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공량5" border="0" color="8388608" x="912" y="4" height="14" width="46" html.valueishtml="0"  name=pgong5_t  tag="pgong5" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품셈6" border="0" color="8388608" x="960" y="4" height="14" width="46" html.valueishtml="0"  name=pcode6_t  tag="pcode6" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공량6" border="0" color="8388608" x="1008" y="4" height="14" width="46" html.valueishtml="0"  name=pgong6_t  tag="pgong6" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품셈2" border="0" color="8388608" x="576" y="4" height="14" width="46" html.valueishtml="0"  name=pcode2_t  tag="pcode2" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="명칭" border="0" color="8388608" x="2" y="4" height="14" width="150" html.valueishtml="0"  name=item_name_t  tag="item_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="8388608" x="154" y="4" height="14" width="136" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=30 border="0" color="33554432" x="292" y="2" height="14" width="68" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=40 border="0" color="33554432" x="362" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=mat_extra visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=50 border="0" color="33554432" x="421" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=lab_extra visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=60 border="0" color="33554432" x="480" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=pcode1 visible="1" dddw.name=dw_em_itemcode dddw.displaycolumn=item_size dddw.datacolumn=item_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=yes dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=100 border="0" color="33554432" x="672" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=pcode3 visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=120 border="0" color="33554432" x="768" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=pcode4 visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=140 border="0" color="33554432" x="864" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=pcode5 visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="1" tabsequence=160 border="0" color="33554432" x="960" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=pcode6 visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=80 border="0" color="33554432" x="576" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=pcode2 visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=70 border="0" color="33554432" x="528" y="2" height="14" width="46" format="#,###.######" html.valueishtml="0"  name=pgong1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=90 border="0" color="33554432" x="624" y="2" height="14" width="46" format="#,###.######" html.valueishtml="0"  name=pgong2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=110 border="0" color="33554432" x="720" y="2" height="14" width="46" format="#,###.######" html.valueishtml="0"  name=pgong3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=130 border="0" color="33554432" x="816" y="2" height="14" width="46" format="#,###.######" html.valueishtml="0"  name=pgong4 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=150 border="0" color="33554432" x="912" y="2" height="14" width="46" format="#,###.######" html.valueishtml="0"  name=pgong5 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="1" tabsequence=170 border="0" color="33554432" x="1008" y="2" height="14" width="46" format="#,###.######" html.valueishtml="0"  name=pgong6 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=10 border="0" color="33554432" x="2" y="2" height="14" width="150" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=20 border="0" color="33554432" x="154" y="2" height="14" width="136" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

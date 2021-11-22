@@ -1,0 +1,60 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes key=yes name=company_code dbname="cm_cust_proj_person.company_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=cnst_code dbname="cm_cust_proj_person.cnst_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cust_proj_person.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=pers_seq dbname="cm_cust_proj_person.pers_seq" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=buz_duty dbname="cm_cust_proj_person.buz_duty" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=work_div dbname="cm_cust_proj_person.work_div" values="현재	1/이전	2/" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=pers_name dbname="cm_cust_proj_person.pers_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=buz_post dbname="cm_cust_proj_person.buz_post" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phon_no dbname="cm_cust_proj_person.phon_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=hp_no dbname="cm_cust_proj_person.hp_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=work_year dbname="cm_cust_proj_person.work_year" )
+ column=(type=char(0) updatewhereclause=yes name=ho_ca dbname="ho_ca" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.CNST_CODE,  
+         A.PROJ_CODE, 
+         A.PERS_SEQ, 
+         A.BUZ_DUTY, 
+         A.WORK_DIV, 
+         A.PERS_NAME, 
+         A.BUZ_POST, 
+         A.PHON_NO, 
+         A.HP_NO, 
+         A.WORK_YEAR,
+         '' AS ho_ca
+    FROM CM_CUST_PROJ_PERSON A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.CNST_CODE = :as_code
+     AND A.PROJ_CODE = :as_proj
+ORDER BY A.CNST_CODE ASC,
+         A.PROJ_CODE ASC" update="CM_CUST_PROJ_PERSON" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_code", string),("as_proj", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="26" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=50 border="0" color="33554432" x="269" y="2" height="14" width="84" format="[general]~tif(len(phon_no) = 9, '@@-@@@-@@@@', if(len(phon_no) = 11, '@@@-@@@@-@@@@', if(len(phon_no) = 10, if(left(phon_no, 2) = '02', '@@-@@@@-@@@@', '@@@-@@@-@@@@'), '[general]')))  " html.valueishtml="0"  name=phon_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=60 border="0" color="33554432" x="355" y="2" height="14" width="84" format="[general]~tif(len(hp_no) = 9, '@@-@@@-@@@@', if(len(hp_no) = 11, '@@@-@@@@-@@@@', if(len(hp_no) = 10, if(left(hp_no, 2) = '02', '@@-@@@@-@@@@', '@@@-@@@-@@@@'), '[general]')))  " html.valueishtml="0"  name=hp_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=70 border="0" color="33554432" x="441" y="2" height="14" width="75" format="[general]" html.valueishtml="0"  name=work_year visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="518" y="2" height="14" width="75" format="[general]" html.valueishtml="0"  name=ho_ca pointer="HyperLink!" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="26" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="30" y="2" height="14" width="68" format="[general]" html.valueishtml="0"  name=buz_duty visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=20 border="0" color="33554432" x="100" y="2" height="14" width="40" format="[general]" html.valueishtml="0"  name=work_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=30 border="0" color="33554432" x="142" y="2" height="14" width="60" format="[general]" html.valueishtml="0"  name=pers_name visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=40 border="0" color="33554432" x="204" y="2" height="14" width="63" format="[general]" html.valueishtml="0"  name=buz_post visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="담당업무" border="0" color="33554432" x="30" y="2" height="14" width="68" html.valueishtml="0"  name=buz_duty_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="100" y="2" height="14" width="40" html.valueishtml="0"  name=work_div_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="142" y="2" height="14" width="60" html.valueishtml="0"  name=pers_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직급" border="0" color="33554432" x="204" y="2" height="14" width="63" html.valueishtml="0"  name=buz_post_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전화" border="0" color="33554432" x="269" y="2" height="14" width="84" html.valueishtml="0"  name=phon_no_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="휴대전화" border="0" color="33554432" x="355" y="2" height="14" width="84" html.valueishtml="0"  name=hp_no_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무기간" border="0" color="33554432" x="441" y="2" height="14" width="75" html.valueishtml="0"  name=work_year_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="취미및약력" border="0" color="16711680" x="518" y="2" height="14" width="75" html.valueishtml="0"  name=ho_ca_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

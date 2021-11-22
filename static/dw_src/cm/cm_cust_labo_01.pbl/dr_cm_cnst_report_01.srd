@@ -1,0 +1,45 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=152 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=144 color="536870912" )
+table(column=(type=char(5) updatewhereclause=yes name=div dbname="div" )
+ column=(type=number updatewhereclause=yes name=tot_cnt dbname="tot_cnt" )
+ retrieve="SELECT '전체 현장' AS DIV
+       ,COUNT(*) AS TOT_CNT
+  FROM SM_CODE_PROJECT
+ WHERE COMPANY_CODE = :as_comp_code
+   AND MANAGE_TAG  = '1'
+   AND PROJECT_TAG = '1'
+   AND MANAGE_TYPE = '1'
+UNION ALL
+SELECT '적용 현장' AS DIV
+       ,COUNT(*) AS PMIS_CNT
+  FROM SM_CODE_PROJECT
+ WHERE COMPANY_CODE = :as_comp_code
+   AND MANAGE_TAG  = '1'
+   AND PROJECT_TAG = '1'
+   AND MANAGE_TYPE = '1'
+   AND PMIS_USE = 'Y'
+   AND PMIS_DIV <> '99'" arguments=(("as_comp_code", string)) )
+rectangle(band=header x="27" y="16" height="104" width="718"  name=r_1 visible="1" brush.hatch="6" brush.color="134217730" pen.style="0" pen.width="5" pen.color="134217730"  background.mode="2" background.color="134217730" )
+text(band=header alignment="0" text="▣ 대상 현장" border="0" color="16777215" x="50" y="44" height="60" width="503" html.valueishtml="0"  name=t_1 visible="1"  font.face="순명조" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="27" y1="140" x2="850" y2="140"  name=l_1 visible="1" pen.style="0" pen.width="5" pen.color="268435456"  background.mode="2" background.color="268435456" )
+line(band=detail x1="27" y1="0" x2="850" y2="0"  name=l_2 visible="1" pen.style="0" pen.width="5" pen.color="268435456"  background.mode="2" background.color="268435456" )
+line(band=detail x1="27" y1="4" x2="27" y2="140"  name=l_3 visible="1" pen.style="0" pen.width="5" pen.color="268435456"  background.mode="2" background.color="268435456" )
+line(band=detail x1="539" y1="4" x2="539" y2="140"  name=l_4 visible="1" pen.style="0" pen.width="5" pen.color="268435456"  background.mode="2" background.color="268435456" )
+line(band=detail x1="850" y1="4" x2="850" y2="140"  name=l_5 visible="1" pen.style="0" pen.width="5" pen.color="268435456"  background.mode="2" background.color="268435456" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="8388608" x="46" y="48" height="76" width="480" format="[general]" html.valueishtml="0"  name=div visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="0" x="553" y="48" height="76" width="283" format="[general]" html.valueishtml="0"  name=tot_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

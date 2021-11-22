@@ -1,0 +1,119 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=3 color="536870912" )
+footer(height=18 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_osct_completed.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_osct_completed.proj_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="cm_osct_completed.osct_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=consult_code dbname="cm_osct_completed.consult_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=dem_date dbname="cm_osct_completed.dem_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=work_per dbname="cm_osct_completed.work_per" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=work_day dbname="cm_osct_completed.work_day" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=work_qty dbname="cm_osct_completed.work_qty" )
+ column=(type=number update=yes updatewhereclause=yes name=labor_amt dbname="labor_amt" )
+ column=(type=number updatewhereclause=yes name=incentieve_amt dbname="incentieve_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=head_amt dbname="head_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=consult_amt dbname="consult_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=food_amt dbname="food_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=equip_amt dbname="equip_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=tool_amt dbname="tool_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=house_amt dbname="house_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=etc_amt dbname="etc_amt" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=completed_rate dbname="cm_osct_completed.completed_rate" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=vat_amt dbname="cm_osct_completed.vat_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=per_amt dbname="cm_osct_completed.per_amt" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=trans_tag dbname="cm_osct_completed.trans_tag" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remarks dbname="cm_osct_completed.remarks" )
+ column=(type=char(3) updatewhereclause=yes name=team_code dbname="cm_attd_teams.team_code" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="cm_attd_teams.team_name" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,   
+         A.DEM_DATE,   
+         A.WORK_PER,   
+         A.WORK_DAY,   
+         A.WORK_QTY, 
+         NVL(A.LABOR_AMT,0)     LABOR_AMT,  
+         NVL(A.INCENTIVE_AMT,0) INCENTIEVE_AMT,
+         NVL(A.HEAD_AMT,0)      HEAD_AMT,   
+         NVL(A.CONSULT_AMT,0) + NVL(A.GEN_AMT,0) CONSULT_AMT,
+         NVL(A.FOOD_AMT,0)      FOOD_AMT,   
+         NVL(A.EQUIP_AMT,0)     EQUIP_AMT,   
+         NVL(A.TOOL_AMT,0)      TOOL_AMT,   
+         NVL(A.HOUSE_AMT,0)     HOUSE_AMT,   
+         NVL(A.ETC_AMT,0)       ETC_AMT,   
+         A.COMPLETED_RATE,
+         A.VAT_AMT,   
+         A.PER_AMT,
+         A.TRANS_TAG,
+         A.REMARKS,
+         B.TEAM_CODE,
+         B.TEAM_NAME
+    FROM CM_OSCT_COMPLETED A INNER JOIN CM_ATTD_TEAMS B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.PROJ_CODE    = B.PROJ_CODE
+                                    AND A.OSCT_DIV     = B.TEAM_DIV
+                                    AND A.CONSULT_CODE = B.CONSULT_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.OSCT_DIV     = :as_osct_div
+     AND A.DEM_DATE    <= :as_dem_yymm
+     AND B.TEAM_CODE LIKE :as_team_code
+ORDER BY B.TEAM_CODE, A.DEM_DATE  " arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_team_code", string),("as_dem_yymm", string)) )
+group(level=1 header.height=0 trailer.height=18 by=("team_name" ) header.color="536870912" trailer.color="15793151" )
+text(band=header alignment="2" text="팀명" border="0" color="33554432" x="2" y="2" height="14" width="76" html.valueishtml="0"  name=team_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="청구년월" border="0" color="33554432" x="80" y="2" height="14" width="70" html.valueishtml="0"  name=dem_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="152" y="2" height="14" width="80" html.valueishtml="0"  name=labor_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="식대" border="0" color="33554432" x="398" y="2" height="14" width="80" html.valueishtml="0"  name=food_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="장비비" border="0" color="33554432" x="480" y="2" height="14" width="80" html.valueishtml="0"  name=equip_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공구비" border="0" color="33554432" x="562" y="2" height="14" width="80" html.valueishtml="0"  name=tool_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="숙박비" border="0" color="33554432" x="644" y="2" height="14" width="80" html.valueishtml="0"  name=house_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기타" border="0" color="33554432" x="726" y="2" height="14" width="80" html.valueishtml="0"  name=etc_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="팀장급여" border="0" color="33554432" x="234" y="2" height="14" width="80" html.valueishtml="0"  name=head_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자문료" border="0" color="33554432" x="316" y="2" height="14" width="80" html.valueishtml="0"  name=consult_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="808" y="2" height="14" width="71" html.valueishtml="0"  name=sum_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="투입공수" border="0" color="33554432" x="881" y="2" height="14" width="64" html.valueishtml="0"  name=work_qty_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="80" y="2" height="14" width="70" format="@@@@-@@" html.valueishtml="0"  name=dem_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="152" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=labor_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="398" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=food_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="480" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=equip_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="562" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=tool_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="644" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=house_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="234" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=head_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="316" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=consult_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="76" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="726" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=etc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" labor_amt  +  head_amt  +   consult_amt  +  food_amt  +  equip_amt  +  tool_amt  +  house_amt  +  etc_amt "border="0" color="33554432" x="808" y="2" height="14" width="71" format="#,###" html.valueishtml="0"  name=sum_amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="881" y="2" height="14" width="64" format="[general]" html.valueishtml="0"  name=work_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(labor_amt for group 1) "border="0" color="33554432" x="152" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( sum_amt for group 1 )"border="0" color="33554432" x="808" y="2" height="14" width="71" format="#,###" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( head_amt for group 1 )"border="0" color="33554432" x="234" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( consult_amt for group 1 )"border="0" color="33554432" x="316" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( food_amt for group 1 )"border="0" color="33554432" x="398" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( equip_amt for group 1 )"border="0" color="33554432" x="480" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( tool_amt for group 1 )"border="0" color="33554432" x="562" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( house_amt for group 1 )"border="0" color="33554432" x="644" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( etc_amt for group 1 )"border="0" color="33554432" x="726" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=trailer.1 alignment="2" text="소    계" border="0" color="33554432" x="80" y="2" height="14" width="70" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(labor_amt for all) "border="0" color="33554432" x="152" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( head_amt for all )"border="0" color="33554432" x="234" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( consult_amt for all )"border="0" color="33554432" x="316" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( food_amt for all )"border="0" color="33554432" x="398" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_14 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( equip_amt for all )"border="0" color="33554432" x="480" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_15 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( tool_amt for all )"border="0" color="33554432" x="562" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( house_amt for all )"border="0" color="33554432" x="644" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( etc_amt for all )"border="0" color="33554432" x="726" y="2" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( sum_amt for all )"border="0" color="33554432" x="808" y="2" height="14" width="71" format="#,###" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="80" y="2" height="14" width="70" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="947" y="1" height="14" width="256" format="[general]" html.valueishtml="0"  name=incentieve_amt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Incentieve Amt" border="0" color="33554432" x="947" y="1" height="14" width="256" html.valueishtml="0"  name=incentieve_amt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="team_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

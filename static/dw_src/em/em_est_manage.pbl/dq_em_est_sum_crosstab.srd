@@ -1,0 +1,121 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=4 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no  crosstab.dynamic = yes grid.lines=0 grid.columnmove=no selected.mouse=no )
+header[1](height=0 color="536870912" )
+header[2](height=18 color="536870912" )
+summary(height=18 color="134217750" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(20) updatewhereclause=yes name=item_name dbname="item_name" )
+ column=(type=char(20) updatewhereclause=yes name=item_std dbname="item_std" )
+ column=(type=char(20) updatewhereclause=yes name=item_unit dbname="item_unit" )
+ column=(type=number updatewhereclause=yes name=a_qty dbname="a_qty" )
+ retrieve="  SELECT A.CONST_CODE,
+         C.CONST_NAME,
+         A.ITEM_CODE,
+         B.ITEM_NAME,
+         A.ITEM_SIZE ITEM_STD,
+         B.ITEM_UNIT, 
+         A.A_QTY
+    FROM EM_EST_SUM A JOIN (SELECT ITEM_CODE,
+                                   NVL(ITEM_NAME1, NVL(ITEM_NAME2, ITEM_NAME3)) ITEM_NAME,
+                                   NVL(ITEM_UNIT1, NVL(ITEM_UNIT2, ITEM_UNIT3)) ITEM_UNIT
+                              FROM ( SELECT ITEM_CODE,
+                                            MAX(ITEM_NAME1) ITEM_NAME1,
+                                            MAX(ITEM_UNIT1) ITEM_UNIT1,
+                                            MAX(ITEM_NAME2) ITEM_NAME2,
+                                            MAX(ITEM_UNIT2) ITEM_UNIT2,
+                                            MAX(ITEM_NAME3) ITEM_NAME3,
+                                            MAX(ITEM_UNIT3) ITEM_UNIT3
+                                       FROM ( SELECT ITEM_CODE,
+                                                     ITEM_NAME ITEM_NAME1,
+                                                     ITEM_UNIT ITEM_UNIT1,
+                                                     NULL ITEM_NAME2,
+                                                     NULL ITEM_UNIT2,
+                                                     NULL ITEM_NAME3,
+                                                     NULL ITEM_UNIT3
+                                                FROM EM_EST_EM
+                                               WHERE USER_ID = :as_userid
+                                                 AND BREAK_DIV = :as_breakdiv
+                                                 AND EST_CODE = :as_estcode
+                                                 AND CONST_DIV = :as_constdiv
+                                            GROUP BY ITEM_CODE, ITEM_NAME, ITEM_UNIT
+                                               UNION ALL
+                                              SELECT ITEM_CODE,
+                                                     NULL ITEM_NAME1,
+                                                     NULL ITEM_UNIT1,
+                                                     IW_NAME ITEM_NAME2,
+                                                     IW_UNIT ITEM_UNIT2,
+                                                     NULL ITEM_NAME3,
+                                                     NULL ITEM_UNIT3
+                                                FROM EM_EST_IWITEM
+                                               WHERE EST_CODE = :as_estcode
+                                                 /*AND BREAK_DIV = :as_breakdiv*/
+                                            GROUP BY ITEM_CODE, IW_NAME, IW_UNIT
+                                               UNION ALL
+                                              SELECT ITEM_CODE,
+                                                     NULL ITEM_NAME1,
+                                                     NULL ITEM_UNIT1,
+                                                     NULL ITEM_NAME2,
+                                                     NULL ITEM_UNIT2,
+                                                     ITEM_NAME ITEM_NAME3,
+                                                     ITEM_UNIT ITEM_UNIT3
+                                                FROM SM_CODE_MATERIAL )
+                                     GROUP BY ITEM_CODE )) B
+                        ON A.ITEM_CODE = B.ITEM_CODE
+                      JOIN ( SELECT CONST_CODE, CONST_NAME
+                               FROM ( SELECT '01' BREAK_DIV, CONST_CODE, CONST_NAME
+                                        FROM EM_SITECONST_KIND
+                                       WHERE EST_CODE = :as_estcode
+                                         AND CONST_DIV = :as_constdiv
+                                       UNION ALL
+                                      SELECT '02' BREAK_DIV, CONST_CODE, CONST_NAME
+                                        FROM CM_CONTRACT_CONST
+                                       WHERE COMPANY_CODE = :as_compcode
+                                         AND PROJ_CODE = :as_projcode
+                                       UNION ALL
+                                      SELECT '03' BREAK_DIV, CONST_CODE, CONST_NAME
+                                        FROM CM_EXEC_CONST
+                                       WHERE COMPANY_CODE = :as_compcode
+                                         AND PROJ_CODE = :as_projcode
+                                       UNION ALL
+                                      SELECT '04' BREAK_DIV, CONST_CODE, CONST_NAME
+                                        FROM CM_EXEC_CONST
+                                       WHERE COMPANY_CODE = :as_compcode
+                                         AND PROJ_CODE = :as_projcode )
+                              WHERE BREAK_DIV = :as_breakdiv ) C
+                        ON A.CONST_CODE = C.CONST_CODE
+   WHERE A.USER_ID = :as_userid
+     AND A.BREAK_DIV = :as_breakdiv
+     AND A.EST_CODE = :as_estcode
+     AND A.CONST_DIV = :as_constdiv" arguments=(("as_compcode", string),("as_userid", string),("as_projcode", string),("as_breakdiv", string),("as_estcode", string),("as_constdiv", string))  sort="item_name A item_std A item_unit A " )
+group(level=1 header.height=0 trailer.height=18 by=("item_name" ) header.color="536870912" trailer.color="12639424" )
+group(level=2 header.height=0 trailer.height=18 by=("item_std" ) header.color="536870912" trailer.color="536870912" )
+text(band=header[1] alignment="0" text="Sum Of A Qty" border="0" color="33554432" x="2" y="7" height="14" width="194" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[1] alignment="0" text="Const Name" border="0" color="33554432" x="198" y="7" height="14" width="152" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[2] alignment="2" text="품   명" border="0" color="33554432" x="2" y="2" height="14" width="194" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[2] alignment="2" text="규   격" border="0" color="33554432" x="198" y="2" height="14" width="152" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[2] alignment="2" text="단 위" border="0" color="33554432" x="352" y="2" height="14" width="52" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[2] alignment="0" text="@const_name" border="0" color="33554432" x="406" y="2" height="14" width="97" html.valueishtml="0"  name=a_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[2] alignment="2" text="계" border="0" color="33554432" x="505" y="2" height="14" width="89" html.valueishtml="0"  name=grand_sum_a_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="194" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="198" y="2" height="14" width="152" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="352" y="2" height="14" width="52" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="406" y="2" height="14" width="97" format="#,###" html.valueishtml="0"  name=a_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0 crosstab.repeat=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="crosstabsum(1)"border="0" color="33554432" x="505" y="2" height="14" width="89" format="#,###" html.valueishtml="0"  name=grand_sum_a_qty visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="~"Grand Total~""border="0" color="33554432" x="2" y="1" height="14" width="194" format="[general]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(a_qty for all )"border="0" color="33554432" x="406" y="1" height="14" width="97" format="#,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(grand_sum_a_qty for all )"border="0" color="33554432" x="505" y="1" height="14" width="89" format="#,###" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.2 alignment="1" expression="item_std + ~" Total~""border="0" color="33554432" x="198" y="2" height="14" width="152" format="[general]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.2 alignment="1" expression="sum(a_qty for group 2)"border="0" color="33554432" x="406" y="2" height="14" width="97" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.2 alignment="1" expression="sum(grand_sum_a_qty for group 2)"border="0" color="33554432" x="505" y="2" height="14" width="89" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="item_name + ~" Total~""border="0" color="33554432" x="2" y="2" height="14" width="194" format="[general]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="sum(a_qty for group 1)"border="0" color="33554432" x="406" y="2" height="14" width="97" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="sum(grand_sum_a_qty for group 1)"border="0" color="33554432" x="505" y="2" height="14" width="89" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+ crosstab(band = foreground  crosstabonly = yes 
+ columns = "const_name" rows = "item_name, item_std, item_unit" values = "sum(a_qty for crosstab)" sourcenames = "const_code, const_name, item_code, item_name, item_std, item_unit, a_qty")
+sparse(names="item_name	item_std")htmltable(border="0" cellpadding="1" cellspacing="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

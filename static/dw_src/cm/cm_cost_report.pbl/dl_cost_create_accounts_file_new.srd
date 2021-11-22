@@ -1,0 +1,377 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=title dbname="title" )
+ column=(type=char(50) updatewhereclause=yes name=f_proj_name dbname="cm_osct_completed.proj_name" dbalias=".proj_name" )
+ column=(type=char(94) updatewhereclause=yes name=reamrks dbname="reamrks" )
+ column=(type=char(400) updatewhereclause=yes name=sm_code_cust_cust_name dbname="sm_code_cust.cust_name" dbalias="D.cust_name" )
+ column=(type=char(13) updatewhereclause=yes name=sm_code_cust_cust_code dbname="sm_code_cust.cust_code" dbalias="D.cust_code" )
+ column=(type=number updatewhereclause=yes name=amt dbname="amt" )
+ column=(type=number updatewhereclause=yes name=amt2 dbname="amt2" )
+ retrieve="SELECT '외주기성' TITLE,
+       F.PROJ_NAME PROJ_NAME,
+       F.CONSULT_NAME || CASE WHEN COUNT(B.CUST_CODE) > 1 THEN ' 외 '||TO_CHAR(COUNT(B.CUST_CODE)-1)||'건'  ELSE '' END REAMRKS,
+       D.CUST_NAME CUST_NAME, 
+       D.BIZ_NO   CUST_CODE, 
+       SUM(NVL(A.GEN_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+ FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                 AND A.PROJ_CODE = B.PROJ_CODE 
+                                 AND A.OSCT_DIV = B.OSCT_DIV 
+                                 AND A.CONSULT_CODE = B.CONSULT_CODE 
+                          INNER JOIN SM_CODE_PROJECT C 
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                 AND A.PROJ_CODE = C.PROJ_CODE 
+                          INNER JOIN SM_CODE_CUST D 
+                                  ON B.CUST_CODE = D.CUST_CODE
+                          INNER JOIN HR_PERS_MASTER E
+                                  ON C.COMPANY_CODE = E.COMPANY_CODE
+                                 AND C.PM_EMPNO = E.EMP_NO
+                          INNER JOIN (SELECT C.PROJ_NAME ,B.CUST_CODE, CONSULT_NAME
+                                      FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                                                      ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = B.PROJ_CODE 
+                                                                     AND A.OSCT_DIV = B.OSCT_DIV 
+                                                                     AND A.CONSULT_CODE = B.CONSULT_CODE 
+                                                              INNER JOIN SM_CODE_PROJECT C 
+                                                                      ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = C.PROJ_CODE 
+                                                              INNER JOIN SM_CODE_CUST D 
+                                                                      ON B.CUST_CODE = D.CUST_CODE
+                                                              INNER JOIN HR_PERS_MASTER E
+                                                                      ON C.COMPANY_CODE = E.COMPANY_CODE
+                                                                     AND C.PM_EMPNO = E.EMP_NO
+                                      WHERE A.COMPANY_CODE = :as_comp
+                                        AND A.DEM_DATE LIKE :as_month||'%'
+                                        AND A.OSCT_DIV LIKE :as_osct_div   
+                                        AND A.PROJ_CODE LIKE :as_proj
+                                        AND SUBSTR(A.PAYREQ_YMD, 7, 2) = '25'
+                                        AND (B.CUST_CODE, NVL(A.GEN_AMT+A.VAT_AMT, 0))IN(
+                                        SELECT B.CUST_CODE, MAX(NVL(A.GEN_AMT+A.VAT_AMT, 0)) MAX_AMT
+                                      FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                                                      ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = B.PROJ_CODE 
+                                                                     AND A.OSCT_DIV = B.OSCT_DIV 
+                                                                     AND A.CONSULT_CODE = B.CONSULT_CODE 
+                                                              INNER JOIN SM_CODE_PROJECT C 
+                                                                      ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = C.PROJ_CODE 
+                                                              INNER JOIN SM_CODE_CUST D 
+                                                                      ON B.CUST_CODE = D.CUST_CODE
+                                                              INNER JOIN HR_PERS_MASTER E
+                                                                      ON C.COMPANY_CODE = E.COMPANY_CODE
+                                                                     AND C.PM_EMPNO = E.EMP_NO
+                                      WHERE A.COMPANY_CODE = :as_comp
+                                        AND A.PROJ_CODE LIKE :as_proj
+                                        AND A.DEM_DATE LIKE :as_month||'%'
+                                        AND A.OSCT_DIV LIKE :as_osct_div 
+                                        AND SUBSTR(A.PAYREQ_YMD, 7, 2) = '25'
+                                      GROUP BY A.COMPANY_CODE, B.CUST_CODE)) F 
+                                   ON  B.CUST_CODE = F.CUST_CODE
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.DEM_DATE LIKE :as_month||'%'
+    AND A.OSCT_DIV LIKE :as_osct_div
+    AND SUBSTR(A.PAYREQ_YMD, 7, 2) = '25'
+  GROUP BY D.CUST_NAME, B.CUST_CODE, F.CONSULT_NAME, F.PROJ_NAME, D.BIZ_NO
+  UNION ALL
+SELECT '외주기성' TITLE,
+       '' PROJ_NAME,
+       '합계' REAMRKS,
+       '' CUST_NAME,
+       '' CUST_CODE, 
+       SUM(NVL(A.GEN_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+ FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                 AND A.PROJ_CODE = B.PROJ_CODE 
+                                 AND A.OSCT_DIV = B.OSCT_DIV 
+                                 AND A.CONSULT_CODE = B.CONSULT_CODE 
+                          INNER JOIN SM_CODE_PROJECT C 
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                 AND A.PROJ_CODE = C.PROJ_CODE 
+                          INNER JOIN SM_CODE_CUST D 
+                                  ON B.CUST_CODE = D.CUST_CODE
+                          INNER JOIN HR_PERS_MASTER E
+                                  ON C.COMPANY_CODE = E.COMPANY_CODE
+                                 AND C.PM_EMPNO = E.EMP_NO
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.DEM_DATE LIKE :as_month||'%'
+    AND A.OSCT_DIV LIKE :as_osct_div
+    AND SUBSTR(A.PAYREQ_YMD, 7, 2) = '25'
+  UNION ALL
+SELECT '외상매입금' TITLE,
+       F.PROJ_NAME PROJ_NAME,  
+       F.SUMMARY || CASE WHEN COUNT(A.CUST_CODE) > 1 THEN ' 외 '||TO_CHAR(COUNT(A.CUST_CODE)-1)||'건'  ELSE '' END REAMRKS,
+       C.CUST_NAME CUST_NAME,
+       C.BIZ_NO AS CUST_CODE,
+       SUM(NVL(A.SUPPLAY_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+  FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE = B.PROJ_CODE
+                            INNER JOIN SM_CODE_CUST C
+                                    ON A.CUST_CODE = C.CUST_CODE
+                            INNER JOIN HR_PERS_MASTER D
+                                    ON B.COMPANY_CODE = D.COMPANY_CODE
+                                   AND B.PM_EMPNO = D.EMP_NO
+                            INNER JOIN ( SELECT MAX(B.PROJ_NAME) PROJ_NAME
+                                              , A.CUST_CODE
+                                              , MAX(A.SUMMARY) SUMMARY
+                                           FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                                             ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                            AND A.PROJ_CODE = B.PROJ_CODE
+                                                                     INNER JOIN SM_CODE_CUST C
+                                                                             ON A.CUST_CODE = C.CUST_CODE
+                                                                     INNER JOIN HR_PERS_MASTER D
+                                                                             ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                            AND B.PM_EMPNO = D.EMP_NO
+                                          WHERE A.COMPANY_CODE = :as_comp
+                                             AND A.YYYYMM = :as_month
+                                             AND A.CREATE_DIV IN ('1', '3')
+                                             AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+                                             AND (A.CUST_CODE, NVL(A.SUPPLAY_AMT+A.VAT_AMT, 0))
+                                              IN(SELECT A.CUST_CODE, MAX(NVL(A.SUPPLAY_AMT+ A.VAT_AMT, 0)) MAX_AMT
+                                                   FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                    AND A.PROJ_CODE = B.PROJ_CODE
+                                                                             INNER JOIN SM_CODE_CUST C
+                                                                                     ON A.CUST_CODE = C.CUST_CODE
+                                                                             INNER JOIN HR_PERS_MASTER D
+                                                                                     ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                                    AND B.PM_EMPNO = D.EMP_NO
+                                                  WHERE A.COMPANY_CODE = :as_comp
+                                                    AND A.PROJ_CODE LIKE :as_proj
+                                                    AND A.YYYYMM = :as_month
+                                                    AND A.CREATE_DIV IN ('1', '3')
+                                                    AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+                                                  GROUP BY A.CUST_CODE)
+                                                  GROUP BY A.CUST_CODE) F
+                                    ON  A.CUST_CODE = F.CUST_CODE 
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.YYYYMM = :as_month
+    AND A.CREATE_DIV IN ('1', '3')
+    AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+  GROUP BY C.BIZ_NO, C.CUST_NAME,  F.SUMMARY, F.PROJ_NAME
+  UNION ALL  
+SELECT '외상매입금' TITLE,
+       '' PROJ_NAME,  
+       '합계' REAMRKS,
+       '' CUST_NAME,
+       '' CUST_CODE,
+       SUM(NVL(A.SUPPLAY_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT
+  FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE = B.PROJ_CODE
+                            INNER JOIN SM_CODE_CUST C
+                                    ON A.CUST_CODE = C.CUST_CODE
+                            INNER JOIN HR_PERS_MASTER D
+                                    ON B.COMPANY_CODE = D.COMPANY_CODE
+                                   AND B.PM_EMPNO = D.EMP_NO
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.YYYYMM = :as_month
+    AND A.CREATE_DIV IN ('1', '3')
+    AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+UNION ALL
+SELECT '외주기성 정기결제제외' TITLE,
+       F.PROJ_NAME PROJ_NAME,
+       F.CONSULT_NAME || CASE WHEN COUNT(B.CUST_CODE) > 1 THEN ' 외 '||TO_CHAR(COUNT(B.CUST_CODE)-1)||'건'  ELSE '' END REAMRKS,
+       D.CUST_NAME CUST_NAME,
+       D.BIZ_NO CUST_CODE, 
+       SUM(NVL(A.GEN_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+ FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                 AND A.PROJ_CODE = B.PROJ_CODE 
+                                 AND A.OSCT_DIV = B.OSCT_DIV 
+                                 AND A.CONSULT_CODE = B.CONSULT_CODE 
+                          INNER JOIN SM_CODE_PROJECT C 
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                 AND A.PROJ_CODE = C.PROJ_CODE 
+                          INNER JOIN SM_CODE_CUST D 
+                                  ON B.CUST_CODE = D.CUST_CODE
+                          INNER JOIN HR_PERS_MASTER E
+                                  ON C.COMPANY_CODE = E.COMPANY_CODE
+                                 AND C.PM_EMPNO = E.EMP_NO
+                          INNER JOIN (SELECT C.PROJ_NAME ,B.CUST_CODE, CONSULT_NAME
+                                      FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                                                      ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = B.PROJ_CODE 
+                                                                     AND A.OSCT_DIV = B.OSCT_DIV 
+                                                                     AND A.CONSULT_CODE = B.CONSULT_CODE 
+                                                              INNER JOIN SM_CODE_PROJECT C 
+                                                                      ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = C.PROJ_CODE 
+                                                              INNER JOIN SM_CODE_CUST D 
+                                                                      ON B.CUST_CODE = D.CUST_CODE
+                                                              INNER JOIN HR_PERS_MASTER E
+                                                                      ON C.COMPANY_CODE = E.COMPANY_CODE
+                                                                     AND C.PM_EMPNO = E.EMP_NO
+                                      WHERE A.COMPANY_CODE = :as_comp
+                                        AND A.DEM_DATE LIKE :as_month||'%'
+                                        AND A.OSCT_DIV LIKE :as_osct_div   
+                                        AND SUBSTR(A.PAYREQ_YMD, 7, 2) <> '25'
+                                        AND (B.CUST_CODE, NVL(A.GEN_AMT+A.VAT_AMT, 0))IN(
+                                        SELECT B.CUST_CODE, MAX(NVL(A.GEN_AMT+A.VAT_AMT, 0)) MAX_AMT
+                                      FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                                                      ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = B.PROJ_CODE 
+                                                                     AND A.OSCT_DIV = B.OSCT_DIV 
+                                                                     AND A.CONSULT_CODE = B.CONSULT_CODE 
+                                                              INNER JOIN SM_CODE_PROJECT C 
+                                                                      ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                                                     AND A.PROJ_CODE = C.PROJ_CODE 
+                                                              INNER JOIN SM_CODE_CUST D 
+                                                                      ON B.CUST_CODE = D.CUST_CODE
+                                                              INNER JOIN HR_PERS_MASTER E
+                                                                      ON C.COMPANY_CODE = E.COMPANY_CODE
+                                                                     AND C.PM_EMPNO = E.EMP_NO
+                                      WHERE A.COMPANY_CODE = :as_comp
+                                        AND A.PROJ_CODE LIKE :as_proj
+                                        AND A.DEM_DATE LIKE :as_month||'%'
+                                        AND A.OSCT_DIV LIKE :as_osct_div 
+                                        AND SUBSTR(A.PAYREQ_YMD, 7, 2) <> '25'
+                                      GROUP BY A.COMPANY_CODE, B.CUST_CODE)) F 
+                                   ON  B.CUST_CODE = F.CUST_CODE
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.DEM_DATE LIKE :as_month||'%'
+    AND A.OSCT_DIV LIKE :as_osct_div
+    AND SUBSTR(A.PAYREQ_YMD, 7, 2) <> '25'
+  GROUP BY D.CUST_NAME, D.BIZ_NO, F.CONSULT_NAME, F.PROJ_NAME
+  UNION ALL
+SELECT '외주기성 정기결제제외' TITLE,
+       '' PROJ_NAME,
+       '합계' REAMRKS,
+       '' CUST_NAME,
+       '' CUST_CODE, 
+       SUM(NVL(A.GEN_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+ FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B 
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                 AND A.PROJ_CODE = B.PROJ_CODE 
+                                 AND A.OSCT_DIV = B.OSCT_DIV 
+                                 AND A.CONSULT_CODE = B.CONSULT_CODE 
+                          INNER JOIN SM_CODE_PROJECT C 
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                 AND A.PROJ_CODE = C.PROJ_CODE 
+                          INNER JOIN SM_CODE_CUST D 
+                                  ON B.CUST_CODE = D.CUST_CODE
+                          INNER JOIN HR_PERS_MASTER E
+                                  ON C.COMPANY_CODE = E.COMPANY_CODE
+                                 AND C.PM_EMPNO = E.EMP_NO
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.DEM_DATE LIKE :as_month||'%'
+    AND A.OSCT_DIV LIKE :as_osct_div
+    AND SUBSTR(A.PAYREQ_YMD, 7, 2) <> '25'
+  UNION ALL
+SELECT '외상매입금 정기결제제외' TITLE,
+       F.PROJ_NAME PROJ_NAME,  
+       F.SUMMARY || CASE WHEN COUNT(A.CUST_CODE) > 1 THEN ' 외 '||TO_CHAR(COUNT(A.CUST_CODE)-1)||'건'  ELSE '' END REAMRKS,
+       C.CUST_NAME CUST_NAME,
+       C.BIZ_NO CUST_CODE,
+       SUM(NVL(A.SUPPLAY_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+  FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE = B.PROJ_CODE
+                            INNER JOIN SM_CODE_CUST C
+                                    ON A.CUST_CODE = C.CUST_CODE
+                            INNER JOIN HR_PERS_MASTER D
+                                    ON B.COMPANY_CODE = D.COMPANY_CODE
+                                   AND B.PM_EMPNO = D.EMP_NO
+                            INNER JOIN ( SELECT MAX(B.PROJ_NAME) PROJ_NAME
+                                              , A.CUST_CODE
+                                              , MAX(A.SUMMARY) SUMMARY
+                                           FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                                             ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                            AND A.PROJ_CODE = B.PROJ_CODE
+                                                                     INNER JOIN SM_CODE_CUST C
+                                                                             ON A.CUST_CODE = C.CUST_CODE
+                                                                     INNER JOIN HR_PERS_MASTER D
+                                                                             ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                            AND B.PM_EMPNO = D.EMP_NO
+                                          WHERE A.COMPANY_CODE = :as_comp
+                                             AND A.YYYYMM = :as_month
+                                             AND A.CREATE_DIV IN ('1', '3')
+                                             AND SUBSTR(A.REQ_DATE, 7, 2) <> '25'
+                                             AND (A.CUST_CODE, NVL(A.SUPPLAY_AMT+A.VAT_AMT, 0))
+                                              IN(SELECT A.CUST_CODE, MAX(NVL(A.SUPPLAY_AMT+ A.VAT_AMT, 0)) MAX_AMT
+                                                   FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                    AND A.PROJ_CODE = B.PROJ_CODE
+                                                                             INNER JOIN SM_CODE_CUST C
+                                                                                     ON A.CUST_CODE = C.CUST_CODE
+                                                                             INNER JOIN HR_PERS_MASTER D
+                                                                                     ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                                    AND B.PM_EMPNO = D.EMP_NO
+                                                  WHERE A.COMPANY_CODE = :as_comp
+                                                    AND A.PROJ_CODE LIKE :as_proj
+                                                    AND A.YYYYMM = :as_month
+                                                    AND A.CREATE_DIV IN ('1', '3')
+                                                    AND SUBSTR(A.REQ_DATE, 7, 2) <> '25'
+                                                  GROUP BY A.CUST_CODE)
+                                                  GROUP BY A.CUST_CODE) F
+                                    ON  A.CUST_CODE = F.CUST_CODE 
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.YYYYMM = :as_month
+    AND A.CREATE_DIV IN ('1', '3')
+    AND SUBSTR(A.REQ_DATE, 7, 2) <> '25'
+  GROUP BY C.BIZ_NO, C.CUST_NAME,  F.SUMMARY, F.PROJ_NAME
+  UNION ALL  
+SELECT '외상매입금 정기결제제외' TITLE,
+       '' PROJ_NAME,  
+       '합계' REAMRKS,
+       '' CUST_NAME,
+       '' CUST_CODE,
+       SUM(NVL(A.SUPPLAY_AMT, 0)) AMT,
+       SUM(NVL(A.VAT_AMT, 0)) AMT2
+  FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE = B.PROJ_CODE
+                            INNER JOIN SM_CODE_CUST C
+                                    ON A.CUST_CODE = C.CUST_CODE
+                            INNER JOIN HR_PERS_MASTER D
+                                    ON B.COMPANY_CODE = D.COMPANY_CODE
+                                   AND B.PM_EMPNO = D.EMP_NO
+  WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE LIKE :as_proj
+    AND A.YYYYMM = :as_month
+    AND A.CREATE_DIV IN ('1', '3')
+    AND SUBSTR(A.REQ_DATE, 7, 2) <> '25'
+  ORDER BY TITLE, PROJ_NAME, CUST_CODE, REAMRKS" arguments=(("as_comp", string),("as_proj", string),("as_month", string),("as_osct_div", string)) )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="2" y="3" height="14" width="136" html.valueishtml="0"  name=title_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요" border="0" color="33554432" x="360" y="3" height="14" width="221" html.valueishtml="0"  name=reamrks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="140" y="3" height="14" width="218" html.valueishtml="0"  name=f_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="968" y="3" height="14" width="186" html.valueishtml="0"  name=amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세" border="0" color="33554432" x="1156" y="3" height="14" width="184" html.valueishtml="0"  name=amt2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="18" width="136" format="[general]" html.valueishtml="0"  name=title visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="583" y="2" height="18" width="208" format="[general]" html.valueishtml="0"  name=sm_code_cust_cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="360" y="2" height="18" width="221" format="[general]" html.valueishtml="0"  name=reamrks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="140" y="2" height="18" width="218" format="[general]" html.valueishtml="0"  name=f_proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="968" y="2" height="18" width="186" format="#,###" html.valueishtml="0"  name=amt visible="1" editmask.mask="###,###,###,###,###,###" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="1156" y="2" height="18" width="184" format="#,###" html.valueishtml="0"  name=amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="794" y="3" height="14" width="172" format="[general]" html.valueishtml="0"  name=sm_code_cust_cust_code visible="1" editmask.mask="@@@-@@-@@@@@" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상호명" border="0" color="33554432" x="583" y="3" height="14" width="208" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업자번호" border="0" color="33554432" x="793" y="3" height="14" width="173" html.valueishtml="0"  name=sm_code_cust_cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

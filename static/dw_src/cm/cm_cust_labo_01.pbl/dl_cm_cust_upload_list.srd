@@ -1,0 +1,45 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=datetime updatewhereclause=yes name=cm_cnst_upload_upload_date dbname="cm_cnst_upload.upload_date" dbalias="A.upload_date" )
+ column=(type=char(40) updatewhereclause=yes name=sm_auth_user_user_name dbname="sm_auth_user.user_name" dbalias="B.user_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_cnst_upload_upload_cnt dbname="cm_cnst_upload.upload_cnt" dbalias="A.upload_cnt" )
+ column=(type=char(6) updatewhereclause=yes name=upload_yymm dbname="upload_yymm" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_cnst_upload.proj_code" dbalias="A.proj_code" )
+ retrieve="SELECT A.UPLOAD_DATE,
+            B.USER_NAME,
+            A.UPLOAD_CNT,
+            TO_CHAR(A.UPLOAD_F_DATE,'YYYYMM') UPLOAD_YYMM,
+            A.PROJ_CODE
+  FROM CM_CNST_UPLOAD A,
+            SM_AUTH_USER B
+WHERE A.COMPANY_CODE = :as_comp
+    AND A.PROJ_CODE = :as_proj
+    AND A.UPLOAD_ID = B.USER_ID 
+ ORDER BY A.UPLOAD_DATE" arguments=(("as_comp", string),("as_proj", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="201" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업로드 일시" border="0" color="33554432" x="219" y="8" height="56" width="585" html.valueishtml="0"  name=cm_cnst_upload_upload_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="작업자" border="0" color="33554432" x="814" y="8" height="56" width="425" html.valueishtml="0"  name=sm_auth_user_user_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업로드건" border="0" color="33554432" x="1248" y="8" height="56" width="347" html.valueishtml="0"  name=cm_cnst_upload_upload_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업로드년월" border="0" color="33554432" x="1605" y="8" height="56" width="370" html.valueishtml="0"  name=upload_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="68" width="201" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="224" y="8" height="68" width="581" format="[shortdate] [time]" html.valueishtml="0"  name=cm_cnst_upload_upload_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="818" y="8" height="68" width="421" format="[general]" html.valueishtml="0"  name=sm_auth_user_user_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="1253" y="8" height="68" width="343" format="[general]" html.valueishtml="0"  name=cm_cnst_upload_upload_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="1609" y="8" height="68" width="366" format="[general]" html.valueishtml="0"  name=upload_yymm visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=0 border="0" color="33554432" x="1989" y="0" height="56" width="315" html.valueishtml="0"  name=proj_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Cm Cnst Upload Proj Code" border="0" color="33554432" x="1984" y="4" height="56" width="320" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

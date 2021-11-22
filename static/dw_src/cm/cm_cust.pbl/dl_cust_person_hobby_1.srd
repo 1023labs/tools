@@ -1,0 +1,34 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes key=yes name=company_code dbname="cm_cust_pers_add.company_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=cnst_code dbname="cm_cust_pers_add.cnst_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=pers_seq dbname="cm_cust_pers_add.pers_seq" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=hobb_seq dbname="cm_cust_pers_add.hobb_seq" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=hobby dbname="cm_cust_pers_add.hobby" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=career dbname="cm_cust_pers_add.career" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.CNST_CODE,
+         A.PERS_SEQ, 
+         A.HOBB_SEQ, 
+         A.HOBBY, 
+         A.CAREER
+    FROM CM_CUST_PERS_ADD A
+   WHERE A.COMPANY_CODE = :as_comp 
+     AND A.CNST_CODE =:as_cnst
+     AND A.PERS_SEQ = :as_pers" update="CM_CUST_PERS_ADD" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_cnst", string),("as_pers", string)) )
+text(band=header alignment="2" text="약력" border="0" color="33554432" x="235" y="2" height="14" width="184" html.valueishtml="0"  name=career_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="취미" border="0" color="33554432" x="41" y="2" height="14" width="192" html.valueishtml="0"  name=hobby_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="37" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=20 border="0" color="33554432" x="235" y="2" height="15" width="184" format="[general]" html.valueishtml="0"  name=career visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=10 border="0" color="33554432" x="41" y="2" height="15" width="192" format="[general]" html.valueishtml="0"  name=hobby visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="15" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

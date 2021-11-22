@@ -1,0 +1,162 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(10) updatewhereclause=yes name=company_code dbname="em_synonym.company_code" )
+ column=(type=char(10) updatewhereclause=yes name=tmscode dbname="em_synonym.tmscode" )
+ column=(type=number updatewhereclause=yes name=tmseq dbname="em_synonym.tmseq" )
+ column=(type=char(100) updatewhereclause=yes name=tmp_name dbname="em_synonym.tmp_name" )
+ column=(type=char(100) updatewhereclause=yes name=tmp_size dbname="em_synonym.tmp_size" )
+ column=(type=char(10) updatewhereclause=yes name=tmp_unit dbname="em_synonym.tmp_unit" )
+ column=(type=decimal(2) updatewhereclause=yes name=tmp_cost dbname="em_synonym.tmp_cost" )
+ column=(type=char(20) updatewhereclause=yes name=tmp_remarks dbname="em_synonym.tmp_remarks" )
+ column=(type=char(12) updatewhereclause=yes name=item_code dbname="em_synonym.item_code" )
+ column=(type=char(100) updatewhereclause=yes name=item_name dbname="em_synonym.item_name" )
+ column=(type=char(100) updatewhereclause=yes name=item_std dbname="em_synonym.item_std" )
+ column=(type=char(10) updatewhereclause=yes name=item_unit dbname="em_synonym.item_unit" )
+ column=(type=char(20) updatewhereclause=yes name=sptext1 dbname="em_synonym.sptext1" )
+ column=(type=char(20) updatewhereclause=yes name=sptext2 dbname="em_synonym.sptext2" )
+ column=(type=char(20) updatewhereclause=yes name=remarks dbname="em_synonym.remarks" )
+ column=(type=number updatewhereclause=yes name=tmp_qty dbname="tmp_qty" )
+ column=(type=char(20) updatewhereclause=yes name=acc_gb dbname="acc_gb" )
+ column=(type=number updatewhereclause=yes name=master_ucost dbname="em_synonym.master_ucost" )
+ column=(type=number updatewhereclause=yes name=order_ucost dbname="em_synonym.order_ucost" )
+ column=(type=number updatewhereclause=yes name=etc_ucost dbname="em_synonym.etc_ucost" )
+ column=(type=decimal(2) updatewhereclause=yes name=order_cost dbname="em_synonym.order_cost" )
+ column=(type=char(12) updatewhereclause=yes name=pcode1 dbname="em_synonym.pcode1" )
+ column=(type=decimal(6) updatewhereclause=yes name=pgong1 dbname="em_synonym.pgong1" )
+ column=(type=char(12) updatewhereclause=yes name=pcode2 dbname="em_synonym.pcode2" )
+ column=(type=decimal(6) updatewhereclause=yes name=pgong2 dbname="em_synonym.pgong2" )
+ column=(type=char(12) updatewhereclause=yes name=pcode3 dbname="em_synonym.pcode3" )
+ column=(type=decimal(6) updatewhereclause=yes name=pgong3 dbname="em_synonym.pgong3" )
+ column=(type=char(12) updatewhereclause=yes name=pcode4 dbname="em_synonym.pcode4" )
+ column=(type=decimal(6) updatewhereclause=yes name=pgong4 dbname="em_synonym.pgong4" )
+ column=(type=char(12) updatewhereclause=yes name=pcode5 dbname="em_synonym.pcode5" )
+ column=(type=decimal(6) updatewhereclause=yes name=pgong5 dbname="em_synonym.pgong5" )
+ column=(type=char(12) updatewhereclause=yes name=pcode6 dbname="em_synonym.pcode6" )
+ column=(type=decimal(6) updatewhereclause=yes name=pgong6 dbname="em_synonym.pgong6" )
+ column=(type=char(20) updatewhereclause=yes name=real_sptext1 dbname="em_synonym.real_sptext1" )
+ column=(type=char(4) updatewhereclause=yes name=real_sptext2 dbname="em_synonym.real_sptext2" )
+ column=(type=char(250) updatewhereclause=yes name=dname1 dbname="vw_em_comcode_applymethod.dname1" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.TMSCODE,
+         A.TMSEQ,
+         A.TMP_NAME,
+         A.TMP_SIZE,
+         A.TMP_UNIT,
+         A.TMP_COST,
+         A.TMP_REMARKS,
+         A.ITEM_CODE,
+         A.ITEM_NAME,
+         A.ITEM_STD,
+         A.ITEM_UNIT,
+         A.SPTEXT1,
+         A.SPTEXT2,
+         A.REMARKS,
+         NVL(B.TMP_QTY, 0) TMP_QTY,
+         NVL(C.ACC_GB, '11') ACC_GB,
+         C.MASTER_UCOST,
+         C.ORDER_UCOST,
+         C.ETC_UCOST,
+         D.ORDER_COST,
+         C.PCODE1, 
+         C.PGONG1,
+         C.PCODE2,
+         C.PGONG2,
+         C.PCODE3,
+         C.PGONG3,
+         C.PCODE4,
+         C.PGONG4,
+         C.PCODE5,
+         C.PGONG5,
+         C.PCODE6,
+         C.PGONG6,
+         C.SPTEXT REAL_SPTEXT1,
+         D.ITEM_MAKER REAL_SPTEXT2,
+         E.DNAME DNAME1
+    FROM EM_SYNONYM A LEFT JOIN (SELECT A.COMPANY_CODE,
+                                        A.USER_ID, 
+                                        A.BREAK_DIV,
+                                        A.EST_CODE,
+                                        A.TMSCODE,
+                                        A.TMP_NAME,
+                                        A.TMP_SIZE,
+                                        A.TMP_UNIT,
+                                        A.TMP_QTY,
+                                        A.SPTEXT1,
+                                        B.DCODE
+                                   FROM EM_SYNONYM_WORK A LEFT JOIN VW_EM_COMCODE_APPLYMETHOD B
+                                                                 ON NVL(A.SPTEXT1, '표준') = B.DNAME
+                                  WHERE A.COMPANY_CODE = :as_compcode
+                                    AND A.USER_ID = :as_user_id
+                                    AND A.BREAK_DIV = :as_break_div
+                                    AND A.EST_CODE = :as_est_code
+                                    AND A.TMSCODE = :as_tmscode
+                               GROUP BY A.COMPANY_CODE, A.USER_ID, A.BREAK_DIV, A.EST_CODE,A.TMSCODE, A.TMP_NAME, A.TMP_SIZE, A.TMP_UNIT, A.TMP_QTY, A.SPTEXT1, B.DCODE ) B 
+                             ON A.COMPANY_CODE = B.COMPANY_CODE
+                            AND A.TMSCODE = B.TMSCODE
+                            AND A.TMP_NAME = B.TMP_NAME
+                            AND A.TMP_SIZE = B.TMP_SIZE
+                            AND A.TMP_UNIT = B.TMP_UNIT
+                            AND A.SPTEXT1 = NVL(B.DCODE, '000')
+                      LEFT JOIN (SELECT A.ITEM_CODE, A.ACC_GB, A.ITEM_NAME, A.ITEM_STD, A.ITEM_UNIT, B.SPTEXT,
+                                        DECODE(NVL(B.MASTER_UCOST,0),0,NVL(A.MASTER_COST,0),B.MASTER_UCOST) AS MASTER_UCOST,
+                                        DECODE(NVL(B.ORDER_UCOST,0),0,NVL(A.ORDER_COST,0),B.ORDER_UCOST) AS ORDER_UCOST,
+                                        DECODE(NVL(B.ETC_UCOST,0),0,NVL(A.ETC_COST,0),B.ETC_UCOST) AS ETC_UCOST,
+                                        B.PCODE1, B.PGONG1, B.PCODE2, B.PGONG2, B.PCODE3, B.PGONG3, B.PCODE4, B.PGONG4, B.PCODE5,
+                                        B.PGONG5, B.PCODE6, B.PGONG6, C.ITEM_MAKER, C.MAKER_NAME
+                                   FROM SM_CODE_MATERIAL A LEFT JOIN SM_CODE_MATERIAL_PLAB B
+                                                                  ON A.ITEM_CODE = B.ITEM_CODE
+                                                           LEFT JOIN (SELECT Z.ITEM_CODE,
+                                                                             Z.ORDER_COST,
+                                                                             Z.ITEM_MAKER,
+                                                                             Y.DNAME MAKER_NAME
+                                                                        FROM PM_UNPR_MASTER Z LEFT JOIN VW_C_PM_MATMAKER Y
+                                                                                                     ON Z.ITEM_MAKER = Y.DCODE
+                                                                       WHERE OPEN_YN = 'Y' ) C
+                                                                  ON B.ITEM_CODE = C.ITEM_CODE ) C
+                             ON A.ITEM_CODE = C.ITEM_CODE
+                            AND A.SPTEXT1 = C.SPTEXT
+                            AND NVL(A.SPTEXT2, '표준') = NVL(C.MAKER_NAME, '표준')
+                      LEFT JOIN (SELECT A.ITEM_CODE,
+                                        A.ORDER_COST,
+                                        A.ITEM_MAKER,
+                                        B.DNAME MAKER_NAME
+                                   FROM PM_UNPR_MASTER A LEFT JOIN VW_C_PM_MATMAKER B
+                                                                ON A.ITEM_MAKER = B.DCODE
+                                  WHERE OPEN_YN = 'Y' ) D
+                             ON A.ITEM_CODE = D.ITEM_CODE
+                            AND A.SPTEXT2 = D.MAKER_NAME
+                      LEFT JOIN VW_EM_COMCODE_APPLYMETHOD E
+                             ON A.SPTEXT1 = E.DCODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.TMSCODE = :as_tmscode
+ORDER BY A.TMP_NAME" arguments=(("as_compcode", string),("as_user_id", string),("as_break_div", string),("as_est_code", string),("as_tmscode", string)) )
+text(band=header alignment="2" text="No." border="0" color="27229506" x="2" y="2" height="14" width="43" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사 규격" border="0" color="27229506" x="194" y="2" height="14" width="126" html.valueishtml="0"  name=tmp_size_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사 비고" border="0" color="27229506" x="390" y="2" height="14" width="147" html.valueishtml="0"  name=tmp_remarks_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="27229506" x="806" y="2" height="14" width="126" html.valueishtml="0"  name=item_std_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품셈기준" border="0" color="27229506" x="539" y="2" height="14" width="118" html.valueishtml="0"  name=dname1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재명" border="0" color="27229506" x="659" y="2" height="14" width="145" html.valueishtml="0"  name=item_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사 단위" border="0" color="27229506" x="322" y="2" height="14" width="66" html.valueishtml="0"  name=tmp_unit_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="27229506" x="934" y="2" height="14" width="66" html.valueishtml="0"  name=item_unit_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사 자재명" border="0" color="27229506" x="47" y="2" height="14" width="145" html.valueishtml="0"  name=tmp_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="27229506" x="1002" y="2" height="14" width="147" html.valueishtml="0"  name=remarks_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="43" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="47" y="2" height="17" width="145" format="[general]" html.valueishtml="0"  name=tmp_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="194" y="2" height="17" width="126" format="[general]" html.valueishtml="0"  name=tmp_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="322" y="2" height="17" width="66" format="[general]" html.valueishtml="0"  name=tmp_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="390" y="2" height="17" width="147" format="[general]" html.valueishtml="0"  name=tmp_remarks visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="659" y="2" height="17" width="145" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="806" y="2" height="17" width="126" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="934" y="2" height="17" width="66" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="33554432" x="1002" y="2" height="17" width="147" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=36 alignment="0" tabsequence=32766 border="0" color="33554432" x="539" y="2" height="17" width="118" format="[general]" html.valueishtml="0"  name=dname1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,218 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=16777215 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=24 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=contract_code dbname="contract_code" )
+ column=(type=char(50) updatewhereclause=yes name=contract_name dbname="contract_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=review_napprono dbname="review_napprono" )
+ column=(type=decimal(0) updatewhereclause=yes name=napprono dbname="napprono" )
+ column=(type=decimal(0) updatewhereclause=yes name=check_napprono dbname="check_napprono" )
+ column=(type=decimal(0) updatewhereclause=yes name=comf_napprono dbname="comf_napprono" )
+ column=(type=datetime updatewhereclause=yes name=cm_exec_work_budget_app_app_date dbname="app_date" )
+ column=(type=datetime updatewhereclause=yes name=last_appdate dbname="last_appdate" )
+ column=(type=char(12) updatewhereclause=yes name=approval_strdepartmentno dbname="strdepartmentno" )
+ column=(type=char(100) updatewhereclause=yes name=sm_code_dept_dept_name dbname="dept_name" )
+ column=(type=char(10) updatewhereclause=yes name=approval_strpersonno dbname="strpersonno" )
+ column=(type=char(40) updatewhereclause=yes name=sm_auth_user_user_name dbname="user_name" )
+ column=(type=char(10) updatewhereclause=yes name=approval_check_strpersonno dbname="check_strpersonno" )
+ column=(type=char(40) updatewhereclause=yes name=check_user_name dbname="check_user_name" )
+ column=(type=char(4000) updatewhereclause=yes name=process_tag dbname="process_tag" )
+ column=(type=char(1) updatewhereclause=yes name=app_tag dbname="app_tag" values="상신	Y/미상신	N/" )
+ column=(type=decimal(2) updatewhereclause=yes name=cm_exec_work_budget_app_first_rate dbname="first_rate" )
+ column=(type=decimal(2) updatewhereclause=yes name=cm_exec_work_budget_app_second_rate dbname="second_rate" )
+ column=(type=decimal(2) updatewhereclause=yes name=cm_exec_work_budget_app_third_rate dbname="third_rate" )
+ column=(type=decimal(2) updatewhereclause=yes name=cm_exec_work_budget_app_fourth_rate dbname="fourth_rate" )
+ column=(type=char(1) updatewhereclause=yes name=review_tag dbname="review_tag" values="미허가	N/허가	Y/" )
+ column=(type=char(10) updatewhereclause=yes name=sm_code_project_pm_empno dbname="pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=hr_pers_master_emp_name dbname="emp_name" )
+ column=(type=char(6) updatewhereclause=yes name=sm_code_project_open_date dbname="open_date" )
+ column=(type=char(100) updatewhereclause=yes name=cm_exec_work_budget_app_remarks dbname="remarks" )
+ column=(type=number updatewhereclause=yes name=ce_recv_amt dbname="recv_amt" )
+ column=(type=number updatewhereclause=yes name=ce_check_amt dbname="check_amt" )
+ column=(type=number updatewhereclause=yes name=ce_change_amt dbname="change_amt" )
+ column=(type=number updatewhereclause=yes name=comf_amt dbname="comf_amt" )
+ column=(type=char(1) updatewhereclause=yes name=field_change dbname="field_change" values="미허가	N/허가	Y/" )
+ column=(type=char(1) updatewhereclause=yes name=close_tag dbname="close_tag" values="미마감	N/마감	Y/" )
+ column=(type=decimal(0) updatewhereclause=yes name=no_degree dbname="no_degree" )
+ column=(type=char(250) updatewhereclause=yes name=ent_dept dbname="ent_dept" )
+ column=(type=char(250) updatewhereclause=yes name=ent_dept_detail dbname="ent_dept_detail" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="cust_name" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=ac_rate dbname="ac_rate" )
+ column=(type=decimal(0) updatewhereclause=yes name=ac_amt dbname="ac_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=ac_napprono dbname="ac_napprono" )
+ column=(type=number updatewhereclause=yes name=amt01 dbname="amt01" )
+ column=(type=number updatewhereclause=yes name=amt02 dbname="amt02" )
+ column=(type=number updatewhereclause=yes name=amt03 dbname="amt03" )
+ column=(type=number updatewhereclause=yes name=amt04 dbname="amt04" )
+ column=(type=number updatewhereclause=yes name=amt05 dbname="amt05" )
+ column=(type=number updatewhereclause=yes name=amt06 dbname="amt06" )
+ column=(type=char(1) updatewhereclause=yes name=ac_close dbname="ac_close" values="마감	Y/미마감	N/" )
+ retrieve="SELECT A.COMPANY_CODE,
+            A.PROJ_CODE,
+            B.PROJ_NAME,
+            A.CONTRACT_CODE,
+            CC.CONTRACT_NAME,
+            A.REVIEW_NAPPRONO,
+            A.NAPPRONO,
+            A.CHECK_NAPPRONO,
+            A.COMF_NAPPRONO,            
+            A.APP_DATE,
+            (SELECT DATEAPPRO FROM SEBOGW.APPRO_PROCESS 
+                             WHERE NAPPRONO      = DECODE(A.COMF_NAPPRONO,NULL,A.CHECK_NAPPRONO,A.COMF_NAPPRONO) 
+                               AND NLINESEQUENCE = (SELECT MAX(NLINESEQUENCE) FROM SEBOGW.APPRO_PROCESS WHERE NAPPRONO = DECODE(A.COMF_NAPPRONO,NULL,A.CHECK_NAPPRONO,A.COMF_NAPPRONO) )) LAST_APPDATE,
+            C.STRDEPARTMENTNO,
+            E.DEPT_NAME,
+            C.STRPERSONNO,
+            D.USER_NAME,
+            CA.STRPERSONNO  CHECK_STRPERSONNO,
+            NVL(DA.USER_NAME,DB.USER_NAME)    CHECK_USER_NAME,
+            SEBOGW.UF_APPRO_PROCESS(DECODE(A.COMF_NAPPRONO,NULL,A.CHECK_NAPPRONO,A.COMF_NAPPRONO)) PROCESS_TAG,
+            A.APP_TAG,             
+            A.FIRST_RATE,
+            A.SECOND_RATE,
+            A.THIRD_RATE,
+            A.FOURTH_RATE,
+            A.REVIEW_TAG,
+            B.PM_EMPNO,
+            F.EMP_NAME,
+            SUBSTR(B.OPEN_DATE,3,6) OPEN_DATE,
+            A.REMARKS,
+            CE.RECV_AMT,
+            CE.CHECK_AMT,
+            CE.CHANGE_AMT,
+            CE.COMF_AMT,
+            A.FIELD_CHANGE,
+            A.CLOSE_TAG,
+            A.NO_DEGREE,
+            (SELECT DNAME FROM SM_COMCODE_D WHERE HCODE = 'DEPTGROUP' AND DCODE =  B.ENT_DEPT) ENT_DEPT,
+            (SELECT DNAME FROM SM_COMCODE_D WHERE HCODE = 'DEPTCODE1' AND DCODE =  B.ENT_DEPT_DETAIL) ENT_DEPT_DETAIL,
+            B.CUST_CODE,
+            CU.CUST_NAME,
+            A.AC_RATE,
+            A.AC_AMT,
+            A.AC_NAPPRONO,
+            0 AMT01,
+            0 AMT02,
+            0 AMT03,
+            0 AMT04,
+            0 AMT05,
+            0 AMT06,
+            'N' AC_CLOSE                       
+       FROM CM_EXEC_WORK_BUDGET_APP         A,
+            SM_CODE_PROJECT                 B,
+            SEBOGW.APPROVAL                 C,
+            SEBOGW.APPROVAL                 CA,
+            SEBOGW.APPROVAL                 CB,
+            SM_AUTH_USER                    D,
+            SM_AUTH_USER                    DA,
+            SM_AUTH_USER                    DB,
+            SM_CODE_DEPT                    E,
+            HR_PERS_MASTER                  F,
+            (SELECT PROJ_CODE, 
+                    NVL(SUM(RECV_AMT),0)   RECV_AMT,
+                    NVL(SUM(CHECK_AMT),0)  CHECK_AMT,
+                    NVL(SUM(CHANGE_AMT),0)  CHANGE_AMT,
+                    NVL(SUM(COMF_AMT),0)  COMF_AMT
+               FROM CM_EXEC_WORK_BUDGET_PROJ
+              WHERE LEVEL_NUM = 2              
+           GROUP BY PROJ_CODE) CE,
+           CM_CONT_CONTRACT                 CC,
+           SM_CODE_CUST                     CU
+      WHERE A.PROJ_CODE       = B.PROJ_CODE
+        AND A.NAPPRONO        = C.NAPPRONO(+)
+        AND A.CHECK_NAPPRONO  = CA.NAPPRONO(+)
+        AND A.COMF_NAPPRONO   = CB.NAPPRONO(+)
+        AND CA.STRPERSONNO    = DA.USER_ID(+)
+        AND CB.STRPERSONNO    = DB.USER_ID(+)
+        AND C.STRPERSONNO     = D.USER_ID(+)
+        AND C.STRDEPARTMENTNO = E.DEPT_CODE(+)
+        AND B.PM_EMPNO        = F.EMP_NO(+)
+        AND A.PROJ_CODE       = CE.PROJ_CODE(+)
+        AND A.CONTRACT_CODE   = CC.CONTRACT_CODE
+        AND B.CUST_CODE       = CU.CUST_CODE
+        AND B.MANAGE_TAG      = '1'
+        AND B.MANAGE_TYPE     = '1'
+        AND B.PROJECT_TAG     = '1'
+        AND B.PM_EMPNO        LIKE :as_pm
+        AND A.PROJ_CODE       LIKE :as_project
+        ORDER BY   B.ENT_DEPT,
+                         B.ENT_DEPT_DETAIL,
+                        A.PROJ_CODE" arguments=(("as_pm", string),("as_project", string)) )
+group(level=1 header.height=0 trailer.height=21 by=("ent_dept" ) header.color="536870912" trailer.color="536870912" )
+group(level=2 header.height=0 trailer.height=22 by=("ent_dept_detail" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="220" y="2" height="14" width="175" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM" border="0" color="33554432" x="397" y="2" height="14" width="44" html.valueishtml="0"  name=hr_pers_master_emp_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="개설일자" border="0" color="33554432" x="443" y="2" height="14" width="51" html.valueishtml="0"  name=sm_code_project_open_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="진행상태" border="0" color="33554432" x="1065" y="2" height="14" width="48" html.valueishtml="0"  name=process_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="승인일자" border="0" color="33554432" x="1115" y="2" height="14" width="57" html.valueishtml="0"  name=last_appdate_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행팀마감" border="0" color="33554432" x="1174" y="2" height="14" width="70" html.valueishtml="0"  name=close_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="변경금액" border="0" color="33554432" x="678" y="2" height="14" width="96" html.valueishtml="0"  name=comf_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행계약금액" border="0" color="33554432" x="496" y="2" height="14" width="89" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="원실행" border="0" color="33554432" x="587" y="2" height="14" width="89" html.valueishtml="0"  name=ce_check_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용비율" border="0" color="33554432" x="1464" y="2" height="14" width="54" html.valueishtml="0"  name=ac_rate_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공통원가" border="0" color="33554432" x="1520" y="2" height="14" width="94" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Approval Strdepartmentno" border="0" color="33554432" x="1344" y="2" height="14" width="58" html.valueishtml="0"  name=approval_strdepartmentno_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Approval Strpersonno" border="0" color="33554432" x="1404" y="2" height="14" width="58" html.valueishtml="0"  name=approval_strpersonno_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="변경금액" border="0" color="33554432" x="1247" y="2" height="14" width="94" html.valueishtml="0"  name=ce_change_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="추정실행원가" border="0" color="33554432" x="1616" y="2" height="14" width="88" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="50" y="1" height="14" width="168" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="1" y="1" height="14" width="47" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="재경팀마감" border="0" color="33554432" x="2287" y="1" height="14" width="67" html.valueishtml="0"  name=ac_close_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="관리실행율" border="0" color="33554432" x="1706" y="3" height="14" width="68" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="투입원가누계" border="0" color="33554432" x="1775" y="2" height="14" width="94" html.valueishtml="0"  name=amt01_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="진행율" border="0" color="33554432" x="1871" y="2" height="14" width="52" html.valueishtml="0"  name=amt02_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="진행율수입금액" border="0" color="33554432" x="1925" y="2" height="14" width="96" html.valueishtml="0"  name=amt03_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계산서수입금액" border="0" color="33554432" x="2023" y="2" height="14" width="91" html.valueishtml="0"  name=amt04_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="미청구공사" border="0" color="33554432" x="2116" y="2" height="14" width="85" html.valueishtml="0"  name=amt05_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="초과청구" border="0" color="33554432" x="2203" y="2" height="14" width="82" html.valueishtml="0"  name=amt06_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="변경횟수" border="0" color="33554432" x="776" y="2" height="14" width="52" html.valueishtml="0"  name=no_degree_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="최종실행금액" border="0" color="33554432" x="830" y="2" height="14" width="102" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행율" border="0" color="33554432" x="934" y="2" height="14" width="52" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=26 alignment="2" tabsequence=32766 border="0" color="33554432" x="397" y="2" height="17" width="44" format="[general]" html.valueishtml="0"  name=hr_pers_master_emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="33554432" x="1065" y="2" height="17" width="48" format="[general]" html.valueishtml="0"  name=process_tag visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="1116" y="2" height="17" width="56" format="[shortdate] [time]" html.valueishtml="0"  name=last_appdate visible="1" editmask.mask="yy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=27 alignment="2" tabsequence=32766 border="0" color="33554432" x="444" y="2" height="17" width="50" format="[general]" html.valueishtml="0"  name=sm_code_project_open_date visible="1" editmask.mask="XX/XX/XX" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=34 alignment="2" tabsequence=32766 border="0" color="33554432" x="1174" y="2" height="17" width="70" format="[general]" html.valueishtml="0"  name=close_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=32 alignment="1" tabsequence=32766 border="0" color="33554432" x="678" y="2" height="17" width="96" format="#,##0" html.valueishtml="0"  name=comf_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="if( ce_change_amt > 0, ce_change_amt,ce_recv_amt)"border="0" color="33554432" x="496" y="2" height="17" width="89" format="#,##0" html.valueishtml="0"  name=first_amt visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=30 alignment="1" tabsequence=32766 border="0" color="33554432" x="587" y="2" height="17" width="89" format="#,##0" html.valueishtml="0"  name=ce_check_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=35 alignment="2" tabsequence=32766 border="0" color="33554432" x="776" y="2" height="17" width="52" format="[general]" html.valueishtml="0"  name=no_degree visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="if(comf_amt > 0,  comf_napprono , check_napprono )"border="0" color="33554432" x="987" y="4" height="14" width="77" format="[GENERAL]" html.valueishtml="0"  name=last_napprono visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=40 alignment="1" tabsequence=140 border="0" color="33554432" x="1465" y="2" height="17" width="53" format="#,##0.00" html.valueishtml="0"  name=ac_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="round(last_amt * ac_rate,0)"border="0" color="33554432" x="1520" y="2" height="17" width="94" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=120 border="0" color="33554432" x="1344" y="2" height="17" width="58" format="[general]" html.valueishtml="0"  name=approval_strdepartmentno visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=130 border="0" color="33554432" x="1404" y="2" height="17" width="58" format="[general]" html.valueishtml="0"  name=approval_strpersonno visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=31 alignment="1" tabsequence=32766 border="0" color="33554432" x="1247" y="2" height="17" width="94" format="#,##0" html.valueishtml="0"  name=ce_change_amt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="220" y="2" height="17" width="175" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=39 alignment="0" tabsequence=32766 border="0" color="33554432" x="50" y="2" height="17" width="168" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="2" height="17" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=49 alignment="2" tabsequence=210 border="0" color="33554432" x="2288" y="2" height="17" width="66" format="[general]" html.valueishtml="0"  name=ac_close visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="last_amt -  compute_3 "border="0" color="33554432" x="1616" y="2" height="17" width="88" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="compute_7 / first_amt"border="0" color="33554432" x="1706" y="2" height="17" width="68" format="#,##0.00%" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=43 alignment="1" tabsequence=150 border="0" color="33554432" x="1776" y="2" height="17" width="93" format="[general]" html.valueishtml="0"  name=amt01 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=44 alignment="1" tabsequence=160 border="0" color="33554432" x="1872" y="2" height="17" width="51" format="[general]" html.valueishtml="0"  name=amt02 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=45 alignment="1" tabsequence=170 border="0" color="33554432" x="1926" y="2" height="17" width="95" format="[general]" html.valueishtml="0"  name=amt03 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=46 alignment="1" tabsequence=180 border="0" color="33554432" x="2024" y="2" height="17" width="90" format="[general]" html.valueishtml="0"  name=amt04 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=47 alignment="1" tabsequence=190 border="0" color="33554432" x="2117" y="2" height="17" width="84" format="[general]" html.valueishtml="0"  name=amt05 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=48 alignment="1" tabsequence=200 border="0" color="33554432" x="2204" y="2" height="17" width="81" format="[general]" html.valueishtml="0"  name=amt06 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(comf_amt > 0, comf_amt,ce_check_amt)"border="0" color="33554432" x="830" y="2" height="17" width="102" format="#,##0" html.valueishtml="0"  name=last_amt visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="last_amt / first_amt"border="0" color="33554432" x="934" y="2" height="17" width="52" format="#,##0.00%" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.2 alignment="0" expression=" ent_dept_detail"border="0" color="134217856" x="220" y="3" height="14" width="175" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=trailer.1 alignment="0" expression=" ent_dept"border="0" color="8421376" x="220" y="3" height="14" width="175" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

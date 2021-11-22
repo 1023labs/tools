@@ -1,0 +1,67 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=yes print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=28 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="33289712" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=compute_0001 dbname="compute_0001" )
+ column=(type=char(8) updatewhereclause=yes name=compute_0002 dbname="compute_0002" )
+ column=(type=char(3) updatewhereclause=yes name=house_div2 dbname="house_div2" )
+ column=(type=number updatewhereclause=yes name=rent_pay dbname="rent_pay" )
+ column=(type=number updatewhereclause=yes name=sum_rent_pay dbname="sum_rent_pay" )
+ retrieve=" SELECT  MAX(COMPANY_CODE)
+        ,MAX(PROJ_CODE)
+        ,HOUSE_DIV2
+        ,SUM(RENT_PAY) AS RENT_PAY
+        ,SUM_RENT_PAY
+   FROM
+ (SELECT A.COMPANY_CODE AS COMPANY_CODE
+       ,A.PROJ_CODE AS PROJ_CODE
+       ,A.HOUSE_DIV2 AS HOUSE_DIV2
+       ,CASE WHEN SUBSTR(B.PAY_DATE,1,6) = :AS_TO_DATE THEN B.RENT_PAY 
+        ELSE 0 END AS RENT_PAY
+       ,(SELECT SUM(RENT_PAY)
+           FROM CM_COST_HOUSE_ACCOUNT_NEW T
+          WHERE A.COMPANY_CODE = T.COMPANY_CODE 
+            AND A.PROJ_CODE = T.PROJ_CODE 
+              AND T.SEND_YN = 'Y' 
+              AND T.SLIP_NO IS NOT NULL
+            AND A.HOUSE_DIV2 = DECODE(SUBSTR(T.REMARK1,1,1),'작','001','사','002','003')
+            AND SUBSTR(T.PAY_DATE,1,6) BETWEEN :AS_FROM_DATE AND :AS_TO_DATE ) AS SUM_RENT_PAY       
+ FROM CM_COST_HOUSE_GW_LIST A
+ LEFT JOIN CM_COST_HOUSE_ACCOUNT_NEW B
+        ON A.COMPANY_CODE = B.COMPANY_CODE 
+       AND A.PROJ_CODE = B.PROJ_CODE 
+       AND A.CUST_CODE = B.CUST_CODE 
+       AND A.RENT_DATE = B.RENT_DATE 
+       AND A.RENT_SEQ = B.RENT_SEQ
+WHERE A.COMPANY_CODE = :AS_COMP_CODE
+  AND A.PROJ_CODE  = :AS_PROJ_CODE
+  AND B.SLIP_NO IS NOT NULL) GROUP BY HOUSE_DIV2,SUM_RENT_PAY
+ ORDER BY HOUSE_DIV2" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_FROM_DATE", string),("AS_TO_DATE", string)) )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="8" height="14" width="29" html.valueishtml="0"  name=c_row_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계정명" border="0" color="33554432" x="33" y="8" height="14" width="57" html.valueishtml="0"  name=house_div2_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="92" y="8" height="14" width="102" html.valueishtml="0"  name=rent_pay_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="투입누계" border="0" color="33554432" x="196" y="8" height="14" width="123" html.valueishtml="0"  name=sum_rent_pay_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Compute 0001" border="0" color="33554432" x="377" y="1" height="19" width="16" html.valueishtml="0"  name=compute_0001_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Compute 0002" border="0" color="33554432" x="321" y="1" height="19" width="54" html.valueishtml="0"  name=compute_0002_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="2" y="4" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="4" height="14" width="57" format="[general]" html.valueishtml="0"  name=house_div2 visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="92" y="4" height="14" width="102" format="#,###" html.valueishtml="0"  name=rent_pay visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="196" y="4" height="14" width="123" format="#,###" html.valueishtml="0"  name=sum_rent_pay visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="377" y="1" height="14" width="16" format="[general]" html.valueishtml="0"  name=compute_0001 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="321" y="1" height="14" width="54" format="[general]" html.valueishtml="0"  name=compute_0002 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="1" text="총 합계 :" border="0" color="33554432" x="33" y="6" height="14" width="57" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(rent_pay for all)"border="0" color="33554432" x="92" y="6" height="14" width="102" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(sum_rent_pay for all)"border="0" color="33554432" x="196" y="6" height="14" width="123" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

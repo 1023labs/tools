@@ -1,0 +1,58 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_esti_master.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=est_code dbname="cm_esti_master.est_code" )
+ column=(type=char(4) updatewhereclause=yes name=f_type dbname="cm_esti_master.f_type" )
+ column=(type=char(60) updatewhereclause=yes name=est_name dbname="cm_esti_master.est_name" )
+ column=(type=char(8) updatewhereclause=yes name=rec_date dbname="cm_esti_master.rec_date" )
+ column=(type=char(8) updatewhereclause=yes name=start_date dbname="cm_esti_master.start_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="cm_esti_master.end_date" )
+ column=(type=char(5) updatewhereclause=yes name=cnst_code dbname="cm_esti_master.cnst_code" )
+ column=(type=char(250) updatewhereclause=yes name=dname dbname="vw_cm_comcode_consttype.dname" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.EST_CODE,
+         A.F_TYPE,
+         A.EST_NAME,
+         A.REC_DATE,
+         A.START_DATE,
+         A.END_DATE,
+         A.CNST_CODE,
+         B.DNAME,
+         C.CNST_NAME
+    FROM CM_ESTI_MASTER A LEFT JOIN VW_CM_COMCODE_CONSTTYPE B
+                                 ON A.F_TYPE = B.DCODE
+                          LEFT JOIN CM_CUST_CONSTRUCT C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE AND A.CNST_CODE = C.CNST_CODE
+                               JOIN CM_ESTI_REQUEST D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE
+                                AND A.EST_CODE = D.EST_CODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND (A.EST_CODE LIKE :as_find OR A.EST_NAME LIKE '%'||:as_find||'%')
+ORDER BY A.EST_CODE" arguments=(("as_compcode", string),("as_find", string)) )
+text(band=header alignment="2" text="현설코드" border="0" color="33554432" x="34" y="2" height="14" width="62" html.valueishtml="0"  name=est_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사명" border="0" color="33554432" x="98" y="2" height="14" width="290" html.valueishtml="0"  name=est_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="접수일자" border="0" color="33554432" x="599" y="2" height="14" width="65" html.valueishtml="0"  name=rec_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사" border="0" color="33554432" x="482" y="2" height="14" width="115" html.valueishtml="0"  name=cnst_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사시작일" border="0" color="33554432" x="666" y="2" height="14" width="65" html.valueishtml="0"  name=start_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사종료일" border="0" color="33554432" x="733" y="2" height="14" width="65" html.valueishtml="0"  name=end_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사유형" border="0" color="33554432" x="390" y="2" height="14" width="90" html.valueishtml="0"  name=dname_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=detail x="2" y="0" height="21" width="30"  name=c_row_bg visible="1" brush.hatch="6" brush.color="15780518" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="15780518" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="30" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="34" y="2" height="17" width="62" format="[general]" html.valueishtml="0"  name=est_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="98" y="2" height="17" width="290" format="[general]" html.valueishtml="0"  name=est_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="390" y="2" height="17" width="90" format="[general]" html.valueishtml="0"  name=dname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="482" y="2" height="17" width="115" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="599" y="2" height="17" width="65" format="@@@@-@@-@@" html.valueishtml="0"  name=rec_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="666" y="2" height="17" width="65" format="@@@@-@@-@@" html.valueishtml="0"  name=start_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="733" y="2" height="17" width="65" format="@@@@-@@-@@" html.valueishtml="0"  name=end_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

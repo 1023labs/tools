@@ -1,0 +1,158 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=22 color="553648127" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=36 color="553648127" )
+table(column=(type=number updatewhereclause=yes name=supplay_amt dbname="supplay_amt" )
+ column=(type=char(8) updatewhereclause=yes name=cm_cont_contract_start_date dbname="cm_cont_contract.start_date" )
+ column=(type=char(8) updatewhereclause=yes name=cm_cont_contract_end_date dbname="cm_cont_contract.end_date" )
+ column=(type=number updatewhereclause=yes name=exec_rate dbname="exec_rate" )
+ column=(type=number updatewhereclause=yes name=fld_proc_rate dbname="fld_proc_rate" )
+ column=(type=number updatewhereclause=yes name=amt11 dbname="amt11" )
+ column=(type=number updatewhereclause=yes name=amt12 dbname="amt12" )
+ column=(type=number updatewhereclause=yes name=cost_rate1 dbname="cost_rate1" )
+ column=(type=number updatewhereclause=yes name=amt21 dbname="amt21" )
+ column=(type=number updatewhereclause=yes name=amt22 dbname="amt22" )
+ column=(type=number updatewhereclause=yes name=cost_rate2 dbname="cost_rate2" )
+ column=(type=char(4) updatewhereclause=yes name=title dbname="title" )
+ retrieve="  SELECT NVL(SUM(C.SUPPLAY_AMT), 0)         SUPPLAY_AMT
+       , A.START_DATE                       START_DATE
+       , A.END_DATE                         END_DATE
+       , NVL(MAX(B.EXEC_RATE), 0)           EXEC_RATE
+       , NVL(MAX(B.FLD_PROC_RATE), 0)       FLD_PROC_RATE
+       , NVL(SUM(C.SUPPLAY_AMT), 0)
+       * NVL(MAX(B.PROC_RATE), 0) / 100     AMT11
+       , 0                                  AMT12
+       , 0                                  COST_RATE1
+       , NVL(SUM(C.SUPPLAY_AMT), 0)
+       * NVL(MAX(B.FLD_PROC_RATE), 0) / 100 AMT21
+       , 0                                  AMT22
+       , 0                                  COST_RATE2
+       , '계약'                             TITLE
+    FROM CM_CONT_CONTRACT A LEFT JOIN CM_CONT_CONTRACT_COST  B
+                                   ON A.COMPANY_CODE  = B.COMPANY_CODE
+                                  AND A.PROJ_CODE     = B.PROJ_CODE
+                                  AND A.CONTRACT_CODE = B.CONTRACT_CODE AND B.CC_YM = :AS_CC_YM
+                            LEFT JOIN (  SELECT COMPANY_CODE
+                                              , PROJ_CODE
+                                              , CONTRACT_CODE
+                                              , SUM(NVL(MATERIAL_AMT, 0) + NVL(LABOR_AMT, 0) + NVL(COST_AMT, 0)) SUPPLAY_AMT
+                                           FROM CM_CONT_CHANGE_INFO
+                                          WHERE COMPANY_CODE = :AS_COMP_CODE
+                                            AND PROJ_CODE    = :AS_PROJ_CODE
+                                       GROUP BY COMPANY_CODE, PROJ_CODE, CONTRACT_CODE) C
+                                   ON A.COMPANY_CODE  = C.COMPANY_CODE
+                                  AND A.PROJ_CODE     = C.PROJ_CODE
+                                  AND A.CONTRACT_CODE = C.CONTRACT_CODE
+   WHERE A.COMPANY_CODE  = :AS_COMP_CODE
+     AND A.PROJ_CODE     = :AS_PROJ_CODE
+     AND A.CONTRACT_CODE = :AS_CONTRACT_CODE
+GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.CONTRACT_CODE, A.START_DATE, A.END_DATE
+UNION ALL
+  SELECT SUPPLAY_AMT
+       , START_DATE
+       , END_DATE
+       , EXEC_RATE
+       , FLD_PROC_RATE
+       , AMT11
+       , CC_AMT0                         AMT12
+       , ROUND(AMT11 / CC_AMT0 * 100, 4) COST_RATE1
+       , AMT21
+       , CC_AMT1                         AMT22
+       , ROUND(AMT21 / CC_AMT1 * 100, 4) COST_RATE2
+       , '전체'                          TITLE
+    FROM (  SELECT A.COMPANY_CODE
+                 , A.PROJ_CODE
+                 , NVL(SUM(C.SUPPLAY_AMT), 0)                          SUPPLAY_AMT
+                 , MIN(A.START_DATE)                                   START_DATE
+                 , MAX(A.END_DATE)                                     END_DATE
+                 , NVL(MAX(CASE
+                             WHEN B.CC_YM = :AS_CC_YM AND B.DEFAULT_YN = 'Y'
+                             THEN B.EXEC_RATE
+                           END), 0)                                    EXEC_RATE
+                 , 0                                                   FLD_PROC_RATE
+                 , NVL(SUM(C.SUPPLAY_AMT * B.PROC_RATE), 0) / 100      AMT11
+                 , NVL(SUM(C.SUPPLAY_AMT * B.FLD_PROC_RATE), 0) / 100  AMT21
+                 , NVL((SELECT SUM(COST_TOT)    FROM CM_CC_SUM     WHERE COMPANY_CODE = A.COMPANY_CODE AND DEPT_CODE = A.PROJ_CODE AND CDEPT_CODE = 'CM' AND CC_YM = :AS_CC_YM), 0)
+                 + NVL((SELECT SUM(SUPPLAY_AMT) FROM CM_COST_AJUST WHERE COMPANY_CODE = A.COMPANY_CODE AND PROJ_CODE = A.PROJ_CODE AND YYYYMM = :AS_CC_YM), 0)  CC_AMT0
+                 , NVL((SELECT SUM(COST_TOT)    FROM CM_CC_SUM     WHERE COMPANY_CODE = A.COMPANY_CODE AND DEPT_CODE = A.PROJ_CODE AND CDEPT_CODE = 'CM' AND CC_YM <= :AS_CC_YM), 0)
+                 + NVL((SELECT SUM(SUPPLAY_AMT) FROM CM_COST_AJUST WHERE COMPANY_CODE = A.COMPANY_CODE AND PROJ_CODE = A.PROJ_CODE AND YYYYMM <= :AS_CC_YM), 0) CC_AMT1
+              FROM CM_CONT_CONTRACT A LEFT JOIN CM_CONT_CONTRACT_COST  B
+                                             ON A.COMPANY_CODE  = B.COMPANY_CODE
+                                            AND A.PROJ_CODE     = B.PROJ_CODE
+                                            AND A.CONTRACT_CODE = B.CONTRACT_CODE AND B.CC_YM <= :AS_CC_YM
+                                      LEFT JOIN (  SELECT COMPANY_CODE
+                                                        , PROJ_CODE
+                                                        , CONTRACT_CODE
+                                                        , SUM(NVL(MATERIAL_AMT, 0) + NVL(LABOR_AMT, 0) + NVL(COST_AMT, 0)) SUPPLAY_AMT
+                                                     FROM CM_CONT_CHANGE_INFO
+                                                    WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                      AND PROJ_CODE    = :AS_PROJ_CODE
+                                                 GROUP BY COMPANY_CODE, PROJ_CODE, CONTRACT_CODE) C
+                                             ON A.COMPANY_CODE  = C.COMPANY_CODE
+                                            AND A.PROJ_CODE     = C.PROJ_CODE
+                                            AND A.CONTRACT_CODE = C.CONTRACT_CODE
+             WHERE A.COMPANY_CODE  = :AS_COMP_CODE
+               AND A.PROJ_CODE     = :AS_PROJ_CODE
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE)" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CC_YM", string),("AS_CONTRACT_CODE", string)) )
+rectangle(band=header x="1" y="0" height="21" width="945"  name=r_1 visible="1" brush.hatch="6" brush.color="32896501" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="33554432" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="40" y="4" height="14" width="108" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사기간" border="0" color="33554432" x="248" y="4" height="14" width="98" html.valueishtml="0"  name=cm_cont_contract_start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="154" y="4" height="14" width="88" html.valueishtml="0"  name=supplay_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행율(%)" border="0" color="33554432" x="352" y="4" height="14" width="75" html.valueishtml="0"  name=exec_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공정율(%)" border="0" color="33554432" x="433" y="4" height="14" width="74" html.valueishtml="0"  name=fld_proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당월원가율(%)" border="0" color="33554432" x="621" y="4" height="14" width="102" html.valueishtml="0"  name=cost_rate1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계원가율(%)" border="0" color="33554432" x="837" y="4" height="14" width="105" html.valueishtml="0"  name=cost_rate2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="4" y="4" height="14" width="30" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="945" y1="1" x2="945" y2="33"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="833" y1="1" x2="833" y2="33"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="725" y1="1" x2="725" y2="33"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="617" y1="1" x2="617" y2="33"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="509" y1="1" x2="509" y2="33"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="429" y1="1" x2="429" y2="33"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="348" y1="1" x2="348" y2="33"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="36" y1="1" x2="36" y2="33"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="150" y1="1" x2="150" y2="33"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="244" y1="1" x2="244" y2="33"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="21" x2="945" y2="21"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="20" x2="945" y2="20"  name=l_53 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="1" x2="945" y2="1"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="1" x2="1" y2="33"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="당월매출/투입" border="0" color="33554432" x="513" y="4" height="14" width="102" html.valueishtml="0"  name=amt1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계매출/투입" border="0" color="33554432" x="729" y="4" height="14" width="102" html.valueishtml="0"  name=amt2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="1" y="0" height="36" width="945"  name=r_2 visible="1~tif ( getrow() = 1, 0, 1 )" brush.hatch="6" brush.color="31649000~tRGB(232, 236, 226)" pen.style="0" pen.width="1" pen.color="1073741824~tRGB(232, 236, 226)"  background.mode="0" background.color="32896501~tRGB(232, 236, 226)" )
+line(band=detail x1="1" y1="35" x2="945" y2="35"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="248" y="2" height="14" width="98" format="@@@@/@@/@@" html.valueishtml="0"  name=cm_cont_contract_start_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="248" y="20" height="14" width="98" format="@@@@/@@/@@" html.valueishtml="0"  name=cm_cont_contract_end_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="513" y="2" height="14" width="102" format="#,###" html.valueishtml="0"  name=amt11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="513" y="20" height="14" width="102" format="#,###" html.valueishtml="0"  name=amt12 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="729" y="2" height="14" width="102" format="#,###" html.valueishtml="0"  name=amt21 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="729" y="20" height="14" width="102" format="#,###" html.valueishtml="0"  name=amt22 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1" y1="0" x2="1" y2="39"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="945" y1="0" x2="945" y2="39"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="833" y1="0" x2="833" y2="39"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="725" y1="0" x2="725" y2="39"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="617" y1="0" x2="617" y2="39"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="509" y1="0" x2="509" y2="39"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="429" y1="0" x2="429" y2="39"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="348" y1="0" x2="348" y2="39"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="36" y1="0" x2="36" y2="39"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="150" y1="0" x2="150" y2="39"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="244" y1="0" x2="244" y2="39"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="83" y1="0" x2="83" y2="39"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="1" tabsequence=32766 border="0" color="33554432" x="154" y="12" height="17" width="88" format="#,###" html.valueishtml="0"  name=supplay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="352" y="12" height="17" width="75" format="0.0" html.valueishtml="0"  name=exec_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="433" y="12" height="17" width="74" format="~tif( fld_proc_rate = 0, ~"#~", ~"0.0~" )" html.valueishtml="0"  name=fld_proc_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="621" y="12" height="14" width="102" format="~tif( cost_rate1 = 0, ~"#~", ~"0.0~" )" html.valueishtml="0"  name=cost_rate1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="GetRow()"border="0" color="33554432" x="4" y="12" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="837" y="12" height="14" width="105" format="~tif( cost_rate2 = 0, ~"#~", ~"0.0~" )" html.valueishtml="0"  name=cost_rate2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="도급매출" border="0" color="16711935" x="84" y="2" height="14" width="66" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원가투입" border="0" color="134217856" x="87" y="20" height="14" width="61" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="134217858" x="44" y="9" height="19" width="36" format="[general]" html.valueishtml="0"  name=title visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-12" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

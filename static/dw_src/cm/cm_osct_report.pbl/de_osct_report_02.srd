@@ -1,0 +1,56 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=23 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_osct_recog_rate.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_osct_recog_rate.proj_code" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="cm_osct_recog_rate.consult_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="cm_osct_recog_rate.osct_div" )
+ column=(type=char(50) updatewhereclause=yes name=rate_cont dbname="cm_osct_recog_rate.rate_cont" )
+ column=(type=char(2) updatewhereclause=yes name=rate_seq dbname="cm_osct_recog_rate.rate_seq" )
+ column=(type=decimal(2) updatewhereclause=yes name=rate dbname="cm_osct_recog_rate.rate" )
+ column=(type=number updatewhereclause=yes name=mon_rate dbname="mon_rate" )
+ column=(type=number updatewhereclause=yes name=tot_rate dbname="tot_rate" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONSULT_CODE,
+         A.OSCT_DIV,
+         A.RATE_CONT,
+         A.RATE_SEQ,
+         A.RATE,
+         MAX(CASE SUBSTR(B.DEM_DATE,1,6) WHEN :as_dem_month THEN B.GONG_RATE END) MON_RATE,
+         SUM(B.GONG_RATE) TOT_RATE
+    FROM CM_OSCT_RECOG_RATE A  INNER JOIN CM_OSCT_PAY_RATE_M B
+                                      ON A.COMPANY_CODE = B.COMPANY_CODE
+                                     AND A.PROJ_CODE = B.PROJ_CODE
+                                     AND A.CONSULT_CODE = B.CONSULT_CODE
+                                     AND A.OSCT_DIV = B.OSCT_DIV
+                                     AND A.RATE_SEQ = B.RATE_SEQ
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE = :as_proj
+     AND A.CONSULT_CODE = :as_consult
+     AND A.OSCT_DIV = '3'
+     AND SUBSTR(B.DEM_DATE,1,6) <= :as_dem_month
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONSULT_CODE,
+         A.OSCT_DIV,
+         A.RATE_CONT,
+         A.RATE_SEQ,
+         A.RATE
+ORDER BY A.RATE_SEQ" arguments=(("as_comp", string),("as_proj", string),("as_consult", string),("as_dem_month", string)) )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="20" y="4" height="19" width="240" format="[general]" html.valueishtml="0"  name=rate_cont visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="rate + ~" %~""border="0" color="33554432" x="273" y="4" height="14" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" mon_rate + ~" %~""border="0" color="33554432" x="365" y="4" height="14" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" tot_rate + ~" %~""border="0" color="33554432" x="457" y="4" height="14" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=summary alignment="2" text="소   계" border="0" color="33554432" x="20" y="4" height="15" width="240" html.valueishtml="0"  name=t_1 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="2" expression="sum(rate for all) + ~" %~""border="0" color="33554432" x="273" y="4" height="14" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="2" expression="sum( rate / 100 * mon_rate for all) + ~" %~""border="0" color="33554432" x="365" y="4" height="14" width="47" format="[General]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="2" expression="sum( rate / 100 * tot_rate for all) + ~" %~""border="0" color="33554432" x="457" y="4" height="14" width="47" format="[General]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

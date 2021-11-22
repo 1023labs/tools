@@ -1,0 +1,34 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 56 print.margin.right = 56 print.margin.top = 50 print.margin.bottom = 50 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=24 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(20) updatewhereclause=yes name=cust_code dbname="cm_cost_create_buy.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=number updatewhereclause=yes name=supplay_amt dbname="supplay_amt" )
+ retrieve="  SELECT A.CUST_CODE,
+         C.CUST_NAME,
+         SUM(NVL(A.SUPPLAY_AMT,0) + NVL(A.VAT_AMT,0)) as SUPPLAY_AMT
+    FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_CUST C
+                                      ON A.CUST_CODE = C.CUST_CODE
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.YYYYMM = :as_month
+     AND A.CREATE_DIV IN ('1', '3')
+     AND SUBSTR(A.REQ_DATE,7,2) = '25'  
+GROUP BY A.CUST_CODE, C.CUST_NAME  
+ORDER BY C.CUST_NAME
+
+" arguments=(("as_comp", string),("as_month", string)) )
+line(band=detail x1="997" y1="0" x2="997" y2="25"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="25198720"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="/*  supplay_amt + vat_amt  */"border="0" color="33554432" x="885" y="1" height="14" width="108" format="#,##0" html.valueishtml="0"  name=tot_amt visible="1"  font.face="바탕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="7" y="4" height="14" width="220" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=summary alignment="2" text="합       계" border="0" color="33554432" x="9" y="2" height="13" width="375" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-8" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="237" y="4" height="14" width="148" format="@@@-@@-@@@@@" html.valueishtml="0"  name=cust_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="403" y="5" height="14" width="104" format="#,##0" html.valueishtml="0"  name=supplay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="1" expression="sum(supplay_amt for all)"border="0" color="33554432" x="403" y="1" height="14" width="104" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

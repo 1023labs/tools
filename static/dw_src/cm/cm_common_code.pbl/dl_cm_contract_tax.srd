@@ -1,0 +1,56 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_contract_tax.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=yyyymm dbname="cm_labo_contract_tax.yyyymm" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=basic_tax dbname="cm_labo_contract_tax.basic_tax" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=ju_tax dbname="cm_labo_contract_tax.ju_tax" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=time_etc_tax dbname="cm_labo_contract_tax.time_etc_tax" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=holiday_cut_tax dbname="cm_labo_contract_tax.holiday_cut_tax" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=year_tax dbname="cm_labo_contract_tax.year_tax" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=total_tax dbname="cm_labo_contract_tax.total_tax" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=over_tax dbname="cm_labo_contract_tax.over_tax" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.YYYYMM,   
+         A.BASIC_TAX,   
+         A.JU_TAX,   
+         A.TIME_ETC_TAX,   
+         A.HOLIDAY_CUT_TAX,   
+         A.YEAR_TAX,   
+         A.TOTAL_TAX,
+         A.OVER_TAX
+    FROM CM_LABO_CONTRACT_TAX A  
+   WHERE A.COMPANY_CODE = :as_comp_code
+" update="CM_LABO_CONTRACT_TAX" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="38" html.valueishtml="0"  name=t_1 pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="42" y="2" height="14" width="79" html.valueishtml="0"  name=yyyymm_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기본금" border="0" color="33554432" x="123" y="2" height="14" width="72" html.valueishtml="0"  name=basic_tax_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주휴수당" border="0" color="33554432" x="197" y="2" height="14" width="72" html.valueishtml="0"  name=ju_tax_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="국공휴일수당" border="0" color="33554432" x="271" y="2" height="14" width="77" html.valueishtml="0"  name=time_etc_tax_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="휴일가산분할수당" border="0" color="33554432" x="444" y="2" height="14" width="109" html.valueishtml="0"  name=holiday_cut_tax_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="연차수당" border="0" color="33554432" x="555" y="1" height="14" width="76" html.valueishtml="0"  name=year_tax_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총세율" border="0" color="33554432" x="633" y="1" height="14" width="78" html.valueishtml="0"  name=total_tax_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="시간외가산수당" border="0" color="33554432" x="350" y="1" height="14" width="92" html.valueishtml="0"  name=over_tax_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="43" y="2" height="17" width="78" format="[general]" html.valueishtml="0"  name=yyyymm visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="1" tabsequence=20 border="0" color="33554432" x="123" y="2" height="17" width="72" format="[general]" html.valueishtml="0"  name=basic_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=30 border="0" color="33554432" x="197" y="2" height="17" width="72" format="[general]" html.valueishtml="0"  name=ju_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=40 border="0" color="33554432" x="271" y="2" height="17" width="77" format="[general]" html.valueishtml="0"  name=time_etc_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=60 border="0" color="33554432" x="444" y="2" height="17" width="109" format="[general]" html.valueishtml="0"  name=holiday_cut_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=70 border="0" color="33554432" x="555" y="2" height="17" width="76" format="[general]" html.valueishtml="0"  name=year_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=80 border="0" color="33554432" x="633" y="2" height="17" width="78" format="[general]" html.valueishtml="0"  name=total_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=50 border="0" color="33554432" x="350" y="2" height="17" width="92" format="[general]" html.valueishtml="0"  name=over_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

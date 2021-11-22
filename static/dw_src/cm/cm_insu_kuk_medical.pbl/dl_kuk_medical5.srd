@@ -1,0 +1,83 @@
+release 7;
+datawindow(units=0 timer_interval=0 color=31909606 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+header(height=76 color="536870912" )
+summary(height=72 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=68 color="536870912" )
+table(column=(type=char(6) updatewhereclause=yes name=pay_yymm dbname="l_labor_account.pay_yymm" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="l_code_labor.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="l_code_labor.labor_name" )
+ column=(type=char(13) updatewhereclause=yes name=resident_no dbname="l_code_labor.resident_no" )
+ column=(type=number updatewhereclause=yes name=work_qty dbname="work_qty" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="pay_tot" )
+ column=(type=number updatewhereclause=yes name=kukmin_amt dbname="kukmin_amt" )
+ column=(type=number updatewhereclause=yes name=medical_amt dbname="medical_amt" )
+ column=(type=char(1) updatewhereclause=yes name=l_code_labor_total_chk dbname="l_code_labor.total_chk" values="	Y/	N" )
+ column=(type=char(1) updatewhereclause=yes name=l_code_labor_kukmin_chk dbname="l_code_labor.kukmin_chk" values="	Y/	N" )
+ column=(type=char(1) updatewhereclause=yes name=l_code_labor_meidcal_chk dbname="l_code_labor.meidcal_chk" values="	Y/	N" )
+ column=(type=char(50) updatewhereclause=yes name=code_project_project_name dbname="code_project.project_name" )
+ column=(type=char(1) updatewhereclause=yes name=unreliable_chk dbname="l_code_labor.unreliable_chk" )
+ column=(type=char(1) updatewhereclause=yes name=basic_life_chk dbname="l_code_labor.basic_life_chk" )
+ retrieve="  SELECT ACCOUNT.PAY_YYMM AS PAY_YYMM,
+			LABOR.LABOR_CODE AS LABOR_CODE,
+	      LABOR.LABOR_NAME AS LABOR_NAME,
+	      LABOR.RESIDENT_NO AS RESIDENT_NO,
+	      SUM(ACCOUNT.WORK_DAY) AS WORK_QTY,
+	      SUM(ACCOUNT.PAY_TOT) AS PAY_TOT,
+	      SUM(ACCOUNT.KUKMIN_AMT) AS KUKMIN_AMT,
+	      SUM(ACCOUNT.MEDICAL_AMT) AS MEDICAL_AMT,
+		   LABOR.TOTAL_CHK AS TOTAL_CHK,
+	      LABOR.KUKMIN_CHK AS KUKMIN_CHK,
+	      LABOR.MEDICAL_CHK AS MEIDCAL_CHK,
+			PROJECT.PROJECT_NAME AS PROJECT_NAME,
+			LABOR.UNRELIABLE_CHK AS UNRELIABLE_CHK,
+			LABOR.BASIC_LIFE_CHK AS BASIC_LIFE_CHK
+    FROM L_CODE_LABOR LABOR,
+  	      L_LABOR_ACCOUNT ACCOUNT,
+			CODE_PROJECT PROJECT
+   WHERE LABOR.LABOR_CODE = ACCOUNT.LABOR_CODE
+     AND LABOR.LABOR_CODE like :as_labor
+	  AND ACCOUNT.PROJECT_CODE = PROJECT.PROJECT_CODE
+	  AND ACCOUNT.PROJECT_CODE NOT IN('05900')
+GROUP BY ACCOUNT.PAY_YYMM,
+			LABOR.LABOR_CODE,
+	  	   LABOR.LABOR_NAME,
+		   LABOR.RESIDENT_NO,
+		   LABOR.TOTAL_CHK,
+		   LABOR.KUKMIN_CHK,
+		   LABOR.MEDICAL_CHK,
+			PROJECT.PROJECT_NAME,
+			LABOR.UNRELIABLE_CHK,
+			LABOR.BASIC_LIFE_CHK
+ORDER BY LABOR.LABOR_NAME" arguments=(("as_labor", string)) )
+button(band=header text="순번"filename=""action="0" border="0" color="0" x="9" y="0" height="76" width="146" vtextalign="0" htextalign="0"  name=b_1  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="년월"filename=""action="0" border="0" color="0" x="151" y="0" height="76" width="261" vtextalign="0" htextalign="0"  name=b_11  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="성명"filename=""action="0" border="0" color="0" x="407" y="0" height="76" width="347" vtextalign="0" htextalign="0"  name=b_2  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="주민번호"filename=""action="0" border="0" color="0" x="750" y="0" height="76" width="466" vtextalign="0" htextalign="0"  name=b_3  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="현장명"filename=""action="0" border="0" color="0" x="1211" y="0" height="76" width="759" vtextalign="0" htextalign="0"  name=b_7  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="출력일수"filename=""action="0" border="0" color="0" x="1966" y="0" height="76" width="251" vtextalign="0" htextalign="0"  name=b_4  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="월급여"filename=""action="0" border="0" color="0" x="2213" y="0" height="76" width="379" vtextalign="0" htextalign="0"  name=b_5  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="국민연금"filename=""action="0" border="0" color="0" x="2587" y="0" height="76" width="279" vtextalign="0" htextalign="0"  name=b_6  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="건강보험"filename=""action="0" border="0" color="0" x="2862" y="0" height="76" width="279" vtextalign="0" htextalign="0"  name=b_8  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="0" x="151" y="4" height="60" width="256" format="[general]"  name=pay_yymm edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif( unreliable_chk  = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="0" x="1970" y="4" height="60" width="242" format="[general]"  name=work_qty edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="0" x="2217" y="4" height="60" width="370" format="#,##0"  name=pay_tot edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="0" x="2592" y="4" height="60" width="270" format="#,##0"  name=kukmin_amt edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="0" x="2866" y="4" height="60" width="270" format="#,##0"  name=medical_amt edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="0" x="754" y="4" height="60" width="457" format="[general]"  name=resident_no editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="0" x="1216" y="4" height="60" width="750" format="[general]"  name=code_project_project_name edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="0" x="3150" y="4" height="56" width="23" format="[general]"  name=unreliable_chk visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="9" y="4" height="60" width="137" format="[GENERAL]"  name=compute_1  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif( unreliable_chk  = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="0" x="411" y="4" height="60" width="338" format="[general]"  name=labor_name edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif( unreliable_chk  = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+rectangle(band=detail x="5" y="0" height="68" width="3145"  name=r_1 visible="1~tif( getrow() = currentrow(), 1, 0)" brush.hatch="7" brush.color="553648127" pen.style="0" pen.width="5" pen.color="255"  background.mode="2" background.color="0" )
+text(band=summary alignment="1" text="총 급여 :" border="0" color="0" x="750" y="12" height="56" width="279"  name=t_1  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+line(band=summary x1="745" y1="0" x2="3127" y2="0"  name=l_1 pen.style="0" pen.width="5" pen.color="0"  background.mode="2" background.color="255" )
+text(band=summary alignment="1" text="총 건강보험 :" border="0" color="0" x="2491" y="12" height="56" width="347"  name=t_3  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="1" expression="sum(pay_tot for all)"border="0" color="0" x="1033" y="12" height="56" width="526" format="#,##0"  name=compute_2  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="1" expression="sum(medical_amt for all)"border="0" color="0" x="2843" y="12" height="56" width="283" format="#,##0"  name=compute_4  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=summary alignment="1" text="총 국민연금 :" border="0" color="0" x="1691" y="12" height="56" width="347"  name=t_2  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=summary alignment="1" expression="sum(kukmin_amt for all)"border="0" color="0" x="2043" y="12" height="56" width="302" format="#,##0"  name=compute_3  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=0 border="0" color="0" x="3173" y="4" height="56" width="9"  name=basic_life_chk visible="1~t0"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )
+ 

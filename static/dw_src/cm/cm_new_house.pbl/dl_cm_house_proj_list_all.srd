@@ -1,0 +1,66 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=yes print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=28 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="33289712" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="sm_code_project.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="sm_code_project.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=rent_pay dbname="cm_cost_house_account_new.rent_pay" )
+ column=(type=number updatewhereclause=yes name=sum_rent_pay dbname="sum_rent_pay" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE
+      ,A.PROJ_CODE AS PROJ_CODE
+      ,A.PROJ_NAME AS PROJ_NAME
+      ,C.EMP_NAME AS EMP_NAME
+      ,B.RENT_PAY AS RENT_PAY
+      ,(SELECT SUM(RENT_PAY)
+          FROM CM_COST_HOUSE_ACCOUNT_NEW T
+         WHERE B.COMPANY_CODE = T.COMPANY_CODE 
+           AND B.PROJ_CODE = T.PROJ_CODE 
+           AND B.CUST_CODE = T.CUST_CODE 
+           AND B.RENT_DATE = T.RENT_DATE 
+           AND B.RENT_SEQ = T.RENT_SEQ
+           AND SUBSTR(B.PAY_DATE,1,6) BETWEEN :AS_FROM_DATE AND :AS_TO_DATE ) AS SUM_RENT_PAY       
+  FROM SM_CODE_PROJECT A 
+  LEFT JOIN CM_COST_HOUSE_ACCOUNT_NEW B
+         ON A.COMPANY_CODE = B.COMPANY_CODE
+        AND A.PROJ_CODE = B.PROJ_CODE
+        AND B.SEND_YN = 'Y'
+        AND SUBSTR(B.PAY_DATE,1,6) = TO_CHAR(SYSDATE,'YYYYMM') 
+  LEFT JOIN HR_PERS_MASTER C 
+       ON A.COMPANY_CODE = C.COMPANY_CODE 
+      AND A.PM_EMPNO = C.EMP_NO  
+ WHERE A.MANAGE_TYPE = '1' 
+   AND A.MANAGE_TAG = '1' 
+   AND A.PROJECT_TAG = '1' 
+   AND A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE LIKE :AS_PROJ_CODE
+ ORDER BY A.PROJ_NAME " arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_FROM_DATE", string),("AS_TO_DATE", string)) )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="8" height="14" width="29" html.valueishtml="0"  name=c_row_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="105" y="8" height="19" width="64" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM명" border="0" color="33554432" x="33" y="8" height="14" width="70" html.valueishtml="0"  name=emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="171" y="8" height="14" width="259" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월금액" border="0" color="134217729" x="432" y="8" height="14" width="104" html.valueishtml="0"  name=rent_pay_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계금액" border="0" color="134217729" x="538" y="8" height="14" width="101" html.valueishtml="0"  name=sum_rent_pay_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="2" y="4" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="4" height="14" width="70" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="105" y="4" height="14" width="64" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="171" y="4" height="14" width="259" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="134217729" x="432" y="4" height="14" width="104" format="#,###" html.valueishtml="0"  name=rent_pay visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="134217729" x="538" y="4" height="14" width="101" format="#,###" html.valueishtml="0"  name=sum_rent_pay visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(rent_pay for all)"border="0" color="33554432" x="432" y="7" height="14" width="104" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(sum_rent_pay for all)"border="0" color="33554432" x="538" y="7" height="14" width="101" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="1" text="총 합계 : " border="0" color="33554432" x="171" y="5" height="14" width="259" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

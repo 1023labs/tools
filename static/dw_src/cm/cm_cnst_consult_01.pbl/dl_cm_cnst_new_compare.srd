@@ -1,0 +1,70 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osct_est_compare.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osct_est_compare.proj_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=osct_div dbname="cm_osct_est_compare.osct_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=consult_code dbname="cm_osct_est_compare.consult_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=consult_no dbname="cm_osct_est_compare.consult_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=cust_code dbname="cm_osct_est_compare.cust_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes key=yes name=cust_name dbname="cm_osct_est_compare.cust_name" )
+ column=(type=char(10) updatewhereclause=yes name=owner dbname="sm_code_cust.owner" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=field_amount dbname="cm_osct_est_compare.field_amount" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=est_amount dbname="cm_osct_est_compare.est_amount" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=office_amount dbname="cm_osct_est_compare.office_amount" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=confirm_tag dbname="cm_osct_est_compare.confirm_tag" values="	Y/	N" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name dbname="cm_osct_est_compare.file_name" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type dbname="cm_osct_est_compare.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_osct_est_compare.file_path" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=confirm_amount dbname="cm_osct_est_compare.confirm_amount" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,  
+         A.CONSULT_NO, 
+         A.CUST_CODE,   
+         A.CUST_NAME,
+         B.OWNER,
+         A.FIELD_AMOUNT,   
+         A.EST_AMOUNT,   
+         A.OFFICE_AMOUNT,   
+         A.CONFIRM_TAG,   
+         A.FILE_NAME,
+         A.FILE_TYPE,
+         A.FILE_PATH,
+         A.CONFIRM_AMOUNT  
+    FROM CM_OSCT_EST_COMPARE A LEFT JOIN SM_CODE_CUST B
+                                      ON A.CUST_CODE = B.CUST_CODE
+   WHERE A.COMPANY_CODE  = :as_comp_code
+     AND A.PROJ_CODE     = :as_proj_code
+     AND A.OSCT_DIV      = :as_osct_div
+     AND A.CONSULT_CODE  = :as_cons_code
+     AND A.CONSULT_NO    = :as_cons_no
+" update="CM_OSCT_EST_COMPARE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_cons_code", string),("as_cons_no", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="33" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장검토" border="0" color="33554432" x="218" y="2" height="14" width="70" html.valueishtml="0"  name=field_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="견적금액" border="0" color="33554432" x="146" y="2" height="14" width="70" html.valueishtml="0"  name=est_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="본사검토" border="0" color="33554432" x="290" y="2" height="14" width="70" html.valueishtml="0"  name=office_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확정금액" border="0" color="33554432" x="362" y="2" height="14" width="70" html.valueishtml="0"  name=confirm_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업체명" border="0" color="255" x="37" y="2" height="14" width="107" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확정" border="0" color="33554432" x="434" y="2" height="14" width="43" html.valueishtml="0"  name=confirm_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="견적서" border="0" color="33554432" x="479" y="2" height="14" width="88" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="1" tabsequence=20 border="0" color="33554432" x="146" y="2" height="17" width="70" format="#,##0" html.valueishtml="0"  name=est_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=40 border="0" color="33554432" x="290" y="2" height="17" width="70" format="#,##0" html.valueishtml="0"  name=office_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=50 border="0" color="33554432" x="362" y="2" height="17" width="70" format="#,##0" html.valueishtml="0"  name=confirm_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=30 border="0" color="33554432" x="218" y="2" height="17" width="70" format="#,##0" html.valueishtml="0"  name=field_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=10 border="0" color="33554432" x="37" y="2" height="17" width="107" format="[general]" html.valueishtml="0"  name=cust_name  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=60 border="0" color="33554432" x="434" y="2" height="17" width="43" format="[general]" html.valueishtml="0"  name=confirm_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="479" y="2" height="17" width="88" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="33554432" x="586" y="2" height="17" width="15" format="[GENERAL]" html.valueishtml="0"  name=p_filedel visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name ) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="33554432" x="569" y="2" height="17" width="15" format="[GENERAL]" html.valueishtml="0"  name=p_download visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

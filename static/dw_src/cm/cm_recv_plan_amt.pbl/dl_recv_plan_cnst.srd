@@ -1,0 +1,74 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=18 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_recv_plan_amount.company_code" )
+ column=(type=char(6) updatewhereclause=yes name=play_year dbname="cm_recv_plan_amount.play_year" )
+ column=(type=char(8) updatewhereclause=yes name=est_code dbname="cm_recv_plan_amount.est_code" )
+ column=(type=char(12) updatewhereclause=yes name=ent_dept dbname="cm_recv_plan_amount.ent_dept" )
+ column=(type=char(6) updatewhereclause=yes name=play_yymm dbname="cm_recv_plan_amount.play_yymm" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_code dbname="cm_recv_plan_amount.cnst_code" )
+ column=(type=char(3) updatewhereclause=yes name=const_div dbname="cm_recv_plan_amount.const_div" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="cm_recv_plan_amount.pm_empno" )
+ column=(type=decimal(0) updatewhereclause=yes name=expt_amt dbname="cm_recv_plan_amount.expt_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=goal_amt dbname="cm_recv_plan_amount.goal_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=plan_amt dbname="cm_recv_plan_amount.plan_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=achv_amt dbname="cm_recv_plan_amount.achv_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=this_amt dbname="cm_recv_plan_amount.this_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=next_amt dbname="cm_recv_plan_amount.next_amt" )
+ column=(type=char(1) updatewhereclause=yes name=recv_div dbname="cm_recv_plan_amount.recv_div" )
+ column=(type=char(1) updatewhereclause=yes name=status_div dbname="cm_recv_plan_amount.status_div" )
+ column=(type=char(200) updatewhereclause=yes name=remarks dbname="cm_recv_plan_amount.remarks" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" )
+ column=(type=char(0) updatewhereclause=yes name=next2_amt dbname="next2_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PLAY_YEAR, 
+         A.EST_CODE,  
+         A.ENT_DEPT, 
+         A.PLAY_YYMM, 
+         A.CNST_CODE, 
+         A.CONST_DIV, 
+         A.PM_EMPNO, 
+         A.EXPT_AMT, 
+         A.GOAL_AMT, 
+         A.PLAN_AMT, 
+         A.ACHV_AMT, 
+         A.THIS_AMT, 
+         A.NEXT_AMT, 
+         A.RECV_DIV, 
+         A.STATUS_DIV, 
+         A.REMARKS,
+         B.CNST_NAME,
+         '' AS NEXT2_AMT 
+    FROM CM_RECV_PLAN_AMOUNT A LEFT JOIN CM_CUST_CONSTRUCT B
+                                      ON A.CNST_CODE = B.CNST_CODE 
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PLAY_YEAR = :as_year
+ORDER BY A.CONST_DIV ASC, 
+         A.PLAY_YYMM ASC" arguments=(("as_comp", string),("as_year", string)) )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="2" y="2" height="14" width="126" html.valueishtml="0"  name=cnst_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비율" border="0" color="33554432" x="471" y="2" height="14" width="48" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수주계획" border="0" color="33554432" x="130" y="2" height="14" width="109" html.valueishtml="0"  name=plan_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금년도공사분" border="0" color="33554432" x="241" y="2" height="14" width="113" html.valueishtml="0"  name=this_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="내년도공사분~tstring(number( play_year )-1)+~"년공사분~"" border="0" color="33554432" x="356" y="2" height="14" width="113" html.valueishtml="0"  name=next_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="내후년공사분" border="0" color="33554432" x="521" y="2" height="14" width="111" html.valueishtml="0"  name=next2_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="125" y1="31" x2="813" y2="31"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="126" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="130" y="2" height="14" width="109" format="#,##0" html.valueishtml="0"  name=plan_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="241" y="2" height="14" width="113" format="#,##0" html.valueishtml="0"  name=this_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="356" y="2" height="14" width="113" format="#,##0" html.valueishtml="0"  name=next_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="round( plan_amt / plan_amt_sum * 100 ,2)+~"%~""border="0" color="33554432" x="471" y="2" height="14" width="48" format="" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="0" tabsequence=32766 border="0" color="33554432" x="521" y="2" height="14" width="111" format="[general]" html.valueishtml="0"  name=next2_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="계" border="0" color="33554432" x="2" y="2" height="14" width="126" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(plan_amt for all)"border="0" color="33554432" x="130" y="2" height="14" width="109" format="#,##0" html.valueishtml="0"  name=plan_amt_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression=" plan_amt_sum / plan_amt_sum * 100 +~"%~""border="0" color="33554432" x="471" y="2" height="14" width="48" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(this_amt for all)"border="0" color="33554432" x="241" y="2" height="14" width="113" format="#,##0" html.valueishtml="0"  name=this_amt_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(next_amt for all)"border="0" color="33554432" x="356" y="2" height="14" width="113" format="#,##0" html.valueishtml="0"  name=next_amt_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

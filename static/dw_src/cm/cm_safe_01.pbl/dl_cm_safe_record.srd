@@ -1,0 +1,89 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=30 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_accid_record.company_code" )
+ column=(type=char(9) update=yes updatewhereclause=yes key=yes name=accid_no dbname="cm_accid_record.accid_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_accid_record.seq" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=record_tag dbname="cm_accid_record.record_tag" )
+ column=(type=datetime update=yes updatewhereclause=yes name=period_start dbname="cm_accid_record.period_start" )
+ column=(type=datetime update=yes updatewhereclause=yes name=period_end dbname="cm_accid_record.period_end" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=record_remarks dbname="cm_accid_record.record_remarks" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=safe_remarks dbname="cm_accid_record.safe_remarks" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=modify_remarks dbname="cm_accid_record.modify_remarks" )
+ column=(type=datetime update=yes updatewhereclause=yes name=talk_date dbname="cm_accid_record.talk_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=agree_date dbname="cm_accid_record.agree_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=complete_date dbname="cm_accid_record.complete_date" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=record_empno dbname="cm_accid_record.record_empno" )
+ column=(type=char(20) updatewhereclause=yes name=record_empnm dbname="hr_pers_master.record_empnm" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=safe_empno dbname="cm_accid_record.safe_empno" )
+ column=(type=char(20) updatewhereclause=yes name=safe_empnm dbname="hr_pers_master.safe_empnm" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=file_name dbname="cm_accid_record.file_name" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=file_type dbname="cm_accid_record.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_accid_record.file_path" )
+ retrieve="SELECT  A.COMPANY_CODE       ,
+             A.ACCID_NO         ,
+             A.SEQ              ,
+             A.RECORD_TAG       ,
+             A.PERIOD_START     ,
+             A.PERIOD_END       ,
+             A.RECORD_REMARKS   ,
+             A.SAFE_REMARKS     ,
+             A.MODIFY_REMARKS   ,
+             A.TALK_DATE        ,
+             A.AGREE_DATE       ,
+             A.COMPLETE_DATE    ,
+             A.RECORD_EMPNO     ,
+             B.EMP_NAME RECORD_EMPNM,
+             A.SAFE_EMPNO       ,
+             C.EMP_NAME SAFE_EMPNM,
+             A.FILE_NAME        ,
+             A.FILE_TYPE        ,
+             A.FILE_PATH        
+   FROM  CM_ACCID_RECORD A,            
+             HR_PERS_MASTER    B,
+             HR_PERS_MASTER    C         
+WHERE A.COMPANY_CODE   = :as_comcode
+    AND A.ACCID_NO            = :as_accid_no
+    AND A.RECORD_EMPNO    = B.EMP_NO(+)
+    AND A.SAFE_EMPNO       = C.EMP_NO(+)
+ORDER BY SEQ DESC    " update="CM_ACCID_RECORD" updatewhere=1 updatekeyinplace=yes arguments=(("as_comcode", string),("as_accid_no", string)) )
+text(band=header alignment="2" text="안전담당자" border="0" color="33554432" x="1528" y="11" height="14" width="70" html.valueishtml="0"  name=hr_pers_master_safe_empnm_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="행동분류" border="0" color="33554432" x="50" y="11" height="14" width="170" html.valueishtml="0"  name=cm_accid_record_record_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="재해자 행동내용" border="0" color="33554432" x="377" y="11" height="14" width="298" html.valueishtml="0"  name=cm_accid_record_record_remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="안전팀 대응" border="0" color="33554432" x="1228" y="11" height="14" width="298" html.valueishtml="0"  name=cm_accid_record_safe_remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="추가사항" border="0" color="33554432" x="864" y="11" height="14" width="156" html.valueishtml="0"  name=cm_accid_record_modify_remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입력자" border="0" color="33554432" x="2" y="11" height="14" width="46" html.valueishtml="0"  name=hr_pers_master_record_empnm_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="첨부파일" border="0" color="33554432" x="677" y="11" height="14" width="152" html.valueishtml="0"  name=cm_accid_record_file_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="면담일" border="0" color="33554432" x="1022" y="11" height="14" width="72" html.valueishtml="0"  name=cm_accid_record_talk_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합의일" border="0" color="33554432" x="1096" y="11" height="14" width="64" html.valueishtml="0"  name=cm_accid_record_agree_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="종결일" border="0" color="33554432" x="1162" y="11" height="14" width="64" html.valueishtml="0"  name=complete_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="시작일" border="0" color="33554432" x="222" y="11" height="14" width="75" html.valueishtml="0"  name=cm_accid_record_period_start_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="종료일" border="0" color="33554432" x="299" y="11" height="14" width="76" html.valueishtml="0"  name=cm_accid_record_period_end_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="2" tabsequence=100 border="0" color="33554432" x="1528" y="2" height="19" width="70" format="[general]" html.valueishtml="0"  name=safe_empnm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=10 border="0" color="33554432" x="50" y="2" height="19" width="170" format="[general]" html.valueishtml="0"  name=record_tag visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=yes dddw.case=any dddw.hscrollbar=yes dddw.vscrollbar=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=40 border="0" color="33554432" x="377" y="2" height="19" width="298" format="[general]" html.valueishtml="0"  name=record_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=90 border="0" color="33554432" x="1228" y="2" height="19" width="298" format="[general]" html.valueishtml="0"  name=safe_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=50 border="0" color="33554432" x="864" y="2" height="19" width="156" format="[general]" html.valueishtml="0"  name=modify_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="19" width="46" format="[general]" html.valueishtml="0"  name=record_empnm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="0" tabsequence=32766 border="0" color="33554432" x="677" y="2" height="19" width="152" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression=" bitmap( if (isNull( FILE_NAME) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="134217856" x="831" y="4" height="14" width="15" format="[GENERAL]" html.valueishtml="0"  name=p_download visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression=" bitmap( if (isNull( file_name) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="134217856" x="848" y="4" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_filedel visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=60 border="0" color="33554432" x="1023" y="2" height="19" width="71" format="[shortdate] [time]" html.valueishtml="0"  name=talk_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=70 border="0" color="33554432" x="1097" y="2" height="19" width="63" format="[shortdate] [time]" html.valueishtml="0"  name=agree_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=80 border="0" color="33554432" x="1163" y="2" height="19" width="63" format="[shortdate] [time]" html.valueishtml="0"  name=complete_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="223" y="2" height="19" width="74" format="[shortdate] [time]" html.valueishtml="0"  name=period_start visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=30 border="0" color="33554432" x="300" y="2" height="19" width="75" format="[shortdate] [time]" html.valueishtml="0"  name=period_end visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

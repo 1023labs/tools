@@ -1,0 +1,88 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=75 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=proj_code dbname="sm_code_project.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=open_date dbname="sm_code_project.open_date" )
+ column=(type=char(8) updatewhereclause=yes name=close_date dbname="sm_code_project.close_date" )
+ column=(type=number updatewhereclause=yes name=conf_cntr_amt dbname="conf_cntr_amt" )
+ column=(type=number updatewhereclause=yes name=plan_cntr_amt dbname="plan_cntr_amt" )
+ column=(type=number updatewhereclause=yes name=conf_exec_amt dbname="conf_exec_amt" )
+ column=(type=number updatewhereclause=yes name=plan_exec_amt dbname="plan_exec_amt" )
+ retrieve="  SELECT A.PROJ_CODE
+       , A.PROJ_NAME
+       , A.OPEN_DATE
+       , A.CLOSE_DATE
+       , NVL(B.CONF_CNTR_AMT, 0) CONF_CNTR_AMT
+       , NVL(B.PLAN_CNTR_AMT, 0) PLAN_CNTR_AMT
+       , NVL(C.CONF_EXEC_AMT, 0) CONF_EXEC_AMT
+       , NVL(C.PLAN_EXEC_AMT, 0) PLAN_EXEC_AMT
+    FROM SM_CODE_PROJECT A LEFT  JOIN (  SELECT A.COMPANY_CODE
+                                              , A.PROJ_CODE
+                                              , SUM(DECODE(B.CONFIRM_TAG, 'Y', NVL(B.MATERIAL_AMT, 0) + NVL(B.LABOR_AMT, 0) + NVL(B.COST_AMT, 0), 0)) CONF_CNTR_AMT
+                                              , SUM(DECODE(B.EXPECT_TAG , 'Y', NVL(B.MATERIAL_AMT, 0) + NVL(B.LABOR_AMT, 0) + NVL(B.COST_AMT, 0), 0)) PLAN_CNTR_AMT
+                                           FROM CM_CONT_CONTRACT A INNER JOIN CM_CONT_CHANGE_INFO B
+                                                                           ON A.COMPANY_CODE  = B.COMPANY_CODE
+                                                                          AND A.PROJ_CODE     = B.PROJ_CODE
+                                                                          AND A.CONTRACT_CODE = B.CONTRACT_CODE
+                                          WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                            AND A.PROJ_CODE    = :AS_PROJ_CODE
+                                            AND B.CONTRACT_DATE <= :AS_YYMM || '31'
+                                       GROUP BY A.COMPANY_CODE, A.PROJ_CODE) B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE    = B.PROJ_CODE
+                           LEFT  JOIN (  SELECT A.COMPANY_CODE
+                                              , A.PROJ_CODE
+                                              , SUM((NVL(A.DESN_MAT_AMT, 0) + NVL(A.DESN_LAB_AMT, 0) + NVL(A.DESN_EXP_AMT, 0)) * NVL(A.DESN_ITEM_QTY, 1)) CONF_EXEC_AMT
+                                              , SUM((NVL(A.CHNG_MAT_AMT, 0) + NVL(A.CHNG_LAB_AMT, 0) + NVL(A.CHNG_EXP_AMT, 0)) * NVL(A.CHNG_ITEM_QTY, 1)) PLAN_EXEC_AMT
+                                           FROM CM_EXEC_DETAIL A
+                                          WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                            AND A.PROJ_CODE    = :AS_PROJ_CODE
+                                            AND A.PGM_DIV      = '1'
+                                       GROUP BY A.COMPANY_CODE, A.PROJ_CODE) C
+                                    ON A.COMPANY_CODE = C.COMPANY_CODE
+                                   AND A.PROJ_CODE    = C.PROJ_CODE
+   WHERE A.COMPANY_CODE = :AS_COMP_CODE
+     AND A.PROJ_CODE    = :AS_PROJ_CODE" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_YYMM", string)) )
+rectangle(band=detail x="4" y="4" height="66" width="145"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+text(band=detail alignment="2" text="확정계약" border="0" color="27229506" x="84" y="10" height="14" width="61" html.valueishtml="0"  name=conf_cntr_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="78" y1="4" x2="78" y2="70"  name=l_7  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=detail alignment="2" text="예정계약" border="0" color="27229506" x="84" y="32" height="14" width="61" html.valueishtml="0"  name=plan_cntr_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="계" border="0" color="27229506" x="84" y="54" height="14" width="61" html.valueishtml="0"  name=c_cntr_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="계약금액" border="0" color="27229506" x="8" y="32" height="14" width="66" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="4" y1="3" x2="270" y2="3"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="4" y1="4" x2="270" y2="4"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="78" y1="26" x2="270" y2="26"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=detail x1="78" y1="48" x2="270" y2="48"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=detail x1="4" y1="71" x2="270" y2="71"  name=l_6  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="4" y1="70" x2="270" y2="70"  name=l_5  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="10789024" x="153" y="10" height="14" width="112" format="#,###" html.valueishtml="0"  name=conf_cntr_amt  tag="[NB]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="10789024" x="153" y="32" height="14" width="112" format="#,###" html.valueishtml="0"  name=plan_cntr_amt  tag="[NB]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="conf_cntr_amt + plan_cntr_amt"border="0" color="10789024" x="153" y="54" height="14" width="112" format="#,###" html.valueishtml="0"  name=c_cntr_amt  tag="[NB]" visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="369" y="4" height="66" width="171"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+text(band=detail alignment="2" text="실행금액" border="0" color="27229506" x="370" y="32" height="14" width="73" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="443" y1="4" x2="443" y2="70"  name=l_14  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=detail x1="443" y1="48" x2="717" y2="48"  name=l_13  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=detail x1="443" y1="26" x2="717" y2="26"  name=l_12  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+compute(band=detail alignment="1" expression="conf_exec_amt / conf_cntr_amt"border="0" color="10789024" x="665" y="10" height="14" width="48" format="~tif( conf_exec_amt / conf_cntr_amt = 0, ~"#~", ~"0.00%~" )" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="660" y1="4" x2="660" y2="70"  name=l_15  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="10789024" x="544" y="10" height="14" width="112" format="#,###" html.valueishtml="0"  name=conf_exec_amt  tag="[NB]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="plan_exec_amt / plan_cntr_amt"border="0" color="10789024" x="665" y="32" height="14" width="48" format="[GENERAL]~tif( plan_exec_amt / plan_cntr_amt = 0, ~"#~", ~"0.00%~" )" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="10789024" x="544" y="32" height="14" width="112" format="#,###" html.valueishtml="0"  name=plan_exec_amt  tag="[NB]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="( conf_exec_amt + plan_exec_amt ) / ( conf_cntr_amt + plan_cntr_amt )"border="0" color="10789024" x="665" y="54" height="14" width="48" format="[GENERAL]~tif( ( conf_exec_amt + plan_exec_amt ) / ( conf_cntr_amt + plan_cntr_amt ) = 0, ~"#~", ~"0.00%~" )" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="conf_exec_amt + plan_exec_amt"border="0" color="10789024" x="544" y="54" height="14" width="112" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="369" y1="4" x2="717" y2="4"  name=l_8  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="369" y1="3" x2="717" y2="3"  name=l_9  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="369" y1="70" x2="717" y2="70"  name=l_10  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="369" y1="71" x2="717" y2="71"  name=l_11  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=detail alignment="2" text="확정실행 / (%)" border="0" color="27229506" x="449" y="10" height="14" width="85" html.valueishtml="0"  name=conf_exec_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="예정실행 / (%)" border="0" color="27229506" x="449" y="32" height="14" width="85" html.valueishtml="0"  name=plan_exec_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="계 / (%)" border="0" color="27229506" x="449" y="54" height="14" width="85" html.valueishtml="0"  name=c_exec_amt visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

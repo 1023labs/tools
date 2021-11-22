@@ -1,0 +1,67 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=44 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=number updatewhereclause=yes name=exe_amt1 dbname="exe_amt1" )
+ column=(type=number updatewhereclause=yes name=exe_amt2 dbname="exe_amt2" )
+ column=(type=number updatewhereclause=yes name=exe_amt3 dbname="exe_amt3" )
+ column=(type=number updatewhereclause=yes name=exe_amt4 dbname="exe_amt4" )
+ retrieve="  SELECT SUM(A.EXE_AMT1) EXE_AMT1,
+         SUM(A.EXE_AMT2) EXE_AMT2,
+         SUM(A.EXE_AMT3) EXE_AMT3,
+         SUM(A.EXE_AMT6+A.EXE_AMT7) EXE_AMT4
+   FROM (   
+          SELECT DECODE(ITEM_CODE, '0101',   EXE_AMT, 0) EXE_AMT1,
+                 DECODE(ITEM_CODE, '010201', EXE_AMT, 0) EXE_AMT2,
+                 DECODE(ITEM_CODE, '010202', EXE_AMT, 0) EXE_AMT3,
+                 DECODE(ITEM_CODE, '0103',   EXE_AMT, 0) EXE_AMT4,
+                 DECODE(ITEM_CODE, '0104',   EXE_AMT, 0) EXE_AMT5,
+                 DECODE(ITEM_CODE, '0105',   EXE_AMT, 0) EXE_AMT6,
+                 DECODE(ITEM_CODE, '0106',   EXE_AMT, 0) EXE_AMT7
+            FROM CM_EXEC_WORK_BUDGET  
+           WHERE COMPANY_CODE  = :as_comp_code
+             AND CONTRACT_CODE = :as_cont_code
+             AND ITEM_CODE <> '0102'
+             AND LEVEL_NUM = 2
+          UNION ALL   
+          SELECT DECODE(ITEM_CODE, '0101',   EXE_AMT, 0) EXE_AMT1,
+                 DECODE(ITEM_CODE, '010201', EXE_AMT, 0) EXE_AMT2,
+                 DECODE(ITEM_CODE, '010202', EXE_AMT, 0) EXE_AMT3,
+                 DECODE(ITEM_CODE, '0103',   EXE_AMT, 0) EXE_AMT4,
+                 DECODE(ITEM_CODE, '0104',   EXE_AMT, 0) EXE_AMT5,
+                 DECODE(ITEM_CODE, '0105',   EXE_AMT, 0) EXE_AMT6,
+                 DECODE(ITEM_CODE, '0106',   EXE_AMT, 0) EXE_AMT7
+            FROM CM_EXEC_WORK_BUDGET  
+           WHERE COMPANY_CODE  = :as_comp_code
+             AND CONTRACT_CODE = :as_cont_code
+             AND ITEM_CODE IN ('010201', '010202'))A     " arguments=(("as_comp_code", string),("as_cont_code", string)) )
+rectangle(band=background x="1" y="1" height="40" width="492"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+line(band=background x1="97" y1="21" x2="97" y2="61"  name=l_29 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="0" y1="2" x2="0" y2="61"  name=l_30 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="2" text="공 사 실 행 금 액" border="0" color="33554432" x="4" y="2" height="16" width="487" html.valueishtml="0"  name=item_name_t visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=background alignment="2" text="자 재 비" border="0" color="33554432" x="4" y="24" height="15" width="90" html.valueishtml="0"  name=t_6 visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=background alignment="2" text="직접노무비" border="0" color="33554432" x="102" y="24" height="14" width="90" html.valueishtml="0"  name=t_2 visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=background alignment="2" text="계" border="0" color="33554432" x="401" y="24" height="15" width="87" html.valueishtml="0"  name=t_3 visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=background x1="198" y1="21" x2="198" y2="61"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="299" y1="21" x2="299" y2="61"  name=l_32 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="396" y1="21" x2="396" y2="61"  name=l_33 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="493" y1="2" x2="493" y2="61"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="2" text="간접노무비" border="0" color="33554432" x="204" y="24" height="15" width="90" html.valueishtml="0"  name=t_4 visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=background alignment="2" text="경          비" border="0" color="33554432" x="303" y="24" height="15" width="90" html.valueishtml="0"  name=t_7 visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" exe_amt1  +  exe_amt2  +  exe_amt3  +  exe_amt4 "border="0" color="33554432" x="400" y="1" height="14" width="91" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="1" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="14" width="91" format="#,##0" html.valueishtml="0"  name=exe_amt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="103" y="1" height="14" width="91" format="#,##0" html.valueishtml="0"  name=exe_amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="204" y="1" height="14" width="91" format="#,##0" html.valueishtml="0"  name=exe_amt3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="303" y="1" height="14" width="91" format="#,##0" html.valueishtml="0"  name=exe_amt4 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=foreground x1="0" y1="1" x2="494" y2="1"  name=l_2  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="0" y1="41" x2="494" y2="41"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="0" y1="21" x2="494" y2="21"  name=l_12  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="0" y1="61" x2="494" y2="61"  name=l_1  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

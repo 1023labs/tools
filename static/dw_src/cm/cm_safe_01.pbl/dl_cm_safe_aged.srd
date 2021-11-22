@@ -1,0 +1,60 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=16 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes key=yes name=company_code dbname="cm_labo_master.company_code" )
+ column=(type=char(8) updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_master.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(14) updatewhereclause=yes name=rrn_no dbname="rrn_no" )
+ column=(type=number updatewhereclause=yes name=age dbname="age" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=safe_yn dbname="cm_labo_master.safe_yn" values="	Y/	N" )
+ column=(type=datetime update=yes updatewhereclause=yes name=safe_date dbname="cm_labo_master.safe_date" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=safe_empno dbname="cm_labo_master.safe_empno" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name1 dbname="cm_labo_master.file_name1" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type1 dbname="cm_labo_master.file_type1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path1 dbname="cm_labo_master.file_path1" )
+ retrieve="SELECT A.COMPANY_CODE,
+            A.LABOR_CODE,
+            A.LABOR_NAME,
+            A.RRN_PRE||'-'||A.RRN_POST RRN_NO,
+            TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(A.RRN_PRE,1,2))) AGE,
+            A.SAFE_YN,
+            A.SAFE_DATE,
+            A.SAFE_EMPNO,    
+            A.FILE_NAME1,
+            A.FILE_TYPE1,
+            A.FILE_PATH1  
+  FROM CM_LABO_MASTER A
+ WHERE A.LABOR_CODE = :as_labor_code
+" update="CM_LABO_MASTER" updatewhere=0 updatekeyinplace=no arguments=(("as_labor_code", string)) )
+text(band=header alignment="2" text="이름" border="0" color="33554432" x="116" y="11" height="14" width="56" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="나이" border="0" color="33554432" x="307" y="11" height="14" width="39" html.valueishtml="0"  name=age_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="승인여부" border="0" color="33554432" x="2" y="11" height="14" width="56" html.valueishtml="0"  name=safe_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="승인일" border="0" color="33554432" x="348" y="11" height="14" width="91" html.valueishtml="0"  name=safe_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="60" y="11" height="14" width="54" html.valueishtml="0"  name=labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="174" y="11" height="14" width="131" html.valueishtml="0"  name=rrn_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="각서" border="0" color="134217856" x="441" y="11" height="14" width="103" html.valueishtml="0"  name=file_name1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="승인자사번" border="0" color="33554432" x="578" y="11" height="14" width="81" html.valueishtml="0"  name=safe_empno_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="56" format="[general]" html.valueishtml="0"  name=safe_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="60" y="2" height="17" width="54" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="116" y="2" height="17" width="56" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="307" y="2" height="17" width="39" format="[general]" html.valueishtml="0"  name=age visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="348" y="2" height="17" width="91" format="[shortdate] [time]" html.valueishtml="0"  name=safe_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="174" y="2" height="17" width="131" format="[general]" html.valueishtml="0"  name=rrn_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=10 border="0" color="33554432" x="441" y="2" height="17" width="103" format="[general]" html.valueishtml="0"  name=file_name1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( FILE_NAME1 ) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="33554432" x="546" y="2" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_download visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name1 ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="33554432" x="562" y="2" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_filedel visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="578" y="2" height="17" width="81" format="[general]" html.valueishtml="0"  name=safe_empno visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

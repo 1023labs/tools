@@ -1,0 +1,222 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="const_code" )
+ column=(type=char(12) updatewhereclause=yes name=item_code dbname="item_code" )
+ column=(type=decimal(0) updatewhereclause=yes name=seq dbname="seq" )
+ column=(type=char(200) updatewhereclause=yes name=item_name dbname="item_name" )
+ column=(type=char(30) updatewhereclause=yes name=item_std dbname="item_std" )
+ column=(type=char(50) updatewhereclause=yes name=item_unit dbname="item_unit" )
+ column=(type=char(1) updatewhereclause=yes name=item_div dbname="item_div" )
+ column=(type=char(250) updatewhereclause=yes name=supply_item dbname="supply_item" )
+ column=(type=char(1) updatewhereclause=yes name=att_input_yn dbname="att_input_yn" )
+ column=(type=decimal(2) updatewhereclause=yes name=att_width dbname="att_width" )
+ column=(type=decimal(2) updatewhereclause=yes name=att_length dbname="att_length" )
+ column=(type=decimal(2) updatewhereclause=yes name=att_height dbname="att_height" )
+ column=(type=decimal(2) updatewhereclause=yes name=att_size dbname="att_size" )
+ column=(type=char(20) updatewhereclause=yes name=item_maker dbname="item_maker" )
+ column=(type=char(250) updatewhereclause=yes name=maker_name dbname="maker_name" )
+ column=(type=decimal(2) updatewhereclause=yes name=desn_item_qty dbname="desn_item_qty" )
+ column=(type=decimal(1) updatewhereclause=yes name=desn_mat_cost dbname="desn_mat_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=desn_mat_amt dbname="desn_mat_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=desn_lab_cost dbname="desn_lab_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=desn_lab_amt dbname="desn_lab_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=desn_exp_cost dbname="desn_exp_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=desn_exp_amt dbname="desn_exp_amt" )
+ column=(type=number updatewhereclause=yes name=desn_tot_amt dbname="desn_tot_amt" )
+ column=(type=decimal(2) updatewhereclause=yes name=chng_item_qty dbname="chng_item_qty" )
+ column=(type=decimal(1) updatewhereclause=yes name=chng_mat_cost dbname="chng_mat_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=chng_mat_amt dbname="chng_mat_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=chng_lab_cost dbname="chng_lab_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=chng_lab_amt dbname="chng_lab_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=chng_exp_cost dbname="chng_exp_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=chng_exp_amt dbname="chng_exp_amt" )
+ column=(type=number updatewhereclause=yes name=chng_tot_amt dbname="chng_tot_amt" )
+ column=(type=char(2) updatewhereclause=yes name=status dbname="status" )
+ column=(type=char(8) updatewhereclause=yes name=est_code dbname="est_code" )
+ column=(type=number updatewhereclause=yes name=tot_item_qty dbname="tot_item_qty" )
+ column=(type=number updatewhereclause=yes name=tot_mat_cost dbname="tot_mat_cost" )
+ column=(type=number updatewhereclause=yes name=tot_mat_amt dbname="tot_mat_amt" )
+ column=(type=number updatewhereclause=yes name=tot_lab_cost dbname="tot_lab_cost" )
+ column=(type=number updatewhereclause=yes name=tot_lab_amt dbname="tot_lab_amt" )
+ column=(type=number updatewhereclause=yes name=tot_exp_cost dbname="tot_exp_cost" )
+ column=(type=number updatewhereclause=yes name=tot_exp_amt dbname="tot_exp_amt" )
+ column=(type=number updatewhereclause=yes name=tot_tot_amt dbname="tot_tot_amt" )
+ column=(type=char(20) updatewhereclause=yes name=attr0 dbname="attr0" )
+ column=(type=char(20) updatewhereclause=yes name=attr1 dbname="attr1" )
+ column=(type=char(20) updatewhereclause=yes name=attr2 dbname="attr2" )
+ column=(type=char(20) updatewhereclause=yes name=attr3 dbname="attr3" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONST_CODE,
+         A.ITEM_CODE,
+         A.SEQ,
+         NVL(B.ITEM_NAME, NVL(C.IW_NAME,F.ITEM_NAME)) ITEM_NAME,
+         A.ITEM_STD,
+         NVL(B.ITEM_UNIT, NVL(C.IW_UNIT,F.ITEM_UNIT)) ITEM_UNIT,
+         A.ITEM_DIV,
+         (SELECT DNAME FROM SM_COMCODE_D WHERE HCODE = 'SUPPLYMATDIV' AND DCODE = A.SUPPLY_ITEM) SUPPLY_ITEM,
+         NVL(D.ATT_INPUT_YN, 'N') ATT_INPUT_YN,
+         A.ATT_WIDTH,
+         A.ATT_LENGTH,
+         A.ATT_HEIGHT,
+         A.ATT_SIZE,
+         A.ITEM_MAKER,
+         E.DNAME MAKER_NAME,
+         A.DESN_ITEM_QTY,
+         A.DESN_MAT_COST,
+         A.DESN_MAT_AMT,
+         A.DESN_LAB_COST,
+         A.DESN_LAB_AMT,
+         A.DESN_EXP_COST,
+         A.DESN_EXP_AMT,
+         NVL(A.DESN_MAT_AMT, 0) + NVL(A.DESN_LAB_AMT, 0) + NVL(A.DESN_EXP_AMT, 0) DESN_TOT_AMT,
+         A.CHNG_ITEM_QTY,
+         A.CHNG_MAT_COST,
+         A.CHNG_MAT_AMT,
+         A.CHNG_LAB_COST,
+         A.CHNG_LAB_AMT,
+         A.CHNG_EXP_COST,
+         A.CHNG_EXP_AMT,
+         NVL(A.CHNG_MAT_AMT, 0) + NVL(A.CHNG_LAB_AMT, 0) + NVL(A.CHNG_EXP_AMT, 0) CHNG_TOT_AMT,
+         A.STATUS,
+         A.EST_CODE,
+         NVL(DESN_ITEM_QTY, 0) + NVL(CHNG_ITEM_QTY, 0) TOT_ITEM_QTY,
+         NVL(CHNG_MAT_COST, 0) + NVL(DESN_MAT_COST, 0) TOT_MAT_COST,
+         NVL(DESN_MAT_AMT, 0) + NVL(CHNG_MAT_AMT, 0) TOT_MAT_AMT,
+         NVL(CHNG_LAB_COST, 0) + NVL(DESN_LAB_COST, 0) TOT_LAB_COST,
+         NVL(DESN_LAB_AMT, 0) + NVL(CHNG_LAB_AMT, 0) TOT_LAB_AMT,
+         NVL(CHNG_EXP_COST, 0) + NVL(DESN_EXP_COST, 0) TOT_EXP_COST,
+         NVL(DESN_EXP_AMT, 0) + NVL(CHNG_EXP_AMT, 0) TOT_EXP_AMT,
+         NVL(A.DESN_MAT_AMT, 0) + NVL(A.DESN_LAB_AMT, 0) + NVL(A.DESN_EXP_AMT, 0) + 
+         NVL(A.CHNG_MAT_AMT, 0) + NVL(A.CHNG_LAB_AMT, 0) + NVL(A.CHNG_EXP_AMT, 0) TOT_TOT_AMT,
+         NVL(D.V_ATTR0, 'N') ATTR0,
+         NVL(D.V_ATTR1, 'N') ATTR1,
+         NVL(D.V_ATTR2, 'N') ATTR2,
+         NVL(D.V_ATTR3, 'N') ATTR3
+    FROM CM_EXEC_DETAIL A LEFT JOIN SM_CODE_MATERIAL B
+                                 ON A.ITEM_CODE = B.ITEM_CODE
+                          LEFT JOIN (SELECT DISTINCT COMPANY_CODE, PROJ_CODE, CONTRACT_CODE, ITEM_CODE, IW_NAME, IW_SIZE, IW_UNIT FROM VW_CONT_IWLIST) C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.PROJ_CODE = C.PROJ_CODE
+                                AND A.EST_CODE = C.CONTRACT_CODE
+                                AND A.ITEM_CODE = C.ITEM_CODE
+                          LEFT JOIN (SELECT Z.ITEM_CODE,
+                                            Z.V_ATTR0,
+                                            Z.V_ATTR1,
+                                            Z.V_ATTR2,
+                                            Z.V_ATTR3,
+                                            Y.ATT_INPUT_YN
+                                       FROM SM_CODE_MATERIAL Z JOIN SM_CODE_MATERIAL_SMALL Y
+                                                                 ON Z.LARGE_CODE = Y.LARGE_CODE
+                                                                AND Z.MIDDLE_CODE = Y.MIDDLE_CODE
+                                                                AND Z.SMALL_CODE = Y.SMALL_CODE
+                                      WHERE Y.ATT_INPUT_YN = 'Y' ) D
+                                 ON A.ITEM_CODE = D.ITEM_CODE
+                          LEFT JOIN VW_C_PM_MATMAKER E
+                                 ON A.ITEM_MAKER = E.DCODE
+                          LEFT JOIN (SELECT ITEM_CODE,
+                                    ITEM_NAME,
+                                    ITEM_STD,
+                                    ITEM_UNIT,
+                                    ACC_GB
+                               FROM SM_CODE_MATERIAL
+                              UNION ALL
+                             SELECT IW_CODE ITEM_CODE,
+                                    IW_NAME ITEM_NAME,
+                                    IW_SIZE ITEM_STD,
+                                    IW_UNIT ITEM_UNIT,
+                                    '10' ACC_GB
+                               FROM EM_EST_IWLIST
+                              WHERE EST_CODE = :as_estcode
+                                AND BREAK_DIV = '03'
+                              UNION ALL
+                             SELECT DISTINCT ITEM_CODE,
+                                    ITEM_NAME,
+                                    NULL,
+                                    ITEM_UNIT,
+                                    '99'
+                               FROM EM_EST_EM
+                              WHERE ITEM_CODE LIKE 'TM%') F
+                                 ON A.ITEM_CODE = F.ITEM_CODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.PROJ_CODE    = :as_projcode
+     AND A.PGM_DIV      = :as_pgmdiv
+     AND A.CONST_CODE   LIKE :as_constcode||'%'
+ORDER BY A.CONST_CODE, A.SORT_SEQ" arguments=(("as_compcode", string),("as_projcode", string),("as_constcode", string),("as_pgmdiv", string),("as_estcode", string)) )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="2" y="1" height="13" width="48" html.valueishtml="0"  name=const_code_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="53" y="1" height="13" width="169" html.valueishtml="0"  name=item_name_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="224" y="1" height="13" width="127" html.valueishtml="0"  name=item_std_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="353" y="1" height="13" width="31" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정수량" border="0" color="33554432" x="386" y="1" height="13" width="49" html.valueishtml="0"  name=desn_item_qty_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정자재단가" border="0" color="33554432" x="437" y="1" height="13" width="75" html.valueishtml="0"  name=desn_mat_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정자재금액" border="0" color="33554432" x="514" y="1" height="13" width="80" html.valueishtml="0"  name=desn_mat_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정노무단가" border="0" color="33554432" x="596" y="1" height="13" width="76" html.valueishtml="0"  name=desn_lab_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정노무금액" border="0" color="33554432" x="674" y="1" height="13" width="78" html.valueishtml="0"  name=desn_lab_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정경비단가" border="0" color="33554432" x="754" y="1" height="13" width="73" html.valueishtml="0"  name=desn_exp_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정경비금액" border="0" color="33554432" x="829" y="1" height="13" width="76" html.valueishtml="0"  name=desn_exp_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="확정금액" border="0" color="33554432" x="907" y="1" height="13" width="81" html.valueishtml="0"  name=desn_tot_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경실행수량" border="0" color="33554432" x="990" y="1" height="13" width="85" html.valueishtml="0"  name=chng_item_qty_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경자재단가" border="0" color="33554432" x="1077" y="1" height="13" width="92" html.valueishtml="0"  name=chng_mat_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경자재금액" border="0" color="33554432" x="1171" y="1" height="13" width="88" html.valueishtml="0"  name=chng_mat_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경노무단가" border="0" color="33554432" x="1261" y="1" height="13" width="89" html.valueishtml="0"  name=chng_lab_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경노무금액" border="0" color="33554432" x="1352" y="1" height="13" width="86" html.valueishtml="0"  name=chng_lab_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경경비단가" border="0" color="33554432" x="1440" y="1" height="13" width="88" html.valueishtml="0"  name=chng_exp_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경경비금액" border="0" color="33554432" x="1530" y="1" height="13" width="87" html.valueishtml="0"  name=chng_exp_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경금액" border="0" color="33554432" x="1619" y="1" height="13" width="83" html.valueishtml="0"  name=chng_tot_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계수량" border="0" color="33554432" x="1704" y="1" height="13" width="73" html.valueishtml="0"  name=tot_item_qty_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계자재단가" border="0" color="33554432" x="1779" y="1" height="13" width="79" html.valueishtml="0"  name=tot_mat_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계자재금액" border="0" color="33554432" x="1860" y="1" height="13" width="74" html.valueishtml="0"  name=tot_mat_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계노무단가" border="0" color="33554432" x="1936" y="1" height="13" width="76" html.valueishtml="0"  name=tot_lab_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계노무금액" border="0" color="33554432" x="2014" y="1" height="13" width="75" html.valueishtml="0"  name=tot_lab_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계경비단가" border="0" color="33554432" x="2091" y="1" height="13" width="78" html.valueishtml="0"  name=tot_exp_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계경비금액" border="0" color="33554432" x="2171" y="1" height="13" width="75" html.valueishtml="0"  name=tot_exp_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="실행합계금액" border="0" color="33554432" x="2248" y="1" height="13" width="69" html.valueishtml="0"  name=tot_tot_amt_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="제조사" border="0" color="33554432" x="2319" y="1" height="13" width="75" html.valueishtml="0"  name=maker_name_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="지급자재" border="0" color="33554432" x="2396" y="1" height="13" width="72" html.valueishtml="0"  name=supply_item_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="53" y="1" height="18" width="169" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="224" y="1" height="18" width="127" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="353" y="1" height="18" width="31" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="18" width="48" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="2319" y="1" height="18" width="75" format="[general]" html.valueishtml="0"  name=maker_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="2396" y="1" height="18" width="72" format="[general]" html.valueishtml="0"  name=supply_item visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="33554432" x="386" y="1" height="18" width="49" format="#,##0" html.valueishtml="0"  name=desn_item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="33554432" x="437" y="1" height="18" width="75" format="#,##0" html.valueishtml="0"  name=desn_mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432" x="514" y="1" height="18" width="80" format="#,##0" html.valueishtml="0"  name=desn_mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="596" y="1" height="18" width="76" format="#,##0" html.valueishtml="0"  name=desn_lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432" x="674" y="1" height="18" width="78" format="#,##0" html.valueishtml="0"  name=desn_lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=23 alignment="1" tabsequence=32766 border="0" color="33554432" x="754" y="1" height="18" width="73" format="#,##0" html.valueishtml="0"  name=desn_exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=24 alignment="1" tabsequence=32766 border="0" color="33554432" x="829" y="1" height="18" width="76" format="#,##0" html.valueishtml="0"  name=desn_exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=25 alignment="1" tabsequence=32766 border="0" color="33554432" x="907" y="1" height="18" width="81" format="#,##0" html.valueishtml="0"  name=desn_tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=26 alignment="1" tabsequence=32766 border="0" color="33554432" x="990" y="1" height="18" width="85" format="#,##0" html.valueishtml="0"  name=chng_item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=27 alignment="1" tabsequence=32766 border="0" color="33554432" x="1077" y="1" height="18" width="92" format="#,##0" html.valueishtml="0"  name=chng_mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=28 alignment="1" tabsequence=32766 border="0" color="33554432" x="1171" y="1" height="18" width="88" format="#,##0" html.valueishtml="0"  name=chng_mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=29 alignment="1" tabsequence=32766 border="0" color="33554432" x="1261" y="1" height="18" width="89" format="#,##0" html.valueishtml="0"  name=chng_lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=30 alignment="1" tabsequence=32766 border="0" color="33554432" x="1352" y="1" height="18" width="86" format="#,##0" html.valueishtml="0"  name=chng_lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=31 alignment="1" tabsequence=32766 border="0" color="33554432" x="1440" y="1" height="18" width="88" format="#,##0" html.valueishtml="0"  name=chng_exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=32 alignment="1" tabsequence=32766 border="0" color="33554432" x="1530" y="1" height="18" width="87" format="#,##0" html.valueishtml="0"  name=chng_exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=33 alignment="1" tabsequence=32766 border="0" color="33554432" x="1619" y="1" height="18" width="83" format="#,##0" html.valueishtml="0"  name=chng_tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=36 alignment="1" tabsequence=32766 border="0" color="33554432" x="1704" y="1" height="18" width="73" format="#,##0" html.valueishtml="0"  name=tot_item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=37 alignment="1" tabsequence=32766 border="0" color="33554432" x="1779" y="1" height="18" width="79" format="#,##0" html.valueishtml="0"  name=tot_mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=38 alignment="1" tabsequence=32766 border="0" color="33554432" x="1860" y="1" height="18" width="74" format="#,##0" html.valueishtml="0"  name=tot_mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=39 alignment="1" tabsequence=32766 border="0" color="33554432" x="1936" y="1" height="18" width="76" format="#,##0" html.valueishtml="0"  name=tot_lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=40 alignment="1" tabsequence=32766 border="0" color="33554432" x="2014" y="1" height="18" width="75" format="#,##0" html.valueishtml="0"  name=tot_lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=41 alignment="1" tabsequence=32766 border="0" color="33554432" x="2091" y="1" height="18" width="78" format="#,##0" html.valueishtml="0"  name=tot_exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=42 alignment="1" tabsequence=32766 border="0" color="33554432" x="2171" y="1" height="18" width="75" format="#,##0" html.valueishtml="0"  name=tot_exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=43 alignment="1" tabsequence=32766 border="0" color="33554432" x="2248" y="1" height="18" width="69" format="#,##0" html.valueishtml="0"  name=tot_tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,43 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=doc_seq dbname="sm_notice_board_dept.doc_seq" )
+ column=(type=char(500) update=yes updatewhereclause=yes name=subject dbname="sm_notice_board_dept.subject" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=read_cnt dbname="sm_notice_board_dept.read_cnt" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=user_id dbname="sm_notice_board_dept.user_id" )
+ column=(type=datetime update=yes updatewhereclause=yes name=reg_date dbname="sm_notice_board_dept.reg_date" )
+ column=(type=char(1) updatewhereclause=yes name=read_yn dbname="read_yn" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=dept_code dbname="sm_notice_board_dept.dept_code" )
+ retrieve="SELECT A.DOC_SEQ, 
+       A.SUBJECT, 
+       A.READ_CNT, 
+       A.USER_ID,
+       A.REG_DATE,
+       'N' as READ_YN,
+	DEPT_CODE
+FROM SM_NOTICE_BOARD_DEPT A
+WHERE A.REG_DATE BETWEEN :as_fromdate AND :as_todate
+    AND A.DEPT_CODE = '03330'  
+ORDER BY REG_DATE DESC,DOC_SEQ DESC" update="SM_NOTICE_BOARD_DEPT" updatewhere=0 updatekeyinplace=no arguments=(("as_fromdate", string),("as_todate", string),("as_type", string),("as_search", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="31" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="제목" border="0" color="33554432" x="36" y="2" height="14" width="328" html.valueishtml="0"  name=subject_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="MS Serif" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="37" y="2" height="14" width="327" format="[general]" html.valueishtml="0"  name=subject visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="367" y="2" height="14" width="107" format="[shortdate] [time]" html.valueishtml="0"  name=reg_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="33554432" x="477" y="2" height="14" width="59" format="[general]" html.valueishtml="0"  name=doc_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="등록일" border="0" color="33554432" x="367" y="2" height="14" width="107" html.valueishtml="0"  name=reg_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="게시물No" border="0" color="33554432" x="476" y="2" height="14" width="60" html.valueishtml="0"  name=doc_seq_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

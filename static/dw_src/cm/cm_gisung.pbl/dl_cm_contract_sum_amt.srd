@@ -1,0 +1,30 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_cont_contract.company_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=cust_code dbname="cm_cont_contract.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.CUST_CODE,
+         B.CUST_NAME
+    FROM CM_CONT_CONTRACT A INNER JOIN SM_CODE_CUST B
+                                    ON A.CUST_CODE = B.CUST_CODE
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE LIKE :as_proj
+GROUP BY A.COMPANY_CODE,
+         A.CUST_CODE,
+         B.CUST_NAME
+ORDER BY B.CUST_NAME" arguments=(("as_comp", string),("as_proj", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="32" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사명" border="0" color="33554432" x="36" y="2" height="14" width="198" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="18" width="32" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="36" y="2" height="18" width="198" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

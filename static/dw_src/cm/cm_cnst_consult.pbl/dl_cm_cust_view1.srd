@@ -1,0 +1,92 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=25 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=cm_osct_consult_company_code dbname="cm_osct_consult.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_osct_consult.proj_code" dbalias="A.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_project_proj_name dbname="sm_code_project.proj_name" dbalias="D.proj_name" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="cm_osct_consult.consult_code" dbalias="A.consult_code" )
+ column=(type=char(50) updatewhereclause=yes name=cm_osct_consult_consult_name dbname="cm_osct_consult.consult_name" dbalias="A.consult_name" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cm_osct_consult.cust_code" dbalias="A.cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_cust_cust_name dbname="sm_code_cust.cust_name" dbalias="B.cust_name" )
+ column=(type=number updatewhereclause=yes name=c_consult_amt dbname="cm_osct_consult.consult_amt" dbalias=".consult_amt" )
+ column=(type=char(8) updatewhereclause=yes name=c_start_date dbname="cm_osct_consult.start_date" dbalias=".start_date" )
+ column=(type=char(8) updatewhereclause=yes name=c_end_date dbname="cm_osct_consult.end_date" dbalias=".end_date" )
+ column=(type=char(2000) updatewhereclause=yes name=specials dbname="cm_osct_consult.specials" dbalias="A.specials" )
+ retrieve="  SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+         A.PROJ_CODE     AS PROJ_CODE,
+         D.PROJ_NAME     AS PROJ_NAME,
+         A.CONSULT_CODE  AS CONSULT_CODE,   
+         A.CONSULT_NAME  AS CONSULT_NAME,   
+         A.CUST_CODE     AS CUST_CODE,
+         B.CUST_NAME     AS CUST_NAME,    
+         C.CONSULT_AMT   AS CONSULT_AMT, 
+         C.START_DATE    AS START_DATE,   
+         C.END_DATE      AS END_DATE,
+         A.SPECIALS     AS SPECIALS
+    FROM CM_OSCT_CONSULT A LEFT JOIN SM_CODE_CUST B
+                                  ON A.CUST_CODE = B.CUST_CODE
+                           LEFT JOIN (
+                                       SELECT COMPANY_CODE,
+                                              PROJ_CODE,
+                                              OSCT_DIV,
+                                              CONSULT_CODE,
+                                              SUM(OEXE_AMT) CONSULT_AMT,
+                                              SUM(OEXE_VAT) CONSULT_VAT,
+                                              MIN(START_DATE) START_DATE,
+                                              MAX(END_DATE) END_DATE
+                                             FROM CM_OSCT_CONSULT_DETAIL
+                                            WHERE COMPANY_CODE = :AS_COMP_CODE
+                                              AND OSCT_DIV     = '3'
+                                              AND STATUS_DIV  <> 'X'
+                                         GROUP BY COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE  ) C
+                                   ON A.COMPANY_CODE = C.COMPANY_CODE
+                                  AND A.PROJ_CODE    = C.PROJ_CODE
+                                  AND A.OSCT_DIV     = C.OSCT_DIV
+                                  AND A.CONSULT_CODE = C.CONSULT_CODE
+                          LEFT JOIN SM_CODE_PROJECT D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE
+                                AND A.PROJ_CODE    = D.PROJ_CODE
+   WHERE A.COMPANY_CODE = :AS_COMP_CODE
+     AND A.OSCT_DIV     = '3'
+     AND B.CUST_NAME LIKE '%'||:AS_CUST_NAME||'%'
+     AND A.CONSULT_NAME LIKE '%'||:AS_CONSULT_NAME||'%'
+     AND A.STATUS_DIV  <> 'X' 
+ORDER BY A.CONSULT_CODE  " arguments=(("AS_COMP_CODE", string),("AS_CUST_NAME", string),("AS_CONSULT_NAME", string)) )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="189" y="9" height="14" width="186" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사명" border="0" color="33554432" x="377" y="9" height="14" width="146" html.valueishtml="0"  name=cm_osct_consult_consult_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="업체명" border="0" color="33554432" x="32" y="9" height="14" width="155" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사금액" border="0" color="33554432" x="525" y="9" height="14" width="72" html.valueishtml="0"  name=c_consult_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="공사" border="0" color="33554432" x="599" y="9" height="14" width="76" html.valueishtml="0"  name=c_start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="677" y="9" height="14" width="72" html.valueishtml="0"  name=c_end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="9" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="189" y="6" height="14" width="186" format="[general]" html.valueishtml="0"  name=sm_code_project_proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="377" y="6" height="14" width="146" format="[general]" html.valueishtml="0"  name=cm_osct_consult_consult_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="32" y="6" height="14" width="155" format="[general]" html.valueishtml="0"  name=sm_code_cust_cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="525" y="6" height="14" width="72" format="#,###" html.valueishtml="0"  name=c_consult_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="599" y="6" height="14" width="76" format="[general]" html.valueishtml="0"  name=c_start_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="677" y="6" height="14" width="72" format="[general]" html.valueishtml="0"  name=c_end_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="6" height="14" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회사코드" border="0" color="33554432" x="751" y="9" height="14" width="28" html.valueishtml="0"  name=cm_osct_consult_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="781" y="9" height="14" width="32" html.valueishtml="0"  name=cm_osct_consult_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="컨설팅코드" border="0" color="33554432" x="815" y="9" height="14" width="30" html.valueishtml="0"  name=cm_osct_consult_consult_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="751" y="6" height="14" width="28" format="[general]" html.valueishtml="0"  name=cm_osct_consult_company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="781" y="6" height="14" width="32" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="815" y="6" height="14" width="30" format="[general]" html.valueishtml="0"  name=consult_code visible="0" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="업체코드" border="0" color="33554432" x="847" y="9" height="14" width="30" html.valueishtml="0"  name=cm_osct_consult_cust_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="847" y="6" height="14" width="30" format="[general]" html.valueishtml="0"  name=cust_code visible="0" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Cm Osct Consult Specials" border="0" color="33554432" x="879" y="9" height="14" width="123" html.valueishtml="0"  name=cm_osct_consult_specials_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="0" tabsequence=0 border="0" color="33554432" x="880" y="6" height="14" width="122" html.valueishtml="0"  name=specials visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,70 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1090519039 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=91 color="536870912" )
+summary(height=18 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_insu_hiring_insurance.company_code" )
+ column=(type=char(6) updatewhereclause=yes name=pay_yymm dbname="cm_insu_hiring_insurance.pay_yymm" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_insu_hiring_insurance.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=number updatewhereclause=yes name=labor_cnt dbname="labor_cnt" )
+ column=(type=number updatewhereclause=yes name=pay_sum dbname="pay_sum" )
+ column=(type=char(1) updatewhereclause=yes name=close_tag dbname="cm_insu_hiring_insurance.close_tag" values="	Y/	N" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PAY_YYMM,
+         C.EMP_NAME,
+         A.PROJ_CODE, 
+         B.PROJ_NAME,
+         COUNT(*) AS LABOR_CNT, 
+         SUM(A.PAY_TOT) AS PAY_SUM, 
+         A.CLOSE_TAG
+    FROM CM_INSU_HIRING_INSURANCE A LEFT JOIN SM_CODE_PROJECT B 
+                                           ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE
+                                    LEFT JOIN HR_PERS_MASTER C 
+                                           ON B.COMPANY_CODE = C.COMPANY_CODE AND B.PM_EMPNO = C.EMP_NO 
+   WHERE A.COMPANY_CODE  = :as_comp_code 
+     AND B.PM_EMPNO   LIKE :as_emp_no  
+     AND A.PAY_YYMM      = :as_pay_yymm 
+     AND A.INSURANCE_TAG = 'Y' 
+GROUP BY A.COMPANY_CODE,
+         A.PAY_YYMM,
+         C.EMP_NAME,
+         A.PROJ_CODE,
+         B.PROJ_NAME,
+         A.CLOSE_TAG
+ORDER BY C.EMP_NAME,
+         B.PROJ_NAME " arguments=(("as_comp_code", string),("as_emp_no", string),("as_pay_yymm", string)) )
+group(level=1 header.height=0 trailer.height=18 by=("company_code" , "emp_name" ) header.color="536870912" trailer.color="536870912" )
+compute(band=background alignment="2" expression="left(pay_yymm, 4) + ' 년' + right(pay_yymm, 2) + ' 월 고용보험 신고 현황' "border="0" color="0" x="90" y="22" height="32" width="533" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="Arial" font.height="-16" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" font.underline="1" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="인 원" border="0" color="0" x="412" y="74" height="16" width="74" html.valueishtml="0"  name=t_9 visible="1"  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="총 금 액" border="0" color="0" x="487" y="74" height="16" width="101" html.valueishtml="0"  name=t_10 visible="1"  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+line(band=header x1="87" y1="73" x2="620" y2="73"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="87" y1="90" x2="620" y2="90"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="현장코드" border="0" color="0" x="172" y="74" height="16" width="67" html.valueishtml="0"  name=t_7 visible="1"  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="현 장 명" border="0" color="0" x="240" y="74" height="16" width="171" html.valueishtml="0"  name=t_8 visible="1"  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="PM 명" border="0" color="0" x="87" y="74" height="16" width="84" html.valueishtml="0"  name=t_6 visible="1"  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="마감" border="0" color="0" x="589" y="74" height="16" width="30" html.valueishtml="0"  name=t_11 visible="1"  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=detail alignment="0" text="명" border="0" color="0" x="473" y="1" height="16" width="13" html.valueishtml="0"  name=t_1 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="0" x="487" y="1" height="16" width="101" format="#,##0" html.valueishtml="0"  name=pay_sum visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="0" x="412" y="1" height="16" width="61" format="[general]" html.valueishtml="0"  name=labor_cnt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="0" x="240" y="1" height="14" width="171" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="0" x="172" y="1" height="14" width="67" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="0" x="87" y="1" height="14" width="84" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="0" x="589" y="1" height="14" width="30" format="[general]" html.valueishtml="0"  name=close_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=trailer.1 alignment="2" text="소 계" border="0" color="0" x="172" y="1" height="16" width="239" html.valueishtml="0"  name=t_2 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33487569" )
+compute(band=trailer.1 alignment="1" expression="sum( labor_cnt for group 1)"border="0" color="0" x="412" y="1" height="16" width="61" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33487569" )
+text(band=trailer.1 alignment="0" text="명" border="0" color="0" x="473" y="1" height="16" width="13" html.valueishtml="0"  name=t_3 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33487569" )
+compute(band=trailer.1 alignment="1" expression="sum( pay_sum for group 1)"border="0" color="0" x="487" y="1" height="16" width="101" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33487569" )
+line(band=trailer.1 x1="87" y1="17" x2="620" y2="17"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=summary alignment="2" text="합 계" border="0" color="0" x="172" y="1" height="16" width="239" html.valueishtml="0"  name=t_4 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33286399" )
+compute(band=summary alignment="1" expression="sum( labor_cnt for all )"border="0" color="0" x="412" y="1" height="16" width="61" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33286399" )
+text(band=summary alignment="0" text="명" border="0" color="0" x="473" y="1" height="16" width="13" html.valueishtml="0"  name=t_5 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33286399" )
+compute(band=summary alignment="1" expression="sum( pay_sum for all )"border="0" color="0" x="487" y="1" height="16" width="101" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="33286399" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

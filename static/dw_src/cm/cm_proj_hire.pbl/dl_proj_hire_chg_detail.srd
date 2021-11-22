@@ -1,0 +1,163 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=2 selected.mouse=no )
+header(height=19 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(1) updatewhereclause=yes name=chk_yn dbname="chk_yn" values="	Y/	N" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_hire_proj_chg_list.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=work_yymm dbname="cm_hire_proj_chg_list.work_yymm" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_hire_proj_chg_list.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_hire_proj_chg_list.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn dbname="rrn" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=join_date dbname="cm_hire_proj_chg_list.join_date" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=job_code dbname="cm_hire_proj_chg_list.job_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=duty_code_h dbname="cm_hire_proj_chg_list.duty_code_h" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=grade_code_h dbname="cm_hire_proj_chg_list.grade_code_h" )
+ column=(type=number update=yes updatewhereclause=yes name=career dbname="cm_hire_proj_chg_list.career" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=school_car_code dbname="cm_hire_proj_chg_list.school_car_code" )
+ column=(type=number update=yes updatewhereclause=yes name=pay_amt dbname="cm_hire_proj_chg_list.pay_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=add_amt dbname="cm_hire_proj_chg_list.add_amt" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=apply_pay_date_h dbname="cm_hire_proj_chg_list.apply_pay_date_h" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=emp_no dbname="cm_hire_proj_chg_list.emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=dept_code dbname="cm_hire_proj_chg_list.dept_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=input_date dbname="cm_hire_proj_chg_list.input_date" )
+ column=(type=char(4000) update=yes updatewhereclause=yes name=remarks dbname="cm_hire_proj_chg_list.remarks" )
+ column=(type=decimal(0) updatewhereclause=yes name=napprono dbname="cm_hire_proj_chg_list.napprono" )
+ column=(type=char(1) updatewhereclause=yes name=report_end dbname="approval.report_end" )
+ column=(type=char(1) updatewhereclause=yes name=report_progress dbname="approval.report_progress" values="진행중	1/승인	2/반려	5/임시저장	6/반려	7/" )
+ column=(type=char(10) updatewhereclause=yes name=dateday dbname="dateday" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name1 dbname="cm_hire_proj_chg_list.file_name1" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type1 dbname="cm_hire_proj_chg_list.file_type1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path1 dbname="cm_hire_proj_chg_list.file_path1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name2 dbname="cm_hire_proj_chg_list.file_name2" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type2 dbname="cm_hire_proj_chg_list.file_type2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path2 dbname="cm_hire_proj_chg_list.file_path2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name3 dbname="cm_hire_proj_chg_list.file_name3" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type3 dbname="cm_hire_proj_chg_list.file_type3" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path3 dbname="cm_hire_proj_chg_list.file_path3" )
+ column=(type=number update=yes updatewhereclause=yes name=add_career dbname="cm_hire_proj_chg_list.add_career" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=add_amt_reason dbname="cm_hire_proj_chg_list.add_amt_reason" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=complete_yn dbname="cm_hire_proj_chg_list.complete_yn" values="	Y/	N" )
+ retrieve="SELECT 'N' AS CHK_YN
+      ,A.COMPANY_CODE     AS COMPANY_CODE    
+      ,A.WORK_YYMM        AS WORK_YYMM       
+      ,A.PROJ_CODE        AS PROJ_CODE       
+      ,C.PROJ_NAME        AS PROJ_NAME       
+      ,A.LABOR_CODE       AS LABOR_CODE      
+      ,B.LABOR_NAME       AS LABOR_NAME      
+      ,(X_DECRYPT(B.RRN_PRE, '(enckey)') || X_DECRYPT(B.RRN_POST, '(enckey)')) AS RRN
+      ,A.JOIN_DATE        AS JOIN_DATE       
+      ,A.JOB_CODE         AS JOB_CODE        
+      ,A.DUTY_CODE_H      AS DUTY_CODE_H     
+      ,A.GRADE_CODE_H     AS GRADE_CODE_H    
+      ,A.CAREER           AS CAREER          
+      ,A.SCHOOL_CAR_CODE  AS SCHOOL_CAR_CODE 
+      ,A.PAY_AMT          AS PAY_AMT         
+      ,A.ADD_AMT          AS ADD_AMT         
+      ,A.APPLY_PAY_DATE_H AS APPLY_PAY_DATE_H
+      ,A.EMP_NO           AS EMP_NO          
+      ,D.EMP_NAME         AS EMP_NAME        
+      ,A.DEPT_CODE        AS DEPT_CODE       
+      ,E.PROJ_NAME        AS PROJ_NAME
+      ,A.INPUT_DATE       AS INPUT_DATE
+      ,A.REMARKS          AS REMARKS
+      ,A.NAPPRONO         AS NAPPRONO
+      ,F.ISREPORTEND      AS REPORT_END
+      ,F.ISREPORTPROGRESS AS REPORT_PROGRESS
+      ,TO_CHAR(F.DATEDAY,'YYYY-MM-DD') AS DATEDAY
+      ,A.FILE_NAME1 AS FILE_NAME1
+      ,A.FILE_TYPE1 AS FILE_TYPE1
+      ,A.FILE_PATH1 AS FILE_PATH1
+      ,A.FILE_NAME2 AS FILE_NAME2
+      ,A.FILE_TYPE2 AS FILE_TYPE2
+      ,A.FILE_PATH2 AS FILE_PATH2
+      ,A.FILE_NAME3 AS FILE_NAME3
+      ,A.FILE_TYPE3 AS FILE_TYPE3
+      ,A.FILE_PATH3 AS FILE_PATH3
+      ,A.ADD_CAREER AS ADD_CAREER
+      ,A.ADD_AMT_REASON AS ADD_AMT_REASON
+      ,A.COMPLETE_YN AS COMPLETE_YN
+  FROM CM_HIRE_PROJ_CHG_LIST A LEFT JOIN CM_LABO_MASTER B
+                                      ON A.LABOR_CODE = B.LABOR_CODE
+                               LEFT JOIN SM_CODE_PROJECT C
+                                      ON A.PROJ_CODE = C.PROJ_CODE
+                               LEFT JOIN HR_PERS_MASTER D
+                                      ON A.EMP_NO = D.EMP_NO
+                               LEFT JOIN SM_CODE_PROJECT E
+                                      ON A.DEPT_CODE = E.PROJ_CODE
+                               LEFT JOIN SEBOGW.APPROVAL F
+                                      ON A.NAPPRONO = F.NAPPRONO
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.WORK_YYMM    = :as_yymm
+   AND A.PROJ_CODE    = :as_proj
+ ORDER BY B.LABOR_NAME, A.LABOR_CODE" update="CM_HIRE_PROJ_CHG_LIST" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_proj", string),("as_yymm", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="22" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="111" y="2" height="14" width="57" html.valueishtml="0"  name=labor_name_t  tag="labor_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="26" y="1" height="14" width="25" html.valueishtml="0"  name=chk_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="170" y="2" height="14" width="92" html.valueishtml="0"  name=rrn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="53" y="2" height="14" width="56" html.valueishtml="0"  name=cm_hire_proj_chg_list_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입사일" border="0" color="33554432" x="264" y="2" height="14" width="67" html.valueishtml="0"  name=cm_hire_proj_chg_list_join_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="374" y="2" height="14" width="63" html.valueishtml="0"  name=cm_hire_proj_chg_list_job_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직무" border="0" color="33554432" x="333" y="2" height="14" width="39" html.valueishtml="0"  name=cm_hire_proj_chg_list_duty_code_h_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직위" border="0" color="33554432" x="439" y="2" height="14" width="31" html.valueishtml="0"  name=cm_hire_proj_chg_list_grade_code_h_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="학력" border="0" color="33554432" x="472" y="2" height="14" width="72" html.valueishtml="0"  name=cm_hire_proj_chg_list_school_car_cod_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="급여" border="0" color="33554432" x="574" y="2" height="14" width="62" html.valueishtml="0"  name=cm_hire_proj_chg_list_pay_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="추가수당" border="0" color="33554432" x="658" y="2" height="14" width="54" html.valueishtml="0"  name=cm_hire_proj_chg_list_add_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="급여적용일" border="0" color="33554432" x="714" y="2" height="14" width="70" html.valueishtml="0"  name=cm_hire_proj_chg_list_apply_pay_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결재번호" border="0" color="33554432" x="1241" y="2" height="14" width="51" html.valueishtml="0"  name=cm_hire_proj_chg_list_napprono_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요" border="0" color="33554432" x="1481" y="2" height="14" width="163" html.valueishtml="0"  name=cm_hire_proj_chg_list_remarks_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상신일" border="0" color="33554432" x="1348" y="2" height="14" width="70" html.valueishtml="0"  name=dateday_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결재상세" border="0" color="33554432" x="1294" y="2" height="14" width="52" html.valueishtml="0"  name=approval_report_progress_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경력" border="0" color="33554432" x="546" y="2" height="14" width="26" html.valueishtml="0"  name=cm_hire_proj_chg_list_career_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인정경력" border="0" color="33554432" x="1646" y="2" height="14" width="57" html.valueishtml="0"  name=cm_hire_proj_chg_list_add_career_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="추가수당 사유" border="0" color="33554432" x="1062" y="2" height="14" width="177" html.valueishtml="0"  name=cm_hire_proj_chg_list_add_amt_reason_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결재상태" border="0" color="33554432" x="1705" y="2" height="14" width="54" html.valueishtml="0"  name=approval_report_end_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확정여부" border="0" color="33554432" x="1420" y="2" height="14" width="59" html.valueishtml="0"  name=cm_hire_proj_chg_list_complete_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이력서" border="0" color="134217856" x="786" y="2" height="14" width="77" html.valueishtml="0"  name=cm_hire_proj_chg_list_file_name1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="면접보고서" border="0" color="134217856" x="882" y="2" height="14" width="60" html.valueishtml="0"  name=cm_hire_proj_chg_list_file_name2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자격득실확인서" border="0" color="134217856" x="961" y="2" height="14" width="82" html.valueishtml="0"  name=cm_hire_proj_chg_list_file_name3_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="22" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="33554432" x="26" y="1" height="14" width="25" format="[general]" html.valueishtml="0"  name=chk_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="53" y="2" height="14" width="56" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="715" y="2" height="14" width="69" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=apply_pay_date_h visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=70 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="658" y="2" height="14" width="54" format="#,##0" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=add_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1241" y="2" height="14" width="51" format="[general]" html.valueishtml="0"  name=napprono visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="0" tabsequence=90 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1481" y="2" height="14" width="163" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=remarks visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=27 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1348" y="2" height="14" width="70" format="[general]" html.valueishtml="0"  name=dateday visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=26 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1294" y="2" height="14" width="52" format="[general]" html.valueishtml="0"  name=report_progress visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=37 alignment="1" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1646" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=add_career visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=38 alignment="0" tabsequence=80 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1062" y="2" height="14" width="177" format="[general]" html.valueishtml="0"  name=add_amt_reason visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=25 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1705" y="2" height="14" width="54" format="[general]" html.valueishtml="0"  name=report_end visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=39 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1420" y="2" height="14" width="59" format="[general]" html.valueishtml="0" protect="0~tif(report_progress='2',if(report_progress='7',0,0),1)"  name=complete_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=28 alignment="0" tabsequence=32766 border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="786" y="2" height="14" width="77" format="[general]" html.valueishtml="0"  name=file_name1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=31 alignment="0" tabsequence=32766 border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="882" y="2" height="14" width="60" format="[general]" html.valueishtml="0"  name=file_name2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=34 alignment="0" tabsequence=32766 border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="961" y="2" height="14" width="82" format="[general]" html.valueishtml="0"  name=file_name3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="170" y="2" height="14" width="92" format="[general]" html.valueishtml="0"  name=rrn visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="264" y="2" height="14" width="67" format="[general]" html.valueishtml="0"  name=join_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=30 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="374" y="2" height="14" width="63" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=job_code visible="1" dddw.name=dddw_com_code_h dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=20 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="333" y="2" height="14" width="39" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=duty_code_h visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=40 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="439" y="2" height="14" width="31" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=grade_code_h visible="1" dddw.name=dddw_hr_code dddw.displaycolumn=grade_name dddw.datacolumn=grade_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=50 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="472" y="2" height="14" width="72" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=school_car_code visible="1" dddw.name=dddw_hr_school_car_code dddw.displaycolumn=school_car_name dddw.datacolumn=school_car_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="574" y="2" height="14" width="62" format="#,##0" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=pay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=60 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="546" y="2" height="14" width="26" format="[general]" html.valueishtml="0" protect="0~tif(isNull(napprono),0,1)"  name=career visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="111" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap(~"/images/button/btn_find.gif~")"border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="638" y="2" height="14" width="18" format="[GENERAL]" html.valueishtml="0"  name=pay_find visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="bitmap( if (isNull( file_name3 ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="1045" y="2" height="14" width="15" format="[GENERAL]" html.valueishtml="0"  name=del_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="bitmap( if (isNull( file_name1 ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="865" y="2" height="14" width="15" format="[GENERAL]" html.valueishtml="0"  name=del_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="bitmap( if (isNull( file_name2 ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="16711680~tif(complete_yn = 'Y',rgb(200,200,200),rgb(0,0,0))" x="944" y="2" height="14" width="15" format="[GENERAL]" html.valueishtml="0"  name=del_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

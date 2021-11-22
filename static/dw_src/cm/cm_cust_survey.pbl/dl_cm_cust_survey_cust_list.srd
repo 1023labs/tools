@@ -1,0 +1,147 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="cm_cust_survey_list.company_code" dbalias="A.company_code" )
+ column=(type=char(4) updatewhereclause=yes name=sur_yyyy dbname="cm_cust_survey_list.sur_yyyy" dbalias="A.sur_yyyy" )
+ column=(type=char(2) updatewhereclause=yes name=sur_half dbname="cm_cust_survey_list.sur_half" dbalias="A.sur_half" )
+ column=(type=char(12) updatewhereclause=yes name=sur_proj_code dbname="cm_cust_survey_list.sur_proj_code" dbalias="A.sur_proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="B.proj_name" )
+ column=(type=char(13) updatewhereclause=yes name=sur_cust_code dbname="cm_cust_survey_list.sur_cust_code" dbalias="A.sur_cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" dbalias="C.cust_name" )
+ column=(type=char(4) updatewhereclause=yes name=sur_consult_code dbname="cm_cust_survey_list.sur_consult_code" dbalias="A.sur_consult_code" )
+ column=(type=char(50) updatewhereclause=yes name=consult_name dbname="cm_osct_consult.consult_name" dbalias="F.consult_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=sur_amt dbname="cm_cust_survey_list.sur_amt" dbalias="A.sur_amt" )
+ column=(type=char(2) updatewhereclause=yes name=sur_proj_yn dbname="cm_cust_survey_list.sur_proj_yn" dbalias="A.sur_proj_yn" values="	Y/	N" )
+ column=(type=char(2) updatewhereclause=yes name=sur_cust_yn dbname="cm_cust_survey_list.sur_cust_yn" dbalias="A.sur_cust_yn" values="	Y/	N" )
+ column=(type=number updatewhereclause=yes name=main_cnt dbname="main_cnt" )
+ column=(type=number updatewhereclause=yes name=chk_cnt dbname="chk_cnt" )
+ column=(type=char(2) updatewhereclause=yes name=sur_pers_yn dbname="cm_cust_survey_list.sur_pers_yn" dbalias="A.sur_pers_yn" )
+ retrieve="SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+       A.SUR_YYYY         AS SUR_YYYY,
+       A.SUR_HALF         AS SUR_HALF,
+       A.SUR_PROJ_CODE    AS SUR_PROJ_CODE,
+       B.PROJ_NAME        AS PROJ_NAME,
+       A.SUR_CUST_CODE    AS SUR_CUST_CODE,
+       C.CUST_NAME        AS CUST_NAME,
+       A.SUR_CONSULT_CODE AS SUR_CONSULT_CODE,
+       F.CONSULT_NAME      AS CONSULT_NAME,
+       A.SUR_AMT          AS SUR_AMT,
+       A.SUR_PROJ_YN      AS SUR_PROJ_YN,
+       A.SUR_CUST_YN      AS SUR_CUST_YN,
+       NVL(D.MID_CNT,0)   AS MAIN_CNT,
+       NVL(G.MID_CNT,0)   AS CHK_CNT,
+       A.SUR_PERS_YN      AS SUR_PERS_YN
+  FROM CM_CUST_SURVEY_LIST A LEFT JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.SUR_PROJ_CODE = B.PROJ_CODE
+                             LEFT JOIN SM_CODE_CUST C
+                                    ON A.SUR_CUST_CODE = C.CUST_CODE
+                             LEFT JOIN (SELECT E.COMPANY_CODE               AS COMPANY_CODE,
+                                               E.SUR_YYYY                   AS SUR_YYYY,
+                                               E.SUR_HALF                   AS SUR_HALF,
+                                               E.SUR_PROJ_CODE              AS SUR_PROJ_CODE,
+                                               E.SUR_CUST_CODE              AS SUR_CUST_CODE,
+                                               COUNT(DISTINCT E.SUR_MIDDLE) AS MID_CNT
+                                          FROM CM_CUST_SURVEY_DATA E
+                                         WHERE E.COMPANY_CODE = :AS_COMP_CODE
+                                           AND E.SUR_YYYY     = :AS_SUR_YYYY
+                                           AND E.SUR_HALF     = :AS_SUR_HALF
+                                           AND E.SUR_PROJ_CODE = :AS_SUR_PROJ
+                                           AND E.SUR_SEQ       = :AS_SUR_SEQ
+                                           AND E.SUR_DEPT_GBN  = :AS_SUR_GBN
+                                      GROUP BY E.COMPANY_CODE,
+                                               E.SUR_YYYY,
+                                               E.SUR_HALF,
+                                               E.SUR_PROJ_CODE,
+                                               E.SUR_CUST_CODE) D
+                                    ON A.COMPANY_CODE = D.COMPANY_CODE
+                                   AND A.SUR_YYYY     = D.SUR_YYYY
+                                   AND A.SUR_HALF     = D.SUR_HALF
+                                   AND A.SUR_PROJ_CODE = D.SUR_PROJ_CODE
+                                   AND A.SUR_CUST_CODE = D.SUR_CUST_CODE
+                             LEFT JOIN (SELECT F.COMPANY_CODE               AS COMPANY_CODE,
+                                               F.SUR_YYYY                   AS SUR_YYYY,
+                                               F.SUR_HALF                   AS SUR_HALF,
+                                               F.SUR_PROJ_CODE              AS SUR_PROJ_CODE,
+                                               F.SUR_CUST_CODE              AS SUR_CUST_CODE,
+                                               COUNT(DISTINCT F.SUR_MIDDLE) AS MID_CNT
+                                          FROM CM_CUST_SURVEY_DATA F
+                                         WHERE F.COMPANY_CODE = :AS_COMP_CODE
+                                           AND F.SUR_YYYY     = :AS_SUR_YYYY
+                                           AND F.SUR_HALF     = :AS_SUR_HALF
+                                           AND F.SUR_PROJ_CODE = :AS_SUR_PROJ
+                                           AND F.SUR_CHECK = 'Y'
+                                           AND F.SUR_SEQ       = :AS_SUR_SEQ
+                                           AND F.SUR_DEPT_GBN  = :AS_SUR_GBN
+                                      GROUP BY F.COMPANY_CODE,
+                                               F.SUR_YYYY,
+                                               F.SUR_HALF,
+                                               F.SUR_PROJ_CODE,
+                                               F.SUR_CUST_CODE) G
+                                    ON A.COMPANY_CODE  = G.COMPANY_CODE
+                                   AND A.SUR_YYYY      = G.SUR_YYYY
+                                   AND A.SUR_HALF      = G.SUR_HALF
+                                   AND A.SUR_PROJ_CODE = G.SUR_PROJ_CODE
+                                   AND A.SUR_CUST_CODE = G.SUR_CUST_CODE
+                            LEFT JOIN CM_OSCT_CONSULT F
+                                    ON A.COMPANY_CODE     = F.COMPANY_CODE
+                                   AND A.SUR_PROJ_CODE    = F.PROJ_CODE
+                                   AND A.SUR_CONSULT_CODE = F.CONSULT_CODE
+                                   AND F.OSCT_DIV         = '3'
+                                   AND F.STATUS_DIV      <> 'X'
+ WHERE A.COMPANY_CODE  = :AS_COMP_CODE
+   AND A.SUR_YYYY      = :AS_SUR_YYYY
+   AND A.SUR_HALF      = :AS_SUR_HALF
+   AND A.SUR_PROJ_CODE = :AS_SUR_PROJ
+   AND A.SUR_PROJ_YN   = 'Y'
+   AND A.SUR_CUST_YN   = 'Y'
+ORDER BY A.SUR_YYYY, A.SUR_HALF, A.SUR_CUST_CODE, A.SUR_CONSULT_CODE" arguments=(("AS_COMP_CODE", string),("AS_SUR_YYYY", string),("AS_SUR_HALF", string),("AS_SUR_PROJ", string),("AS_SUR_SEQ", string),("AS_SUR_GBN", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="7" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="33" y="7" height="14" width="86" html.valueishtml="0"  name=pm_cust_survey_list_sur_cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업자명" border="0" color="33554432" x="121" y="7" height="14" width="168" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="611" y="7" height="14" width="83" html.valueishtml="0"  name=pm_cust_survey_list_sur_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평가유무" border="0" color="33554432" x="696" y="7" height="14" width="26" html.valueishtml="0"  name=pm_cust_survey_list_sur_cust_yn_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="724" y="7" height="14" width="19" html.valueishtml="0"  name=pm_cust_survey_list_sur_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="745" y="7" height="14" width="16" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pm Cust Survey List
+Company Code" border="0" color="33554432" x="804" y="7" height="14" width="19" html.valueishtml="0"  name=pm_cust_survey_list_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pm Cust Survey List
+Sur Yyyy" border="0" color="33554432" x="825" y="7" height="14" width="18" html.valueishtml="0"  name=pm_cust_survey_list_sur_yyyy_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pm Cust Survey List
+Sur Half" border="0" color="33554432" x="845" y="7" height="14" width="17" html.valueishtml="0"  name=pm_cust_survey_list_sur_half_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평가유무[현장]" border="0" color="134217728" x="763" y="7" height="14" width="39" html.valueishtml="0"  name=pm_cust_survey_list_sur_proj_yn_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Main Cnt" border="0" color="33554432" x="864" y="7" height="14" width="29" html.valueishtml="0"  name=main_cnt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Chk Cnt" border="0" color="33554432" x="895" y="7" height="14" width="32" html.valueishtml="0"  name=chk_cnt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="291" y="7" height="14" width="62" html.valueishtml="0"  name=cm_cust_survey_list_sur_consult_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="355" y="7" height="14" width="254" html.valueishtml="0"  name=cm_osct_consult_consult_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432~tif(  main_cnt = chk_cnt , rgb( 0, 0, 0), rgb( 255, 0, 0) )" x="2" y="7" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432~tif(  main_cnt = chk_cnt , rgb( 0, 0, 0), rgb( 255, 0, 0) )" x="33" y="6" height="17" width="86" format="[general]" html.valueishtml="0"  name=sur_cust_code visible="1" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  main_cnt = chk_cnt , rgb( 0, 0, 0), rgb( 255, 0, 0) )" x="121" y="6" height="17" width="168" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  main_cnt = chk_cnt , rgb( 0, 0, 0), rgb( 255, 0, 0) )" x="611" y="6" height="17" width="83" format="#,###" html.valueishtml="0"  name=sur_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="724" y="6" height="17" width="19" format="[general]" html.valueishtml="0"  name=sur_proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="745" y="6" height="17" width="16" format="[general]" html.valueishtml="0"  name=proj_name visible="0" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="804" y="6" height="17" width="19" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="825" y="6" height="17" width="18" format="[general]" html.valueishtml="0"  name=sur_yyyy visible="0" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="845" y="6" height="17" width="17" format="[general]" html.valueishtml="0"  name=sur_half visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="134217728" x="763" y="6" height="17" width="39" format="[general]" html.valueishtml="0" protect="0~t1"  name=sur_proj_yn visible="0" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="696" y="6" height="17" width="26" format="[general]" html.valueishtml="0"  name=sur_cust_yn visible="0" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="864" y="6" height="17" width="29" format="[general]" html.valueishtml="0"  name=main_cnt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432" x="895" y="6" height="17" width="32" format="[general]" html.valueishtml="0"  name=chk_cnt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="291" y="6" height="17" width="62" format="[general]" html.valueishtml="0"  name=sur_consult_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="355" y="6" height="17" width="254" format="[general]" html.valueishtml="0"  name=consult_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=0 border="0" color="33554432" x="930" y="5" height="14" width="10" html.valueishtml="0"  name=sur_pers_yn visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Cm Cust Survey List Sur Pers Yn" border="0" color="33554432" x="929" y="1" height="19" width="11" html.valueishtml="0"  name=cm_cust_survey_list_sur_pers_yn_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

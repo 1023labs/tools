@@ -1,0 +1,37 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=16777215 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(4) update=yes updatewhereclause=yes name=tag dbname="tag" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=iw_code dbname="iw_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=iw_name dbname="iw_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=iw_size dbname="iw_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=iw_unit dbname="iw_unit" )
+ retrieve="SELECT A.TAG, A.IW_CODE, A.IW_NAME, A.IW_SIZE, A.IW_UNIT
+ FROM(SELECT '표준' TAG, IW_CODE, IW_NAME, IW_SIZE, IW_UNIT
+		FROM EM_IWLIST
+		WHERE IW_DIV = '02'
+		UNION 
+		SELECT '현설' TAG, IW_CODE, IW_NAME, IW_SIZE, IW_UNIT
+		  FROM EM_EST_IWLIST
+		 WHERE IW_DIV = '02' 
+			AND BREAK_DIV = '01'
+			AND USER_ID = :AS_USER_ID
+			AND EST_CODE = :AS_EST_CODE)A
+ WHERE A.IW_NAME LIKE :AS_IW_NAME||'%'" arguments=(("AS_USER_ID", string),("AS_EST_CODE", string),("AS_IW_NAME", string)) )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="2" y="2" height="14" width="50" html.valueishtml="0"  name=tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="54" y="2" height="14" width="176" html.valueishtml="0"  name=iw_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="232" y="2" height="14" width="133" html.valueishtml="0"  name=iw_size_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="367" y="2" height="14" width="56" html.valueishtml="0"  name=iw_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="50" format="[general]" html.valueishtml="0"  name=tag visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="54" y="2" height="14" width="176" format="[general]" html.valueishtml="0"  name=iw_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="232" y="2" height="14" width="133" format="[general]" html.valueishtml="0"  name=iw_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="367" y="2" height="14" width="56" format="[general]" html.valueishtml="0"  name=iw_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,66 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_accid_detail.company_code" dbalias=".company_code" )
+ column=(type=char(9) update=yes updatewhereclause=yes key=yes name=accid_no dbname="cm_accid_detail.accid_no" dbalias=".accid_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_accid_detail.seq" dbalias=".seq" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=proj_code dbname="cm_accid_detail.proj_code" dbalias=".proj_code" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=cost_date dbname="cost_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=reward_amt dbname="cm_accid_detail.reward_amt" dbalias=".reward_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cure_amt dbname="cm_accid_detail.cure_amt" dbalias=".cure_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=close_amt dbname="cm_accid_detail.close_amt" dbalias=".close_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=etc_amt dbname="cm_accid_detail.etc_amt" dbalias=".etc_amt" initial="0" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remarks dbname="cm_accid_detail.remarks" dbalias=".remarks" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=oldnew_div dbname="cm_accid_detail.oldnew_div" dbalias=".oldnew_div" )
+ retrieve="SELECT COMPANY_CODE,
+            ACCID_NO,
+            SEQ,
+            PROJ_CODE,
+            TO_CHAR(COST_DATE,'YYYY-MM-DD') AS COST_DATE,
+            REWARD_AMT,
+            CURE_AMT,
+            CLOSE_AMT,
+		   ETC_AMT,
+            REMARKS,
+            OLDNEW_DIV
+  FROM CM_ACCID_DETAIL
+ WHERE COMPANY_CODE = :as_compcode
+     AND ACCID_NO           = :as_accid_no
+     AND OLDNEW_DIV = '1'" update="CM_ACCID_DETAIL" updatewhere=0 updatekeyinplace=no arguments=(("as_compcode", string),("as_accid_no", string)) )
+text(band=header alignment="2" text="전표일자" border="0" color="33554432" x="37" y="11" height="14" width="89" html.valueishtml="0"  name=cost_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보상비" border="0" color="33554432" x="128" y="11" height="14" width="91" html.valueishtml="0"  name=reward_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="휴업급여" border="0" color="33554432" x="320" y="11" height="14" width="102" html.valueishtml="0"  name=close_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="11" height="14" width="33" html.valueishtml="0"  name=seq_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="630" y="11" height="14" width="221" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기타비용" border="0" color="33554432" x="424" y="11" height="14" width="98" html.valueishtml="0"  name=etc_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="38" y="1" height="17" width="88" format="[general]" html.valueishtml="0"  name=cost_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="33" format="[general]" html.valueishtml="0"  name=seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=60 border="0" color="33554432" x="630" y="2" height="17" width="221" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=20 border="0" color="33554432" x="128" y="2" height="17" width="91" format="#,##0" html.valueishtml="0"  name=reward_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="1" tabsequence=40 border="0" color="33554432" x="320" y="2" height="17" width="102" format="#,##0" html.valueishtml="0"  name=close_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="1" tabsequence=50 border="0" color="33554432" x="424" y="2" height="17" width="98" format="#,##0" html.valueishtml="0"  name=etc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="SUM( reward_amt )"border="0" color="33554432" x="128" y="6" height="14" width="91" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM( close_amt  )"border="0" color="33554432" x="320" y="6" height="14" width="102" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM( etc_amt  )"border="0" color="33554432" x="424" y="6" height="14" width="98" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=70 border="0" color="33554432" x="854" y="1" height="14" width="49" html.valueishtml="0"  name=oldnew_div visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="신규구분" border="0" color="33554432" x="853" y="1" height="19" width="50" html.valueishtml="0"  name=oldnew_div_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="524" y="11" height="14" width="105" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" cure_amt + close_amt + etc_amt  + reward_amt"border="0" color="33554432" x="524" y="2" height="19" width="105" format="#,##0" html.valueishtml="0"  name=tot_amt visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="SUM(tot_amt  )"border="0" color="33554432" x="524" y="6" height="14" width="105" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="치료비" border="0" color="33554432" x="221" y="11" height="14" width="97" html.valueishtml="0"  name=cure_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=30 border="0" color="33554432" x="221" y="2" height="17" width="97" format="#,##0" html.valueishtml="0"  name=cure_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="SUM(  cure_amt  )"border="0" color="33554432" x="221" y="6" height="14" width="97" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,57 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=1 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_attach_court.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=emp_no dbname="cm_labo_attach_court.emp_no" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=court_name dbname="cm_labo_attach_court.court_name" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=court_emp_name dbname="cm_labo_attach_court.court_emp_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=attach_amt dbname="cm_labo_attach_court.attach_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_labo_attach_court.seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=master_seq dbname="cm_labo_attach_court.master_seq" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=law_div dbname="cm_labo_attach_court.law_div" values="민법(185만)	1/지방세법(150만)	2/기타(11년07월이전)	3/" )
+ retrieve="SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+       A.EMP_NO           AS EMP_NO,
+       A.COURT_NAME       AS COURT_NAME,
+       A.COURT_EMP_NAME   AS COURT_EMP_NAME,
+       A.ATTACH_AMT       AS ATTACH_AMT,
+       A.SEQ              AS SEQ,
+       A.MASTER_SEQ        AS MASTER_SEQ,
+       A.LAW_DIV              AS LAW_DIV
+  FROM CM_LABO_ATTACH_COURT A
+ WHERE A.COMPANY_CODE = :as_company
+   AND A.EMP_NO       = :as_empno
+   AND A.MASTER_SEQ   = :as_seq" update="CM_LABO_ATTACH_COURT" updatewhere=1 updatekeyinplace=no arguments=(("as_company", string),("as_empno", string),("as_seq", string)) )
+text(band=header alignment="2" text="요청법원/세무서" border="0" color="33554432" x="25" y="2" height="14" width="108" html.valueishtml="0"  name=court_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="담당자" border="0" color="33554432" x="135" y="2" height="14" width="51" html.valueishtml="0"  name=court_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="2" height="14" width="21" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Emp No" border="0" color="33554432" x="415" y="2" height="14" width="11" html.valueishtml="0"  name=emp_no_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="397" y="2" height="14" width="16" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Seq" border="0" color="33554432" x="428" y="1" height="19" width="17" html.valueishtml="0"  name=seq_t visible="0"  font.face="Arial" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Master Seq" border="0" color="33554432" x="447" y="1" height="19" width="10" html.valueishtml="0"  name=master_seq_t visible="0"  font.face="Arial" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="압류요청금액" border="0" color="33554432" x="188" y="2" height="14" width="78" html.valueishtml="0"  name=attach_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="268" y="2" height="14" width="127" html.valueishtml="0"  name=law_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="135" y="2" height="17" width="51" format="[general]" html.valueishtml="0"  name=court_emp_name visible="1" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=30 border="0" color="33554432" x="188" y="2" height="17" width="78" format="#,##0" html.valueishtml="0"  name=attach_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="25" y="2" height="17" width="108" format="[general]" html.valueishtml="0"  name=court_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="21" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=60 border="0" color="33554432" x="415" y="2" height="17" width="11" format="[general]" html.valueishtml="0"  name=emp_no visible="0" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=50 border="0" color="33554432" x="397" y="2" height="17" width="16" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=70 border="0" color="33554432" x="428" y="1" height="16" width="17" format="[General]" html.valueishtml="0"  name=seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=80 border="0" color="33554432" x="447" y="1" height="14" width="10" format="[general]" html.valueishtml="0"  name=master_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=40 border="0" color="33554432" x="268" y="1" height="14" width="127" format="[general]" html.valueishtml="0"  name=law_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(attach_amt for all)"border="0" color="33554432" x="188" y="4" height="14" width="78" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="1" text="합    계  " border="0" color="33554432" x="25" y="4" height="14" width="108" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,50 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=sm_code_mat_maker_item_code dbname="sm_code_mat_maker.item_code" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cust_code" )
+ column=(type=char(1) updatewhereclause=yes name=master_yn dbname="master_yn" )
+ column=(type=number updatewhereclause=yes name=order_cost dbname="order_cost" )
+ column=(type=number updatewhereclause=yes name=min_cost dbname="min_cost" )
+ column=(type=number updatewhereclause=yes name=opt_cost dbname="opt_cost" )
+ column=(type=char(4) updatewhereclause=yes name=item_maker dbname="sm_code_mat_maker.item_maker" )
+ column=(type=char(250) updatewhereclause=yes name=maker_name dbname="vw_c_pm_matmaker.maker_name" )
+ column=(type=char(1) updatewhereclause=yes name=att_input_yn dbname="sm_code_material_small.att_input_yn" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="cust_name" )
+ retrieve="  SELECT MA.ITEM_CODE,
+         NVL(A.CUST_CODE,'') CUST_CODE,
+         NVL(A.MASTER_YN,'N') MASTER_YN,
+         NVL(A.ORDER_COST,0) ORDER_COST,
+         NVL(A.MIN_COST,0) MIN_COST,
+         NVL(A.OPT_COST,0) OPT_COST,
+         MA.MAKER_CODE AS ITEM_MAKER,
+         B.DNAME MAKER_NAME,
+         D.ATT_INPUT_YN,
+         (SELECT CUST_NAME FROM SM_CODE_CUST WHERE CUST_CODE = A.CUST_CODE) CUST_NAME
+    FROM SM_CODE_MAT_MAKER MA JOIN VW_C_PM_MATMAKER B 
+                            ON MA.MAKER_CODE = B.DCODE
+                          JOIN SM_CODE_MATERIAL C
+                            ON MA.ITEM_CODE = C.ITEM_CODE
+                          JOIN SM_CODE_MATERIAL_SMALL D
+                            ON C.LARGE_CODE = D.LARGE_CODE
+                           AND C.MIDDLE_CODE = D.MIDDLE_CODE
+                           AND C.SMALL_CODE = D.SMALL_CODE 
+                          LEFT JOIN PM_UNPR_MASTER A 
+                           ON A.ITEM_CODE = MA.ITEM_CODE
+   WHERE MA.ITEM_CODE = :as_itemcode
+     AND A.OPEN_YN = 'Y'
+     AND (A.ITEM_MAKER LIKE '%'||:as_find||'%' OR B.DNAME LIKE '%'||:as_find||'%')
+ORDER BY MA.MAKER_CODE, B.DNAME, A.ITEM_MAKER" arguments=(("as_itemcode", string),("as_find", string)) )
+text(band=header alignment="2" text="제조사명칭" border="0" color="33554432" x="85" y="2" height="14" width="279" html.valueishtml="0"  name=maker_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="제조사코드" border="0" color="33554432" x="2" y="2" height="14" width="81" html.valueishtml="0"  name=sm_code_mat_maker_item_maker_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="85" y="2" height="17" width="279" format="[general]" html.valueishtml="0"  name=maker_name visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="81" format="[general]" html.valueishtml="0"  name=item_maker visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

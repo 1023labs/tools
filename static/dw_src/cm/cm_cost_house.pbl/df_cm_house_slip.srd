@@ -1,0 +1,63 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes name=slip_date dbname="slip_date" )
+ column=(type=char(3) updatewhereclause=yes name=slip_comp dbname="ac_slip_main.slip_comp" )
+ column=(type=char(4) updatewhereclause=yes name=slip_div dbname="ac_slip_main.slip_div" )
+ column=(type=char(12) updatewhereclause=yes name=slip_dept dbname="ac_slip_main.slip_dept" )
+ column=(type=decimal(0) updatewhereclause=yes name=slip_seq dbname="ac_slip_main.slip_seq" )
+ column=(type=char(8) updatewhereclause=yes name=emp_no dbname="ac_slip_parent.emp_no" )
+ column=(type=decimal(0) updatewhereclause=yes name=cr_amt dbname="ac_slip_main.cr_amt" )
+ column=(type=char(40) updatewhereclause=yes name=remark1 dbname="ac_slip_main.remark1" )
+ retrieve="SELECT TO_CHAR(A.SLIP_DATE,'YYYYMMDD') AS SLIP_DATE,
+       A.SLIP_COMP,
+       A.SLIP_DIV,
+       A.SLIP_DEPT,
+       A.SLIP_SEQ,
+       B.EMP_NO,
+       A.CR_AMT,
+       A.REMARK1
+  FROM AC_SLIP_MAIN A INNER JOIN AC_SLIP_PARENT B
+                              ON A.SLIP_DATE = B.SLIP_DATE
+                             AND A.SLIP_COMP = B.SLIP_COMP
+                             AND A.SLIP_DIV  = B.SLIP_DIV
+                             AND A.SLIP_DEPT = B.SLIP_DEPT
+                             AND A.SLIP_SEQ  = B.SLIP_SEQ
+ WHERE A.SLIP_COMP = :AS_COMP_CODE
+   AND A.SLIP_DIV  = :AS_SLIP_DIV
+   AND A.CR_AMT    = :AS_AMT
+   AND A.ACNT_CODE = '12402010'
+   AND A.DEPT_CODE = :AS_PROJ_CODE
+   AND A.CUST_CODE = :AS_CUST_CODE" arguments=(("AS_COMP_CODE", string),("AS_SLIP_DIV", string),("AS_PROJ_CODE", string),("AS_CUST_CODE", string),("AS_AMT", number)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="7" height="15" width="37" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전표일자" border="0" color="33554432" x="41" y="7" height="15" width="101" html.valueishtml="0"  name=ac_slip_main_slip_date_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회사구분" border="0" color="33554432" x="145" y="7" height="15" width="87" html.valueishtml="0"  name=ac_slip_main_slip_comp_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전표구분" border="0" color="33554432" x="235" y="7" height="15" width="87" html.valueishtml="0"  name=ac_slip_main_slip_div_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="발의부서" border="0" color="33554432" x="325" y="7" height="15" width="87" html.valueishtml="0"  name=ac_slip_main_slip_dept_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전표순번" border="0" color="33554432" x="416" y="7" height="15" width="87" html.valueishtml="0"  name=ac_slip_main_slip_seq_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="발의자" border="0" color="33554432" x="506" y="7" height="15" width="99" html.valueishtml="0"  name=ac_slip_parent_emp_no_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전표금액" border="0" color="33554432" x="608" y="7" height="15" width="87" html.valueishtml="0"  name=ac_slip_main_cr_amt_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="698" y="7" height="15" width="221" html.valueishtml="0"  name=ac_slip_main_remark1_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="41" y="5" height="16" width="101" format="[General]" html.valueishtml="0"  name=slip_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="506" y="5" height="16" width="99" format="[general]" html.valueishtml="0"  name=emp_no visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="608" y="5" height="16" width="87" format="#,##0" html.valueishtml="0"  name=cr_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="698" y="5" height="16" width="221" format="[general]" html.valueishtml="0"  name=remark1 visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="5" height="15" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="145" y="5" height="16" width="87" format="[general]" html.valueishtml="0"  name=slip_comp visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="235" y="5" height="16" width="87" format="[general]" html.valueishtml="0"  name=slip_div visible="1" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="325" y="5" height="16" width="87" format="[general]" html.valueishtml="0"  name=slip_dept visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="416" y="5" height="16" width="87" format="[general]" html.valueishtml="0"  name=slip_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

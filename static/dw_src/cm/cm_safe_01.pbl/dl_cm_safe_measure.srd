@@ -1,0 +1,76 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=30 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_accid_measure.company_code" )
+ column=(type=char(9) update=yes updatewhereclause=yes key=yes name=accid_no dbname="cm_accid_measure.accid_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_accid_measure.seq" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=safe_tag dbname="cm_accid_measure.safe_tag" values="초기자료등록	0/시정조치 요구	1/시정조치 입력	2/완료	3/" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=safe_empno dbname="cm_accid_measure.safe_empno" )
+ column=(type=char(20) updatewhereclause=yes name=safe_empnm dbname="hr_pers_master.safe_empnm" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=safe_remarks dbname="cm_accid_measure.safe_remarks" )
+ column=(type=datetime update=yes updatewhereclause=yes name=safe_indate dbname="cm_accid_measure.safe_indate" )
+ column=(type=datetime update=yes updatewhereclause=yes name=safe_ddate dbname="cm_accid_measure.safe_ddate" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=measure_empno dbname="cm_accid_measure.measure_empno" )
+ column=(type=char(20) updatewhereclause=yes name=measure_empnm dbname="hr_pers_master.measure_empnm" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=measure_remarks dbname="cm_accid_measure.measure_remarks" )
+ column=(type=datetime update=yes updatewhereclause=yes name=measure_date dbname="cm_accid_measure.measure_date" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=file_name dbname="cm_accid_measure.file_name" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=file_type dbname="cm_accid_measure.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_accid_measure.file_path" )
+ retrieve="SELECT A.COMPANY_CODE       ,
+            A.ACCID_NO         ,
+            A.SEQ              ,
+            A.SAFE_TAG         ,
+            A.SAFE_EMPNO       ,
+            B.EMP_NAME SAFE_EMPNM,
+            A.SAFE_REMARKS     ,
+            A.SAFE_INDATE      ,
+            A.SAFE_DDATE       ,
+            A.MEASURE_EMPNO    ,
+            C.EMP_NAME MEASURE_EMPNM,
+            A.MEASURE_REMARKS  ,
+            A.MEASURE_DATE     ,
+            A.FILE_NAME        ,
+            A.FILE_TYPE        ,
+            A.FILE_PATH        
+   FROM CM_ACCID_MEASURE A,
+             HR_PERS_MASTER    B,
+             HR_PERS_MASTER    C         
+WHERE A.COMPANY_CODE   = :as_comcode
+    AND A.ACCID_NO            = :as_accid_no
+    AND A.SAFE_EMPNO        = B.EMP_NO(+)
+    AND A.MEASURE_EMPNO = C.EMP_NO(+)" update="CM_ACCID_MEASURE" updatewhere=0 updatekeyinplace=no arguments=(("as_comcode", string),("as_accid_no", string)) )
+text(band=header alignment="2" text="상태" border="0" color="33554432" x="2" y="11" height="14" width="104" html.valueishtml="0"  name=cm_accid_measure_safe_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="안전담당자" border="0" color="33554432" x="109" y="11" height="14" width="71" html.valueishtml="0"  name=hr_pers_master_safe_empnm_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="안전담당자의견" border="0" color="33554432" x="182" y="11" height="14" width="333" html.valueishtml="0"  name=cm_accid_measure_safe_remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입력일" border="0" color="33554432" x="517" y="11" height="14" width="82" html.valueishtml="0"  name=safe_indate_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입력요구일" border="0" color="33554432" x="601" y="11" height="14" width="81" html.valueishtml="0"  name=cm_accid_measure_safe_ddate_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="대책담당자" border="0" color="134217856" x="685" y="11" height="14" width="69" html.valueishtml="0"  name=hr_pers_master_measure_empnm_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="대책담당자의견" border="0" color="134217856" x="925" y="11" height="14" width="188" html.valueishtml="0"  name=cm_accid_measure_measure_remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="파일 등록일" border="0" color="134217856" x="1115" y="11" height="14" width="98" html.valueishtml="0"  name=cm_accid_measure_measure_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="첨부파일명(ZIP파일만)" border="0" color="134217856" x="756" y="11" height="14" width="138" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=10 border="0" color="33554432" x="3" y="2" height="19" width="103" format="[general]" html.valueishtml="0"  name=safe_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.useasborder=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="110" y="2" height="19" width="70" format="[general]" html.valueishtml="0"  name=safe_empnm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=20 border="0" color="33554432" x="183" y="2" height="19" width="332" format="[general]" html.valueishtml="0" protect="0~tif(isNull(safe_tag) or safe_tag = '0' or safe_tag = '2',1,0 ) "  name=safe_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=40 border="0" color="134217856" x="926" y="2" height="19" width="187" format="[general]" html.valueishtml="0"  name=measure_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="134217856" x="1116" y="2" height="19" width="97" format="[shortdate] [time]" html.valueishtml="0"  name=measure_date visible="1" editmask.mask="yy/mm/dd hh:mm" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="134217856" x="686" y="2" height="19" width="68" format="[general]" html.valueishtml="0"  name=measure_empnm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="134217856" x="757" y="2" height="19" width="137" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( FILE_NAME) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="134217856" x="896" y="4" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_download visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="134217856" x="912" y="4" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_filedel visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="518" y="2" height="19" width="81" format="[shortdate] [time]" html.valueishtml="0"  name=safe_indate visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=30 border="0" color="33554432" x="602" y="2" height="19" width="80" format="[shortdate] [time]" html.valueishtml="0"  name=safe_ddate visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

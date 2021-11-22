@@ -1,0 +1,110 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes key=yes name=labor_code dbname="cm_saly_labor_account.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(6) updatewhereclause=yes name=rrn_pre dbname="cm_labo_master.rrn_pre" )
+ column=(type=char(7) updatewhereclause=yes name=rrn_post dbname="cm_labo_master.rrn_post" )
+ column=(type=char(8) updatewhereclause=yes name=gjoin_date dbname="cm_saly_labor_account.gjoin_date" )
+ column=(type=char(8) updatewhereclause=yes name=work_date dbname="cm_saly_labor_account.work_date" )
+ column=(type=char(12) updatewhereclause=yes key=yes name=proj_code dbname="cm_saly_labor_account.proj_code" )
+ column=(type=number updatewhereclause=yes name=work_day dbname="work_day" )
+ column=(type=char(6) updatewhereclause=yes name=pay_yymm dbname="cm_saly_labor_account.pay_yymm" )
+ column=(type=char(1) updatewhereclause=yes name=application_yn dbname="application_yn" values="신청	1/취소	2/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=change_day dbname="cm_rtte_apply_list.change_day" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="cm_attd_teams.team_name" )
+ column=(type=number updatewhereclause=yes name=month_between dbname="month_between" )
+ column=(type=char(0) updatewhereclause=yes name=expect dbname="expect" )
+ retrieve="   SELECT A.LABOR_CODE,
+         C.LABOR_NAME,
+         C.RRN_PRE,
+         C.RRN_POST,
+         A.GJOIN_DATE,
+         D.WORK_DATE,
+         A.PROJ_CODE,
+         SUM(B.WORK_DAY) AS WORK_DAY,       
+         B.PAY_YYMM,   
+         CASE E.TRANS_TAG WHEN 'Y' THEN '2'
+                          ELSE '1' END AS APPLICATION_YN,
+         E.CHANGE_DAY,
+         F.TEAM_NAME,
+         TRUNC(MONTHS_BETWEEN(WORK_DATE, A.GJOIN_DATE),0) AS MONTH_BETWEEN,
+         '' AS EXPECT
+    FROM ( SELECT A.COMPANY_CODE,
+                  A.LABOR_CODE,
+                  A.PROJ_CODE,
+                  A.TEAM_CODE,
+                  B.GJOIN_DATE                   
+             FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN CM_LABO_MASTER B
+                                                 ON A.LABOR_CODE = B.LABOR_CODE
+            WHERE A.COMPANY_CODE = :as_comp
+              AND A.PROJ_CODE = :as_proj 
+              AND (A.PAY_YYMM BETWEEN :as_fromdate AND :as_todate)
+              AND B.GJOIN_DATE = B.RPAY_DATE) A LEFT JOIN CM_SALY_LABOR_ACCOUNT B
+                                                       ON A.LABOR_CODE = B.LABOR_CODE
+                                                      AND A.PROJ_CODE = B.PROJ_CODE
+                                                LEFT JOIN CM_LABO_MASTER C
+                                                       ON A.LABOR_CODE = C.LABOR_CODE
+                                                LEFT JOIN (SELECT A.COMPANY_CODE,
+                                                                  A.PROJ_CODE,
+                                                                  A.TEAM_CODE,
+                                                                  A.LABOR_CODE,
+                                                                  MAX(A.WORK_DATE)AS WORK_DATE
+                                                             FROM CM_ATTD_DAILY_WORK A
+                                                            WHERE A.COMPANY_CODE = :as_comp
+                                                              AND A.PROJ_CODE = :as_proj
+                                                         GROUP BY A.COMPANY_CODE,
+                                                                  A.PROJ_CODE,
+                                                                  A.TEAM_CODE,
+                                                                  A.LABOR_CODE) D
+                                                       ON A.LABOR_CODE = D.LABOR_CODE    
+                                                LEFT JOIN CM_RTTE_APPLY_LIST E
+                                                       ON A.LABOR_CODE = E.LABOR_CODE
+                                                LEFT JOIN  CM_ATTD_TEAMS F
+                                                       ON B.TEAM_CODE = F.TEAM_CODE 
+                                                      AND B.COMPANY_CODE = F.COMPANY_CODE
+                                                      AND B.PROJ_CODE = F.PROJ_CODE                                                     
+   WHERE B.PAY_YYMM BETWEEN SUBSTR(A.GJOIN_DATE, 1,6) AND TO_CHAR(SYSDATE, 'yyyymm')
+     AND TRUNC(MONTHS_BETWEEN(WORK_DATE, A.GJOIN_DATE),0) >= :as_month
+GROUP BY A.LABOR_CODE,
+         C.LABOR_NAME,
+         C.RRN_PRE,
+         C.RRN_POST,
+         A.GJOIN_DATE,
+         A.PROJ_CODE,
+         B.PAY_YYMM,
+         D.WORK_DATE,
+         E.TRANS_TAG,
+         E.CHANGE_DAY,
+         F.TEAM_NAME" update="CM_RTTE_APPLY_LIST" updatewhere=1 updatekeyinplace=yes arguments=(("as_comp", string),("as_proj", string),("as_fromdate", string),("as_todate", string),("as_month", number)) )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="51" y="2" height="14" width="69" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="재직" border="0" color="33554432" x="232" y="2" height="14" width="74" html.valueishtml="0"  name=a_gjoin_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="308" y="2" height="14" width="70" html.valueishtml="0"  name=d_work_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="출역일수" border="0" color="33554432" x="449" y="2" height="14" width="56" html.valueishtml="0"  name=work_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="퇴직금신청" border="0" color="33554432" x="851" y="2" height="14" width="81" html.valueishtml="0"  name=application_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="팀명" border="0" color="33554432" x="588" y="2" height="14" width="163" html.valueishtml="0"  name=team_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="122" y="2" height="14" width="108" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="47" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무개월수" border="0" color="33554432" x="380" y="2" height="14" width="67" html.valueishtml="0"  name=month_between_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="조정일수" border="0" color="33554432" x="507" y="2" height="14" width="79" html.valueishtml="0"  name=change_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="퇴직금예상금액" border="0" color="33554432" x="753" y="2" height="14" width="96" html.valueishtml="0"  name=expect_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="51" y="2" height="14" width="69" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="449" y="2" height="14" width="56" format="[general]" html.valueishtml="0"  name=work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="851" y="2" height="14" width="81" format="[general]" html.valueishtml="0"  name=application_yn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="588" y="2" height="14" width="163" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" rrn_pre +~"-~"+ rrn_post "border="0" color="33554432" x="122" y="2" height="14" width="108" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="232" y="2" height="14" width="74" format="@@@@-@@-@@" html.valueishtml="0"  name=gjoin_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="308" y="2" height="14" width="70" format="@@@@-@@-@@" html.valueishtml="0"  name=work_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="47" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="380" y="2" height="14" width="67" format="[general]" html.valueishtml="0"  name=month_between visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="507" y="2" height="14" width="79" format="#,##0" html.valueishtml="0"  name=change_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432" x="753" y="2" height="14" width="96" format="[general]" html.valueishtml="0"  name=expect visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

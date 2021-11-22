@@ -1,0 +1,34 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=96 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=116 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_bug_date.company_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=bug_ym dbname="cm_bug_date.bug_ym" )
+ column=(type=number update=yes updatewhereclause=yes name=const_amt dbname="cm_bug_date.const_amt" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.BUG_YM,
+       A.CONST_AMT 
+  FROM CM_BUG_DATE A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND SUBSTR(A.BUG_YM,1,4) = :AS_YY  " update="CM_BUG_DATE" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_YY", string)) )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="224" y="16" height="56" width="453" html.valueishtml="0"  name=bug_ym_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전체매출금액" border="0" color="33554432" x="686" y="16" height="56" width="800" html.valueishtml="0"  name=const_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="1495" y="16" height="56" width="407" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="5" y="16" height="56" width="210" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="229" y="20" height="68" width="448" format="[general]" html.valueishtml="0"  name=bug_ym visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="1" tabsequence=20 border="0" color="33554432" x="686" y="20" height="68" width="800" format="#,##0" html.valueishtml="0"  name=const_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=30 border="0" color="33554432" x="1495" y="20" height="68" width="407" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="5" y="20" height="68" width="210" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

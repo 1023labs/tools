@@ -1,0 +1,235 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=25 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="cm_cust_survey_list.company_code" )
+ column=(type=char(4) updatewhereclause=yes name=sur_yyyy dbname="cm_cust_survey_list.sur_yyyy" )
+ column=(type=char(2) updatewhereclause=yes name=sur_half dbname="cm_cust_survey_list.sur_half" )
+ column=(type=char(13) updatewhereclause=yes name=sur_cust_code dbname="cm_cust_survey_list.sur_cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_cust_cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=number updatewhereclause=yes name=sur_amt dbname="sur_amt" )
+ column=(type=number updatewhereclause=yes name=sur_cnt1 dbname="sur_cnt1" )
+ column=(type=number updatewhereclause=yes name=sur_cnt2 dbname="sur_cnt2" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+       A.SUR_YYYY      AS SUR_YYYY,
+       A.SUR_HALF      AS SUR_HALF,
+       A.SUR_CUST_CODE AS SUR_CUST_CODE,
+       C.CUST_NAME     AS CUST_NAME,
+       SUM(A.SUR_AMT)  AS SUR_AMT,
+       NVL(H.SUR_CNT1,0)      AS SUR_CNT1,
+       NVL(H.SUR_CNT2,0)      AS SUR_CNT2
+  FROM CM_CUST_SURVEY_LIST A LEFT JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.SUR_PROJ_CODE = B.PROJ_CODE
+                             LEFT JOIN SM_CODE_CUST C
+                                    ON A.SUR_CUST_CODE = C.CUST_CODE
+                             LEFT JOIN (SELECT F.COMPANY_CODE                AS COMPANY_CODE,
+                                               F.SUR_YYYY                    AS SUR_YYYY,
+                                               F.SUR_HALF                    AS SUR_HALF,
+                                               F.SUR_CUST_CODE               AS SUR_CUST_CODE,
+                                               TRUNC(SUM(F.SUR_CNT1)*0.5,2)  AS SUR_CNT1,
+                                               TRUNC(SUM(F.SUR_CNT2)*0.5,2)  AS SUR_CNT2
+                                          FROM (SELECT E.COMPANY_CODE                               AS COMPANY_CODE,
+                                                       E.SUR_YYYY                                   AS SUR_YYYY,
+                                                       E.SUR_HALF                                   AS SUR_HALF,
+                                                       E.SUR_CUST_CODE                              AS SUR_CUST_CODE,
+                                                       SUM(CASE WHEN E.SUR_SEQ_CNT = 1 
+                                                                THEN E.SUR_CNT ELSE 
+                                                                    CASE WHEN E.SUR_SEQ = '1' 
+                                                                         THEN E.SUR_CNT*0.4 ELSE 
+                                                                         E.SUR_CNT*0.6 
+                                                                    END 
+                                                           END)                                     AS SUR_CNT1,
+                                                       0                                            AS SUR_CNT2
+                                                  FROM (SELECT B.COMPANY_CODE                         AS COMPANY_CODE,
+                                                               B.SUR_YYYY                             AS SUR_YYYY,
+                                                               B.SUR_HALF                             AS SUR_HALF,
+                                                               B.SUR_CUST_CODE                        AS SUR_CUST_CODE,
+                                                               B.SUR_PROJ_CODE                        AS SUR_PROJ_CODE,
+                                                               B.SUR_SEQ                              AS SUR_SEQ,
+                                                               D.SUR_SEQ_CNT                          AS SUR_SEQ_CNT,
+                                                               TRUNC((SUM(B.SUR_CNT)*F.YOUL)/100,2)   AS SUR_CNT
+                                                          FROM CM_CUST_SURVEY_DATA B LEFT JOIN (SELECT C.COMPANY_CODE            AS COMPANY_CODE,
+                                                                                                       C.SUR_YYYY                AS SUR_YYYY,
+                                                                                                       C.SUR_HALF                AS SUR_HALF,
+                                                                                                       C.SUR_CUST_CODE           AS SUR_CUST_CODE,
+                                                                                                       C.SUR_PROJ_CODE           AS SUR_PROJ_CODE,
+                                                                                                       COUNT(DISTINCT C.SUR_SEQ) AS SUR_SEQ_CNT
+                                                                                                  FROM CM_CUST_SURVEY_DATA C
+                                                                                                 WHERE C.COMPANY_CODE = :AS_COMP_CODE
+                                                                                                   AND C.SUR_YYYY     = :AS_YYYY
+                                                                                                   AND C.SUR_HALF     = :AS_HALF
+                                                                                                   AND C.SUR_PROJ_CODE <> '07310'
+                                                                                                   AND C.SUR_CHECK = 'Y'
+                                                                                              GROUP BY C.COMPANY_CODE,
+                                                                                                       C.SUR_YYYY,
+                                                                                                       C.SUR_HALF,
+                                                                                                       C.SUR_CUST_CODE,
+                                                                                                       C.SUR_PROJ_CODE) D
+                                                                                           ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                                          AND B.SUR_YYYY     = D.SUR_YYYY
+                                                                                          AND B.SUR_HALF     = D.SUR_HALF
+                                                                                          AND B.SUR_CUST_CODE = D.SUR_CUST_CODE
+                                                                                          AND B.SUR_PROJ_CODE = D.SUR_PROJ_CODE
+                                                                                    LEFT JOIN (SELECT A.COMPANY_CODE                               AS COMPANY_CODE,
+                                                                                                      A.SUR_YYYY                                   AS SUR_YYYY,
+                                                                                                      A.SUR_HALF                                   AS SUR_HALF,
+                                                                                                      A.SUR_CUST_CODE                              AS SUR_CUST_CODE,
+                                                                                                      B.SUR_PROJ_CODE                              AS SUR_PROJ_CODE,
+                                                                                                      TRUNC((B.SUR_PROJ_AMT/SUM(A.SUR_AMT))*100,2) AS YOUL
+                                                                                                 FROM CM_CUST_SURVEY_LIST A LEFT JOIN (SELECT C.COMPANY_CODE   AS COMPANY_CODE,
+                                                                                                                                              C.SUR_YYYY       AS SUR_YYYY,
+                                                                                                                                              C.SUR_HALF       AS SUR_HALF,
+                                                                                                                                              C.SUR_CUST_CODE  AS SUR_CUST_CODE,
+                                                                                                                                              C.SUR_PROJ_CODE  AS SUR_PROJ_CODE,
+                                                                                                                                              SUM(C.SUR_AMT)   AS SUR_PROJ_AMT
+                                                                                                                                         FROM CM_CUST_SURVEY_LIST C
+                                                                                                                                        WHERE C.SUR_PROJ_YN = 'Y'
+                                                                                                                                          AND C.SUR_CUST_YN = 'Y'
+                                                                                                                                     GROUP BY C.COMPANY_CODE,
+                                                                                                                                              C.SUR_YYYY,
+                                                                                                                                              C.SUR_HALF,
+                                                                                                                                              C.SUR_CUST_CODE,
+                                                                                                                                              C.SUR_PROJ_CODE) B
+                                                                                                                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                                                                  AND A.SUR_YYYY     = B.SUR_YYYY
+                                                                                                                                  AND A.SUR_HALF     = B.SUR_HALF
+                                                                                                                                  AND A.SUR_CUST_CODE = B.SUR_CUST_CODE
+                                                                                                WHERE A.SUR_PROJ_YN = 'Y'
+                                                                                                  AND A.SUR_CUST_YN = 'Y'
+                                                                                             GROUP BY A.COMPANY_CODE,
+                                                                                                      A.SUR_YYYY,
+                                                                                                      A.SUR_HALF,
+                                                                                                      A.SUR_CUST_CODE,
+                                                                                                      B.SUR_PROJ_CODE,
+                                                                                                      B.SUR_PROJ_AMT) F
+                                                                                           ON B.COMPANY_CODE = F.COMPANY_CODE
+                                                                                          AND B.SUR_YYYY     = F.SUR_YYYY
+                                                                                          AND B.SUR_HALF     = F.SUR_HALF
+                                                                                          AND B.SUR_CUST_CODE = F.SUR_CUST_CODE
+                                                                                          AND B.SUR_PROJ_CODE = F.SUR_PROJ_CODE
+                                                         WHERE B.COMPANY_CODE = :AS_COMP_CODE
+                                                           AND B.SUR_YYYY     = :AS_YYYY
+                                                           AND B.SUR_HALF     = :AS_HALF
+                                                           AND B.SUR_PROJ_CODE <> '07310'
+                                                           AND B.SUR_CHECK = 'Y'
+                                                        GROUP BY B.COMPANY_CODE,
+                                                                 B.SUR_YYYY,
+                                                                 B.SUR_HALF,
+                                                                 B.SUR_CUST_CODE,
+                                                                 B.SUR_PROJ_CODE,
+                                                                 B.SUR_SEQ,
+                                                                 D.SUR_SEQ_CNT,
+                                                                 F.YOUL) E
+                                                GROUP BY E.COMPANY_CODE,
+                                                         E.SUR_YYYY,
+                                                         E.SUR_HALF,
+                                                         E.SUR_CUST_CODE
+                                                UNION ALL
+                                                SELECT E.COMPANY_CODE                               AS COMPANY_CODE,
+                                                       E.SUR_YYYY                                   AS SUR_YYYY,
+                                                       E.SUR_HALF                                   AS SUR_HALF,
+                                                       E.SUR_CUST_CODE                              AS SUR_CUST_CODE,
+                                                       0                                            AS SUR_CNT1,
+                                                       SUM(CASE WHEN E.SUR_SEQ_CNT = 1 
+                                                                THEN E.SUR_CNT ELSE 
+                                                                    CASE WHEN E.SUR_SEQ = '1' 
+                                                                         THEN E.SUR_CNT*0.4 ELSE 
+                                                                         E.SUR_CNT*0.6 
+                                                                    END 
+                                                           END)                                     AS SUR_CNT2
+                                                  FROM (SELECT B.COMPANY_CODE   AS COMPANY_CODE,
+                                                               B.SUR_YYYY       AS SUR_YYYY,
+                                                               B.SUR_HALF       AS SUR_HALF,
+                                                               B.SUR_CUST_CODE  AS SUR_CUST_CODE,
+                                                               B.SUR_SEQ        AS SUR_SEQ,
+                                                               D.SUR_SEQ_CNT    AS SUR_SEQ_CNT,
+                                                               SUM(B.SUR_CNT)   AS SUR_CNT
+                                                          FROM CM_CUST_SURVEY_DATA B LEFT JOIN (SELECT C.COMPANY_CODE            AS COMPANY_CODE,
+                                                                                                       C.SUR_YYYY                AS SUR_YYYY,
+                                                                                                       C.SUR_HALF                AS SUR_HALF,
+                                                                                                       C.SUR_CUST_CODE           AS SUR_CUST_CODE,
+                                                                                                       COUNT(DISTINCT C.SUR_SEQ) AS SUR_SEQ_CNT
+                                                                                                  FROM CM_CUST_SURVEY_DATA C
+                                                                                                 WHERE C.COMPANY_CODE = :AS_COMP_CODE
+                                                                                                   AND C.SUR_YYYY     = :AS_YYYY
+                                                                                                   AND C.SUR_HALF     = :AS_HALF
+                                                                                                   AND C.SUR_PROJ_CODE = '07310'
+                                                                                                   AND C.SUR_CHECK = 'Y'
+                                                                                              GROUP BY C.COMPANY_CODE,
+                                                                                                       C.SUR_YYYY,
+                                                                                                       C.SUR_HALF,
+                                                                                                       C.SUR_CUST_CODE) D
+                                                                                           ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                                          AND B.SUR_YYYY     = D.SUR_YYYY
+                                                                                          AND B.SUR_HALF     = D.SUR_HALF
+                                                                                          AND B.SUR_CUST_CODE = D.SUR_CUST_CODE
+                                                         WHERE B.COMPANY_CODE = :AS_COMP_CODE
+                                                           AND B.SUR_YYYY     = :AS_YYYY
+                                                           AND B.SUR_HALF     = :AS_HALF
+                                                           AND B.SUR_PROJ_CODE = '07310'
+                                                           AND B.SUR_CHECK = 'Y'
+                                                        GROUP BY B.COMPANY_CODE,
+                                                                 B.SUR_YYYY,
+                                                                 B.SUR_HALF,
+                                                                 B.SUR_CUST_CODE,
+                                                                 B.SUR_SEQ,
+                                                                 D.SUR_SEQ_CNT) E
+                                                GROUP BY E.COMPANY_CODE,
+                                                         E.SUR_YYYY,
+                                                         E.SUR_HALF,
+                                                         E.SUR_CUST_CODE) F 
+                                        GROUP BY F.COMPANY_CODE,
+                                                 F.SUR_YYYY,
+                                                 F.SUR_HALF,
+                                                 F.SUR_CUST_CODE) H
+                                    ON A.COMPANY_CODE = H.COMPANY_CODE
+                                   AND A.SUR_YYYY     = H.SUR_YYYY
+                                   AND A.SUR_HALF     = H.SUR_HALF
+                                   AND A.SUR_CUST_CODE = H.SUR_CUST_CODE                  
+ WHERE A.COMPANY_CODE  = :AS_COMP_CODE
+   AND A.SUR_YYYY      = :AS_YYYY
+   AND A.SUR_HALF      = :AS_HALF
+   AND A.SUR_PROJ_YN   = 'Y'
+   AND A.SUR_CUST_YN   = 'Y'
+GROUP BY A.COMPANY_CODE,
+         A.SUR_YYYY,
+         A.SUR_HALF,
+         A.SUR_CUST_CODE,
+         C.CUST_NAME,
+         NVL(H.SUR_CNT1,0),
+         NVL(H.SUR_CNT2,0)
+ORDER BY A.SUR_YYYY, A.SUR_HALF,SUM(A.SUR_AMT) DESC" arguments=(("AS_COMP_CODE", string),("AS_YYYY", string),("AS_HALF", string)) )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="629" y="6" height="14" width="38" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Sur Yyyy" border="0" color="33554432" x="590" y="6" height="14" width="37" html.valueishtml="0"  name=sur_yyyy_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Sur Half" border="0" color="33554432" x="546" y="6" height="14" width="42" html.valueishtml="0"  name=sur_half_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="32" y="6" height="14" width="90" html.valueishtml="0"  name=sur_cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="점수[현장]" border="0" color="33554432" x="406" y="6" height="14" width="68" html.valueishtml="0"  name=sur_cnt1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="점수[본사]" border="0" color="33554432" x="476" y="6" height="14" width="68" html.valueishtml="0"  name=sur_cnt2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="124" y="5" height="14" width="161" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="287" y="5" height="14" width="117" html.valueishtml="0"  name=sur_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="6" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="669" y="6" height="14" width="65" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="629" y="7" height="14" width="38" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="590" y="7" height="14" width="37" format="[general]" html.valueishtml="0"  name=sur_yyyy visible="0" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="546" y="7" height="14" width="42" format="[general]" html.valueishtml="0"  name=sur_half visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="32" y="7" height="14" width="90" format="[general]" html.valueishtml="0"  name=sur_cust_code visible="1" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="406" y="7" height="14" width="68" format="[general]" html.valueishtml="0"  name=sur_cnt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="476" y="7" height="14" width="68" format="[general]" html.valueishtml="0"  name=sur_cnt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="124" y="7" height="14" width="161" format="[general]" html.valueishtml="0"  name=sm_code_cust_cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="287" y="7" height="14" width="117" format="#,###" html.valueishtml="0"  name=sur_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="7" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" sur_cnt1  +  sur_cnt2 "border="0" color="33554432" x="669" y="7" height="14" width="65" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

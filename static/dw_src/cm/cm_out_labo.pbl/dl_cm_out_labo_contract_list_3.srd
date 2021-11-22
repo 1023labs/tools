@@ -1,0 +1,110 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_labo_contract.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=labor_code dbname="cm_labo_contract.labor_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_labo_contract.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=contract_no dbname="cm_labo_contract.contract_no" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=reg_date dbname="cm_labo_contract.reg_date" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=job_code dbname="cm_labo_contract.job_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=pay_cost dbname="cm_labo_contract.pay_cost" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_labo_contract.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_labo_contract.end_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=ticket_div dbname="cm_labo_contract.ticket_div" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name1 dbname="cm_labo_contract.file_name1" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type1 dbname="cm_labo_contract.file_type1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path1 dbname="cm_labo_contract.file_path1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name3 dbname="cm_labo_contract.file_name3" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type3 dbname="cm_labo_contract.file_type3" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path3 dbname="cm_labo_contract.file_path3" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remarks1 dbname="cm_labo_contract.remarks1" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=cont_div dbname="cm_labo_contract.cont_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=gjoin_date dbname="cm_labo_contract.gjoin_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=join_date dbname="cm_labo_contract.join_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=rpay_date dbname="cm_labo_contract.rpay_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=retire_date dbname="cm_labo_contract.retire_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=check_tag dbname="cm_labo_contract.check_tag" values="	Y/	N" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=time_amt dbname="cm_labo_contract.time_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=basic_amt dbname="cm_labo_contract.basic_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=ju_amt dbname="cm_labo_contract.ju_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=time_etc_amt dbname="cm_labo_contract.time_etc_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=holiday_cut_amt dbname="cm_labo_contract.holiday_cut_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=year_amt dbname="cm_labo_contract.year_amt" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.PROJ_CODE,
+         B.PROJ_NAME,
+         A.CONTRACT_NO, 
+         A.REG_DATE, 
+         A.JOB_CODE,
+         A.PAY_COST,
+         A.START_DATE,
+         A.END_DATE, 
+         A.TICKET_DIV,
+         A.FILE_NAME1, 
+         A.FILE_TYPE1, 
+         A.FILE_PATH1, 
+         A.FILE_NAME3, 
+         A.FILE_TYPE3, 
+         A.FILE_PATH3, 
+         A.REMARKS1,
+         A.CONT_DIV,
+         A.GJOIN_DATE,
+         A.JOIN_DATE,
+         A.RPAY_DATE,
+         A.RETIRE_DATE,
+         A.CHECK_TAG,
+         A.TIME_AMT,
+         A.BASIC_AMT,
+         A.JU_AMT,
+         A.TIME_ETC_AMT,
+         A.HOLIDAY_CUT_AMT,
+         A.YEAR_AMT
+    FROM CM_LABO_CONTRACT A LEFT JOIN SM_CODE_PROJECT B
+                                   ON A.PROJ_CODE = B.PROJ_CODE 
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.LABOR_CODE   = :as_labor
+ORDER BY A.REG_DATE DESC" arguments=(("as_comp", string),("as_labor", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="등록일" border="0" color="33554432" x="38" y="2" height="14" width="62" html.valueishtml="0"  name=reg_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="484" y="2" height="14" width="64" html.valueishtml="0"  name=job_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="286" y="2" height="14" width="60" html.valueishtml="0"  name=cm_labo_contract_pay_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="계약" border="0" color="33554432" x="348" y="2" height="14" width="65" html.valueishtml="0"  name=cm_labo_contract_start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="415" y="2" height="14" width="67" html.valueishtml="0"  name=cm_labo_contract_end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="16711680" x="155" y="2" height="14" width="129" html.valueishtml="0"  name=proj_name_t  tag="proj_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약구분" border="0" color="33554432" x="102" y="2" height="14" width="51" html.valueishtml="0"  name=cm_labo_contract_cont_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근로계약서1" border="0" color="16711680" x="550" y="2" height="14" width="85" html.valueishtml="0"  name=cm_labo_contract_file_name1_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="식권매수" border="0" color="33554432" x="824" y="2" height="14" width="58" html.valueishtml="0"  name=cm_labo_contract_ticket_div_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근로계약서2" border="0" color="16711680" x="669" y="2" height="14" width="81" html.valueishtml="0"  name=cm_labo_contract_file_name3_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확인" border="0" color="33554432" x="783" y="2" height="14" width="39" html.valueishtml="0"  name=cm_labo_contract_check_tag_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="14" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="38" y="1" height="14" width="62" format="####-##-##" html.valueishtml="0"  name=reg_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="155" y="1" height="14" width="129" format="[general]" html.valueishtml="0" protect="0~tif( (cont_div = '1' and check_tag ='N'), 0, 1)"  name=proj_name  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="33554432" x="102" y="1" height="14" width="51" format="[general]" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=cont_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="484" y="1" height="14" width="64" format="[general]" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=job_code  tag="[R]" visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="286" y="1" height="14" width="60" format="#,###" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=pay_cost  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="348" y="1" height="14" width="65" format="####-##-##" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=start_date  tag="[R]" visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="415" y="1" height="14" width="67" format="####-##-##" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=end_date  tag="[R]" visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="824" y="1" height="14" width="58" format="[general]" html.valueishtml="0"  name=ticket_div  tag="[R]" visible="0" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="33554432" x="783" y="1" height="14" width="39" format="[general]" html.valueishtml="0"  name=check_tag visible="0" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( FILE_NAME1 ) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="33554432" x="637" y="1" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_download visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name1 ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="33554432" x="653" y="1" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_filedel visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( FILE_NAME3 ) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="33554432" x="752" y="1" height="14" width="13" format="[GENERAL]" html.valueishtml="0"  name=p_download3 visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name3 ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="33554432" x="767" y="1" height="14" width="14" format="[GENERAL]" html.valueishtml="0"  name=p_filedel3 visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="550" y="1" height="14" width="85" format="[general]" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=file_name1 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="669" y="1" height="14" width="81" format="[general]" html.valueishtml="0" protect="0~tif(check_tag='Y', 1, 0)"  name=file_name3 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,67 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_calc_detail.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=entry_date dbname="cm_calc_detail.entry_date" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_calc_detail.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_calc_detail.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_calc_detail.end_date" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=cont_amt dbname="cm_calc_detail.cont_amt" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name dbname="cm_calc_detail.file_name" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=file_type dbname="cm_calc_detail.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_calc_detail.file_path" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=cnst_code dbname="cm_calc_detail.cnst_code" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remarks dbname="cm_calc_detail.remarks" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.ENTRY_DATE,
+         A.PROJ_CODE,
+         A.START_DATE,
+         A.END_DATE,
+         A.CONT_AMT,
+         A.FILE_NAME,
+         A.FILE_TYPE,
+         A.FILE_PATH,
+         A.CNST_CODE,
+         A.REMARKS,
+         B.PROJ_NAME,
+         C.CNST_NAME
+    FROM CM_CALC_DETAIL A LEFT JOIN SM_CODE_PROJECT B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.PROJ_CODE = B.PROJ_CODE
+                          LEFT JOIN CM_CUST_CONSTRUCT C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.CNST_CODE = C.CNST_CODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND ((A.START_DATE >= :as_sdate AND A.START_DATE <= :as_edate)
+      OR (A.END_DATE >= :as_sdate AND A.END_DATE <= :as_edate)
+      OR (A.START_DATE <= :as_sdate AND A.END_DATE >= :as_sdate))
+     AND A.CNST_CODE LIKE :as_cnstcode" update="CM_CALC_DETAIL" updatewhere=0 updatekeyinplace=no arguments=(("as_compcode", string),("as_sdate", string),("as_edate", string),("as_cnstcode", string)) )
+text(band=header alignment="2" text="공사시작일자" border="0" color="33554432" x="308" y="2" height="14" width="72" html.valueishtml="0"  name=start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사완료일자" border="0" color="33554432" x="382" y="2" height="14" width="72" html.valueishtml="0"  name=end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건설사" border="0" color="33554432" x="773" y="2" height="14" width="164" html.valueishtml="0"  name=cnst_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="939" y="2" height="14" width="266" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사금액" border="0" color="33554432" x="456" y="2" height="14" width="110" html.valueishtml="0"  name=cont_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="파일명" border="0" color="33554432" x="568" y="2" height="14" width="165" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="2" y="2" height="17" width="68" format="[general]" html.valueishtml="0"  name=entry_date  tag="[R]" visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=30 border="0" color="33554432" x="308" y="2" height="17" width="72" format="[general]" html.valueishtml="0"  name=start_date visible="1" editmask.mask="XXXX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=40 border="0" color="33554432" x="382" y="2" height="17" width="72" format="[general]" html.valueishtml="0"  name=end_date visible="1" editmask.mask="XXXX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=60 border="0" color="33554432" x="939" y="2" height="17" width="266" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=20 border="0" color="33554432" x="72" y="2" height="17" width="234" format="[general]" html.valueishtml="0" protect="0~tif ( isrownew(), 0, 1 )"  name=proj_name  tag="[R]" pointer="HyperLink!" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="773" y="2" height="17" width="164" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=50 border="0" color="33554432" x="456" y="2" height="17" width="110" format="#,###" html.valueishtml="0"  name=cont_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="568" y="2" height="17" width="165" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name ) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="33554432" x="735" y="2" height="17" width="17" format="[GENERAL]" html.valueishtml="0"  name=p_download visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name )  , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="33554432" x="754" y="2" height="17" width="17" format="[GENERAL]" html.valueishtml="0"  name=p_filedel visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="등록년월일" border="0" color="18110176" x="2" y="2" height="14" width="68" html.valueishtml="0"  name=entry_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="18110176" x="72" y="2" height="14" width="234" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,62 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="const_code" )
+ column=(type=char(4000) updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=level_num dbname="level_num" )
+ column=(type=number updatewhereclause=yes name=desn_mat_amt dbname="desn_mat_amt" )
+ column=(type=number updatewhereclause=yes name=desn_lab_amt dbname="desn_lab_amt" )
+ column=(type=number updatewhereclause=yes name=desn_exp_amt dbname="desn_exp_amt" )
+ column=(type=number updatewhereclause=yes name=desn_amt dbname="desn_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONST_CODE,
+         LPAD('  ', A.LEVEL_NUM*4)||A.CONST_NAME CONST_NAME,
+         A.LEVEL_NUM,
+         B.DESN_MAT_AMT,
+         B.DESN_LAB_AMT,
+         B.DESN_EXP_AMT,
+         B.DESN_AMT
+    FROM CM_EXEC_CONST A LEFT JOIN (SELECT COMPANY_CODE,
+                                           PROJ_CODE,
+                                           REVISION,
+                                           CONST_CODE,
+                                           SUM(DESN_MAT_AMT) DESN_MAT_AMT,
+                                           SUM(DESN_LAB_AMT) DESN_LAB_AMT,
+                                           SUM(DESN_EXP_AMT) DESN_EXP_AMT,
+                                           SUM(DESN_MAT_AMT + DESN_LAB_AMT + DESN_EXP_AMT) DESN_AMT
+                                      FROM CM_CHNG_DETAIL
+                                  GROUP BY COMPANY_CODE, PROJ_CODE, REVISION, CONST_CODE
+                                    HAVING REVISION = :al_revision ) B
+                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                               AND A.PROJ_CODE = B.PROJ_CODE
+                               AND A.CONST_CODE = B.CONST_CODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.PROJ_CODE = :as_projcode
+ORDER BY A.QUERY_SEQ" arguments=(("as_compcode", string),("as_projcode", string),("al_revision", number)) )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="2" y="2" height="14" width="180" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="184" y="2" height="14" width="82" html.valueishtml="0"  name=desn_mat_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="268" y="2" height="14" width="82" html.valueishtml="0"  name=desn_lab_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="352" y="2" height="14" width="82" html.valueishtml="0"  name=desn_exp_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="436" y="2" height="14" width="82" html.valueishtml="0"  name=desn_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="180" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="184" y="2" height="17" width="82" format="#,###" html.valueishtml="0"  name=desn_mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="268" y="2" height="17" width="82" format="#,###" html.valueishtml="0"  name=desn_lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="352" y="2" height="17" width="82" format="#,###" html.valueishtml="0"  name=desn_exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="436" y="2" height="17" width="82" format="#,###" html.valueishtml="0"  name=desn_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합계" border="0" color="33554432" x="2" y="2" height="14" width="180" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( desn_mat_amt for all )"border="0" color="33554432" x="184" y="2" height="14" width="82" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum ( desn_lab_amt for all )"border="0" color="33554432" x="268" y="2" height="14" width="82" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum ( desn_exp_amt for all )"border="0" color="33554432" x="352" y="2" height="14" width="82" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum ( desn_amt for all )"border="0" color="33554432" x="436" y="2" height="14" width="82" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

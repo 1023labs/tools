@@ -1,0 +1,79 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=emp_no dbname="vw_pers_master.emp_no" )
+ column=(type=char(40) updatewhereclause=yes name=emp_name dbname="vw_pers_master.emp_name" )
+ column=(type=char(15) updatewhereclause=yes name=company_code dbname="vw_pers_master.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=dept_code dbname="vw_pers_master.dept_code" )
+ column=(type=char(8) updatewhereclause=yes name=grade_code dbname="vw_pers_master.grade_code" )
+ column=(type=char(8) updatewhereclause=yes name=join_date dbname="vw_pers_master.join_date" )
+ column=(type=char(8) updatewhereclause=yes name=retire_date dbname="vw_pers_master.retire_date" )
+ column=(type=char(100) updatewhereclause=yes name=dept_name dbname="sm_code_dept.dept_name" )
+ column=(type=char(100) updatewhereclause=yes name=real_dept_name dbname="sm_code_dept.real_dept_name" )
+ column=(type=char(20) updatewhereclause=yes name=grade_name dbname="hr_code_grade_comm.grade_name" )
+ column=(type=char(3) updatewhereclause=yes name=dept_div_code dbname="sm_code_dept.dept_div_code" )
+ column=(type=char(8) updatewhereclause=yes name=level_code dbname="vw_pers_master.level_code" )
+ column=(type=char(20) updatewhereclause=yes name=level_name dbname="hr_code_level_comm.level_name" )
+ column=(type=char(0) updatewhereclause=yes name=duty_code dbname="duty_code" )
+ column=(type=char(0) updatewhereclause=yes name=duty_name dbname="duty_name" )
+ column=(type=char(15) updatewhereclause=yes name=cur_company_code dbname="vw_pers_master.cur_company_code" )
+ column=(type=char(30) updatewhereclause=yes name=company_name dbname="sm_code_company.cur_company_name" )
+ column=(type=char(12) updatewhereclause=yes name=cur_dept_code dbname="vw_pers_master.cur_dept_code" )
+ column=(type=char(100) updatewhereclause=yes name=cur_dept_name dbname="sm_code_dept.cur_dept_name" )
+ retrieve="  SELECT A.EMP_NO,   
+         A.EMP_NAME,   
+         A.COMPANY_CODE,   
+         A.DEPT_CODE,   
+         A.GRADE_CODE,   
+         A.JOIN_DATE,   
+         A.RETIRE_DATE,   
+         B.DEPT_NAME,   
+         C.DEPT_NAME REAL_DEPT_NAME,   
+         D.GRADE_NAME,   
+         C.DEPT_DIV_CODE,   
+         A.LEVEL_CODE,   
+         E.LEVEL_NAME,
+         '' DUTY_CODE,
+         '' DUTY_NAME,
+         A.COMPANY_CODE CUR_COMPANY_CODE,
+         G.COMPANY_NAME CUR_COMPANY_NAME,
+         A.DEPT_CODE CUR_DEPT_CODE, 
+         F.DEPT_NAME CUR_DEPT_NAME
+    FROM VW_PERS_MASTER A LEFT JOIN SM_CODE_DEPT B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.DEPT_CODE    = B.DEPT_CODE   
+                          LEFT JOIN SM_CODE_DEPT C
+                                 ON A.COMPANY_CODE   = C.COMPANY_CODE
+                                AND A.REAL_DEPT_CODE = C.DEPT_CODE   
+                          LEFT JOIN HR_CODE_GRADE_COMM D
+                                 ON A.GRADE_CODE   = D.GRADE_CODE    
+                          LEFT JOIN HR_CODE_LEVEL_COMM E
+                                 ON A.LEVEL_CODE = E.LEVEL_CODE
+                          LEFT JOIN SM_CODE_DEPT F
+                                 ON A.COMPANY_CODE = F.COMPANY_CODE
+                                AND A.DEPT_CODE    = F.DEPT_CODE
+                          LEFT JOIN SM_CODE_COMPANY G
+                                 ON A.COMPANY_CODE = G.COMPANY_CODE
+   WHERE ( A.EMP_NO LIKE :as_empname||'%' OR A.EMP_NAME LIKE '%'||:as_empname||'%' )
+     AND ( A.COMPANY_CODE = :as_comp )
+ORDER BY B.SORT_ORDER ASC, B.DEPT_CODE ASC, A.GRADE_CODE ASC, A.EMP_NO ASC
+" arguments=(("as_comp", string),("as_retirediv", string),("as_empname", string)) )
+text(band=header alignment="2" text="부서명" border="0" color="33554432" x="51" y="2" height="14" width="125" html.valueishtml="0"  name=sm_code_dept_dept_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직위명칭" border="0" color="33554432" x="390" y="2" height="14" width="147" html.valueishtml="0"  name=hr_code_grade_comm_grade_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소속부서" border="0" color="33554432" x="234" y="2" height="14" width="154" html.valueishtml="0"  name=sm_code_dept_real_dept_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="178" y="2" height="14" width="54" html.valueishtml="0"  name=vw_pers_master_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="2" y="2" height="14" width="47" html.valueishtml="0"  name=vw_pers_master_emp_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="47" format="[general]" html.valueishtml="0"  name=emp_no visible="1" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="51" y="2" height="17" width="125" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="234" y="2" height="17" width="154" format="[general]" html.valueishtml="0"  name=real_dept_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="390" y="2" height="17" width="147" format="[general]" html.valueishtml="0"  name=grade_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="178" y="2" height="17" width="54" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

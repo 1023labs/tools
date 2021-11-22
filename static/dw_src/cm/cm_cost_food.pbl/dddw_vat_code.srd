@@ -1,0 +1,28 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(2) update=yes updatewhereclause=yes key=yes name=vat_code dbname="ac_code_vat.vat_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=vat_name dbname="ac_code_vat.vat_name" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=sub_tag dbname="ac_code_vat.sub_tag" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=state_kind dbname="ac_code_vat.state_kind" )
+ retrieve="  SELECT A.VAT_CODE,   
+         A.VAT_NAME,   
+         A.SUB_TAG,   
+         A.STATE_KIND  
+    FROM AC_CODE_VAT A  
+   WHERE ( A.VAT_CODE = '11' ) 
+      OR ( A.VAT_CODE = '13' ) 
+      OR ( A.VAT_CODE = '14' ) 
+      OR ( A.VAT_CODE = '24' ) 
+      OR ( A.VAT_CODE = '41' )   
+ORDER BY VAT_CODE ASC   
+" update="AC_CODE_VAT" updatewhere=1 updatekeyinplace=no )
+column(band=detail id=2 alignment="0" tabsequence=20 border="0" color="33554432" x="2" y="2" height="14" width="107" format="[general]" html.valueishtml="0"  name=vat_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

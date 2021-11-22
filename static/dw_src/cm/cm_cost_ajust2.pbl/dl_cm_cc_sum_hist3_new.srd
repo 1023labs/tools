@@ -1,0 +1,86 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="553648127" )
+detail(height=18 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="cm_cc_sum_hist.company_code" )
+ column=(type=char(6) updatewhereclause=yes name=cc_ym dbname="cm_cc_sum_hist.cc_ym" )
+ column=(type=char(12) updatewhereclause=yes name=cdept_code dbname="cm_cc_sum_hist.cdept_code" )
+ column=(type=char(12) updatewhereclause=yes name=dept_code dbname="cm_cc_sum_hist.dept_code" )
+ column=(type=char(8) updatewhereclause=yes name=acnt_code dbname="cm_cc_sum_hist.acnt_code" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="cm_cc_sum_hist.const_code" )
+ column=(type=decimal(0) updatewhereclause=yes name=seq dbname="cm_cc_sum_hist.seq" )
+ column=(type=datetime updatewhereclause=yes name=dml_date dbname="cm_cc_sum_hist.dml_date" )
+ column=(type=char(12) updatewhereclause=yes name=dml_emp_no dbname="cm_cc_sum_hist.dml_emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=dml_ip dbname="cm_cc_sum_hist.dml_ip" )
+ column=(type=decimal(1) updatewhereclause=yes name=cost_direct_amt dbname="cm_cc_sum_hist.cost_direct_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=cost_indirect_amt dbname="cm_cc_sum_hist.cost_indirect_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=cost_tot dbname="cm_cc_sum_hist.cost_tot" )
+ column=(type=datetime updatewhereclause=yes name=row_input_date dbname="cm_cc_sum_hist.row_input_date" )
+ column=(type=char(12) updatewhereclause=yes name=row_input_emp_no dbname="cm_cc_sum_hist.row_input_emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=row_input_ip dbname="cm_cc_sum_hist.row_input_ip" )
+ column=(type=datetime updatewhereclause=yes name=row_update_date dbname="cm_cc_sum_hist.row_update_date" )
+ column=(type=char(12) updatewhereclause=yes name=row_update_emp_no dbname="cm_cc_sum_hist.row_update_emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=row_update_ip dbname="cm_cc_sum_hist.row_update_ip" )
+ column=(type=char(40) updatewhereclause=yes name=const_acnt_name dbname="sm_code_costacc.const_acnt_name" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="cm_exec_const.const_name" )
+ retrieve="SELECT A.COMPANY_CODE
+     , A.CC_YM
+     , A.CDEPT_CODE
+     , A.DEPT_CODE
+     , A.ACNT_CODE
+     , A.CONST_CODE
+     , A.SEQ
+     , A.DML_DATE
+     , A.DML_EMP_NO
+     , A.DML_IP
+     , A.COST_DIRECT_AMT
+     , A.COST_INDIRECT_AMT
+     , A.COST_TOT
+     , A.ROW_INPUT_DATE
+     , A.ROW_INPUT_EMP_NO
+     , A.ROW_INPUT_IP
+     , A.ROW_UPDATE_DATE
+     , A.ROW_UPDATE_EMP_NO
+     , A.ROW_UPDATE_IP
+     , C.CONST_ACNT_NAME
+     , D.PROJ_NAME
+     , E.CONST_NAME
+  FROM CM_CC_SUM_HIST A INNER JOIN AC_CODE_ACNT B    ON A.ACNT_CODE    = B.ACNT_CODE
+                        LEFT  JOIN SM_CODE_COSTACC C ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                                    AND B.COST_ACNT_CODE = C.CONST_ACNT_CODE
+                        LEFT JOIN SM_CODE_PROJECT D  ON A.DEPT_CODE      = D.PROJ_CODE
+                        LEFT JOIN CM_EXEC_CONST E    ON A.COMPANY_CODE = E.COMPANY_CODE
+                                                    AND A.DEPT_CODE    = E.PROJ_CODE
+                                                    AND A.CONST_CODE   = E.CONST_CODE
+ WHERE A.COMPANY_CODE = :AS_COMPANY
+   AND A.DEPT_CODE LIKE :AS_PROJ_CODE
+   AND A.CC_YM = :AS_CC_YM
+   AND A.SEQ = :AS_SEQ
+ ORDER BY A.CC_YM,  A.DEPT_CODE, A.CONST_CODE" arguments=(("AS_COMPANY", string),("AS_PROJ_CODE", string),("AS_CC_YM", string),("AS_SEQ", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="46" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직접비" border="0" color="33554432" x="342" y="2" height="14" width="92" html.valueishtml="0"  name=cost_direct_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="간접비" border="0" color="33554432" x="436" y="2" height="14" width="94" html.valueishtml="0"  name=cost_indirect_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="532" y="2" height="14" width="91" html.valueishtml="0"  name=cost_tot_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="50" y="2" height="14" width="173" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공정명" border="0" color="33554432" x="225" y="2" height="14" width="115" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="3" height="14" width="46" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="342" y="3" height="14" width="92" format="#,###" html.valueishtml="0"  name=cost_direct_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="436" y="3" height="14" width="94" format="#,###" html.valueishtml="0"  name=cost_indirect_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="532" y="3" height="14" width="91" format="#,###" html.valueishtml="0"  name=cost_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="0" tabsequence=32766 border="0" color="33554432" x="50" y="1" height="14" width="173" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="0" tabsequence=32766 border="0" color="33554432" x="225" y="1" height="14" width="115" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="proj_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

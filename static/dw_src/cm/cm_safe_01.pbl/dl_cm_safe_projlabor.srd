@@ -1,0 +1,243 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=proj_code dbname="sm_code_project.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=number updatewhereclause=yes name=work_total_cnt dbname="sm_code_project.work_total_cnt" )
+ column=(type=number updatewhereclause=yes name=work_pre_cnt dbname="sm_code_project.work_pre_cnt" )
+ column=(type=number updatewhereclause=yes name=work_cnt_20 dbname="sm_code_project.work_cnt_20" )
+ column=(type=number updatewhereclause=yes name=work_cnt_30 dbname="sm_code_project.work_cnt_30" )
+ column=(type=number updatewhereclause=yes name=work_cnt_40 dbname="sm_code_project.work_cnt_40" )
+ column=(type=number updatewhereclause=yes name=work_cnt_50 dbname="sm_code_project.work_cnt_50" )
+ column=(type=number updatewhereclause=yes name=work_cnt_60 dbname="sm_code_project.work_cnt_60" )
+ column=(type=number updatewhereclause=yes name=first_total_cnt dbname="sm_code_project.first_total_cnt" )
+ column=(type=number updatewhereclause=yes name=first_pre_cnt dbname="sm_code_project.first_pre_cnt" )
+ column=(type=number updatewhereclause=yes name=first_cnt_20 dbname="sm_code_project.first_cnt_20" )
+ column=(type=number updatewhereclause=yes name=first_cnt_30 dbname="sm_code_project.first_cnt_30" )
+ column=(type=number updatewhereclause=yes name=first_cnt_40 dbname="sm_code_project.first_cnt_40" )
+ column=(type=number updatewhereclause=yes name=first_cnt_50 dbname="sm_code_project.first_cnt_50" )
+ column=(type=number updatewhereclause=yes name=first_cnt_60 dbname="sm_code_project.first_cnt_60" )
+ column=(type=number updatewhereclause=yes name=new_total_cnt dbname="sm_code_project.new_total_cnt" )
+ column=(type=number updatewhereclause=yes name=new_pre_cnt dbname="sm_code_project.new_pre_cnt" )
+ column=(type=number updatewhereclause=yes name=cnt_1 dbname="sm_code_project.cnt_1" )
+ column=(type=number updatewhereclause=yes name=cnt_2 dbname="sm_code_project.cnt_2" )
+ column=(type=number updatewhereclause=yes name=cnt_3 dbname="sm_code_project.cnt_3" )
+ column=(type=number updatewhereclause=yes name=cnt_4 dbname="sm_code_project.cnt_4" )
+ column=(type=number updatewhereclause=yes name=cnt_5 dbname="sm_code_project.cnt_5" )
+ column=(type=number updatewhereclause=yes name=cnt_6 dbname="sm_code_project.cnt_6" )
+ column=(type=number updatewhereclause=yes name=cnt_7 dbname="sm_code_project.cnt_7" )
+ column=(type=number updatewhereclause=yes name=cnt_8 dbname="sm_code_project.cnt_8" )
+ column=(type=number updatewhereclause=yes name=cnt_9 dbname="sm_code_project.cnt_9" )
+ retrieve="  SELECT A.PROJ_CODE,
+       E.PROJ_NAME,
+       B.TOTAL_CNT AS WORK_TOTAL_CNT,
+       B.PRE_CNT   AS WORK_PRE_CNT,
+       B.CNT_20    AS WORK_CNT_20,
+       B.CNT_30    AS WORK_CNT_30,
+       B.CNT_40    AS WORK_CNT_40,
+       B.CNT_50    AS WORK_CNT_50,
+       B.CNT_60    AS WORK_CNT_60,
+       C.TOTAL_CNT AS FIRST_TOTAL_CNT,
+       C.PRE_CNT   AS FIRST_PRE_CNT,
+       C.CNT_20    AS FIRST_CNT_20,
+       C.CNT_30    AS FIRST_CNT_30,
+       C.CNT_40    AS FIRST_CNT_40,
+       C.CNT_50    AS FIRST_CNT_50,
+       C.CNT_60    AS FIRST_CNT_60,
+       D.TOTAL_CNT AS NEW_TOTAL_CNT,
+       D.PRE_CNT   AS NEW_PRE_CNT,
+       F.CNT_1,
+       F.CNT_2,
+       F.CNT_3,
+       F.CNT_4,
+       F.CNT_5,
+       F.CNT_6,
+       F.CNT_7,
+       F.CNT_8,
+       F.CNT_9
+FROM
+  (SELECT DISTINCT PROJ_CODE
+     FROM CM_SALY_LABOR_ACCOUNT
+    WHERE PROJ_CODE LIKE :as_projcode
+      AND PAY_YYMM  = :as_yymm) A,
+   (SELECT A.PROJ_CODE,
+         SUM(1) TOTAL_CNT,
+         MAX(C.CNT) PRE_CNT,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 20 AND 29 THEN 1 END) AS CNT_20,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 30 AND 39 THEN 1 END) AS CNT_30,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 40 AND 49 THEN 1 END) AS CNT_40,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 50 AND 54 THEN 1 END) AS CNT_50,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 55 AND 60 THEN 1 END) AS CNT_60                      
+    FROM CM_SALY_LABOR_ACCOUNT A,
+         CM_LABO_MASTER        B,
+         (SELECT PROJ_CODE,COUNT(*) AS CNT FROM CM_SALY_LABOR_ACCOUNT 
+           WHERE PROJ_CODE LIKE :as_projcode AND PAY_YYMM = TO_CHAR(ADD_MONTHS(TO_DATE(:as_yymm||'01'),-1),'YYYYMM')
+           GROUP BY PROJ_CODE) C
+   WHERE A.PROJ_CODE LIKE :as_projcode
+     AND A.PAY_YYMM  = :as_yymm
+     AND A.LABOR_CODE = B.LABOR_CODE
+     AND A.PROJ_CODE  = C.PROJ_CODE(+)
+GROUP BY A.PROJ_CODE )B,
+(SELECT A.PROJ_CODE,
+         SUM(1) TOTAL_CNT,
+         0 PRE_CNT,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 20 AND 29 THEN 1 END) AS CNT_20,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 30 AND 39 THEN 1 END) AS CNT_30,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 40 AND 49 THEN 1 END) AS CNT_40,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 50 AND 54 THEN 1 END) AS CNT_50,
+         SUM(CASE WHEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(B.RRN_PRE,1,2))) 
+            BETWEEN 55 AND 60 THEN 1 END) AS CNT_60 
+  FROM CM_SALY_LABOR_ACCOUNT A,
+       CM_LABO_MASTER        B, 
+(SELECT LABOR_CODE,
+        SUM(1) CNT
+   FROM CM_LABO_CONTRACT
+GROUP BY LABOR_CODE
+HAVING SUM(1) = 1) C 
+WHERE A.PROJ_CODE LIKE :as_projcode
+  and a.pay_yymm  = :as_yymm
+  AND A.LABOR_CODE = B.LABOR_CODE
+  AND A.LABOR_CODE = C.LABOR_CODE   
+GROUP BY A.PROJ_CODE      ) C,
+(SELECT A.PROJ_CODE,
+       SUM(1) TOTAL_CNT, 
+       MAX(B.CNT) PRE_CNT
+  FROM CM_LABO_CONTRACT  A,
+       (SELECT PROJ_CODE,
+               COUNT(*) CNT
+          FROM CM_LABO_CONTRACT        
+         WHERE SUBSTR(REG_DATE,1,6) = TO_CHAR(ADD_MONTHS(TO_DATE(:as_yymm||'01'),-1),'YYYYMM')
+      GROUP BY PROJ_CODE  ) B      
+ WHERE A.PROJ_CODE LIKE :as_projcode
+   AND SUBSTR(A.REG_DATE,1,6) = :as_yymm
+   AND A.PROJ_CODE = B.PROJ_CODE(+)
+GROUP BY A.PROJ_CODE  ) D,
+(SELECT A.PROJ_CODE,
+       SUM(CASE WHEN B.JOB_CODE IN ('002','003','004') THEN 1 END) AS CNT_1, --배관공
+       SUM(CASE WHEN B.JOB_CODE IN ('005','006','007') THEN 1 END) AS CNT_2, --덕트공
+       SUM(CASE WHEN B.JOB_CODE IN ('008','009','010') THEN 1 END) AS CNT_3, --덕트공
+       SUM(CASE WHEN B.JOB_CODE IN ('015') THEN 1 END) AS CNT_4, --SHOP
+       SUM(CASE WHEN B.JOB_CODE IN ('000') THEN 1 END) AS CNT_5, --기타
+       SUM(CASE WHEN B.JOB_CODE IN ('011') THEN 1 END) AS CNT_6, --함석공
+       SUM(CASE WHEN B.JOB_CODE IN ('013') THEN 1 END) AS CNT_7, --플랜트용접공
+       SUM(CASE WHEN B.JOB_CODE IN ('014') THEN 1 END) AS CNT_8, --플랜트배관공
+       SUM(CASE WHEN B.JOB_CODE IN ('016') THEN 1 END) AS CNT_9 --플랜트배관공               
+  FROM CM_SALY_LABOR_ACCOUNT A,
+       CM_LABO_MASTER        B
+ WHERE A.PROJ_CODE  LIKE :as_projcode
+   AND A.PAY_YYMM   = :as_yymm 
+   AND A.LABOR_CODE = B.LABOR_CODE
+GROUP BY A.PROJ_CODE     ) F,
+SM_CODE_PROJECT E
+WHERE A.PROJ_CODE = B.PROJ_CODE(+)
+  AND A.PROJ_CODE = C.PROJ_CODE(+)
+  AND A.PROJ_CODE = D.PROJ_CODE(+)
+  AND A.PROJ_CODE = F.PROJ_CODE(+)
+  AND A.PROJ_CODE = E.PROJ_CODE   
+ORDER BY E.PROJ_NAME  
+  " arguments=(("as_projcode", string),("as_yymm", string)) )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="2" y="10" height="14" width="60" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="64" y="10" height="14" width="172" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인원수" border="0" color="134217729" x="279" y="10" height="13" width="46" html.valueishtml="0"  name=work_total_cnt_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계" border="0" color="134217729" x="327" y="10" height="13" width="40" html.valueishtml="0"  name=work_pre_cnt_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="20대" border="0" color="134217729" x="369" y="10" height="13" width="36" html.valueishtml="0"  name=work_cnt_20_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="30대" border="0" color="134217729" x="407" y="10" height="13" width="32" html.valueishtml="0"  name=work_cnt_30_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="40대" border="0" color="134217729" x="441" y="10" height="13" width="31" html.valueishtml="0"  name=work_cnt_40_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="50~~54" border="0" color="134217729" x="474" y="10" height="13" width="38" html.valueishtml="0"  name=work_cnt_50_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="55~~60" border="0" color="134217729" x="514" y="10" height="13" width="38" html.valueishtml="0"  name=work_cnt_60_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인원수" border="0" color="134217858" x="713" y="10" height="13" width="42" html.valueishtml="0"  name=first_total_cnt_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전월" border="0" color="134217858" x="757" y="10" height="13" width="33" html.valueishtml="0"  name=first_pre_cnt_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="20대" border="0" color="134217858" x="792" y="10" height="13" width="32" html.valueishtml="0"  name=first_cnt_20_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="30대" border="0" color="134217858" x="826" y="10" height="13" width="31" html.valueishtml="0"  name=first_cnt_30_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="40대" border="0" color="134217858" x="859" y="10" height="13" width="31" html.valueishtml="0"  name=first_cnt_40_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="50~~54" border="0" color="134217858" x="892" y="10" height="13" width="38" html.valueishtml="0"  name=first_cnt_50_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인원수" border="0" color="16711680" x="590" y="10" height="13" width="37" html.valueishtml="0"  name=new_total_cnt_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전월" border="0" color="16711680" x="629" y="10" height="13" width="33" html.valueishtml="0"  name=new_pre_cnt_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="55~~60" border="0" color="134217858" x="932" y="10" height="13" width="38" html.valueishtml="0"  name=first_cnt_60_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="배관공" border="0" color="8388608" x="972" y="10" height="13" width="42" html.valueishtml="0"  name=cnt_1_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="덕트공" border="0" color="8388608" x="1016" y="10" height="13" width="41" html.valueishtml="0"  name=cnt_2_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보온공" border="0" color="8388608" x="1059" y="10" height="13" width="40" html.valueishtml="0"  name=cnt_3_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="SHOP" border="0" color="8388608" x="1101" y="10" height="13" width="35" html.valueishtml="0"  name=cnt_4_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기타" border="0" color="8388608" x="1138" y="10" height="13" width="34" html.valueishtml="0"  name=cnt_5_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="함석공" border="0" color="8388608" x="1174" y="10" height="13" width="40" html.valueishtml="0"  name=cnt_6_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="플-용접공" border="0" color="8388608" x="1216" y="10" height="13" width="56" html.valueishtml="0"  name=cnt_7_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="플-배관공" border="0" color="8388608" x="1274" y="10" height="13" width="56" html.valueishtml="0"  name=cnt_8_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="제관공" border="0" color="8388608" x="1332" y="10" height="13" width="38" html.valueishtml="0"  name=cnt_9_t visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="60" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="64" y="2" height="17" width="172" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="134217729" x="279" y="2" height="17" width="46" format="#,##0" html.valueishtml="0"  name=work_total_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="134217729" x="327" y="2" height="17" width="40" format="#,##0" html.valueishtml="0"  name=work_pre_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="134217729" x="369" y="2" height="17" width="36" format="#,##0" html.valueishtml="0"  name=work_cnt_20 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="134217729" x="407" y="2" height="17" width="32" format="#,##0" html.valueishtml="0"  name=work_cnt_30 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="134217729" x="441" y="2" height="17" width="31" format="#,##0" html.valueishtml="0"  name=work_cnt_40 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="134217729" x="474" y="2" height="17" width="38" format="#,##0" html.valueishtml="0"  name=work_cnt_50 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="134217729" x="514" y="2" height="17" width="38" format="#,##0" html.valueishtml="0"  name=work_cnt_60 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="'출력'"border="0" color="134217729" x="238" y="3" height="15" width="39" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="134217858" x="713" y="2" height="17" width="42" format="#,##0" html.valueishtml="0"  name=first_total_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="134217858" x="757" y="2" height="17" width="33" format="#,##0" html.valueishtml="0"  name=first_pre_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="134217858" x="792" y="2" height="17" width="32" format="#,##0" html.valueishtml="0"  name=first_cnt_20 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="134217858" x="826" y="2" height="17" width="31" format="#,##0" html.valueishtml="0"  name=first_cnt_30 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="134217858" x="859" y="2" height="17" width="31" format="#,##0" html.valueishtml="0"  name=first_cnt_40 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="134217858" x="892" y="2" height="17" width="38" format="#,##0" html.valueishtml="0"  name=first_cnt_50 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="'첫근무'"border="0" color="134217858" x="664" y="3" height="15" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="16711680" x="590" y="2" height="17" width="37" format="[general]" html.valueishtml="0"  name=new_total_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="16711680" x="629" y="2" height="17" width="33" format="[general]" html.valueishtml="0"  name=new_pre_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="'신규'"border="0" color="16711680" x="554" y="3" height="15" width="35" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="134217858" x="932" y="2" height="17" width="38" format="#,##0" html.valueishtml="0"  name=first_cnt_60 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="8388608" x="973" y="2" height="17" width="41" format="[general]" html.valueishtml="0"  name=cnt_1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=20 alignment="2" tabsequence=32766 border="0" color="8388608" x="1017" y="2" height="17" width="40" format="[general]" html.valueishtml="0"  name=cnt_2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=21 alignment="2" tabsequence=32766 border="0" color="8388608" x="1060" y="2" height="17" width="39" format="[general]" html.valueishtml="0"  name=cnt_3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=22 alignment="2" tabsequence=32766 border="0" color="8388608" x="1102" y="2" height="17" width="34" format="[general]" html.valueishtml="0"  name=cnt_4 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=23 alignment="2" tabsequence=32766 border="0" color="8388608" x="1139" y="2" height="17" width="33" format="[general]" html.valueishtml="0"  name=cnt_5 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="8388608" x="1175" y="2" height="17" width="39" format="[general]" html.valueishtml="0"  name=cnt_6 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=25 alignment="2" tabsequence=32766 border="0" color="8388608" x="1217" y="2" height="17" width="55" format="[general]" html.valueishtml="0"  name=cnt_7 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=26 alignment="2" tabsequence=32766 border="0" color="8388608" x="1275" y="2" height="17" width="55" format="[general]" html.valueishtml="0"  name=cnt_8 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=27 alignment="2" tabsequence=32766 border="0" color="8388608" x="1333" y="2" height="17" width="37" format="[general]" html.valueishtml="0"  name=cnt_9 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="2" expression="sum(work_total_cnt)"border="0" color="0" x="279" y="6" height="13" width="46" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( work_pre_cnt )"border="0" color="0" x="327" y="6" height="13" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(   work_cnt_20  )"border="0" color="0" x="369" y="6" height="13" width="36" format="[GENERAL]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( work_cnt_30    )"border="0" color="0" x="407" y="6" height="13" width="32" format="[GENERAL]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( work_cnt_40    )"border="0" color="0" x="441" y="6" height="13" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(  work_cnt_50   )"border="0" color="0" x="474" y="6" height="13" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(  work_cnt_60   )"border="0" color="0" x="514" y="6" height="13" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( new_total_cnt    )"border="0" color="0" x="591" y="6" height="13" width="36" format="[GENERAL]" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( new_pre_cnt    )"border="0" color="0" x="629" y="6" height="13" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(   first_total_cnt  )"border="0" color="0" x="713" y="6" height="13" width="42" format="[GENERAL]" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(  first_pre_cnt   )"border="0" color="0" x="757" y="6" height="13" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_14 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(  first_cnt_20   )"border="0" color="0" x="792" y="6" height="13" width="32" format="[GENERAL]" html.valueishtml="0"  name=compute_15 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(  first_cnt_30   )"border="0" color="0" x="826" y="6" height="13" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( first_cnt_40    )"border="0" color="0" x="859" y="6" height="13" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_1   )"border="0" color="0" x="972" y="6" height="13" width="42" format="[GENERAL]" html.valueishtml="0"  name=compute_20 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_2   )"border="0" color="0" x="1016" y="6" height="13" width="41" format="[GENERAL]" html.valueishtml="0"  name=compute_21 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_3   )"border="0" color="0" x="1059" y="6" height="13" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_22 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_4   )"border="0" color="0" x="1101" y="6" height="13" width="35" format="[GENERAL]" html.valueishtml="0"  name=compute_23 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_5   )"border="0" color="0" x="1138" y="6" height="13" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_24 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_6   )"border="0" color="0" x="1174" y="6" height="13" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_25 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_7   )"border="0" color="0" x="1216" y="6" height="13" width="56" format="[GENERAL]" html.valueishtml="0"  name=compute_26 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_8   )"border="0" color="0" x="1274" y="6" height="13" width="56" format="[GENERAL]" html.valueishtml="0"  name=compute_27 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( cnt_9   )"border="0" color="0" x="1332" y="6" height="13" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_28 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( first_cnt_50    )"border="0" color="0" x="892" y="6" height="13" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( first_cnt_60    )"border="0" color="0" x="932" y="6" height="13" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_19 visible="1"  font.face="굴림체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

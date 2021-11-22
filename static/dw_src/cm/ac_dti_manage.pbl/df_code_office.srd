@@ -1,0 +1,75 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="sm_code_office.company_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=office_code dbname="sm_code_office.office_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=office_name dbname="sm_code_office.office_name" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=comp_no dbname="sm_code_office.comp_no" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=owner dbname="sm_code_office.owner" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=condition dbname="sm_code_office.condition" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=category dbname="sm_code_office.category" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=zip dbname="sm_code_office.zip" )
+ column=(type=char(60) update=yes updatewhereclause=yes name=addr dbname="sm_code_office.addr" )
+ column=(type=datetime update=yes updatewhereclause=yes name=estab_date dbname="sm_code_office.estab_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=term dbname="sm_code_office.term" )
+ column=(type=datetime update=yes updatewhereclause=yes name=close_date dbname="sm_code_office.close_date" )
+ column=(type=char(13) update=yes updatewhereclause=yes name=company_regno dbname="sm_code_office.company_regno" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=budget_basic_tag dbname="sm_code_office.budget_basic_tag" )
+ column=(type=char(60) update=yes updatewhereclause=yes name=addr2 dbname="sm_code_office.addr2" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=tax_office_code dbname="sm_code_office.tax_office_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=tel dbname="sm_code_office.tel" )
+ column=(type=datetime update=yes updatewhereclause=yes name=start_date dbname="sm_code_office.start_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=end_date dbname="sm_code_office.end_date" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=deposit_no dbname="sm_code_office.deposit_no" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=bank_code dbname="sm_code_office.bank_code" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remark dbname="sm_code_office.remark" )
+ column=(type=char(13) update=yes updatewhereclause=yes name=owner_no dbname="sm_code_office.owner_no" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=offices_name dbname="sm_code_office.offices_name" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=sum_tag dbname="sm_code_office.sum_tag" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.OFFICE_CODE, 
+         A.OFFICE_NAME, 
+         A.COMP_NO, 
+         A.OWNER, 
+         A.CONDITION, 
+         A.CATEGORY, 
+         A.ZIP, 
+         A.ADDR, 
+         A.ESTAB_DATE, 
+         A.TERM, 
+         A.CLOSE_DATE, 
+         A.COMPANY_REGNO, 
+         A.BUDGET_BASIC_TAG, 
+         A.ADDR2, 
+         A.TAX_OFFICE_CODE, 
+         A.TEL, 
+         A.START_DATE, 
+         A.END_DATE, 
+         A.DEPOSIT_NO, 
+         A.BANK_CODE, 
+         A.REMARK, 
+         A.OWNER_NO, 
+         A.OFFICES_NAME, 
+         A.SUM_TAG
+    FROM SM_CODE_OFFICE A
+   WHERE A.COMPANY_CODE LIKE :as_comp_code
+     AND ( A.OFFICE_CODE LIKE :as_office_name||'%' OR A.OFFICE_NAME LIKE '%'||:as_office_name||'%' )   
+ORDER BY A.OFFICE_CODE
+" update="SM_CODE_OFFICE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_office_name", string)) )
+text(band=header alignment="2" text="사업장 단축명" border="0" color="33554432" x="1463" y="8" height="56" width="850" html.valueishtml="0"  name=offices_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업장명" border="0" color="33554432" x="805" y="8" height="56" width="649" html.valueishtml="0"  name=office_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업장번호" border="0" color="33554432" x="343" y="8" height="56" width="453" html.valueishtml="0"  name=comp_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업장코드" border="0" color="33554432" x="9" y="8" height="56" width="325" html.valueishtml="0"  name=office_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="0" tabsequence=32766 border="0" color="33554432" x="1463" y="8" height="68" width="850" format="[general]" html.valueishtml="0"  name=offices_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="805" y="8" height="68" width="649" format="[general]" html.valueishtml="0"  name=office_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="347" y="8" height="68" width="448" format="@@@-@@-@@@@@" html.valueishtml="0"  name=comp_no visible="1" editmask.mask="XXX-XX-XXXXX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="9" y="8" height="68" width="325" format="[general]" html.valueishtml="0"  name=office_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

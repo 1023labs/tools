@@ -1,0 +1,64 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cont_contract_dti.company_code" dbalias="A.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cont_contract_dti.proj_code" dbalias="A.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_cont_contract_dti.contract_code" dbalias="A.contract_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes key=yes name=cust_code dbname="cm_cont_contract_dti.cust_code" dbalias="A.cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" dbalias="B.cust_name" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=dti_item_name dbname="cm_cont_contract_dti.dti_item_name" dbalias="A.dti_item_name" )
+ column=(type=char(130) update=yes updatewhereclause=yes name=dti_emp_name dbname="cm_cont_contract_dti.dti_emp_name" dbalias="A.dti_emp_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=dti_tel_num dbname="cm_cont_contract_dti.dti_tel_num" dbalias="A.dti_tel_num" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=dti_email dbname="cm_cont_contract_dti.dti_email" dbalias="A.dti_email" )
+ column=(type=char(150) update=yes updatewhereclause=yes name=dti_remark dbname="cm_cont_contract_dti.dti_remark" dbalias="A.dti_remark" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.CONTRACT_CODE,
+       A.CUST_CODE,
+       B.CUST_NAME,
+       A.DTI_ITEM_NAME,
+       A.DTI_EMP_NAME,
+       A.DTI_TEL_NUM,
+       A.DTI_EMAIL,
+       A.DTI_REMARK
+  FROM CM_CONT_CONTRACT_DTI A LEFT JOIN SM_CODE_CUST B
+                                     ON A.CUST_CODE    = B.CUST_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PROJ_CODE    = :as_proj
+   AND A.CONTRACT_CODE = :as_contract" update="CM_CONT_CONTRACT_DTI" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_proj", string),("as_contract", string)) )
+column(band=detail id=5 alignment="0" tabsequence=10 border="0" color="33554432" x="99" y="2" height="17" width="200" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="0"border="0" color="33554432" x="301" y="3" height="16" width="17" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업자번호" border="0" color="33554432" x="2" y="8" height="14" width="95" html.valueishtml="0"  name=cm_cont_contract_dti_cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업자명" border="0" color="33554432" x="99" y="8" height="14" width="200" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="357" y="8" height="14" width="138" html.valueishtml="0"  name=cm_cont_contract_dti_dti_item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="담당자" border="0" color="33554432" x="497" y="8" height="14" width="107" html.valueishtml="0"  name=cm_cont_contract_dti_dti_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전화번호" border="0" color="33554432" x="606" y="8" height="14" width="108" html.valueishtml="0"  name=cm_cont_contract_dti_dti_tel_num_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="이메일" border="0" color="33554432" x="716" y="8" height="14" width="204" html.valueishtml="0"  name=cm_cont_contract_dti_dti_email_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="922" y="8" height="14" width="120" html.valueishtml="0"  name=cm_cont_contract_dti_dti_remark_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Cont Contract Dti
+Proj Code" border="0" color="33554432" x="340" y="8" height="14" width="15" html.valueishtml="0"  name=cm_cont_contract_dti_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Cont Contract Dti
+Contract Code" border="0" color="33554432" x="321" y="8" height="14" width="17" html.valueishtml="0"  name=cm_cont_contract_dti_contract_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="95" format="[general]" html.valueishtml="0"  name=cust_code visible="1" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=20 border="0" color="33554432" x="358" y="2" height="17" width="137" html.valueishtml="0"  name=dti_item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=60 border="0" color="33554432" x="923" y="2" height="17" width="119" html.valueishtml="0"  name=dti_remark visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="340" y="2" height="17" width="15" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="321" y="2" height="17" width="17" format="[general]" html.valueishtml="0"  name=contract_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=30 border="0" color="33554432" x="498" y="2" height="17" width="106" html.valueishtml="0"  name=dti_emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=40 border="0" color="33554432" x="607" y="2" height="17" width="107" html.valueishtml="0"  name=dti_tel_num visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=50 border="0" color="33554432" x="717" y="2" height="17" width="203" html.valueishtml="0"  name=dti_email visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=detail filename="\images\button\btn_find.gif" x="302" y="2" height="17" width="16" border="0"  name=find_cust_name visible="1" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

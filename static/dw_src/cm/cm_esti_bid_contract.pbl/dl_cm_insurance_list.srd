@@ -1,0 +1,84 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=28 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=30 color="536870912" )
+detail(height=30 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_esti_insurance_mst.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_esti_insurance_mst.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=reg_date dbname="cm_esti_insurance_mst.reg_date" )
+ column=(type=char(14) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_esti_insurance_mst.seq" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=insurance_gubun dbname="cm_esti_insurance_mst.insurance_gubun" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=input_date dbname="cm_esti_insurance_mst.input_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=supply_amt dbname="cm_esti_insurance_mst.supply_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=vat_amt dbname="cm_esti_insurance_mst.vat_amt" )
+ column=(type=char(13) update=yes updatewhereclause=yes name=cust_code dbname="cm_esti_insurance_mst.cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=trans_tag dbname="cm_esti_insurance_mst.trans_tag" values="	Y/	N" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=slip_div dbname="cm_esti_insurance_mst.slip_div" values="AP	AP/GL	GL/" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=slip_no dbname="cm_esti_insurance_mst.slip_no" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=remark dbname="cm_esti_insurance_mst.remark" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=contract_code dbname="cm_esti_insurance_mst.contract_code" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.REG_DATE,
+       A.SEQ,
+       A.INSURANCE_GUBUN,
+       A.INPUT_DATE,
+       A.SUPPLY_AMT,
+       A.VAT_AMT,
+       A.CUST_CODE,
+       B.CUST_NAME,
+       A.TRANS_TAG,
+       A.SLIP_DIV,
+       A.SLIP_NO,
+       A.REMARK,
+       A.CONTRACT_CODE
+FROM CM_ESTI_INSURANCE_MST A LEFT JOIN SM_CODE_CUST B
+                                    ON A.CUST_CODE    = B.CUST_CODE
+WHERE COMPANY_CODE = :as_compcode
+    AND PROJ_CODE  LIKE :as_projcode
+    AND REG_DATE LIKE :as_regyymm || '%'
+ORDER BY SEQ" update="CM_ESTI_INSURANCE_MST" updatewhere=0 updatekeyinplace=no arguments=(("as_compcode", string),("as_projcode", string),("as_regyymm", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="7" height="14" width="27" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세" border="0" color="33554432" x="567" y="7" height="14" width="89" html.valueishtml="0"  name=vat_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="합  계" border="0" color="33554432" x="658" y="7" height="14" width="93" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전표번호" border="0" color="33554432" x="1306" y="7" height="14" width="205" html.valueishtml="0"  name=slip_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="요청일자" border="0" color="33554432" x="1077" y="7" height="14" width="96" html.valueishtml="0"  name=input_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="469" y="7" height="14" width="96" html.valueishtml="0"  name=supply_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이체" border="0" color="33554432" x="1175" y="7" height="14" width="51" html.valueishtml="0"  name=trans_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전표구분" border="0" color="33554432" x="1228" y="7" height="14" width="76" html.valueishtml="0"  name=slip_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요" border="0" color="33554432" x="231" y="7" height="14" width="236" html.valueishtml="0"  name=remark_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Cm Esti Insurance Mst Insurance Gubun" border="0" color="33554432" x="1513" y="7" height="14" width="22" html.valueishtml="0"  name=cm_esti_insurance_mst_insurance_gubu_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="753" y="7" height="14" width="94" html.valueishtml="0"  name=cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="849" y="7" height="14" width="226" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="7" height="14" width="27" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="1306" y="7" height="14" width="205" format="[general]" html.valueishtml="0"  name=slip_no visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=80 border="0" color="33554432" x="1077" y="7" height="14" width="96" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=input_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=90 border="0" color="33554432" x="1175" y="7" height="14" width="51" format="[general]" html.valueishtml="0"  name=trans_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=100 border="0" color="33554432" x="1228" y="7" height="14" width="76" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=slip_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=30 border="0" color="33554432" x="231" y="7" height="14" width="236" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=remark visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=40 border="0" color="33554432" x="469" y="7" height="14" width="96" format="#,###" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=supply_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=50 border="0" color="33554432" x="567" y="7" height="14" width="89" format="#,###" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=vat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=110 border="0" color="33554432" x="1513" y="1" height="14" width="22" format="[general]" html.valueishtml="0"  name=insurance_gubun visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" supply_amt  +  if( isNull( vat_amt ), 0,  vat_amt  )"border="0" color="33554432" x="658" y="7" height="14" width="93" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="2" tabsequence=60 border="0" color="33554432" x="753" y="7" height="14" width="94" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=cust_code visible="1" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=70 border="0" color="33554432" x="849" y="7" height="14" width="226" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( supply_amt  +  vat_amt  for all)"border="0" color="33554432" x="658" y="8" height="14" width="93" format="#,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(vat_amt for all)"border="0" color="33554432" x="567" y="8" height="14" width="89" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( supply_amt )"border="0" color="33554432" x="469" y="8" height="14" width="96" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="발의일자" border="0" color="33554432" x="31" y="7" height="14" width="99" html.valueishtml="0"  name=reg_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="132" y="7" height="14" width="97" html.valueishtml="0"  name=cm_esti_insurance_mst_contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=10 border="0" color="33554432" x="32" y="7" height="14" width="98" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=reg_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=20 border="0" color="33554432" x="132" y="7" height="14" width="97" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,113 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=16777215 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=194 color="536870912" )
+table(column=(type=char(45) updatewhereclause=yes name=defects dbname="defects" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=project_code dbname="cm_defects_master.project_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=datetime update=yes updatewhereclause=yes name=rqst_date dbname="cm_defects_master.rqst_date" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=year dbname="cm_defects_master.year" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=defects_no dbname="cm_defects_master.defects_no" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=level_tag dbname="cm_defects_master.level_tag" )
+ column=(type=datetime update=yes updatewhereclause=yes name=complete_date dbname="cm_defects_master.complete_date" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=gong_tag dbname="cm_defects_master.gong_tag" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=defects_tag dbname="cm_defects_master.defects_tag" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=defects_cause dbname="cm_defects_master.defects_cause" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=defects_couse dbname="cm_defects_master.defects_couse" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=process_result dbname="cm_defects_master.process_result" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=compensation dbname="cm_defects_master.compensation" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=cause_analysis dbname="cm_defects_master.cause_analysis" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=status_tag dbname="cm_defects_master.status_tag" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name1 dbname="cm_defects_master.file_name1" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type1 dbname="cm_defects_master.file_type1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path1 dbname="cm_defects_master.file_path1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name2 dbname="cm_defects_master.file_name2" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type2 dbname="cm_defects_master.file_type2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path2 dbname="cm_defects_master.file_path2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name3 dbname="cm_defects_master.file_name3" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type3 dbname="cm_defects_master.file_type3" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path3 dbname="cm_defects_master.file_path3" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=ea dbname="cm_defects_master.ea" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=doc_no dbname="cm_defects_master.doc_no" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=place dbname="cm_defects_master.place" )
+ retrieve="SELECT A.YEAR||'-'||A.DEFECTS_NO DEFECTS,
+       A.PROJECT_CODE,
+       B.PROJ_NAME,
+       A.RQST_DATE,
+       A.YEAR           ,    
+       A.DEFECTS_NO     ,  
+       A.LEVEL_TAG      ,        
+       A.COMPLETE_DATE  ,  
+       A.GONG_TAG       ,  
+       A.DEFECTS_TAG    ,  
+       A.DEFECTS_CAUSE  ,  
+       A.DEFECTS_COUSE  ,  
+       A.PROCESS_RESULT ,  
+       A.COMPENSATION   ,  
+       A.CAUSE_ANALYSIS ,  
+       A.STATUS_TAG     ,  
+       A.FILE_NAME1     ,  
+       A.FILE_TYPE1     ,  
+       A.FILE_PATH1     ,  
+       A.FILE_NAME2     ,  
+       A.FILE_TYPE2     ,  
+       A.FILE_PATH2     ,  
+       A.FILE_NAME3     ,  
+       A.FILE_TYPE3     ,  
+       A.FILE_PATH3     ,  
+       A.EA             ,  
+       A.DOC_NO       ,
+       A.PLACE
+  FROM CM_DEFECTS_MASTER A,
+       SM_CODE_PROJECT   B
+ WHERE A.PROJECT_CODE = B.PROJ_CODE
+   AND A.YEAR                   = :as_year
+   AND A.DEFECTS_NO       = :as_defects_no" update="CM_DEFECTS_MASTER" updatewhere=0 updatekeyinplace=no arguments=(("as_year", string),("as_defects_no", string)) )
+rectangle(band=background x="186" y="52" height="75" width="99"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="4" y="21" height="184" width="96"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+column(band=detail id=7 alignment="0" tabsequence=10 border="0" color="33554432" x="288" y="42" height="14" width="80" format="[general]" html.valueishtml="0"  name=level_tag visible="1" dddw.name=dddw_com_defectscode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=30 border="0" color="33554432" x="288" y="66" height="14" width="80" format="[shortdate] [time]" html.valueishtml="0"  name=complete_date visible="1" editmask.autoskip=yes editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=50 border="0" color="33554432" x="288" y="93" height="14" width="80" format="[general]" html.valueishtml="0"  name=defects_tag visible="1" dddw.name=dddw_com_defectscode_01 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="103" y="14" height="15" width="265" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="0" tabsequence=60 border="0" color="33554432" x="103" y="119" height="14" width="174" format="[general]" html.valueishtml="0"  name=defects_cause visible="1" dddw.name=dddw_com_defectscode_03 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="103" y="42" height="14" width="78" format="[general]" html.valueishtml="0"  name=defects visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="103" y="67" height="14" width="78" format="[shortdate] [time]" html.valueishtml="0"  name=rqst_date visible="1" editmask.autoskip=yes editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=40 border="0" color="33554432" x="103" y="92" height="14" width="78" format="[general]" html.valueishtml="0"  name=gong_tag visible="1" dddw.name=dddw_com_defectscode_02 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=27 alignment="0" tabsequence=70 border="0" color="33554432" x="103" y="146" height="14" width="265" format="[general]" html.valueishtml="0"  name=doc_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=28 alignment="0" tabsequence=80 border="0" color="33554432" x="103" y="172" height="14" width="265" format="[general]" html.valueishtml="0"  name=place visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=foreground alignment="1" text="등급" border="0" color="27229506" x="190" y="56" height="14" width="88" html.valueishtml="0"  name=buje_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="완료일" border="0" color="134217857" x="194" y="83" height="14" width="84" html.valueishtml="0"  name=t_7  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="하자유형" border="0" color="27229506" x="190" y="108" height="14" width="88" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="현장명" border="0" color="27229506" x="9" y="30" height="14" width="84" html.valueishtml="0"  name=const_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="접수번호" border="0" color="27229506" x="9" y="56" height="14" width="84" html.valueishtml="0"  name=play_yymm_t  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="하자원인" border="0" color="27229506" x="9" y="133" height="14" width="84" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="3" y1="19" x2="369" y2="19"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="18" x2="369" y2="18"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="50" x2="369" y2="50"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="24" x2="369" y2="24"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="76" x2="369" y2="76"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="101" x2="369" y2="101"  name=l_15  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="153" x2="369" y2="153"  name=l_10  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="127" x2="369" y2="127"  name=l_9  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=foreground alignment="1" text="접수일" border="0" color="27229506" x="8" y="82" height="14" width="84" html.valueishtml="0"  name=t_3  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="공종" border="0" color="27229506" x="9" y="107" height="14" width="84" html.valueishtml="0"  name=t_5  tag="[R]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="공문번호" border="0" color="27229506" x="9" y="160" height="14" width="84" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="3" y1="180" x2="369" y2="180"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="206" x2="369" y2="206"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="205" x2="369" y2="205"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="206" x2="369" y2="206"  name=l_11  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="3" y1="207" x2="369" y2="207"  name=l_12  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+text(band=foreground alignment="1" text="장소" border="0" color="27229506" x="9" y="187" height="14" width="84" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

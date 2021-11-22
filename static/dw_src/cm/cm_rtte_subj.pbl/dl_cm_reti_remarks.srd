@@ -1,0 +1,33 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=128 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_retire_remark.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_retire_remark.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=work_yymm dbname="cm_retire_remark.work_yymm" )
+ column=(type=char(4000) update=yes updatewhereclause=yes name=remarks dbname="cm_retire_remark.remarks" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE,
+       A.PROJ_CODE    AS PROJ_CODE,
+       A.WORK_YYMM    AS WORK_YYMM,
+       A.REMARKS      AS REMARKS
+  FROM CM_RETIRE_REMARK A
+ WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE  = :as_proj_code
+     AND A.WORK_YYMM  = :as_pay_yymm" update="CM_RETIRE_REMARK" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_pay_yymm", string)) )
+column(band=detail id=4 alignment="0" tabsequence=40 border="0" color="33554432" x="4" y="2" height="121" width="904" format="[general]" html.valueishtml="0"  name=remarks  tag="[M]" visible="1" edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.vscrollbar=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=10 border="0" color="33554432" x="9" y="135" height="17" width="96" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=20 border="0" color="33554432" x="112" y="136" height="17" width="66" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=30 border="0" color="33554432" x="192" y="136" height="17" width="54" format="[general]" html.valueishtml="0"  name=work_yymm visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

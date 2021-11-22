@@ -1,0 +1,71 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=16 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=real_dept_code dbname="sm_code_dept.real_dept_code" dbalias=".real_dept_code" )
+ column=(type=char(100) updatewhereclause=yes name=dept_name dbname="sm_code_dept.dept_name" dbalias="C.dept_name" )
+ column=(type=number updatewhereclause=yes name=total_cnt dbname="total_cnt" )
+ column=(type=number updatewhereclause=yes name=open_cnt dbname="open_cnt" )
+ column=(type=number updatewhereclause=yes name=reading_rate dbname="reading_rate" )
+ retrieve="SELECT A.REAL_DEPT_CODE,
+       C.DEPT_NAME,
+       NVL(A.TOTAL_CNT,0) TOTAL_CNT,
+       NVL(B.OPEN_CNT,0)  OPEN_CNT,
+       NVL(D.READING_RATE,0)  READING_RATE
+  FROM
+      (SELECT REAL_DEPT_CODE,COUNT(*) TOTAL_CNT
+         FROM HR_PERS_MASTER A
+        WHERE A.COMPANY_CODE = :as_comp
+          AND A.RETIRE_DATE IS NULL
+          AND A.EMPLOYEE_DIV = '1'
+       GROUP BY REAL_DEPT_CODE) A,   
+       (SELECT B.REAL_DEPT_CODE, COUNT(*) OPEN_CNT 
+          FROM CM_QUALITY_M A,
+               HR_PERS_MASTER B
+         WHERE A.COMPANY_CODE = B.COMPANY_CODE
+           AND A.EMP_NO       = B.EMP_NO
+       GROUP BY REAL_DEPT_CODE ) B,
+       SM_CODE_DEPT C,
+       (SELECT A.REAL_DEPT_CODE,
+                 ROUND(AVG(NVL(B.LAST_PAGE,0)/A.TOTAL_PAGE),4) READING_RATE              
+         FROM
+              (SELECT A.EMP_NO,
+                      A.REAL_DEPT_CODE,  
+                      B.BOOK_NO,                    
+                      B.TOTAL_PAGE
+                 FROM HR_PERS_MASTER A,
+                      CM_QUALITY_BOOK B 
+                WHERE A.COMPANY_CODE = :as_comp
+                  AND A.RETIRE_DATE IS NULL
+                  AND A.EMPLOYEE_DIV = '1') A,
+              CM_QUALITY_D B
+       WHERE A.EMP_NO  = B.EMP_NO(+)    
+         AND A.BOOK_NO = B.BOOK_NO(+)
+      GROUP BY A.REAL_DEPT_CODE) D
+ WHERE A.REAL_DEPT_CODE = B.REAL_DEPT_CODE(+)
+   AND A.REAL_DEPT_CODE = C.DEPT_CODE(+)
+   AND A.REAL_DEPT_CODE = D.REAL_DEPT_CODE(+)
+ORDER BY A.REAL_DEPT_CODE ASC              " arguments=(("as_comp", string)) )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="289" y="2" height="17" width="70" format="[general]" html.valueishtml="0"  name=open_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="209" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="214" y="2" height="17" width="74" format="[general]" html.valueishtml="0"  name=total_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression=" open_cnt / total_cnt "border="0" color="33554432" x="361" y="2" height="17" width="65" format="#,##0%" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=0 border="0" color="33554432" x="429" y="2" height="17" width="62" format="#,##0.00%" html.valueishtml="0"  name=reading_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="진도율" border="0" color="33554432" x="428" y="11" height="14" width="63" html.valueishtml="0"  name=reading_rate_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="열람인원" border="0" color="33554432" x="289" y="11" height="14" width="70" html.valueishtml="0"  name=open_cnt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부서/현장명" border="0" color="33554432" x="2" y="11" height="14" width="209" html.valueishtml="0"  name=dept_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총인원" border="0" color="33554432" x="213" y="11" height="14" width="75" html.valueishtml="0"  name=total_cnt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="열람율" border="0" color="33554432" x="361" y="11" height="14" width="65" html.valueishtml="0"  name=t_1 pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

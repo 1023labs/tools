@@ -1,0 +1,163 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=1176 color="536870912" )
+summary(height=72 color="536870912" )
+footer(height=596 color="536870912" )
+detail(height=112 color="536870912" height.autosize=yes )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_labo_handicap.company_code" dbalias="A.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_labo_handicap.labor_code" dbalias="A.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" dbalias="B.labor_name" )
+ column=(type=char(61) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=char(8) updatewhereclause=yes name=join_date dbname="cm_labo_master.join_date" dbalias="B.join_date" )
+ column=(type=char(8) updatewhereclause=yes name=handi_date dbname="cm_labo_handicap.handi_date" dbalias="A.handi_date" )
+ column=(type=char(4) updatewhereclause=yes name=handi_type dbname="cm_labo_handicap.handi_type" dbalias="A.handi_type" )
+ column=(type=char(40) updatewhereclause=yes name=type_name dbname="hr_code_ref.type_name" dbalias="D.type_name" )
+ column=(type=char(4) updatewhereclause=yes name=handi_level dbname="cm_labo_handicap.handi_level" dbalias="A.handi_level" )
+ column=(type=char(40) updatewhereclause=yes name=level_name dbname="hr_code_ref.level_name" dbalias="E.level_name" )
+ column=(type=char(2) updatewhereclause=yes name=handi_yn dbname="cm_labo_handicap.handi_yn" dbalias="A.handi_yn" values="	Y/	N/	0" )
+ column=(type=char(500) updatewhereclause=yes name=remarks dbname="cm_labo_handicap.remarks" dbalias="A.remarks" )
+ column=(type=char(352) updatewhereclause=yes name=card1_path dbname="card1_path" )
+ column=(type=char(352) updatewhereclause=yes name=card2_path dbname="card2_path" )
+ column=(type=char(352) updatewhereclause=yes name=report_path dbname="report_path" )
+ column=(type=char(100) updatewhereclause=yes name=handi_card dbname="cm_labo_handicap.handi_card" dbalias="A.handi_card" )
+ column=(type=char(100) updatewhereclause=yes name=handi_card2 dbname="cm_labo_handicap.handi_card2" dbalias="A.handi_card2" )
+ column=(type=char(100) updatewhereclause=yes name=handi_report dbname="cm_labo_handicap.handi_report" dbalias="A.handi_report" )
+ column=(type=char(6) updatewhereclause=yes name=pay_yymm dbname="cm_saly_labor_account.pay_yymm" dbalias="F.pay_yymm" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_saly_labor_account.proj_code" dbalias="F.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="G.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=team_code dbname="cm_saly_labor_account.team_code" dbalias="F.team_code" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="cm_attd_teams.team_name" dbalias="H.team_name" )
+ column=(type=decimal(2) updatewhereclause=yes name=work_day dbname="cm_saly_labor_account.work_day" dbalias="F.work_day" )
+ column=(type=decimal(2) updatewhereclause=yes name=work_qty dbname="cm_saly_labor_account.work_qty" dbalias="F.work_qty" )
+ column=(type=decimal(0) updatewhereclause=yes name=unit_amt dbname="cm_saly_labor_account.unit_amt" dbalias="F.unit_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=pay_tot dbname="cm_saly_labor_account.pay_tot" dbalias="F.pay_tot" )
+ retrieve=" SELECT A.COMPANY_CODE                              AS COMPANY_CODE, 
+        A.LABOR_CODE                                AS LABOR_CODE, 
+        B.LABOR_NAME                                AS LABOR_NAME, 
+        B.RRN_PRE||'-'||B.RRN_POST            AS JUMIN_NO,
+        B.JOIN_DATE                                 AS JOIN_DATE,
+        A.HANDI_DATE                                AS HANDI_DATE, 
+        A.HANDI_TYPE                                AS HANDI_TYPE, 
+        D.REF_NAME                                  AS TYPE_NAME,
+        A.HANDI_LEVEL                               AS HANDI_LEVEL, 
+        E.REF_NAME                                  AS LEVEL_NAME,
+        A.HANDI_YN                                  AS HANDI_YN, 
+        A.REMARKS                                   AS REMARKS,
+        trim('/'|| C.DNAME  ||'/'|| A.HANDI_CARD)   AS CARD1_PATH,
+        trim('/'|| C.DNAME  ||'/'|| A.HANDI_CARD2)  AS CARD2_PATH,
+        trim('/'|| C.DNAME  ||'/'|| A.HANDI_REPORT) AS REPORT_PATH,
+        A.HANDI_CARD                                AS HANDI_CARD,
+        A.HANDI_CARD2                               AS HANDI_CARD2,
+        A.HANDI_REPORT                              AS HANDI_REPORT,
+        F.PAY_YYMM                                  AS PAY_YYMM,
+        F.PROJ_CODE                                 AS PROJ_CODE,
+        G.PROJ_NAME                                 AS PROJ_NAME,
+        F.TEAM_CODE                                 AS TEAM_CODE,
+        H.TEAM_NAME                                 AS TEAM_NAME,
+        F.WORK_DAY                                  AS WORK_DAY,
+        F.WORK_QTY                                  AS WORK_QTY,
+        F.UNIT_AMT                                  AS UNIT_AMT,
+        F.PAY_TOT                                   AS PAY_TOT
+   FROM CM_LABO_HANDICAP A INNER JOIN CM_LABO_MASTER B 
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                  AND A.LABOR_CODE = B.LABOR_CODE 
+                            LEFT JOIN SM_COMCODE_D C
+                                   ON C.HCODE = 'HANDIPIC'
+                            LEFT JOIN HR_CODE_REF D
+                                   ON A.HANDI_TYPE = D.REF_CODE
+                                  AND D.REF_GBN_CODE = 'PA'
+                                  AND D.REF_CODE != '00'
+                            LEFT JOIN HR_CODE_REF E
+                                   ON A.HANDI_LEVEL = E.REF_CODE
+                                  AND E.REF_GBN_CODE = 'PB'
+                                  AND E.REF_CODE != '00'
+                            LEFT JOIN CM_SALY_LABOR_ACCOUNT F LEFT JOIN SM_CODE_PROJECT G
+                                                                     ON F.COMPANY_CODE = G.COMPANY_CODE
+                                                                    AND F.PROJ_CODE    = G.PROJ_CODE
+                                                              LEFT JOIN CM_ATTD_TEAMS H
+                                                                     ON F.COMPANY_CODE = H.COMPANY_CODE
+                                                                    AND F.PROJ_CODE    = H.PROJ_CODE
+                                                                    AND F.TEAM_CODE    = H.TEAM_CODE
+                                   ON A.COMPANY_CODE = F.COMPANY_CODE
+                                  AND A.LABOR_CODE   = F.LABOR_CODE
+                                  AND SUBSTR(F.PAY_YYMM,1,4) = :as_year
+  WHERE A.COMPANY_CODE = :as_comp 
+    AND A.LABOR_CODE = :as_labor
+ ORDER BY F.PAY_YYMM, F.PROJ_CODE " arguments=(("as_comp", string),("as_labor", string),("as_year", string)) )
+rectangle(band=header x="2167" y="288" height="524" width="462"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=header x="1024" y="288" height="528" width="462"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=header x="78" y="288" height="528" width="462"  name=r_6  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=header alignment="2" text="장애인 근무 기록 카드" border="0" color="33554432" x="1175" y="88" height="96" width="1015" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-16" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=header id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="549" y="592" height="56" width="453" format="[general]" html.valueishtml="0"  name=handi_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="중증여부" border="0" color="8388608" x="1042" y="592" height="56" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="1751" y="592" height="56" width="142" format="[general]" html.valueishtml="0"  name=handi_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.other="0" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="549" y="460" height="56" width="453" format="[general]" html.valueishtml="0"  name=join_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="장애유형" border="0" color="8388608" x="1042" y="460" height="48" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_type_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="장애등급" border="0" color="8388608" x="2181" y="460" height="48" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_level_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="549" y="332" height="56" width="453" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="성명" border="0" color="8388608" x="1042" y="332" height="56" width="425" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="1486" y="332" height="56" width="663" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="주민등록번호" border="0" color="8388608" x="2181" y="332" height="48" width="425" html.valueishtml="0"  name=jumin_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="2624" y="332" height="56" width="603" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" edit.limit=14 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="1486" y="460" height="56" width="663" format="[general]" html.valueishtml="0"  name=type_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="2624" y="460" height="56" width="603" format="[general]" html.valueishtml="0"  name=level_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="549" y="712" height="68" width="2679" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=500 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="사번" border="0" color="8388608" x="96" y="332" height="56" width="425" html.valueishtml="0"  name=cm_labo_handicap_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="입사일" border="0" color="8388608" x="96" y="460" height="56" width="425" html.valueishtml="0"  name=cm_labo_master_join_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="장애인정일" border="0" color="8388608" x="96" y="592" height="56" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="비고" border="0" color="8388608" x="96" y="712" height="68" width="425" html.valueishtml="0"  name=cm_labo_handicap_remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="78" y1="424" x2="3232" y2="424"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="284" x2="3232" y2="284"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="288" x2="3232" y2="288"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="556" x2="3232" y2="556"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="812" x2="3232" y2="812"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="812" x2="3232" y2="812"  name=l_7  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="816" x2="3232" y2="816"  name=l_8  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="684" x2="3232" y2="684"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=header alignment="0" text="연간 노임 지급현황" border="0" color="33554432" x="87" y="992" height="60" width="1015" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=header x1="78" y1="1080" x2="3232" y2="1080"  name=l_9  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=header x1="78" y1="1084" x2="3232" y2="1084"  name=l_10  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=header alignment="2" text="근무년월" border="0" color="8388608" x="233" y="1096" height="56" width="210" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="팀명" border="0" color="8388608" x="1733" y="1096" height="56" width="457" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="8388608" x="768" y="1096" height="56" width="955" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="8388608" x="462" y="1096" height="56" width="293" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="8388608" x="73" y="1096" height="56" width="146" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="78" y1="1168" x2="3232" y2="1168"  name=l_16  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=header alignment="2" text="단가" border="0" color="8388608" x="2578" y="1096" height="56" width="247" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="금액" border="0" color="8388608" x="2834" y="1096" height="56" width="379" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공수" border="0" color="8388608" x="2391" y="1096" height="56" width="169" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일수" border="0" color="8388608" x="2208" y="1096" height="56" width="169" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="78" y1="104" x2="3232" y2="104"  name=l_15  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+compute(band=detail alignment="2" expression="GetRow()"border="0" color="33554432" x="73" y="24" height="56" width="142" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="33554432" x="233" y="24" height="56" width="210" format="[general]" html.valueishtml="0"  name=pay_yymm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="0" tabsequence=32766 border="0" color="33554432" x="1733" y="24" height="56" width="457" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="0" tabsequence=32766 border="0" color="33554432" x="768" y="24" height="56" width="955" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="2" tabsequence=32766 border="0" color="33554432" x="462" y="24" height="56" width="293" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=26 alignment="1" tabsequence=32766 border="0" color="33554432" x="2578" y="24" height="56" width="247" format="#,###" html.valueishtml="0"  name=unit_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="33554432" x="2208" y="24" height="56" width="169" format="[general]" html.valueishtml="0"  name=work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="2" tabsequence=32766 border="0" color="33554432" x="2391" y="24" height="56" width="169" format="[general]" html.valueishtml="0"  name=work_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=27 alignment="1" tabsequence=32766 border="0" color="33554432" x="2834" y="24" height="56" width="379" format="#,###" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="2" expression="sum(work_day for all)"border="0" color="33554432" x="2208" y="4" height="56" width="169" format="#,###.#" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="2" expression="sum(work_qty for all)"border="0" color="33554432" x="2391" y="4" height="56" width="169" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(pay_tot for all)"border="0" color="33554432" x="2834" y="4" height="56" width="379" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="78" y1="4" x2="3232" y2="4"  name=l_13  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=footer x1="78" y1="8" x2="3232" y2="8"  name=l_14  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=footer x1="78" y1="572" x2="3232" y2="572"  name=l_11  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=footer x1="78" y1="576" x2="3232" y2="576"  name=l_12  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=footer alignment="2" text="복지카드[앞]" border="1" color="33554432" x="105" y="28" height="56" width="425" html.valueishtml="0"  name=card1_path_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=footer filename="/img/cm/labo/noimage.jpg" x="110" y="116" height="428" width="978" border="6"  name=path_card1 visible="1" )
+text(band=footer alignment="2" text="복지카드[뒤]" border="1" color="33554432" x="1184" y="28" height="56" width="425" html.valueishtml="0"  name=card2_path_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=footer filename="/img/cm/labo/noimage.jpg" x="1179" y="116" height="428" width="978" border="6"  name=path_card2 visible="1" )
+text(band=footer alignment="2" text="장애인등록증" border="1" color="33554432" x="2245" y="28" height="56" width="425" html.valueishtml="0"  name=report_path_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=footer filename="/img/cm/labo/noimage.jpg" x="2249" y="116" height="428" width="978" border="6"  name=path_report visible="1" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,155 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=user_id dbname="em_mqc_main.user_id" )
+ column=(type=char(51) updatewhereclause=yes name=item_code dbname="item_code" )
+ column=(type=char(200) updatewhereclause=yes name=item_name dbname="em_mqc_main.item_name" )
+ column=(type=char(200) updatewhereclause=yes name=item_size dbname="item_size" )
+ column=(type=char(10) updatewhereclause=yes name=item_unit dbname="em_mqc_main.item_unit" )
+ column=(type=decimal(6) updatewhereclause=yes name=item_qty dbname="em_mqc_main.item_qty" )
+ column=(type=decimal(6) updatewhereclause=yes name=item_qty2 dbname="em_mqc_main.item_qty2" )
+ column=(type=number updatewhereclause=yes name=item_total dbname="item_total" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=formula dbname="em_mqc_main.formula" )
+ column=(type=char(8) updatewhereclause=yes name=est_code dbname="em_mqc_main.est_code" )
+ column=(type=char(10) updatewhereclause=yes name=const_div dbname="em_mqc_main.const_div" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="em_mqc_main.const_code" )
+ column=(type=number updatewhereclause=yes name=mqc_seq dbname="em_mqc_main.mqc_seq" )
+ column=(type=char(5) updatewhereclause=yes name=code_tag dbname="em_mqc_main.code_tag" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sort_seq dbname="em_mqc_main.sort_seq" )
+ column=(type=char(6) updatewhereclause=yes name=serial dbname="em_mqc_main.serial" )
+ column=(type=char(3) updatewhereclause=yes name=seq dbname="em_mqc_main.seq" )
+ column=(type=char(60) updatewhereclause=yes name=est_name dbname="cm_esti_master.est_name" )
+ column=(type=char(100) updatewhereclause=yes name=d_const_name dbname="em_mqc_main.const_name" )
+ column=(type=char(100) updatewhereclause=yes name=choice_const_name dbname="em_siteconst_kind.choice_const_name" )
+ column=(type=number updatewhereclause=yes name=proj_qty dbname="proj_qty" )
+ column=(type=char(20) updatewhereclause=yes name=remarks dbname="em_mqc_main.remarks" )
+ column=(type=number updatewhereclause=yes name=re_count dbname="re_count" )
+ retrieve="SELECT A.USER_ID,
+         '@'||A.ITEM_CODE  as ITEM_CODE,
+         A.ITEM_NAME, 
+         DECODE(A.DUCT_DIV, NULL, A.ITEM_SIZE,A.ITEM_SIZE2) AS ITEM_SIZE,
+         A.ITEM_UNIT,
+         A.ITEM_QTY,
+         A.ITEM_QTY2, 
+         DECODE(A.DUCT_DIV, NULL, A.ITEM_QTY * NVL(D.PROJ_QTY,1), A.ITEM_QTY2 * NVL(D.PROJ_QTY,1)) AS ITEM_TOTAL, 
+         A.FORMULA,
+         A.EST_CODE,
+         A.CONST_DIV,
+         A.CONST_CODE, 
+         A.MQC_SEQ,
+         A.CODE_TAG,
+         A.SORT_SEQ,
+         A.SERIAL,
+         A.SEQ,
+         C.EST_NAME,
+         D.CONST_NAME CONST_NAME,
+         F.CONST_NAME CHOICE_CONST_NAME,
+         NVL(D.PROJ_QTY,1) PROJ_QTY,
+         A.REMARKS,
+         (SELECT COUNT(P.ITEM_CODE) FROM EM_MQC_MAIN P 
+          WHERE P.USER_ID = A.USER_ID AND P.EST_CODE = A.EST_CODE 
+            AND P.CONST_DIV = A.CONST_DIV AND P.CONST_CODE = A.CONST_CODE
+            AND P.ITEM_CODE = A.ITEM_CODE AND P.ITEM_SIZE = A.ITEM_SIZE ) RE_COUNT
+    FROM EM_MQC_MAIN A
+    LEFT OUTER JOIN CM_ESTI_MASTER C ON A.EST_CODE = C.EST_CODE AND C.COMPANY_CODE = :as_compcode
+    LEFT OUTER JOIN ( SELECT EST_CODE, CONST_DIV, CONST_CODE, CONST_NAME, 0 PROJ_QTY
+                        FROM EM_SITECONST_KIND
+                       WHERE EST_CODE = :as_estcode
+                         AND CONST_DIV LIKE :as_constdiv
+                         UNION 
+                      SELECT EST_CODE, CONST_DIV, CONST_CODE, CONST_NAME, PROJ_QTY
+                        FROM EM_SITECONST_KIND_MQC
+                       WHERE EST_CODE = :as_estcode
+                         AND CONST_DIV LIKE :as_constdiv) D ON A.EST_CODE = D.EST_CODE AND A.CONST_DIV = D.CONST_DIV AND A.CONST_CODE = D.CONST_CODE
+    LEFT OUTER JOIN EM_SITECONST_KIND F ON A.EST_CODE = F.EST_CODE AND A.CONST_DIV = F.CONST_DIV AND substr(A.CONST_CODE,1,length(A.CONST_CODE)-2) = F.CONST_CODE
+   WHERE A.USER_ID = :as_userid
+     AND A.EST_CODE = :as_estcode
+     AND A.CONST_DIV = :as_constdiv
+     AND A.CONST_CODE like :as_constcode||'%'
+     AND A.CODE_TAG NOT IN ('82')
+  UNION
+   SELECT A.USER_ID,
+         '@'||A.WARM_CODE AS ITEM_CODE,
+         B.ITEM_NAME, 
+         B.ITEM_SIZE,
+         B.ITEM_UNIT,
+         A.ITEM_QTY,
+         A.ITEM_QTY2,
+         DECODE(A.DUCT_DIV, NULL, A.ITEM_QTY * NVL(D.PROJ_QTY,1), A.ITEM_QTY2 * NVL(D.PROJ_QTY,1)) AS ITEM_TOTAL,  
+         A.FORMULA,
+         A.EST_CODE,
+         A.CONST_DIV,
+         A.CONST_CODE, 
+         A.MQC_SEQ,
+         A.CODE_TAG,
+         A.SORT_SEQ,
+         A.SERIAL,
+         A.SEQ,
+         C.EST_NAME,
+         D.CONST_NAME,
+         F.CONST_NAME CHOICE_CONST_NAME,
+         NVL(D.PROJ_QTY,1) PROJ_QTY,
+         A.REMARKS,
+         (SELECT COUNT(P.ITEM_CODE) FROM EM_MQC_MAIN P 
+          WHERE P.USER_ID = A.USER_ID AND P.EST_CODE = A.EST_CODE 
+            AND P.CONST_DIV = A.CONST_DIV AND P.CONST_CODE = A.CONST_CODE
+            AND P.ITEM_CODE = A.ITEM_CODE AND P.ITEM_SIZE = A.ITEM_SIZE ) RE_COUNT
+    FROM EM_MQC_MAIN A
+    INNER JOIN( SELECT P.WARM_CODE,
+                       Z.ITEM_CODE, 
+                       Z.ITEM_NAME,
+                       Z.ITEM_SIZE,
+                       Z.ITEM_UNIT
+                  FROM EM_WARM_MAIN P
+                  INNER JOIN EM_WARM_SUB Z ON P.WARM_CODE = Z.WARM_CODE) B ON
+                  A.WARM_DIV = B.WARM_CODE AND A.WARM_CODE = B.ITEM_CODE
+    LEFT OUTER JOIN CM_ESTI_MASTER C ON A.EST_CODE = C.EST_CODE AND C.COMPANY_CODE = :as_compcode
+    LEFT OUTER JOIN ( SELECT EST_CODE, CONST_DIV, CONST_CODE, CONST_NAME, 0 PROJ_QTY
+                        FROM EM_SITECONST_KIND
+                       WHERE EST_CODE = :as_estcode
+                         AND CONST_DIV LIKE :as_constdiv
+                         UNION 
+                      SELECT EST_CODE, CONST_DIV, CONST_CODE, CONST_NAME, PROJ_QTY
+                        FROM EM_SITECONST_KIND_MQC
+                       WHERE EST_CODE = :as_estcode
+                         AND CONST_DIV LIKE :as_constdiv) D ON A.EST_CODE = D.EST_CODE AND A.CONST_DIV = D.CONST_DIV AND A.CONST_CODE = D.CONST_CODE
+    LEFT OUTER JOIN EM_SITECONST_KIND F ON A.EST_CODE = F.EST_CODE AND A.CONST_DIV = F.CONST_DIV AND substr(A.CONST_CODE,1,length(A.CONST_CODE)-2) = F.CONST_CODE              
+    WHERE A.USER_ID = :as_userid
+      AND A.EST_CODE = :as_estcode
+      AND A.CONST_DIV = :as_constdiv
+      AND A.CONST_CODE like :as_constcode||'%'
+ORDER BY CONST_CODE, SORT_SEQ, ITEM_CODE" arguments=(("as_compcode", string),("as_userid", string),("as_estcode", string),("as_constdiv", string),("as_constcode", string)) )
+line(band=header x1="362" y1="2500" x2="392" y2="5000"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="산식" border="0" color="33554432" x="942" y="3" height="14" width="482" html.valueishtml="0"  name=formula_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="363" y="3" height="14" width="168" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="533" y="3" height="14" width="124" html.valueishtml="0"  name=item_size_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="비고" border="0" color="33554432" x="1426" y="3" height="14" width="118" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="2" y="3" height="14" width="116" html.valueishtml="0"  name=choice_const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="코드" border="0" color="33554432" x="279" y="3" height="14" width="82" html.valueishtml="0"  name=item_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량2" border="0" color="33554432" x="884" y="3" height="14" width="56" html.valueishtml="0"  name=item_qty2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="도면명" border="0" color="33554432" x="120" y="3" height="14" width="157" html.valueishtml="0"  name=d_const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="279" y="4" height="14" width="82" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="363" y="4" height="14" width="168" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="533" y="4" height="14" width="124" format="[general]" html.valueishtml="0"  name=item_size visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="942" y="4" height="14" width="482" format="[general]" html.valueishtml="0"  name=formula visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="0" tabsequence=32766 border="0" color="33554432" x="1426" y="4" height="14" width="118" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="0" tabsequence=32766 border="0" color="33554432" x="120" y="4" height="14" width="157" format="[general]" html.valueishtml="0"  name=d_const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="4" height="14" width="116" format="[general]" html.valueishtml="0"  name=choice_const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="659" y="3" height="14" width="41" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="703" y="3" height="14" width="68" html.valueishtml="0"  name=item_total_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="개소" border="0" color="33554432" x="773" y="3" height="14" width="52" html.valueishtml="0"  name=proj_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="33554432" x="827" y="3" height="14" width="55" html.valueishtml="0"  name=item_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="659" y="4" height="14" width="41" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="703" y="4" height="14" width="68" format="[general]" html.valueishtml="0"  name=item_total visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="773" y="4" height="14" width="52" format="[general]" html.valueishtml="0"  name=proj_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="827" y="4" height="14" width="55" format="[general]~t'#,###' + if ( item_qty = truncate (  item_qty , 0 ), '',  '0.####' )" html.valueishtml="0"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="884" y="4" height="14" width="56" format="~t'#,###' + if ( item_qty2 = truncate (  item_qty2 , 0 ), '',  '0.####' )" html.valueishtml="0"  name=item_qty2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

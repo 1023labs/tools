@@ -1,0 +1,204 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=54 color="536870912" )
+summary(height=0 color="553648127" )
+footer(height=16 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(12) updatewhereclause=yes name=team_code dbname="team_code" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="team_name" )
+ column=(type=number updatewhereclause=yes name=pre_day_qty1 dbname="pre_day_qty1" )
+ column=(type=number updatewhereclause=yes name=pre_day_qty2 dbname="pre_day_qty2" )
+ column=(type=number updatewhereclause=yes name=pre_night_qyt dbname="pre_night_qyt" )
+ column=(type=number updatewhereclause=yes name=day_qty1 dbname="day_qty1" )
+ column=(type=number updatewhereclause=yes name=day_qty2 dbname="day_qty2" )
+ column=(type=number updatewhereclause=yes name=night_qty dbname="night_qty" )
+ column=(type=number updatewhereclause=yes name=pre_out_qty1 dbname="pre_out_qty1" )
+ column=(type=number updatewhereclause=yes name=pre_out_qty2 dbname="pre_out_qty2" )
+ column=(type=number updatewhereclause=yes name=pre_out_night_qyt dbname="pre_out_night_qyt" )
+ column=(type=number updatewhereclause=yes name=out_qty1 dbname="out_qty1" )
+ column=(type=number updatewhereclause=yes name=out_qty2 dbname="out_qty2" )
+ column=(type=number updatewhereclause=yes name=out_night_qty dbname="out_night_qty" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PM_EMPNO,
+         A.PROJ_CODE,
+         A.PROJ_NAME,
+         DECODE(A.TEAM_CODE,'201','997','202','998','301','999',A.TEAM_CODE) AS TEAM_CODE, 
+         A.TEAM_NAME,
+         SUM(A.PRE_DAY_QTY1)  PRE_DAY_QTY1,
+         SUM(A.PRE_DAY_QTY2)  PRE_DAY_QTY2,
+         SUM(A.PRE_NIGHT_QTY) PRE_NIGHT_QYT,
+         SUM(A.DAY_QTY1)      DAY_QTY1,
+         SUM(A.DAY_QTY2)      DAY_QTY2,
+         SUM(A.NIGHT_QTY)     NIGHT_QTY,
+         SUM(A.PRE_OUT_QTY1)  PRE_OUT_QTY1,
+         SUM(A.PRE_OUT_QTY2)  PRE_OUT_QTY2,
+         SUM(A.PRE_OUT_NIGHT_QTY) PRE_OUT_NIGHT_QYT,
+         SUM(A.OUT_QTY1)      OUT_QTY1,
+         SUM(A.OUT_QTY2)      OUT_QTY2,
+         SUM(A.OUT_NIGHT_QTY)     OUT_NIGHT_QTY
+    FROM (                  
+          SELECT A.COMPANY_CODE,
+                 A.PROJ_CODE      AS PROJ_CODE,
+                 P.PROJ_NAME      AS PROJ_NAME,   
+                 P.PM_EMPNO       AS PM_EMPNO,
+                 A.TEAM_CODE      AS TEAM_CODE,
+                 T.TEAM_NAME      AS TEAM_NAME,
+                 A.WORK_DATE      AS WORK_DATE,    
+                 DECODE(A.WORK_DATE, :as_work_date-1, SUM(A.DAY_QTY1), 0 ) PRE_DAY_QTY1,
+                 DECODE(A.WORK_DATE, :as_work_date-1, SUM(A.DAY_QTY2), 0 ) PRE_DAY_QTY2,
+                 DECODE(A.WORK_DATE, :as_work_date-1, SUM(A.NIGHT_QTY), 0 ) PRE_NIGHT_QTY,
+                 DECODE(A.WORK_DATE, :as_work_date,   SUM(A.DAY_QTY1), 0 ) DAY_QTY1,
+                 DECODE(A.WORK_DATE, :as_work_date,   SUM(A.DAY_QTY2), 0 ) DAY_QTY2,
+                 DECODE(A.WORK_DATE, :as_work_date,   SUM(A.NIGHT_QTY), 0 ) NIGHT_QTY,
+                 0   AS PRE_OUT_QTY1,
+                 0   AS PRE_OUT_QTY2,
+                 0   AS PRE_OUT_NIGHT_QTY,
+                 0   AS OUT_QTY1,
+                 0   AS OUT_QTY2,
+                 0   AS OUT_NIGHT_QTY
+           FROM CM_ATTD_DAILY_WORK A LEFT JOIN SM_CODE_PROJECT P
+                                            ON A.COMPANY_CODE = P.COMPANY_CODE
+                                           AND A.PROJ_CODE    = P.PROJ_CODE
+                                     LEFT JOIN CM_ATTD_TEAMS T
+                                            ON A.COMPANY_CODE = T.COMPANY_CODE
+                                           AND A.PROJ_CODE    = T.PROJ_CODE
+                                           AND A.TEAM_CODE    = T.TEAM_CODE
+          WHERE A.COMPANY_CODE = :as_comp_code
+            AND A.WORK_DATE  BETWEEN :as_work_date-1 AND :as_work_date 
+            AND P.PM_EMPNO   LIKE    :as_pm_empno
+        GROUP BY A.COMPANY_CODE, A.PROJ_CODE, P.PROJ_NAME, P.PM_EMPNO,A.TEAM_CODE, T.TEAM_NAME, A.WORK_DATE
+       UNION ALL
+       SELECT A.COMPANY_CODE,
+                 A.PROJ_CODE      AS PROJ_CODE,
+                 P.PROJ_NAME      AS PROJ_NAME,   
+                 P.PM_EMPNO       AS PM_EMPNO,
+                 A.TEAM_CODE      AS TEAM_CODE,
+                 T.TEAM_NAME      AS TEAM_NAME,
+                 A.WORK_DATE      AS WORK_DATE,  
+                 0  AS PRE_DAY_QTY1,
+                 0  AS PRE_DAY_QTY2,
+                 0  AS PRE_NIGHT_QTY,
+                 0  AS DAY_QTY1,
+                 0  AS DAY_QTY2,
+                 0  AS NIGHT_QTY,  
+                 DECODE(A.WORK_DATE, :as_work_date-1, SUM(A.DAY_QTY1), 0 ) PRE_OUT_QTY1,
+                 DECODE(A.WORK_DATE, :as_work_date-1, SUM(A.DAY_QTY2), 0 ) PRE_OUT_QTY2,
+                 DECODE(A.WORK_DATE, :as_work_date-1, SUM(A.NIGHT_QTY), 0 ) PRE_OUT_NIGHT_QTY,
+                 DECODE(A.WORK_DATE, :as_work_date,   SUM(A.DAY_QTY1), 0 ) OUT_QTY1,
+                 DECODE(A.WORK_DATE, :as_work_date,   SUM(A.DAY_QTY2), 0 ) OUT_QTY2,
+                 DECODE(A.WORK_DATE, :as_work_date,   SUM(A.NIGHT_QTY), 0 ) OUT_NIGHT_QTY
+           FROM CM_ATTD_DAILY_WORK_H A LEFT JOIN SM_CODE_PROJECT P
+                                            ON A.COMPANY_CODE = P.COMPANY_CODE
+                                           AND A.PROJ_CODE    = P.PROJ_CODE
+                                     LEFT JOIN CM_ATTD_TEAMS T
+                                            ON A.COMPANY_CODE = T.COMPANY_CODE
+                                           AND A.PROJ_CODE    = T.PROJ_CODE
+                                           AND A.TEAM_CODE    = T.TEAM_CODE
+          WHERE A.COMPANY_CODE = :as_comp_code
+            AND A.WORK_DATE  BETWEEN :as_work_date-1 AND :as_work_date 
+            AND P.PM_EMPNO   LIKE    :as_pm_empno
+        GROUP BY A.COMPANY_CODE, A.PROJ_CODE, P.PROJ_NAME, P.PM_EMPNO,A.TEAM_CODE, T.TEAM_NAME, A.WORK_DATE ) A
+GROUP BY A.COMPANY_CODE,A.PM_EMPNO,A.PROJ_CODE,A.PROJ_NAME,DECODE(A.TEAM_CODE,'201','997','202','998','301','999',A.TEAM_CODE),A.TEAM_NAME
+ORDER BY A.COMPANY_CODE,A.PM_EMPNO,A.PROJ_NAME, DECODE(A.TEAM_CODE,'201','997','202','998','301','999',A.TEAM_CODE)" arguments=(("as_comp_code", string),("as_work_date", string),("as_pm_empno", string))  sort="company_code A pm_empno A proj_name A " )
+group(level=1 header.height=0 trailer.height=16 by=("company_code" , "pm_empno" , "proj_code" , "proj_name" ) header.color="536870912" trailer.color="15793151" )
+rectangle(band=header x="1202" y="1" height="53" width="634"  name=r_2 visible="1" brush.hatch="6" brush.color="67108864" pen.style="0" pen.width="1" pen.color="16711935"  background.mode="2" background.color="12639424" )
+rectangle(band=header x="524" y="1" height="53" width="606"  name=r_1 visible="1" brush.hatch="6" brush.color="15793151" pen.style="0" pen.width="1" pen.color="134217856"  background.mode="2" background.color="12639424" )
+line(band=header x1="524" y1="35" x2="1131" y2="35"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="1" text="전일출" border="0" color="33554432" x="604" y="22" height="14" width="75" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="당일출" border="0" color="33554432" x="907" y="22" height="14" width="75" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="역공수(직영)" border="0" color="33554432" x="681" y="22" height="14" width="75" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="역공수(직영)" border="0" color="33554432" x="984" y="22" height="14" width="75" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주간1" border="0" color="33554432" x="527" y="38" height="14" width="75" html.valueishtml="0"  name=pre_day_qty1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주간1" border="0" color="33554432" x="830" y="38" height="14" width="75" html.valueishtml="0"  name=day_qty1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주간2" border="0" color="33554432" x="604" y="38" height="14" width="75" html.valueishtml="0"  name=pre_day_qty2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="야간" border="0" color="33554432" x="681" y="38" height="14" width="75" html.valueishtml="0"  name=pre_night_qyt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주간2" border="0" color="33554432" x="907" y="38" height="14" width="75" html.valueishtml="0"  name=day_qty2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="야간" border="0" color="33554432" x="984" y="38" height="14" width="75" html.valueishtml="0"  name=night_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="758" y="38" height="14" width="70" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="1061" y="38" height="14" width="69" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="역공수(컨설팅)" border="0" color="33554432" x="1612" y="22" height="14" width="77" html.valueishtml="0"  name=t_13 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="1201" y1="35" x2="1835" y2="35"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="525" y1="19" x2="1760" y2="19"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="2" y="21" height="14" width="309" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="팀명" border="0" color="33554432" x="313" y="21" height="14" width="212" html.valueishtml="0"  name=team_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주간1" border="0" color="33554432" x="1132" y="38" height="14" width="78" html.valueishtml="0"  name=pre_out_qty1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주간2" border="0" color="33554432" x="1212" y="38" height="14" width="73" html.valueishtml="0"  name=pre_out_qty2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="야간" border="0" color="33554432" x="1287" y="38" height="14" width="79" html.valueishtml="0"  name=pre_out_night_qyt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="역공수(컨설팅)" border="0" color="33554432" x="1287" y="22" height="14" width="79" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="전일출" border="0" color="33554432" x="1212" y="22" height="14" width="73" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="1368" y="38" height="14" width="78" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주간1" border="0" color="33554432" x="1447" y="38" height="14" width="82" html.valueishtml="0"  name=out_qty1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주간2" border="0" color="33554432" x="1531" y="38" height="14" width="79" html.valueishtml="0"  name=out_qty2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="당일출" border="0" color="33554432" x="1531" y="22" height="14" width="79" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="야간" border="0" color="33554432" x="1612" y="38" height="14" width="77" html.valueishtml="0"  name=out_night_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="1691" y="38" height="14" width="71" html.valueishtml="0"  name=t_14 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="309" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="313" y="2" height="14" width="212" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="527" y="2" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=pre_day_qty1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="604" y="2" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=pre_day_qty2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="681" y="2" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=pre_night_qyt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="830" y="2" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=day_qty1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="907" y="2" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=day_qty2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="984" y="2" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=night_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" pre_day_qty1  +  pre_day_qty2  +  pre_night_qyt "border="0" color="33554432" x="758" y="2" height="14" width="70" format="#,###.#" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression=" day_qty1  +  day_qty2  +   night_qty "border="0" color="33554432" x="1061" y="2" height="14" width="69" format="#,###.#" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="1133" y="2" height="14" width="77" format="#,###.#" html.valueishtml="0"  name=pre_out_qty1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="1213" y="2" height="14" width="72" format="#,###.#" html.valueishtml="0"  name=pre_out_qty2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="1288" y="2" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=pre_out_night_qyt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="1448" y="2" height="14" width="81" format="#,###.#" html.valueishtml="0"  name=out_qty1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="1532" y="2" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=out_qty2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" pre_out_qty1  +  pre_out_qty2  +  pre_out_night_qyt "border="0" color="33554432" x="1368" y="2" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=compute_19 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="33554432" x="1613" y="2" height="14" width="76" format="#,###.#" html.valueishtml="0"  name=out_night_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" out_qty1  +  out_qty2  +  out_night_qty "border="0" color="33554432" x="1691" y="2" height="14" width="71" format="#,###.#" html.valueishtml="0"  name=compute_20 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum(pre_day_qty2 for group 1)"border="0" color="33554432" x="604" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum(pre_night_qyt for group 1)"border="0" color="33554432" x="681" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum(day_qty1 for group 1)"border="0" color="33554432" x="830" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum(day_qty2 for group 1)"border="0" color="33554432" x="907" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum(night_qty for group 1)"border="0" color="33554432" x="984" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum( pre_day_qty1  +  pre_day_qty2  +  pre_night_qyt  for group 1)"border="0" color="33554432" x="758" y="1" height="14" width="70" format="#,###.#" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum(pre_day_qty1 for group 1)"border="0" color="33554432" x="527" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=trailer.1 alignment="2" text="소    계" border="0" color="33554432" x="313" y="1" height="14" width="212" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum( day_qty1  +  day_qty2  +   night_qty  for group 1)"border="0" color="33554432" x="1061" y="1" height="14" width="69" format="#,###.#" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="2" expression="sum(pre_out_qty1 for group 1)"border="0" color="33554432" x="1132" y="1" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=compute_21 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum(pre_out_qty2 for group 1)"border="0" color="33554432" x="1212" y="1" height="14" width="73" format="#,###.#" html.valueishtml="0"  name=compute_22 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum(pre_out_night_qyt for group 1)"border="0" color="33554432" x="1287" y="1" height="14" width="79" format="#,###.#" html.valueishtml="0"  name=compute_23 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum(out_qty1 for group 1)"border="0" color="33554432" x="1448" y="1" height="14" width="81" format="#,###.#" html.valueishtml="0"  name=compute_24 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum(out_qty2 for group 1)"border="0" color="33554432" x="1531" y="1" height="14" width="79" format="#,###.#" html.valueishtml="0"  name=compute_25 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum( pre_out_qty1  +  pre_out_qty2  +  pre_out_night_qyt  for group 1)"border="0" color="33554432" x="1368" y="1" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=compute_26 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum(out_night_qty for group 1)"border="0" color="33554432" x="1612" y="1" height="14" width="77" format="#,###.#" html.valueishtml="0"  name=compute_27 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="2" expression="sum( out_qty1  +  out_qty2  +  out_night_qty  for group 1)"border="0" color="33554432" x="1691" y="1" height="14" width="71" format="#,###.#" html.valueishtml="0"  name=compute_28 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum(night_qty for all)"border="0" color="33554432" x="984" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_15 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="313" y="1" height="14" width="212" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(pre_day_qty1 for all)"border="0" color="33554432" x="527" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(pre_day_qty2 for all)"border="0" color="33554432" x="604" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(pre_night_qyt for all)"border="0" color="33554432" x="681" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( pre_day_qty1  +  pre_day_qty2  +  pre_night_qyt  for all)"border="0" color="33554432" x="758" y="1" height="14" width="70" format="#,###.#" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(day_qty1 for all)"border="0" color="33554432" x="830" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(day_qty2 for all)"border="0" color="33554432" x="907" y="1" height="14" width="75" format="#,###.#" html.valueishtml="0"  name=compute_14 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( day_qty1  +  day_qty2  +   night_qty  for all)"border="0" color="33554432" x="1061" y="1" height="14" width="69" format="#,###.#" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(pre_out_qty1 for all)"border="0" color="33554432" x="1132" y="1" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=compute_29 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum(out_qty1 for all)"border="0" color="33554432" x="1448" y="1" height="14" width="81" format="#,###.#" html.valueishtml="0"  name=compute_33 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum(pre_out_qty2 for all)"border="0" color="33554432" x="1212" y="1" height="14" width="73" format="#,###.#" html.valueishtml="0"  name=compute_30 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum(pre_out_night_qyt for all)"border="0" color="33554432" x="1287" y="1" height="14" width="79" format="#,###.#" html.valueishtml="0"  name=compute_31 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum( pre_out_qty1  +  pre_out_qty2  +  pre_out_night_qyt  for all)"border="0" color="33554432" x="1368" y="1" height="14" width="78" format="#,###.#" html.valueishtml="0"  name=compute_32 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum(out_qty2 for all)"border="0" color="33554432" x="1531" y="1" height="14" width="79" format="#,###.#" html.valueishtml="0"  name=compute_34 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum(out_night_qty for all)"border="0" color="33554432" x="1612" y="1" height="14" width="77" format="#,###.#" html.valueishtml="0"  name=compute_35 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum( out_qty1  +  out_qty2  +  out_night_qty  for all)"border="0" color="33554432" x="1691" y="1" height="14" width="71" format="#,###.#" html.valueishtml="0"  name=compute_36 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=0 border="0" color="33554432" x="1765" y="1" height="14" width="70" html.valueishtml="0"  name=team_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Team Code" border="0" color="33554432" x="1764" y="1" height="19" width="71" html.valueishtml="0"  name=team_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+
+sparse(names="proj_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

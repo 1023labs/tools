@@ -1,0 +1,142 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=37 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=cm_labor_reti_pv_result_company_code dbname="company_code" )
+ column=(type=char(8) updatewhereclause=yes name=work_month dbname="work_month" )
+ column=(type=char(13) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(51) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(9) updatewhereclause=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn dbname="rrn" )
+ column=(type=number updatewhereclause=yes name=provision_sum dbname="provision_sum" )
+ column=(type=number updatewhereclause=yes name=recalibrate_sum dbname="recalibrate_sum" )
+ column=(type=number updatewhereclause=yes name=comp_provision_sum dbname="comp_provision_sum" )
+ column=(type=number updatewhereclause=yes name=provision_amt dbname="provision_amt" )
+ column=(type=number updatewhereclause=yes name=recalibrate dbname="recalibrate" )
+ column=(type=number updatewhereclause=yes name=comp_provision_amt dbname="comp_provision_amt" )
+ column=(type=number updatewhereclause=yes name=provision_amt_y dbname="provision_amt_y" )
+ column=(type=number updatewhereclause=yes name=recalibrate_y dbname="recalibrate_y" )
+ column=(type=number updatewhereclause=yes name=comp_provision_amt_y dbname="comp_provision_amt_y" )
+ column=(type=number updatewhereclause=yes name=tot_provision dbname="tot_provision" )
+ column=(type=number updatewhereclause=yes name=tot_recalibrate dbname="tot_recalibrate" )
+ column=(type=number updatewhereclause=yes name=tot_comp_provision dbname="tot_comp_provision" )
+ column=(type=number updatewhereclause=yes name=tot_amt dbname="tot_amt" )
+ retrieve="SELECT MA.COMPANY_CODE         AS COMPANY_CODE
+      ,MA.WORK_MONTH           AS WORK_MONTH
+      ,'@'||MA.PROJ_CODE            AS PROJ_CODE
+      ,'@'||MA.PROJ_NAME            AS PROJ_NAME
+      ,'@'||MA.LABOR_CODE           AS LABOR_CODE                   --사번
+      ,MA.LABOR_NAME           AS LABOR_NAME                 --성명
+      ,'@'||MA.RRN                  AS RRN                      --주민번호
+      ,MB.PROVISION_SUM        AS PROVISION_SUM
+      ,MB.RECALIBRATE_SUM      AS RECALIBRATE_SUM
+      ,MB.COMP_PROVISION_SUM   AS COMP_PROVISION_SUM
+      ,MB.PROVISION_AMT        AS PROVISION_AMT
+      ,MB.RECALIBRATE          AS RECALIBRATE
+      ,MB.COMP_PROVISION_AMT   AS COMP_PROVISION_AMT
+      ,MB.PROVISION_AMT_Y      AS PROVISION_AMT_Y
+      ,MB.RECALIBRATE_Y        AS RECALIBRATE_Y
+      ,MB.COMP_PROVISION_AMT_Y AS COMP_PROVISION_AMT_Y
+      ,MB.TOT_PROVISION        AS TOT_PROVISION
+      ,MB.TOT_RECALIBRATE      AS TOT_RECALIBRATE
+      ,MB.TOT_COMP_PROVISION   AS TOT_COMP_PROVISION
+      ,MB.TOT_PROVISION + MB.TOT_RECALIBRATE - MB.TOT_COMP_PROVISION AS TOT_AMT
+  FROM (SELECT LABOR_CODE
+          FROM CM_LABOR_RETI_PV_RESULT
+         WHERE COMPANY_CODE = :as_comp_code
+           AND WORK_MONTH <= :as_month
+         GROUP BY LABOR_CODE) M LEFT JOIN (SELECT A.COMPANY_CODE
+                                                 ,A.PROJ_CODE
+                                                 ,C.PROJ_NAME
+                                                 ,A.WORK_MONTH
+                                                 ,A.LABOR_CODE
+                                                 ,B.LABOR_NAME
+                                                 ,X_DECRYPT(B.RRN_PRE,'(enckey)') || X_DECRYPT(B.RRN_POST,'(enckey)') AS RRN
+                                             FROM CM_LABOR_RETI_PV_RESULT A LEFT JOIN CM_LABO_MASTER B
+                                                                                   ON A.LABOR_CODE = B.LABOR_CODE
+                                                                            LEFT JOIN SM_CODE_PROJECT C
+                                                                                   ON A.PROJ_CODE = C.PROJ_CODE
+                                            WHERE A.COMPANY_CODE = :as_comp_code
+                                              AND A.WORK_MONTH  <= :as_month
+                                              AND A.LABOR_CODE||A.WORK_MONTH IN (SELECT LABOR_CODE||MAX(WORK_MONTH)
+                                                                                   FROM CM_LABOR_RETI_PV_RESULT
+                                                                                  WHERE WORK_MONTH  <= :as_month
+                                                                                  GROUP BY LABOR_CODE)) MA
+                                       ON M.LABOR_CODE = MA.LABOR_CODE
+                                LEFT JOIN ( SELECT LABOR_CODE
+                                                  ,SUM(CASE WHEN WORK_MONTH <  :as_month THEN PROVISION_AMT      ELSE 0 END) AS PROVISION_SUM
+                                                  ,SUM(CASE WHEN WORK_MONTH <  :as_month THEN RECALIBRATE        ELSE 0 END) AS RECALIBRATE_SUM
+                                                  ,SUM(CASE WHEN WORK_MONTH <  :as_month THEN COMP_PROVISION_AMT ELSE 0 END) AS COMP_PROVISION_SUM
+                                                  ,SUM(CASE WHEN WORK_MONTH =  :as_month THEN PROVISION_AMT      ELSE 0 END) AS PROVISION_AMT
+                                                  ,SUM(CASE WHEN WORK_MONTH =  :as_month THEN RECALIBRATE        ELSE 0 END) AS RECALIBRATE
+                                                  ,SUM(CASE WHEN WORK_MONTH =  :as_month THEN COMP_PROVISION_AMT ELSE 0 END) AS COMP_PROVISION_AMT
+                                                  ,SUM(CASE WHEN WORK_MONTH BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month THEN PROVISION_AMT      ELSE 0 END) AS PROVISION_AMT_Y
+                                                  ,SUM(CASE WHEN WORK_MONTH BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month THEN RECALIBRATE        ELSE 0 END) AS RECALIBRATE_Y
+                                                  ,SUM(CASE WHEN WORK_MONTH BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month THEN COMP_PROVISION_AMT ELSE 0 END) AS COMP_PROVISION_AMT_Y
+                                                  ,SUM(CASE WHEN WORK_MONTH <= :as_month THEN PROVISION_AMT      ELSE 0 END) AS TOT_PROVISION
+                                                  ,SUM(CASE WHEN WORK_MONTH <= :as_month THEN RECALIBRATE        ELSE 0 END) AS TOT_RECALIBRATE
+                                                  ,SUM(CASE WHEN WORK_MONTH <= :as_month THEN COMP_PROVISION_AMT ELSE 0 END) AS TOT_COMP_PROVISION
+                                              FROM CM_LABOR_RETI_PV_RESULT
+                                             WHERE COMPANY_CODE = :as_comp_code
+                                               AND WORK_MONTH  <= :as_month
+                                             GROUP BY LABOR_CODE) MB
+                                       ON M.LABOR_CODE = MB.LABOR_CODE
+ WHERE MB.TOT_PROVISION + MB.TOT_RECALIBRATE - MB.TOT_COMP_PROVISION <> 0
+    OR MB.COMP_PROVISION_AMT <> 0
+ ORDER BY MA.LABOR_NAME" arguments=(("as_comp_code", string),("as_month", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="37" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="365" y="2" height="14" width="56" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="302" y="2" height="14" width="61" html.valueishtml="0"  name=cm_labor_reti_pv_result_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="423" y="2" height="14" width="120" html.valueishtml="0"  name=rrn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계(충당부채)" border="0" color="33554432" x="718" y="2" height="14" width="88" html.valueishtml="0"  name=tot_provision_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계(재측정)" border="0" color="33554432" x="975" y="2" height="14" width="93" html.valueishtml="0"  name=tot_recalibrate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이월(충당)" border="0" color="33554432" x="545" y="2" height="14" width="85" html.valueishtml="0"  name=provision_sum_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="충당" border="0" color="33554432" x="632" y="2" height="14" width="84" html.valueishtml="0"  name=provision_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이월(재측정)" border="0" color="33554432" x="808" y="2" height="14" width="95" html.valueishtml="0"  name=recalibrate_sum_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="재측정" border="0" color="33554432" x="905" y="2" height="14" width="68" html.valueishtml="0"  name=recalibrate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="충당부채지급액" border="0" color="33554432" x="1169" y="2" height="14" width="128" html.valueishtml="0"  name=comp_provision_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="1399" y="2" height="14" width="98" html.valueishtml="0"  name=tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="41" y="2" height="14" width="68" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="111" y="2" height="14" width="189" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이월(지급액)" border="0" color="33554432" x="1070" y="2" height="14" width="97" html.valueishtml="0"  name=comp_provision_sum_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계(지급액)" border="0" color="33554432" x="1299" y="2" height="14" width="98" html.valueishtml="0"  name=tot_comp_provision_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="365" y="2" height="17" width="56" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="302" y="2" height="17" width="61" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="423" y="2" height="17" width="120" format="[general]" html.valueishtml="0"  name=rrn visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="41" y="2" height="17" width="68" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="111" y="2" height="17" width="189" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432~tif(tot_provision<0,rgb(255,0,0),rgb(0,0,0))" x="718" y="2" height="17" width="88" format="#,##0" html.valueishtml="0"  name=tot_provision visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="33554432~tif(tot_recalibrate<0,rgb(255,0,0),rgb(0,0,0))" x="975" y="2" height="17" width="93" format="#,##0" html.valueishtml="0"  name=tot_recalibrate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432~tif(provision_sum<0,rgb(255,0,0),rgb(0,0,0))" x="545" y="2" height="17" width="85" format="#,##0" html.valueishtml="0"  name=provision_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432~tif(provision_amt<0,rgb(255,0,0),rgb(0,0,0))" x="632" y="2" height="17" width="84" format="#,##0" html.valueishtml="0"  name=provision_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432~tif(recalibrate_sum<0,rgb(255,0,0),rgb(0,0,0))" x="808" y="2" height="17" width="95" format="#,##0" html.valueishtml="0"  name=recalibrate_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432~tif(recalibrate<0,rgb(255,0,0),rgb(0,0,0))" x="905" y="2" height="17" width="68" format="#,##0" html.valueishtml="0"  name=recalibrate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432~tif(comp_provision_amt<0,rgb(255,0,0),rgb(0,0,0))" x="1169" y="2" height="17" width="128" format="#,##0" html.valueishtml="0"  name=comp_provision_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432~tif(tot_amt<0,rgb(255,0,0),rgb(0,0,0))" x="1399" y="2" height="17" width="98" format="#,##0" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="1070" y="2" height="17" width="97" format="#,##0" html.valueishtml="0"  name=comp_provision_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="33554432" x="1299" y="2" height="17" width="98" format="#,##0" html.valueishtml="0"  name=tot_comp_provision visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(tot_provision)"border="0" color="33554432~tif(compute_2<0,rgb(255,0,0),rgb(0,0,0))" x="718" y="2" height="14" width="88" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(PROVISION_SUM)"border="0" color="33554432~tif(compute_5<0,rgb(255,0,0),rgb(0,0,0))" x="545" y="2" height="14" width="85" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(PROVISION_AMT)"border="0" color="33554432~tif(compute_6<0,rgb(255,0,0),rgb(0,0,0))" x="632" y="2" height="14" width="84" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(RECALIBRATE_SUM)"border="0" color="33554432~tif(compute_7<0,rgb(255,0,0),rgb(0,0,0))" x="808" y="2" height="14" width="95" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(RECALIBRATE)"border="0" color="33554432~tif(compute_8<0,rgb(255,0,0),rgb(0,0,0))" x="905" y="2" height="14" width="68" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM( tot_recalibrate )"border="0" color="33554432~tif(compute_3<0,rgb(255,0,0),rgb(0,0,0))" x="975" y="2" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUm(TOT_AMT)"border="0" color="33554432~tif(compute_4<0,rgb(255,0,0),rgb(0,0,0))" x="1399" y="2" height="14" width="98" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(COMP_PROVISION_AMT)"border="0" color="33554432~tif(compute_9<0,rgb(255,0,0),rgb(0,0,0))" x="1169" y="2" height="14" width="128" format="#,##0" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(comp_provision_sum)"border="0" color="33554432" x="1070" y="2" height="14" width="97" format="#,##0" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(tot_comp_provision)"border="0" color="33554432" x="1299" y="2" height="14" width="98" format="#,##0" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

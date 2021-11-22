@@ -1,0 +1,38 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(1) updatewhereclause=yes name=select_tag dbname="select_tag" values="	Y/	N" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=cert_regno dbname="xxsb_dti_cert.cert_regno" )
+ column=(type=char(70) update=yes updatewhereclause=yes name=cert_comname dbname="xxsb_dti_cert.cert_comname" )
+ column=(type=char(150) update=yes updatewhereclause=yes name=userdn dbname="xxsb_dti_cert.userdn" )
+ column=(type=char(32759) update=yes updatewhereclause=no name=userinfo dbname="xxsb_dti_cert.userinfo" )
+ column=(type=datetime update=yes updatewhereclause=yes name=expiration_date dbname="xxsb_dti_cert.expiration_date" )
+ retrieve="  SELECT 'N' AS SELECT_TAG,
+         A.CERT_REGNO,   
+         A.CERT_COMNAME,   
+         A.USERDN,   
+         A.USERINFO,   
+         A.EXPIRATION_DATE  
+    FROM XXSB_DTI_CERT A  
+" update="XXSB_DTI_CERT" updatewhere=1 updatekeyinplace=no )
+text(band=header alignment="2" text="사업자번호" border="0" color="16711680" x="49" y="2" height="14" width="87" html.valueishtml="0"  name=cert_regno_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인증서DN" border="0" color="33554432" x="327" y="2" height="14" width="290" html.valueishtml="0"  name=userdn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인증서정보" border="0" color="33554432" x="619" y="2" height="14" width="129" html.valueishtml="0"  name=userinfo_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="만료일" border="0" color="33554432" x="750" y="2" height="14" width="131" html.valueishtml="0"  name=expiration_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="2" y="2" height="14" width="45" html.valueishtml="0"  name=select_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회사명" border="0" color="16711680" x="138" y="2" height="14" width="187" html.valueishtml="0"  name=cert_comname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=40 border="0" color="33554432" x="327" y="2" height="17" width="290" format="[general]" html.valueishtml="0"  name=userdn visible="1" edit.limit=150 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="619" y="2" height="17" width="129" format="[general]" html.valueishtml="0"  name=userinfo visible="1" edit.limit=32000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="750" y="2" height="17" width="131" format="[shortdate] [time]" html.valueishtml="0"  name=expiration_date visible="1" editmask.mask="mm/dd/yy hh:mm:ss:fff" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="33554432" x="2" y="2" height="17" width="45" format="[general]" html.valueishtml="0"  name=select_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=20 border="0" color="33554432" x="49" y="2" height="17" width="87" format="@@@-@@-@@@@@" html.valueishtml="0"  name=cert_regno visible="1" editmask.mask="XXX-XX-XXXXX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=30 border="0" color="33554432" x="138" y="2" height="17" width="187" format="[general]" html.valueishtml="0"  name=cert_comname visible="1" edit.limit=70 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0 edit.displayonly=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

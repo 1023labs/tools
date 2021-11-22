@@ -1,0 +1,415 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=24 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_exec_plan_month_temp.company_code" dbalias="A.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_exec_plan_month_temp.proj_code" dbalias="A.proj_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_name dbname="cm_exec_plan_month_temp.const_name" dbalias="A.const_name" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_acnt_name dbname="const_acnt_name" )
+ column=(type=number update=yes updatewhereclause=yes name=exec_amt dbname="cm_exec_plan_month_temp.exec_amt" dbalias="A.exec_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=chg_amt dbname="cm_exec_plan_month_temp.chg_amt" dbalias="A.chg_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=pre_year_amt dbname="cm_exec_plan_month_temp.pre_year_amt" dbalias="A.pre_year_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=cur_year_amt dbname="cm_exec_plan_month_temp.cur_year_amt" dbalias="A.cur_year_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=tot_year_amt dbname="cm_exec_plan_month_temp.tot_year_amt" dbalias="A.tot_year_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=plan01 dbname="cm_exec_plan_month_temp.plan01" dbalias="A.plan01" )
+ column=(type=number update=yes updatewhereclause=yes name=plan02 dbname="cm_exec_plan_month_temp.plan02" dbalias="A.plan02" )
+ column=(type=number update=yes updatewhereclause=yes name=plan03 dbname="cm_exec_plan_month_temp.plan03" dbalias="A.plan03" )
+ column=(type=number update=yes updatewhereclause=yes name=plan04 dbname="cm_exec_plan_month_temp.plan04" dbalias="A.plan04" )
+ column=(type=number update=yes updatewhereclause=yes name=plan05 dbname="cm_exec_plan_month_temp.plan05" dbalias="A.plan05" )
+ column=(type=number update=yes updatewhereclause=yes name=plan06 dbname="cm_exec_plan_month_temp.plan06" dbalias="A.plan06" )
+ column=(type=number update=yes updatewhereclause=yes name=plan07 dbname="cm_exec_plan_month_temp.plan07" dbalias="A.plan07" )
+ column=(type=number update=yes updatewhereclause=yes name=plan08 dbname="cm_exec_plan_month_temp.plan08" dbalias="A.plan08" )
+ column=(type=number update=yes updatewhereclause=yes name=plan09 dbname="cm_exec_plan_month_temp.plan09" dbalias="A.plan09" )
+ column=(type=number update=yes updatewhereclause=yes name=plan10 dbname="cm_exec_plan_month_temp.plan10" dbalias="A.plan10" )
+ column=(type=number update=yes updatewhereclause=yes name=plan11 dbname="cm_exec_plan_month_temp.plan11" dbalias="A.plan11" )
+ column=(type=number update=yes updatewhereclause=yes name=plan12 dbname="cm_exec_plan_month_temp.plan12" dbalias="A.plan12" )
+ column=(type=number update=yes updatewhereclause=yes name=year01 dbname="cm_exec_plan_month_temp.year01" dbalias="A.year01" )
+ column=(type=number update=yes updatewhereclause=yes name=year02 dbname="cm_exec_plan_month_temp.year02" dbalias="A.year02" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=sort_order dbname="cm_exec_plan_month_temp.sort_order" dbalias="A.sort_order" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=sort_order2 dbname="cm_exec_plan_month_temp.sort_order2" dbalias="A.sort_order2" )
+ column=(type=number updatewhereclause=yes name=plan_tot_amt dbname="cm_exec_plan_month_temp.plan_tot_amt" dbalias="A.plan_tot_amt" )
+ column=(type=number updatewhereclause=yes name=sum_tot_amt dbname="cm_exec_plan_month_temp.sum_tot_amt" dbalias="A.sum_tot_amt" )
+ column=(type=number updatewhereclause=yes name=etc_tot_amt dbname="cm_exec_plan_month_temp.etc_tot_amt" dbalias="A.etc_tot_amt" )
+ retrieve="SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+       A.PROJ_CODE        AS PROJ_CODE,
+       A.CONST_NAME       AS CONST_NAME,
+       DECODE(A.CONST_ACNT_NAME,'공사매출','',A.CONST_ACNT_NAME)  AS CONST_ACNT_NAME,
+       A.EXEC_AMT         AS EXEC_AMT,
+       A.CHG_AMT          AS CHG_AMT,
+       A.PRE_YEAR_AMT     AS PRE_YEAR_AMT,
+       A.CUR_YEAR_AMT     AS CUR_YEAR_AMT,
+       A.TOT_YEAR_AMT     AS TOT_YEAR_AMT,
+       A.PLAN01           AS PLAN01,
+       A.PLAN02           AS PLAN02,
+       A.PLAN03           AS PLAN03,
+       A.PLAN04           AS PLAN04,
+       A.PLAN05           AS PLAN05,
+       A.PLAN06           AS PLAN06,
+       A.PLAN07           AS PLAN07,
+       A.PLAN08           AS PLAN08,
+       A.PLAN09           AS PLAN09,
+       A.PLAN10           AS PLAN10,
+       A.PLAN11           AS PLAN11,
+       A.PLAN12           AS PLAN12,
+       A.YEAR01           AS YEAR01,
+       A.YEAR02           AS YEAR02,
+       A.SORT_ORDER       AS SORT_ORDER,
+       A.SORT_ORDER2      AS SORT_ORDER2,
+       A.PLAN_TOT_AMT     AS PLAN_TOT_AMT,
+       A.SUM_TOT_AMT      AS SUM_TOT_AMT,
+       A.ETC_TOT_AMT      AS ETC_TOT_AMT
+  FROM CM_EXEC_PLAN_MONTH_TEMP A
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PROJ_CODE    = :as_proj
+   AND A.CONST_ACNT_NAME NOT IN('공통자재공사','기계실배관공사')
+UNION ALL
+SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+       A.PROJ_CODE        AS PROJ_CODE,
+       A.CONST_NAME       AS CONST_NAME,
+       '소계'             AS CONST_ACNT_NAME,
+       SUM(A.EXEC_AMT)         AS EXEC_AMT,
+       SUM(A.CHG_AMT)          AS CHG_AMT,
+       SUM(A.PRE_YEAR_AMT)     AS PRE_YEAR_AMT,
+       SUM(A.CUR_YEAR_AMT)     AS CUR_YEAR_AMT,
+       SUM(A.TOT_YEAR_AMT)     AS TOT_YEAR_AMT,
+       SUM(A.PLAN01)           AS PLAN01,
+       SUM(A.PLAN02)           AS PLAN02,
+       SUM(A.PLAN03)           AS PLAN03,
+       SUM(A.PLAN04)           AS PLAN04,
+       SUM(A.PLAN05)           AS PLAN05,
+       SUM(A.PLAN06)           AS PLAN06,
+       SUM(A.PLAN07)           AS PLAN07,
+       SUM(A.PLAN08)           AS PLAN08,
+       SUM(A.PLAN09)           AS PLAN09,
+       SUM(A.PLAN10)           AS PLAN10,
+       SUM(A.PLAN11)           AS PLAN11,
+       SUM(A.PLAN12)           AS PLAN12,
+       SUM(A.YEAR01)           AS YEAR01,
+       SUM(A.YEAR02)           AS YEAR02,
+       '99'                   AS SORT_ORDER,
+       '3'                    AS SORT_ORDER2,
+       SUM(A.PLAN_TOT_AMT)     AS PLAN_TOT_AMT,
+       SUM(A.SUM_TOT_AMT)      AS SUM_TOT_AMT,
+       SUM(A.ETC_TOT_AMT)      AS ETC_TOT_AMT
+  FROM CM_EXEC_PLAN_MONTH_TEMP A
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PROJ_CODE    = :as_proj
+   AND A.SORT_ORDER2 = '2'  
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONST_NAME 
+UNION ALL
+--SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+--       A.PROJ_CODE        AS PROJ_CODE,
+--       A.CONST_NAME       AS CONST_NAME,
+--       '소계'             AS CONST_ACNT_NAME,
+--       SUM(A.EXEC_AMT)         AS EXEC_AMT,
+--       SUM(A.CHG_AMT)          AS CHG_AMT,
+--       SUM(A.PRE_YEAR_AMT)     AS PRE_YEAR_AMT,
+--       SUM(A.CUR_YEAR_AMT)     AS CUR_YEAR_AMT,
+--       SUM(A.TOT_YEAR_AMT)     AS TOT_YEAR_AMT,
+--       SUM(A.PLAN01)           AS PLAN01,
+--       SUM(A.PLAN02)           AS PLAN02,
+--       SUM(A.PLAN03)           AS PLAN03,
+--       SUM(A.PLAN04)           AS PLAN04,
+--       SUM(A.PLAN05)           AS PLAN05,
+--       SUM(A.PLAN06)           AS PLAN06,
+--       SUM(A.PLAN07)           AS PLAN07,
+--       SUM(A.PLAN08)           AS PLAN08,
+--       SUM(A.PLAN09)           AS PLAN09,
+--       SUM(A.PLAN10)           AS PLAN10,
+--       SUM(A.PLAN11)           AS PLAN11,
+--       SUM(A.PLAN12)           AS PLAN12,
+--       SUM(A.YEAR01)           AS YEAR01,
+--       SUM(A.YEAR02)           AS YEAR02,
+--       '99'                   AS SORT_ORDER,
+--       '8'                    AS SORT_ORDER2,
+--       SUM(A.PLAN_TOT_AMT)     AS PLAN_TOT_AMT,
+--       SUM(A.SUM_TOT_AMT)      AS SUM_TOT_AMT,
+--       SUM(A.ETC_TOT_AMT)      AS ETC_TOT_AMT
+--  FROM CM_EXEC_PLAN_MONTH_TEMP A
+-- WHERE A.COMPANY_CODE = :as_comp
+--   AND A.PROJ_CODE    = :as_proj
+--   AND A.SORT_ORDER2 IN('6','7')  
+--GROUP BY A.COMPANY_CODE,
+--         A.PROJ_CODE,
+--         A.CONST_NAME      
+--UNION ALL
+SELECT A.COMPANY_CODE                  AS COMPANY_CODE,
+       A.PROJ_CODE                     AS PROJ_CODE,
+       '공사이익'                      AS CONST_NAME,
+       ''                              AS CONST_ACNT_NAME,
+       A.EXEC_AMT - B.EXEC_AMT         AS EXEC_AMT,
+       A.CHG_AMT - B.CHG_AMT           AS CHG_AMT,
+       A.PRE_YEAR_AMT - B.PRE_YEAR_AMT AS PRE_YEAR_AMT,
+       A.CUR_YEAR_AMT - B.CUR_YEAR_AMT AS CUR_YEAR_AMT,
+       A.TOT_YEAR_AMT - B.TOT_YEAR_AMT AS TOT_YEAR_AMT,
+       A.PLAN01 - B.PLAN01             AS PLAN01,
+       A.PLAN02 - B.PLAN02             AS PLAN02,
+       A.PLAN03 - B.PLAN03             AS PLAN03,
+       A.PLAN04 - B.PLAN04             AS PLAN04,
+       A.PLAN05 - B.PLAN05             AS PLAN05,
+       A.PLAN06 - B.PLAN06             AS PLAN06,
+       A.PLAN07 - B.PLAN07             AS PLAN07,
+       A.PLAN08 - B.PLAN08             AS PLAN08,
+       A.PLAN09 - B.PLAN09             AS PLAN09,
+       A.PLAN10 - B.PLAN10             AS PLAN10,
+       A.PLAN11 - B.PLAN11             AS PLAN11,
+       A.PLAN12 - B.PLAN12             AS PLAN12,
+       A.YEAR01 - B.YEAR01             AS YEAR01,
+       A.YEAR02 - B.YEAR02             AS YEAR02,
+       '99'                            AS SORT_ORDER,
+       '4'                             AS SORT_ORDER2,
+       A.PLAN_TOT_AMT - B.PLAN_TOT_AMT     AS PLAN_TOT_AMT,
+       A.SUM_TOT_AMT - B.SUM_TOT_AMT     AS SUM_TOT_AMT,
+       A.ETC_TOT_AMT - B.ETC_TOT_AMT      AS ETC_TOT_AMT
+  FROM CM_EXEC_PLAN_MONTH_TEMP A LEFT JOIN (SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+                                                   A.PROJ_CODE        AS PROJ_CODE,
+                                                   A.CONST_NAME       AS CONST_NAME,
+                                                   '소계'             AS CONST_ACNT_NAME,
+                                                   SUM(A.EXEC_AMT)         AS EXEC_AMT,
+                                                   SUM(A.CHG_AMT)          AS CHG_AMT,
+                                                   SUM(A.PRE_YEAR_AMT)     AS PRE_YEAR_AMT,
+                                                   SUM(A.CUR_YEAR_AMT)     AS CUR_YEAR_AMT,
+                                                   SUM(A.TOT_YEAR_AMT)     AS TOT_YEAR_AMT,
+                                                   SUM(A.PLAN01)           AS PLAN01,
+                                                   SUM(A.PLAN02)           AS PLAN02,
+                                                   SUM(A.PLAN03)           AS PLAN03,
+                                                   SUM(A.PLAN04)           AS PLAN04,
+                                                   SUM(A.PLAN05)           AS PLAN05,
+                                                   SUM(A.PLAN06)           AS PLAN06,
+                                                   SUM(A.PLAN07)           AS PLAN07,
+                                                   SUM(A.PLAN08)           AS PLAN08,
+                                                   SUM(A.PLAN09)           AS PLAN09,
+                                                   SUM(A.PLAN10)           AS PLAN10,
+                                                   SUM(A.PLAN11)           AS PLAN11,
+                                                   SUM(A.PLAN12)           AS PLAN12,
+                                                   SUM(A.YEAR01)           AS YEAR01,
+                                                   SUM(A.YEAR02)           AS YEAR02,
+                                                   '99'                   AS SORT_ORDER,
+                                                   '3'                    AS SORT_ORDER2,
+                                                   SUM(A.PLAN_TOT_AMT)    AS PLAN_TOT_AMT,
+                                                   SUM(A.SUM_TOT_AMT)     AS SUM_TOT_AMT,
+                                                   SUM(A.ETC_TOT_AMT)      AS ETC_TOT_AMT
+                                              FROM CM_EXEC_PLAN_MONTH_TEMP A
+                                             WHERE A.COMPANY_CODE = :as_comp
+                                               AND A.PROJ_CODE    = :as_proj
+                                               AND A.SORT_ORDER2 = '2'  
+                                            GROUP BY A.COMPANY_CODE,
+                                                     A.PROJ_CODE,
+                                                     A.CONST_NAME ) B
+                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                        AND A.PROJ_CODE    = B.PROJ_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PROJ_CODE    = :as_proj
+   AND A.SORT_ORDER2 = '1'    
+UNION ALL
+SELECT A.COMPANY_CODE                                     AS COMPANY_CODE,
+       A.PROJ_CODE                                        AS PROJ_CODE,
+       '손익율'                                           AS CONST_NAME,
+       ''                                                 AS CONST_ACNT_NAME,
+       DECODE(A.EXEC_AMT,0,0,TRUNC(100 - TRUNC((B.EXEC_AMT/A.EXEC_AMT)*100,2),2))         AS EXEC_AMT,
+       DECODE(A.CHG_AMT,0,0,TRUNC(100 - TRUNC((B.CHG_AMT/A.CHG_AMT)*100,2),2))           AS CHG_AMT,
+       DECODE(A.PRE_YEAR_AMT,0,0,TRUNC(100 - TRUNC((B.PRE_YEAR_AMT/A.PRE_YEAR_AMT)*100,2),2)) AS PRE_YEAR_AMT,
+       DECODE(A.CUR_YEAR_AMT,0,0,TRUNC(100 - TRUNC((B.CUR_YEAR_AMT/A.CUR_YEAR_AMT)*100,2),2)) AS CUR_YEAR_AMT,
+       DECODE(A.TOT_YEAR_AMT,0,0,TRUNC(100 - TRUNC((B.TOT_YEAR_AMT/A.TOT_YEAR_AMT)*100,2),2)) AS TOT_YEAR_AMT,
+       DECODE(A.PLAN01,0,0,TRUNC(100 - TRUNC((B.PLAN01/A.PLAN01)*100,2),2))             AS PLAN01,
+       DECODE(A.PLAN02,0,0,TRUNC(100 - TRUNC((B.PLAN02/A.PLAN02)*100,2),2))             AS PLAN02,
+       DECODE(A.PLAN03,0,0,TRUNC(100 - TRUNC((B.PLAN03/A.PLAN03)*100,2),2))             AS PLAN03,
+       DECODE(A.PLAN04,0,0,TRUNC(100 - TRUNC((B.PLAN04/A.PLAN04)*100,2),2))             AS PLAN04,
+       DECODE(A.PLAN05,0,0,TRUNC(100 - TRUNC((B.PLAN05/A.PLAN05)*100,2),2))             AS PLAN05,
+       DECODE(A.PLAN06,0,0,TRUNC(100 - TRUNC((B.PLAN06/A.PLAN06)*100,2),2))            AS PLAN06,
+       DECODE(A.PLAN07,0,0,TRUNC(100 - TRUNC((B.PLAN07/A.PLAN07)*100,2),2))             AS PLAN07,
+       DECODE(A.PLAN08,0,0,TRUNC(100 - TRUNC((B.PLAN08/A.PLAN08)*100,2),2))             AS PLAN08,
+       DECODE(A.PLAN09,0,0,TRUNC(100 - TRUNC((B.PLAN09/A.PLAN09)*100,2),2))            AS PLAN09,
+       DECODE(A.PLAN10,0,0,TRUNC(100 - TRUNC((B.PLAN10/A.PLAN10)*100,2),2))             AS PLAN10,
+       DECODE(A.PLAN11,0,0,TRUNC(100 - TRUNC((B.PLAN11/A.PLAN11)*100,2),2))             AS PLAN11,
+       DECODE(A.PLAN12,0,0,TRUNC(100 - TRUNC((B.PLAN12/A.PLAN12)*100,2),2))             AS PLAN12,
+       DECODE(A.YEAR01,0,0,TRUNC(100 - TRUNC((B.YEAR01/A.YEAR01)*100,2),2))             AS YEAR01,
+       DECODE(A.YEAR02,0,0,TRUNC(100 - TRUNC((B.YEAR02/A.YEAR02)*100,2),2))             AS YEAR02,
+       '99'                            AS SORT_ORDER,
+       '5'                             AS SORT_ORDER2,
+       DECODE(A.PLAN_TOT_AMT,0,0,TRUNC(100 - TRUNC((B.PLAN_TOT_AMT/A.PLAN_TOT_AMT)*100,2),2)) AS PLAN_TOT_AMT,
+       DECODE(A.SUM_TOT_AMT,0,0,TRUNC(100 - TRUNC((B.SUM_TOT_AMT/A.SUM_TOT_AMT)*100,2),2))    AS SUM_TOT_AMT,
+       DECODE(A.ETC_TOT_AMT,0,0,TRUNC(100 - TRUNC((B.ETC_TOT_AMT/A.ETC_TOT_AMT)*100,2),2))    AS ETC_TOT_AMT
+  FROM CM_EXEC_PLAN_MONTH_TEMP A LEFT JOIN (SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+                                                   A.PROJ_CODE        AS PROJ_CODE,
+                                                   A.CONST_NAME       AS CONST_NAME,
+                                                   '소   계'             AS CONST_ACNT_NAME,
+                                                   SUM(A.EXEC_AMT)         AS EXEC_AMT,
+                                                   SUM(A.CHG_AMT)          AS CHG_AMT,
+                                                   SUM(A.PRE_YEAR_AMT)     AS PRE_YEAR_AMT,
+                                                   SUM(A.CUR_YEAR_AMT)     AS CUR_YEAR_AMT,
+                                                   SUM(A.TOT_YEAR_AMT)     AS TOT_YEAR_AMT,
+                                                   SUM(A.PLAN01)           AS PLAN01,
+                                                   SUM(A.PLAN02)           AS PLAN02,
+                                                   SUM(A.PLAN03)           AS PLAN03,
+                                                   SUM(A.PLAN04)           AS PLAN04,
+                                                   SUM(A.PLAN05)           AS PLAN05,
+                                                   SUM(A.PLAN06)           AS PLAN06,
+                                                   SUM(A.PLAN07)           AS PLAN07,
+                                                   SUM(A.PLAN08)           AS PLAN08,
+                                                   SUM(A.PLAN09)           AS PLAN09,
+                                                   SUM(A.PLAN10)           AS PLAN10,
+                                                   SUM(A.PLAN11)           AS PLAN11,
+                                                   SUM(A.PLAN12)           AS PLAN12,
+                                                   SUM(A.YEAR01)           AS YEAR01,
+                                                   SUM(A.YEAR02)           AS YEAR02,
+                                                   '99'                   AS SORT_ORDER,
+                                                   '3'                    AS SORT_ORDER2,
+                                                   SUM(A.PLAN_TOT_AMT)    AS PLAN_TOT_AMT,
+                                                   SUM(A.SUM_TOT_AMT)     AS SUM_TOT_AMT,
+                                                   SUM(A.ETC_TOT_AMT)      AS ETC_TOT_AMT
+                                              FROM CM_EXEC_PLAN_MONTH_TEMP A
+                                             WHERE A.COMPANY_CODE = :as_comp
+                                               AND A.PROJ_CODE    = :as_proj
+                                               AND A.SORT_ORDER2 = '2'  
+                                            GROUP BY A.COMPANY_CODE,
+                                                     A.PROJ_CODE,
+                                                     A.CONST_NAME ) B
+                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                        AND A.PROJ_CODE    = B.PROJ_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PROJ_CODE    = :as_proj
+   AND A.SORT_ORDER2 = '1'       
+UNION ALL
+SELECT A.COMPANY_CODE                                     AS COMPANY_CODE,
+       A.PROJ_CODE                                        AS PROJ_CODE,
+       '원가율'                                           AS CONST_NAME,
+       ''                                                 AS CONST_ACNT_NAME,
+       DECODE(A.EXEC_AMT,0,0,TRUNC((B.EXEC_AMT/A.EXEC_AMT)*100,2))         AS EXEC_AMT,
+       DECODE(A.CHG_AMT,0,0,TRUNC((B.CHG_AMT/A.CHG_AMT)*100,2))           AS CHG_AMT,
+       DECODE(A.PRE_YEAR_AMT,0,0,TRUNC((B.PRE_YEAR_AMT/A.PRE_YEAR_AMT)*100,2)) AS PRE_YEAR_AMT,
+       DECODE(A.CUR_YEAR_AMT,0,0,TRUNC((B.CUR_YEAR_AMT/A.CUR_YEAR_AMT)*100,2)) AS CUR_YEAR_AMT,
+       DECODE(A.TOT_YEAR_AMT,0,0,TRUNC((B.TOT_YEAR_AMT/A.TOT_YEAR_AMT)*100,2)) AS TOT_YEAR_AMT,
+       DECODE(A.PLAN01,0,0,TRUNC((B.PLAN01/A.PLAN01)*100,2))             AS PLAN01,
+       DECODE(A.PLAN02,0,0,TRUNC((B.PLAN02/A.PLAN02)*100,2))             AS PLAN02,
+       DECODE(A.PLAN03,0,0,TRUNC((B.PLAN03/A.PLAN03)*100,2))             AS PLAN03,
+       DECODE(A.PLAN04,0,0,TRUNC((B.PLAN04/A.PLAN04)*100,2))             AS PLAN04,
+       DECODE(A.PLAN05,0,0,TRUNC((B.PLAN05/A.PLAN05)*100,2))             AS PLAN05,
+       DECODE(A.PLAN06,0,0,TRUNC((B.PLAN06/A.PLAN06)*100,2))             AS PLAN06,
+       DECODE(A.PLAN07,0,0,TRUNC((B.PLAN07/A.PLAN07)*100,2))             AS PLAN07,
+       DECODE(A.PLAN08,0,0,TRUNC((B.PLAN08/A.PLAN08)*100,2))             AS PLAN08,
+       DECODE(A.PLAN09,0,0,TRUNC((B.PLAN09/A.PLAN09)*100,2))             AS PLAN09,
+       DECODE(A.PLAN10,0,0,TRUNC((B.PLAN10/A.PLAN10)*100,2))             AS PLAN10,
+       DECODE(A.PLAN11,0,0,TRUNC((B.PLAN11/A.PLAN11)*100,2))             AS PLAN11,
+       DECODE(A.PLAN12,0,0,TRUNC((B.PLAN12/A.PLAN12)*100,2))             AS PLAN12,
+       DECODE(A.YEAR01,0,0,TRUNC((B.YEAR01/A.YEAR01)*100,2))             AS YEAR01,
+       DECODE(A.YEAR02,0,0,TRUNC((B.YEAR02/A.YEAR02)*100,2))             AS YEAR02,
+       '99'                            AS SORT_ORDER,
+       '9'                             AS SORT_ORDER2,
+       DECODE(A.PLAN_TOT_AMT,0,0,TRUNC((B.PLAN_TOT_AMT/A.PLAN_TOT_AMT)*100,2)) AS PLAN_TOT_AMT,
+       DECODE(A.SUM_TOT_AMT,0,0,TRUNC((B.SUM_TOT_AMT/A.SUM_TOT_AMT)*100,2))    AS SUM_TOT_AMT,
+       DECODE(A.ETC_TOT_AMT,0,0,TRUNC((B.ETC_TOT_AMT/A.ETC_TOT_AMT)*100,2))    AS ETC_TOT_AMT
+  FROM CM_EXEC_PLAN_MONTH_TEMP A LEFT JOIN (SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+                                                   A.PROJ_CODE        AS PROJ_CODE,
+                                                   A.CONST_NAME       AS CONST_NAME,
+                                                   '소계'             AS CONST_ACNT_NAME,
+                                                   SUM(A.EXEC_AMT)         AS EXEC_AMT,
+                                                   SUM(A.CHG_AMT)          AS CHG_AMT,
+                                                   SUM(A.PRE_YEAR_AMT)     AS PRE_YEAR_AMT,
+                                                   SUM(A.CUR_YEAR_AMT)     AS CUR_YEAR_AMT,
+                                                   SUM(A.TOT_YEAR_AMT)     AS TOT_YEAR_AMT,
+                                                   SUM(A.PLAN01)           AS PLAN01,
+                                                   SUM(A.PLAN02)           AS PLAN02,
+                                                   SUM(A.PLAN03)           AS PLAN03,
+                                                   SUM(A.PLAN04)           AS PLAN04,
+                                                   SUM(A.PLAN05)           AS PLAN05,
+                                                   SUM(A.PLAN06)           AS PLAN06,
+                                                   SUM(A.PLAN07)           AS PLAN07,
+                                                   SUM(A.PLAN08)           AS PLAN08,
+                                                   SUM(A.PLAN09)           AS PLAN09,
+                                                   SUM(A.PLAN10)           AS PLAN10,
+                                                   SUM(A.PLAN11)           AS PLAN11,
+                                                   SUM(A.PLAN12)           AS PLAN12,
+                                                   SUM(A.YEAR01)           AS YEAR01,
+                                                   SUM(A.YEAR02)           AS YEAR02,
+                                                   '99'                   AS SORT_ORDER,
+                                                   '3'                    AS SORT_ORDER2,
+                                                   SUM(A.PLAN_TOT_AMT)    AS PLAN_TOT_AMT,
+                                                   SUM(A.SUM_TOT_AMT)     AS SUM_TOT_AMT,
+                                                   SUM(A.ETC_TOT_AMT)      AS ETC_TOT_AMT
+                                              FROM CM_EXEC_PLAN_MONTH_TEMP A
+                                             WHERE A.COMPANY_CODE = :as_comp
+                                               AND A.PROJ_CODE    = :as_proj
+                                               AND A.SORT_ORDER2 = '2'  
+                                            GROUP BY A.COMPANY_CODE,
+                                                     A.PROJ_CODE,
+                                                     A.CONST_NAME ) B
+                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                        AND A.PROJ_CODE    = B.PROJ_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PROJ_CODE    = :as_proj
+   AND A.SORT_ORDER2 = '1'   
+ORDER BY SORT_ORDER2,SORT_ORDER     " arguments=(("as_comp", string),("as_proj", string)) )
+text(band=header alignment="1" text="구   " border="0" color="33554432" x="2" y="7" height="14" width="69" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="       분" border="0" color="33554432" x="73" y="7" height="14" width="82" html.valueishtml="0"  name=const_acnt_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전년실적" border="0" color="33554432" x="465" y="7" height="14" width="71" html.valueishtml="0"  name=pre_year_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당년실적" border="0" color="33554432" x="538" y="7" height="14" width="73" html.valueishtml="0"  name=cur_year_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계실적" border="0" color="33554432" x="613" y="7" height="14" width="70" html.valueishtml="0"  name=tot_year_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="01월" border="0" color="33554432" x="766" y="7" height="14" width="56" html.valueishtml="0"  name=plan01_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="02월" border="0" color="33554432" x="824" y="7" height="14" width="54" html.valueishtml="0"  name=plan02_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="03월" border="0" color="33554432" x="880" y="7" height="14" width="58" html.valueishtml="0"  name=plan03_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="04월" border="0" color="33554432" x="940" y="7" height="14" width="58" html.valueishtml="0"  name=plan04_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="05월" border="0" color="33554432" x="1000" y="7" height="14" width="55" html.valueishtml="0"  name=plan05_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="06월" border="0" color="33554432" x="1057" y="7" height="14" width="56" html.valueishtml="0"  name=plan06_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="07월" border="0" color="33554432" x="1115" y="7" height="14" width="58" html.valueishtml="0"  name=plan07_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="08월" border="0" color="33554432" x="1175" y="7" height="14" width="60" html.valueishtml="0"  name=plan08_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="09월" border="0" color="33554432" x="1237" y="7" height="14" width="61" html.valueishtml="0"  name=plan09_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="10월" border="0" color="33554432" x="1300" y="7" height="14" width="62" html.valueishtml="0"  name=plan10_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="11월" border="0" color="33554432" x="1364" y="7" height="14" width="62" html.valueishtml="0"  name=plan11_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="12월" border="0" color="33554432" x="1428" y="7" height="14" width="60" html.valueishtml="0"  name=plan12_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Y + 1" border="0" color="33554432" x="1490" y="7" height="14" width="60" html.valueishtml="0"  name=year01_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Y + 2" border="0" color="33554432" x="1552" y="7" height="14" width="62" html.valueishtml="0"  name=year02_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Sort Order" border="0" color="33554432" x="1616" y="7" height="14" width="18" html.valueishtml="0"  name=sort_order_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Sort Order2" border="0" color="33554432" x="1636" y="7" height="14" width="19" html.valueishtml="0"  name=sort_order2_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="1657" y="7" height="14" width="16" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Proj Code" border="0" color="33554432" x="1675" y="7" height="14" width="17" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="확정예산" border="0" color="33554432" x="297" y="7" height="14" width="77" html.valueishtml="0"  name=plan_tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전체원가" border="0" color="33554432" x="376" y="7" height="14" width="87" html.valueishtml="0"  name=sum_tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="잔여예산" border="0" color="33554432" x="685" y="7" height="14" width="79" html.valueishtml="0"  name=etc_tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확 정" border="0" color="33554432" x="157" y="7" height="14" width="67" html.valueishtml="0"  name=exec_amt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경 예상" border="0" color="33554432" x="226" y="7" height="14" width="69" html.valueishtml="0"  name=chg_amt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="73" y="0" height="25" width="1541"  name=r_1 visible="1~tif(  sort_order2 = '3' or sort_order2 = '8', 1, 0 )" brush.hatch="6" brush.color="15793151" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="2" y="6" height="15" width="69" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9', 1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1657" y="6" height="15" width="16" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="1675" y="6" height="15" width="17" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=24 alignment="0" tabsequence=32766 border="0" color="33554432" x="1616" y="6" height="15" width="18" format="[general]" html.valueishtml="0"  name=sort_order visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="0" tabsequence=32766 border="0" color="33554432" x="1636" y="6" height="15" width="19" format="[general]" html.valueishtml="0"  name=sort_order2 visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="73" y="6" height="15" width="82" format="[general]" html.valueishtml="0"  name=const_acnt_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="465" y="6" height="15" width="71" format="#,###.##" html.valueishtml="0"  name=pre_year_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="538" y="6" height="15" width="73" format="#,###.##" html.valueishtml="0"  name=cur_year_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="613" y="6" height="15" width="70" format="#,###.##" html.valueishtml="0"  name=tot_year_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="766" y="6" height="15" width="56" format="#,###.##" html.valueishtml="0"  name=plan01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="824" y="6" height="15" width="54" format="#,###.##" html.valueishtml="0"  name=plan02 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="880" y="6" height="15" width="58" format="#,###.##" html.valueishtml="0"  name=plan03 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="940" y="6" height="15" width="58" format="#,###.##" html.valueishtml="0"  name=plan04 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1000" y="6" height="15" width="55" format="#,###.##" html.valueishtml="0"  name=plan05 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1057" y="6" height="15" width="56" format="#,###.##" html.valueishtml="0"  name=plan06 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1115" y="6" height="15" width="58" format="#,###.##" html.valueishtml="0"  name=plan07 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1175" y="6" height="15" width="60" format="#,###.##" html.valueishtml="0"  name=plan08 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1237" y="6" height="15" width="61" format="#,###.##" html.valueishtml="0"  name=plan09 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1300" y="6" height="15" width="62" format="#,###.##" html.valueishtml="0"  name=plan10 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1364" y="6" height="15" width="62" format="#,###.##" html.valueishtml="0"  name=plan11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1428" y="6" height="15" width="60" format="#,###.##" html.valueishtml="0"  name=plan12 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1552" y="6" height="15" width="62" format="#,###.##" html.valueishtml="0"  name=year02 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=26 alignment="1" tabsequence=32766 border="0" color="33554432" x="297" y="6" height="15" width="77" format="#,###.##" html.valueishtml="0"  name=plan_tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=27 alignment="1" tabsequence=32766 border="0" color="33554432" x="376" y="6" height="15" width="87" format="#,###.##" html.valueishtml="0"  name=sum_tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="255~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="1490" y="6" height="15" width="60" format="#,###.##" html.valueishtml="0"  name=year01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=28 alignment="1" tabsequence=32766 border="0" color="255" x="685" y="6" height="15" width="79" format="#,###.##" html.valueishtml="0"  name=etc_tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="226" y="6" height="15" width="69" format="#,###.##" html.valueishtml="0"  name=chg_amt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  sort_order2 = '3' or sort_order2 = '8', rgb( 0, 0, 255), rgb( 0, 0, 0) )" x="157" y="6" height="15" width="67" format="#,###.##" html.valueishtml="0"  name=exec_amt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400~tif(  sort_order2 = '5' or sort_order2 = '9',1, 0 )"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="const_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,46 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="appro_content.company_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=napprono dbname="appro_content.napprono" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=emp_no dbname="appro_content.emp_no" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=content dbname="appro_content.content" )
+ column=(type=char(1) updatewhereclause=yes name=isapprocheck dbname="appro_content.isapprocheck" values="미결재	1/결재	2/전결	3/반려	4/" )
+ column=(type=char(200) updatewhereclause=yes name=strname dbname="appro_content.strname" )
+ column=(type=char(1) updatewhereclause=yes name=compute_0007 dbname="compute_0007" values="	Y/	N" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.NAPPRONO,
+         A.EMP_NO,
+         A.CONTENT,
+         B.ISAPPROCHECK,
+         C.STRNAME,
+         CASE WHEN LENGTH(CONTENT) > 0 THEN 'Y'
+              ELSE 'N' END
+    FROM SEBOGW.APPRO_CONTENT A INNER JOIN SEBOGW.APPRO_PROCESS B
+                                        ON A.NAPPRONO = B.NAPPRONO
+                                       AND A.EMP_NO = B.STRPERSONNO
+                                INNER JOIN SEBOGW.PERSON C
+                                        ON A.EMP_NO = C.STRPERSONNO
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.NAPPRONO = :as_nappro
+ORDER BY SEQ" update="SEBOGW.APPRO_CONTENT" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_nappro", string)) )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="38" y="2" height="14" width="51" html.valueishtml="0"  name=emp_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="진행상태" border="0" color="33554432" x="175" y="2" height="14" width="93" html.valueishtml="0"  name=isapprocheck_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="91" y="2" height="14" width="82" html.valueishtml="0"  name=strname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="" border="0" color="33554432" x="270" y="1" height="19" width="64" html.valueishtml="0"  name=compute_0007_t visible="1"  font.face="Arial" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="검토의견" border="0" color="33554432" x="270" y="2" height="14" width="64" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="18" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="38" y="2" height="18" width="51" format="[general]" html.valueishtml="0"  name=emp_no visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="175" y="2" height="18" width="93" format="[general]" html.valueishtml="0"  name=isapprocheck visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="91" y="2" height="18" width="82" format="[general]" html.valueishtml="0"  name=strname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="270" y="2" height="18" width="64" format="[general]" html.valueishtml="0"  name=compute_0007 visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

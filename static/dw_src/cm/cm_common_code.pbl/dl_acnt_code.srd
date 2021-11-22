@@ -1,0 +1,42 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes key=yes name=account_code dbname="e_account.account_code" )
+ column=(type=char(3) updatewhereclause=yes key=yes name=const_acnt_code dbname="e_account.const_acnt_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=acntname dbname="e_account.acntname" )
+ column=(type=char(40) updatewhereclause=yes name=const_acnt_name dbname="SM_CODE_COSTACC.const_acnt_name" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=acnt_entrytag dbname="e_account.entrytag" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=acntcode dbname="e_account.acntcode" )
+ retrieve="SELECT A.ACCOUNT_CODE,   
+       A.CONST_ACNT_CODE,   
+       C.ACNTNAME,   
+       B.CONST_ACNT_NAME,   
+       C.ENTRYTAG,   
+       C.ACNTCODE  
+  FROM SBCMIS.E_ACCOUNT A, SM_CODE_COSTACC B, SBAMIS.A_CODE_ACNT C 
+ WHERE A.CONST_ACNT_CODE = B.CONST_ACNT_CODE (+)
+   AND A.ACCOUNT_CODE(+) = C.ACNTCODE
+   AND ((C.ACNTCODE BETWEEN '700000' AND '899999') 
+     OR (C.ACNTCODE LIKE '12402%') 
+     OR (C.ACNTCODE LIKE '122%') 
+     OR (C.ACNTCODE LIKE '220500') 
+     OR (C.ACNTCODE LIKE '900000') 
+     OR (C.ACNTCODE LIKE '910000')) 
+ORDER BY C.ACNTCODE ASC" update="SBAMIS.A_CODE_ACNT" updatewhere=0 updatekeyinplace=no )
+text(band=header alignment="2" text="회계계정명" border="0" color="33554432" x="114" y="2" height="17" width="188" html.valueishtml="0"  name=acntname_t  tag="acntname" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사계정명" border="0" color="33554432" x="401" y="2" height="17" width="212" html.valueishtml="0"  name=const_acnt_name_t  tag="const_acnt_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회계계정코드" border="0" color="33554432" x="2" y="2" height="17" width="110" html.valueishtml="0"  name=acntcode_t  tag="acntcode" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=20 border="0" color="33554432" x="114" y="2" height="14" width="188" format="[general]" html.valueishtml="0"  name=acntname visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=40 border="0" color="33554432" x="401" y="2" height="14" width="212" format="[general]" html.valueishtml="0"  name=const_acnt_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=10 border="0" color="33554432" x="2" y="2" height="14" width="110" format="[general]" html.valueishtml="0"  name=acntcode visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사계정코드" border="0" color="16711680" x="304" y="2" height="17" width="95" html.valueishtml="0"  name=const_acnt_code_t  tag="const_acnt_code" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=30 border="0" color="33554432" x="304" y="2" height="14" width="95" format="[general]" html.valueishtml="0"  name=const_acnt_code visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

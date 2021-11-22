@@ -1,0 +1,179 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=19 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_insu_tf_check.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_insu_tf_check.proj_code" dbalias="A.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="B.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=insu_yymm dbname="cm_insu_tf_check.insu_yymm" dbalias="A.insu_yymm" )
+ column=(type=char(1) updatewhereclause=yes name=insu_div dbname="cm_insu_tf_check.insu_div" dbalias="A.insu_div" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_insu_tf_check.labor_code" dbalias="A.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_insu_tf_check.labor_name" dbalias="A.labor_name" )
+ column=(type=char(8) updatewhereclause=yes name=reg_date dbname="cm_insu_tf_check.reg_date" dbalias="A.reg_date" )
+ column=(type=char(13) updatewhereclause=yes name=resident_no dbname="cm_insu_tf_check.resident_no" dbalias="A.resident_no" )
+ column=(type=char(30) updatewhereclause=yes name=medical_card dbname="medical_card" )
+ column=(type=number updatewhereclause=yes name=month dbname="cm_insu_tf_check.month" dbalias=".month" )
+ column=(type=number updatewhereclause=yes name=pay_sum dbname="cm_insu_tf_check.pay_sum" dbalias=".pay_sum" )
+ column=(type=char(1) updatewhereclause=yes name=kukmin_tag dbname="kukmin_tag" values="	Y/	N" )
+ column=(type=char(1) updatewhereclause=yes name=medical_tag dbname="medical_tag" values="	Y/	N" )
+ column=(type=char(20) updatewhereclause=yes name=phone dbname="phone" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         B.PROJ_NAME,
+         A.INSU_YYMM,
+         A.INSU_DIV,
+         A.LABOR_CODE,
+         A.LABOR_NAME,
+         A.REG_DATE,
+         A.RESIDENT_NO,
+         NVL(D.MEDICAL_CARD, C.MEDICAL_CARD) MEDICAL_CARD,
+         G.MONTH,
+         F.PAY_SUM,
+         NVL(A.KUKMIN_TAG, 'N')  KUKMIN_TAG,
+         NVL(A.MEDICAL_TAG, 'N') MEDICAL_TAG,
+         NVL(K.HP,K.PHONE) AS PHONE
+    FROM CM_INSU_TF_CHECK A INNER JOIN SM_CODE_PROJECT B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE = B.PROJ_CODE 
+                             LEFT JOIN (  SELECT COMPANY_CODE,
+                                                 PROJ_CODE,
+                                                 TO_CHAR(ADD_MONTHS(TO_DATE(PAY_YYMM,'YYYYMM'),+1),'YYYYMM') PAY_YYMM,
+                                                 LABOR_CODE,
+                                                 MEDICAL_CARD
+                                            FROM CM_SALY_LABOR_ACCOUNT
+                                           WHERE COMPANY_CODE = :as_comp
+                                             AND PROJ_CODE LIKE :as_proj
+                                             AND PAY_YYMM     =  TO_CHAR(ADD_MONTHS(TO_DATE(:as_insu_yymm,'YYYYMM'),-1),'YYYYMM')
+                                        GROUP BY COMPANY_CODE,
+                                                 PROJ_CODE,
+                                                 TO_CHAR(ADD_MONTHS(TO_DATE(PAY_YYMM,'YYYYMM'),+1),'YYYYMM'),
+                                                 LABOR_CODE,
+                                                 MEDICAL_CARD)C
+                                    ON A.COMPANY_CODE = C.COMPANY_CODE
+                                   AND A.PROJ_CODE = C.PROJ_CODE
+                                   AND A.LABOR_CODE = C.LABOR_CODE
+                                   AND A.INSU_YYMM = C.PAY_YYMM
+                             LEFT JOIN ( SELECT A.COMPANY_CODE, 
+                                                     A.PROJ_CODE, 
+                                                     A.LABOR_CODE,
+                                                     SUM(NVL(A.PAY_TOT,0)) PAY_SUM
+                                                FROM CM_SALY_LABOR_ACCOUNT A  LEFT JOIN CM_INSU_TF_CHECK B
+                                                                                     ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE
+                                                                                    AND A.PAY_YYMM = B.INSU_YYMM AND A.LABOR_CODE = B.LABOR_CODE AND B.INSU_DIV LIKE :as_insu
+                                               WHERE A.COMPANY_CODE = :as_comp
+                                                 AND A.PROJ_CODE LIKE :as_proj
+                                                 AND A.PAY_YYMM  BETWEEN TO_CHAR(ADD_MONTHS(TO_DATE(:as_insu_yymm,'YYYYMM'),-4),'YYYYMM')
+                                                                     AND TO_CHAR(ADD_MONTHS(TO_DATE(:as_insu_yymm,'YYYYMM'),-1),'YYYYMM')
+                                            GROUP BY A.COMPANY_CODE, 
+                                                     A.PROJ_CODE, 
+                                                     A.LABOR_CODE) F
+                                         ON A.COMPANY_CODE = F.COMPANY_CODE 
+                                        AND A.PROJ_CODE = F.PROJ_CODE 
+                                        AND A.LABOR_CODE = F.LABOR_CODE      
+                             LEFT JOIN (  SELECT COMPANY_CODE,
+                                                 PROJ_CODE,
+                                                 PAY_YYMM,
+                                                 LABOR_CODE,
+                                                 MEDICAL_CARD,
+                                                 MAX(KUKMIN_TAG)  AS KUKMIN_TAG,
+                                                 MAX(MEDICAL_TAG) AS MEDICAL_TAG
+                                            FROM CM_SALY_LABOR_ACCOUNT
+                                           WHERE COMPANY_CODE = :as_comp
+                                             AND PROJ_CODE LIKE :as_proj
+                                             AND PAY_YYMM     = :as_insu_yymm
+                                        GROUP BY COMPANY_CODE,
+                                                 PROJ_CODE,
+                                                 PAY_YYMM,
+                                                 LABOR_CODE,
+                                                 MEDICAL_CARD) D
+                                    ON A.COMPANY_CODE = D.COMPANY_CODE
+                                   AND A.PROJ_CODE = D.PROJ_CODE
+                                   AND A.LABOR_CODE = D.LABOR_CODE
+                                   AND A.INSU_YYMM = D.PAY_YYMM
+                            INNER JOIN ( SELECT COMPANY_CODE, 
+                                                PROJ_CODE,
+                                                LABOR_CODE, 
+                                                LABOR_NAME, 
+                                                RESIDENT_NO,
+                                                MAX(START_DATE),
+                                                MAX(END_DATE),
+                                                MONTHS_BETWEEN(TO_DATE(MAX(END_DATE),'YYYYMM') , TO_DATE(MAX(START_DATE),'YYYYMM')) MONTH
+                                           FROM(
+                                         SELECT COMPANY_CODE, 
+                                                PROJ_CODE,
+                                                LABOR_CODE, 
+                                                LABOR_NAME, 
+                                                RESIDENT_NO,
+                                                NVL(CASE INSU_DIV WHEN '1' THEN INSU_YYMM END,'201001') START_DATE,
+                                                '' END_DATE
+                                           FROM CM_INSU_TF_CHECK A
+                                          WHERE A.COMPANY_CODE = :as_comp 
+                                            AND A.PROJ_CODE LIKE :as_proj
+                                       UNION ALL     
+                                         SELECT COMPANY_CODE, 
+                                                PROJ_CODE,
+                                                LABOR_CODE, 
+                                                LABOR_NAME, 
+                                                RESIDENT_NO,
+                                                '' START_DATE,
+                                                INSU_YYMM END_DATE
+                                           FROM CM_INSU_TF_CHECK A
+                                          WHERE A.COMPANY_CODE = :as_comp 
+                                            AND A.PROJ_CODE LIKE :as_proj
+                                            AND INSU_DIV = '2') A                                                  
+                                       GROUP BY COMPANY_CODE, 
+                                                PROJ_CODE,
+                                                LABOR_CODE, 
+                                                LABOR_NAME, 
+                                                RESIDENT_NO) G
+                                      ON A.COMPANY_CODE = G.COMPANY_CODE
+                                     AND A.PROJ_CODE = G.PROJ_CODE
+                                     AND A.LABOR_CODE = G.LABOR_CODE
+                   LEFT JOIN CM_LABO_MASTER K
+                                ON A.COMPANY_CODE = K.COMPANY_CODE
+                               AND A.LABOR_CODE   = K.LABOR_CODE
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE LIKE :as_proj
+     AND A.INSU_YYMM = :as_insu_yymm
+     AND A.INSU_DIV = :as_insu
+     AND B.MANAGE_TYPE = :as_manage_type
+ORDER BY LABOR_NAME" arguments=(("as_comp", string),("as_proj", string),("as_insu_yymm", string),("as_insu", string),("as_manage_type", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="37" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증번호" border="0" color="33554432" x="572" y="2" height="14" width="94" html.valueishtml="0"  name=medical_card_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="279" y="2" height="14" width="206" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="174" y="2" height="14" width="103" html.valueishtml="0"  name=resident_no_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="102" y="2" height="14" width="70" html.valueishtml="0"  name=labor_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="개월수" border="0" color="33554432" x="668" y="2" height="14" width="45" html.valueishtml="0"  name=month_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월금액" border="0" color="33554432" x="715" y="2" height="14" width="92" html.valueishtml="0"  name=pay_sum_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="41" y="2" height="14" width="59" html.valueishtml="0"  name=insu_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="국민" border="0" color="33554432" x="487" y="2" height="14" width="41" html.valueishtml="0"  name=kukmin_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건강" border="0" color="33554432" x="530" y="2" height="14" width="40" html.valueishtml="0"  name=medical_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="715" y="2" height="18" width="92" format="#,###" html.valueishtml="0"  name=pay_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="18" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="279" y="2" height="18" width="206" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="102" y="2" height="18" width="70" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="174" y="2" height="18" width="103" format="@@@@@@-@@@@@@@" html.valueishtml="0"  name=resident_no visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="572" y="2" height="18" width="94" format="[general]" html.valueishtml="0"  name=medical_card visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="668" y="2" height="18" width="45" format="[general]" html.valueishtml="0"  name=month visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="41" y="2" height="18" width="59" format="@@@@-@@" html.valueishtml="0"  name=insu_yymm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="530" y="2" height="18" width="40" format="[general]" html.valueishtml="0"  name=medical_tag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="487" y="2" height="18" width="41" format="[general]" html.valueishtml="0"  name=kukmin_tag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="279" y="2" height="14" width="206" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="count( 1 for all )"border="0" color="33554432" x="1" y="2" height="14" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if( kukmin_tag = 'Y',1,0) for all)"border="0" color="33554432" x="487" y="2" height="14" width="41" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="sum(if( medical_tag  = 'Y',1,0) for all)"border="0" color="33554432" x="530" y="2" height="14" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=15 alignment="0" tabsequence=0 border="0" color="33554432" x="810" y="1" height="14" width="118" html.valueishtml="0"  name=phone visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Phone" border="0" color="33554432" x="809" y="1" height="19" width="119" html.valueishtml="0"  name=phone_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

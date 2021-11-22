@@ -1,0 +1,85 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=16 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(20) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(1) updatewhereclause=yes name=ticket_div dbname="ticket_div" )
+ column=(type=number updatewhereclause=yes name=age dbname="age" )
+ column=(type=char(8) updatewhereclause=yes name=reg_date dbname="reg_date" )
+ column=(type=char(100) updatewhereclause=yes name=file_name dbname="file_name" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn_no dbname="rrn_no" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE
+      ,B.PROJ_CODE AS PROJ_CODE
+      ,C.PROJ_NAME AS PROJ_NAME
+      ,A.LABOR_CODE AS LABOR_CODE
+      ,A.LABOR_NAME AS LABOR_NAME
+      ,B.CONT_DIV AS  TICKET_DIV
+      ,CASE WHEN SUBSTR(X_DECRYPT(A.RRN_POST, '[Mighty-X.2012.]'),1,1) IN ('1','2') THEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('19'||TRIM(SUBSTR(X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]'),1,2))) 
+                 WHEN SUBSTR(X_DECRYPT(A.RRN_POST, '[Mighty-X.2012.]'),1,1) IN ('3','4') THEN TO_NUMBER(TO_CHAR(SYSDATE,'YYYY')) - TO_NUMBER('20'||TRIM(SUBSTR(X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]'),1,2))) 
+             END   AS AGE
+      ,B.REG_DATE AS REG_DATE		
+      ,(SELECT FILE_NAME 
+          FROM CM_LABO_AGED_STAT AA 
+         WHERE A.COMPANY_CODE = AA.COMPANY_CODE 
+           AND A.LABOR_CODE = AA.LABOR_CODE 
+           AND AA.SEQ = ( SELECT MAX(SEQ) 
+                            FROM CM_LABO_AGED_STAT AAA 
+                           WHERE AAA.LABOR_CODE = A.LABOR_CODE )) AS FILE_NAME
+	 ,X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]')||'-'||X_DECRYPT(A.RRN_POST, '[Mighty-X.2012.]') RRN_NO   	
+	 ,(SELECT NVL(SAFE_YN,'N') 
+	 FROM CM_LABO_AGED_STAT AA 
+	WHERE A.COMPANY_CODE = AA.COMPANY_CODE 
+	  AND A.LABOR_CODE = AA.LABOR_CODE 
+	  AND AA.SEQ = ( SELECT MAX(SEQ) 
+							 FROM CM_LABO_AGED_STAT AAA 
+							WHERE AAA.LABOR_CODE = A.LABOR_CODE )) AS SAFE_YN
+  FROM CM_LABO_MASTER A LEFT JOIN ( SELECT MAX(REG_DATE) AS REG_DATE,COMPANY_CODE,LABOR_CODE,PROJ_CODE,CONT_DIV FROM CM_LABO_CONTRACT
+                    WHERE PROJ_CODE NOT LIKE '08%' 
+                  GROUP BY COMPANY_CODE,LABOR_CODE, PROJ_CODE,CONT_DIV) B
+                               ON A.COMPANY_CODE = B.COMPANY_CODE 
+                              AND A.LABOR_CODE = B.LABOR_CODE   
+                        LEFT JOIN SM_CODE_PROJECT C
+                               ON A.COMPANY_CODE = C.COMPANY_CODE
+                              AND A.PROJ_CODE    = C.PROJ_CODE
+ WHERE B.PROJ_CODE  LIKE :as_projcode
+   AND SUBSTR(B.PROJ_CODE,1,2) <> '08'
+   AND A.LABOR_NAME   LIKE :as_labor
+   AND B.REG_DATE BETWEEN :as_fdate AND :as_tdate
+   AND NVL(A.FOREGN_DIV,'N') = 'N' 
+   AND A.SAFE_YN = :as_safeyn
+   AND A.AGE BETWEEN '55' AND '80'        
+     " arguments=(("as_projcode", string),("as_safeyn", string),("as_fdate", string),("as_tdate", string),("as_labor", string)) )
+text(band=header alignment="2" text="이름" border="0" color="33554432" x="277" y="11" height="14" width="56" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약구분" border="0" color="33554432" x="453" y="11" height="14" width="71" html.valueishtml="0"  name=ticket_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="나이" border="0" color="33554432" x="526" y="11" height="14" width="39" html.valueishtml="0"  name=age_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="221" y="11" height="14" width="54" html.valueishtml="0"  name=labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="등록일" border="0" color="33554432" x="567" y="11" height="14" width="84" html.valueishtml="0"  name=reg_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="각서" border="0" color="33554432" x="653" y="11" height="14" width="86" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="335" y="11" height="14" width="116" html.valueishtml="0"  name=rrn_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tif(safe_yn='Y',rgb(0,0,255),rgb(0,0,0))" x="221" y="2" height="17" width="54" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432~tif(safe_yn='Y',rgb(0,0,255),rgb(0,0,0))" x="277" y="2" height="17" width="56" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432~tif(safe_yn='Y',rgb(0,0,255),rgb(0,0,0))" x="453" y="2" height="17" width="71" format="[general]" html.valueishtml="0"  name=ticket_div visible="1" dddw.name=dddw_com_safecode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432~tif(safe_yn='Y',rgb(0,0,255),rgb(0,0,0))" x="526" y="2" height="17" width="39" format="[general]" html.valueishtml="0"  name=age visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432~tif(safe_yn='Y',rgb(0,0,255),rgb(0,0,0))" x="567" y="2" height="17" width="84" format="[general]" html.valueishtml="0"  name=reg_date visible="1" editmask.mask="XXXX/XX/XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="653" y="2" height="14" width="86" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="335" y="1" height="14" width="116" format="[general]" html.valueishtml="0"  name=rrn_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="37" y="11" height="14" width="182" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="11" height="14" width="33" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432~tif(safe_yn='Y',rgb(0,0,255),rgb(0,0,0))" x="37" y="2" height="17" width="182" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()

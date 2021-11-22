@@ -1,0 +1,72 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=emp_no dbname="hr_pers_master.emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(5) updatewhereclause=yes name=jobkind_code dbname="hr_pers_master.jobkind_code" )
+ column=(type=char(40) updatewhereclause=yes name=jobkind_name dbname="hr_code_jobkind.jobkind_name" )
+ column=(type=char(8) updatewhereclause=yes name=duty_code dbname="hr_pers_master.duty_code" )
+ column=(type=char(40) updatewhereclause=yes name=duty_name dbname="hr_code_duty.duty_name" )
+ column=(type=char(8) updatewhereclause=yes name=level_code dbname="hr_pers_master.level_code" )
+ column=(type=char(20) updatewhereclause=yes name=level_name dbname="hr_code_level.level_name" )
+ column=(type=char(8) updatewhereclause=yes name=grade_code dbname="hr_pers_master.grade_code" )
+ column=(type=char(20) updatewhereclause=yes name=grade_name dbname="hr_code_grade.grade_name" )
+ column=(type=char(10) updatewhereclause=yes name=title_code dbname="hr_pers_master.title_code" )
+ column=(type=char(40) updatewhereclause=yes name=title_name dbname="hr_code_title.title_name" )
+ column=(type=char(30) updatewhereclause=yes name=phone dbname="phone" )
+ column=(type=char(31) updatewhereclause=yes name=cell dbname="cell" )
+ retrieve="  SELECT A.EMP_NO,
+         A.EMP_NAME,   
+         A.JOBKIND_CODE,
+         J.JOBKIND_NAME,
+         A.DUTY_CODE,
+         D.DUTY_NAME,
+         A.LEVEL_CODE,
+         L.LEVEL_NAME,
+         A.GRADE_CODE,
+         G.GRADE_NAME,
+         A.TITLE_CODE,
+         T.TITLE_NAME,
+         A.PHONE_PRE||A.PHONE_POST PHONE,
+         A.CELL_PRE||'-'||A.CELL_POST   CELL
+    FROM HR_PERS_MASTER A LEFT JOIN HR_CODE_JOBKIND J 
+                                 ON A.COMPANY_CODE = J.COMPANY_CODE AND A.JOBKIND_CODE = J.JOBKIND_CODE
+                          LEFT JOIN HR_CODE_DUTY D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE AND A.DUTY_CODE = D.DUTY_CODE
+                          LEFT JOIN HR_CODE_LEVEL L
+                                 ON A.COMPANY_CODE = L.COMPANY_CODE AND A.LEVEL_CODE = L.LEVEL_CODE
+                          LEFT JOIN HR_CODE_GRADE G
+                                 ON A.COMPANY_CODE = G.COMPANY_CODE AND A.GRADE_CODE = G.GRADE_CODE
+                          LEFT JOIN HR_CODE_TITLE T
+                                 ON A.COMPANY_CODE = T.COMPANY_CODE AND A.TITLE_CODE = T.TITLE_CODE                                                           
+   WHERE A.COMPANY_CODE   = :as_comp_code
+     AND A.REAL_DEPT_CODE = :as_proj_code
+ORDER BY A.EMP_NO
+" arguments=(("as_comp_code", string),("as_proj_code", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="210" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="229" y="8" height="56" width="270" html.valueishtml="0"  name=emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="507" y="8" height="56" width="274" html.valueishtml="0"  name=jobkind_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직무" border="0" color="33554432" x="791" y="8" height="56" width="265" html.valueishtml="0"  name=duty_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직급" border="0" color="33554432" x="1065" y="8" height="56" width="270" html.valueishtml="0"  name=level_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직위" border="0" color="33554432" x="1344" y="8" height="56" width="265" html.valueishtml="0"  name=grade_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직책" border="0" color="33554432" x="1618" y="8" height="56" width="297" html.valueishtml="0"  name=title_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="집전화" border="0" color="33554432" x="1925" y="8" height="56" width="416" html.valueishtml="0"  name=phone_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="핸드폰" border="0" color="33554432" x="2350" y="8" height="56" width="421" html.valueishtml="0"  name=cell_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="68" width="210" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="229" y="8" height="68" width="270" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="507" y="8" height="68" width="274" format="[general]" html.valueishtml="0"  name=jobkind_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=30 border="0" color="33554432" x="791" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=duty_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=40 border="0" color="33554432" x="1065" y="8" height="68" width="270" format="[general]" html.valueishtml="0"  name=level_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=50 border="0" color="33554432" x="1344" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=grade_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=60 border="0" color="33554432" x="1618" y="8" height="68" width="297" format="[general]" html.valueishtml="0"  name=title_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=70 border="0" color="33554432" x="1925" y="8" height="68" width="416" format="[general]" html.valueishtml="0"  name=phone visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=80 border="0" color="33554432" x="2350" y="8" height="68" width="421" format="[general]" html.valueishtml="0"  name=cell visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

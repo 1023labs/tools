@@ -1,0 +1,134 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=163 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_esti_bid_detail.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="cm_esti_bid_detail.est_code" )
+ column=(type=char(60) updatewhereclause=yes name=est_name dbname="cm_esti_master.est_name" )
+ column=(type=char(5) updatewhereclause=yes name=cnst_code dbname="cm_esti_master.cnst_code" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=bid_amount dbname="cm_esti_request.bid_amount" )
+ column=(type=decimal(0) updatewhereclause=yes name=exe_amount dbname="cm_esti_request.exe_amount" )
+ column=(type=decimal(0) updatewhereclause=yes name=win_amount dbname="cm_esti_request.win_amount" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=bid_user1 dbname="cm_esti_bid_detail.bid_user1" )
+ column=(type=char(20) updatewhereclause=yes name=bid_name1 dbname="hr_pers_master.bid_name1" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=bid_user2 dbname="cm_esti_bid_detail.bid_user2" )
+ column=(type=char(20) updatewhereclause=yes name=bid_name2 dbname="hr_pers_master.bid_name2" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=est_user1 dbname="cm_esti_bid_detail.est_user1" )
+ column=(type=char(20) updatewhereclause=yes name=est_name1 dbname="hr_pers_master.est_name1" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=est_user2 dbname="cm_esti_bid_detail.est_user2" )
+ column=(type=char(20) updatewhereclause=yes name=est_name2 dbname="hr_pers_master.est_name2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=mat_text dbname="cm_esti_bid_detail.mat_text" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=lab_text dbname="cm_esti_bid_detail.lab_text" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=ost_text dbname="cm_esti_bid_detail.ost_text" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=cot_text dbname="cm_esti_bid_detail.cot_text" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=ins_text dbname="cm_esti_bid_detail.ins_text" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=bid_contents dbname="cm_esti_bid_detail.bid_contents" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=qna_contents dbname="cm_esti_bid_detail.qna_contents" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=ref_contents dbname="cm_esti_bid_detail.ref_contents" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=add_contents dbname="cm_esti_bid_detail.add_contents" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.EST_CODE,   
+         B.EST_NAME,
+         B.CNST_CODE, 
+         C.CNST_NAME,
+         D.BID_AMOUNT,
+         D.EXE_AMOUNT,
+         D.WIN_AMOUNT,
+         A.BID_USER1,
+         E.EMP_NAME   AS BID_NAME1,   
+         A.BID_USER2,
+         F.EMP_NAME   AS BID_NAME2,   
+         A.EST_USER1,
+         G.EMP_NAME   AS EST_NAME1,   
+         A.EST_USER2,
+         H.EMP_NAME   AS EST_NAME2,   
+         A.MAT_TEXT,   
+         A.LAB_TEXT,   
+         A.OST_TEXT,   
+         A.COT_TEXT,   
+         A.INS_TEXT,   
+         A.BID_CONTENTS,   
+         A.QNA_CONTENTS,   
+         A.REF_CONTENTS,   
+         A.ADD_CONTENTS  
+    FROM CM_ESTI_BID_DETAIL A LEFT JOIN CM_ESTI_MASTER B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.EST_CODE     = B.EST_CODE  
+                              LEFT JOIN CM_CUST_CONSTRUCT C 
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                    AND B.CNST_CODE    = C.CNST_CODE
+                              LEFT JOIN CM_ESTI_REQUEST D     
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE
+                                    AND A.EST_CODE     = D.EST_CODE   
+                              LEFT JOIN HR_PERS_MASTER E 
+                                     ON A.COMPANY_CODE = E.COMPANY_CODE 
+                                    AND A.BID_USER1    = E.EMP_NO
+                              LEFT JOIN HR_PERS_MASTER F 
+                                     ON A.COMPANY_CODE = F.COMPANY_CODE 
+                                    AND A.BID_USER2    = F.EMP_NO 
+                              LEFT JOIN HR_PERS_MASTER G 
+                                     ON A.COMPANY_CODE = G.COMPANY_CODE 
+                                    AND A.EST_USER1    = G.EMP_NO 
+                              LEFT JOIN HR_PERS_MASTER H 
+                                     ON A.COMPANY_CODE = H.COMPANY_CODE 
+                                    AND A.EST_USER2    = H.EMP_NO   
+   WHERE A.COMPANY_CODE = :as_comp_code
+ORDER BY B.EST_NAME  " update="CM_ESTI_BID_DETAIL" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string)) )
+rectangle(band=background x="415" y="18" height="103" width="82"  name=r_4  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="5" y="17" height="156" width="82"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+line(band=background x1="5" y1="17" x2="973" y2="17"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="16" x2="973" y2="16"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="173" x2="973" y2="173"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="174" x2="973" y2="174"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="95" x2="975" y2="95"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="86" y1="69" x2="975" y2="69"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="43" x2="975" y2="43"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="입찰담당자" border="0" color="27229506" x="93" y="50" height="14" width="60" html.valueishtml="0"  name=hr_pers_master_bid_name1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="견적담당자" border="0" color="27229506" x="93" y="76" height="14" width="60" html.valueishtml="0"  name=hr_pers_master_est_name1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="자재비" border="0" color="27229506" x="93" y="102" height="14" width="60" html.valueishtml="0"  name=mat_text_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="4대보험" border="0" color="27229506" x="93" y="154" height="14" width="60" html.valueishtml="0"  name=ins_text_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="/" border="0" color="33554432" x="272" y="50" height="14" width="14" html.valueishtml="0"  name=t_1  tag="[NB]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="/" border="0" color="33554432" x="272" y="77" height="14" width="14" html.valueishtml="0"  name=t_3  tag="[NB]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+bitmap(band=background filename="/images/button/btn_find.gif" x="389" y="21" height="15" width="14" border="0"  name=find_est_name pointer="HyperLink!" visible="1" )
+bitmap(band=background filename="/images/button/btn_find.gif" x="389" y="48" height="15" width="14" border="0"  name=find_bid_name2 pointer="HyperLink!" visible="1" )
+bitmap(band=background filename="/images/button/btn_find.gif" x="389" y="74" height="15" width="14" border="0"  name=find_est_name2 pointer="HyperLink!" visible="1" )
+bitmap(band=background filename="/images/button/btn_find.gif" x="253" y="74" height="15" width="14" border="0"  name=find_est_name1 pointer="HyperLink!" visible="1" )
+bitmap(band=background filename="/images/button/btn_find.gif" x="253" y="48" height="15" width="14" border="0"  name=find_bid_name1 pointer="HyperLink!" visible="1" )
+line(band=background x1="86" y1="121" x2="974" y2="121"  name=l_10  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="86" y1="147" x2="974" y2="147"  name=l_9  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="노무비" border="0" color="27229506" x="93" y="128" height="14" width="60" html.valueishtml="0"  name=lab_text_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="공사명" border="0" color="27229506" x="9" y="24" height="14" width="69" html.valueishtml="0"  name=cm_esti_master_est_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="담당자" border="0" color="27229506" x="9" y="61" height="14" width="69" html.valueishtml="0"  name=hr_pers_master_bid_name2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="적용기준" border="0" color="27229506" x="9" y="128" height="14" width="69" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="견적요구처" border="0" color="27229506" x="420" y="24" height="14" width="69" html.valueishtml="0"  name=cm_cust_construct_cnst_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="입찰금액" border="0" color="27229506" x="420" y="50" height="14" width="69" html.valueishtml="0"  name=cm_esti_request_bid_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="실행금액" border="0" color="27229506" x="420" y="76" height="14" width="69" html.valueishtml="0"  name=cm_esti_request_exe_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="낙찰율" border="0" color="27229506" x="621" y="76" height="14" width="75" html.valueishtml="0"  name=cm_esti_request_win_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="93" y="9" height="14" width="289" format="[general]" html.valueishtml="0"  name=est_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="503" y="9" height="14" width="141" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=20 border="0" color="33554432" x="159" y="35" height="14" width="87" format="[general]" html.valueishtml="0"  name=bid_name1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=40 border="0" color="33554432" x="159" y="61" height="14" width="87" format="[general]" html.valueishtml="0"  name=est_name1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=30 border="0" color="33554432" x="293" y="35" height="14" width="89" format="[general]" html.valueishtml="0"  name=bid_name2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="0" tabsequence=50 border="0" color="33554432" x="293" y="61" height="14" width="89" format="[general]" html.valueishtml="0"  name=est_name2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="503" y="35" height="14" width="102" format="#,###" html.valueishtml="0"  name=bid_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="0" tabsequence=100 border="0" color="33554432" x="159" y="139" height="14" width="208" format="[general]" html.valueishtml="0"  name=ins_text visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="경비" border="0" color="27229506" x="374" y="154" height="14" width="60" html.valueishtml="0"  name=cot_text_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="0" tabsequence=90 border="0" color="33554432" x="440" y="139" height="14" width="204" format="[general]" html.valueishtml="0"  name=cot_text visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="0" tabsequence=80 border="0" color="33554432" x="159" y="113" height="14" width="208" format="[general]" html.valueishtml="0"  name=lab_text visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="외주비" border="0" color="27229506" x="374" y="128" height="14" width="60" html.valueishtml="0"  name=ost_text_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="0" tabsequence=70 border="0" color="33554432" x="440" y="113" height="14" width="204" format="[general]" html.valueishtml="0"  name=ost_text visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="0" tabsequence=60 border="0" color="33554432" x="159" y="87" height="14" width="208" format="[general]" html.valueishtml="0"  name=mat_text visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="낙찰률" border="0" color="27229506" x="420" y="102" height="14" width="69" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="%" border="0" color="33554432" x="555" y="102" height="14" width="14" html.valueishtml="0"  name=t_5  tag="[NB]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="원" border="0" color="33554432" x="609" y="50" height="14" width="15" html.valueishtml="0"  name=t_6  tag="[NB]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="원" border="0" color="33554432" x="609" y="76" height="14" width="15" html.valueishtml="0"  name=t_7  tag="[NB]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="503" y="61" height="14" width="102" format="#,###" html.valueishtml="0"  name=exe_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="truncate((exe_amount / win_amount ) * 100, 1) "border="0" color="33554432" x="503" y="87" height="14" width="48" format="#,##0.00~tif( win_rate = ceiling( win_rate ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=win_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

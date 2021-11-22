@@ -1,0 +1,99 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=19 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="536870912" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_attd_daily_work.company_code" dbalias="A.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_attd_daily_work.proj_code" dbalias="A.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=team_code dbname="cm_attd_daily_work.team_code" dbalias="A.team_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_attd_daily_work.labor_code" dbalias="A.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" dbalias="B.labor_name" )
+ column=(type=char(60) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=work_date dbname="cm_attd_daily_work.work_date" dbalias="A.work_date" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_code1 dbname="cm_attd_daily_work.const_code1" dbalias="A.const_code1" )
+ column=(type=char(100) updatewhereclause=yes name=const_name1 dbname="cm_exec_const.const_name1" dbalias="C.const_name1" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=day_qty1 dbname="cm_attd_daily_work.day_qty1" dbalias="A.day_qty1" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_code2 dbname="cm_attd_daily_work.const_code2" dbalias="A.const_code2" )
+ column=(type=char(100) updatewhereclause=yes name=const_name2 dbname="cm_exec_const.const_name2" dbalias="D.const_name2" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=day_qty2 dbname="cm_attd_daily_work.day_qty2" dbalias="A.day_qty2" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_code3 dbname="cm_attd_daily_work.const_code3" dbalias="A.const_code3" )
+ column=(type=char(100) updatewhereclause=yes name=const_name3 dbname="cm_exec_const.const_name3" dbalias="E.const_name3" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=night_qty dbname="cm_attd_daily_work.night_qty" dbalias="A.night_qty" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=ticket_qty dbname="cm_attd_daily_work.ticket_qty" dbalias="A.ticket_qty" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=in_time dbname="cm_attd_daily_work.in_time" dbalias="A.in_time" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=out_time dbname="cm_attd_daily_work.out_time" dbalias="A.out_time" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.TEAM_CODE,   
+         A.LABOR_CODE,
+         B.LABOR_NAME,
+         (B.RRN_PRE || B.RRN_POST) LABOR_ID,
+         A.WORK_DATE,   
+         A.CONST_CODE1,
+         C.CONST_NAME CONST_NAME1,   
+         A.DAY_QTY1,   
+         A.CONST_CODE2,   
+         D.CONST_NAME CONST_NAME2,   
+         A.DAY_QTY2,   
+         A.CONST_CODE3,   
+         E.CONST_NAME CONST_NAME3,   
+         A.NIGHT_QTY,
+         A.TICKET_QTY  ,
+         A.IN_TIME ,
+         A.OUT_TIME 
+    FROM CM_ATTD_DAILY_WORK A LEFT JOIN CM_LABO_MASTER B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE AND A.LABOR_CODE = B.LABOR_CODE
+                              LEFT JOIN CM_EXEC_CONST C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE AND A.PROJ_CODE = C.PROJ_CODE AND A.CONST_CODE1 = C.CONST_CODE      
+                              LEFT JOIN CM_EXEC_CONST D
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE AND A.PROJ_CODE = D.PROJ_CODE AND A.CONST_CODE2 = D.CONST_CODE         
+                              LEFT JOIN CM_EXEC_CONST E
+                                     ON A.COMPANY_CODE = E.COMPANY_CODE AND A.PROJ_CODE = E.PROJ_CODE AND A.CONST_CODE3 = E.CONST_CODE         
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code 
+     AND A.TEAM_CODE    = :as_team_code
+     AND A.WORK_DATE    = :as_work_date
+ORDER BY B.LABOR_NAME
+" update="CM_ATTD_DAILY_WORK" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_team_code", string),("as_work_date", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="3" height="14" width="41" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="45" y="3" height="14" width="48" html.valueishtml="0"  name=labor_name_t  tag="labor_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="95" y="3" height="14" width="96" html.valueishtml="0"  name=labor_id_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="289" y="3" height="14" width="30" html.valueishtml="0"  name=cm_attd_daily_work_day_qty1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="408" y="3" height="14" width="31" html.valueishtml="0"  name=cm_attd_daily_work_day_qty2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="528" y="3" height="14" width="33" html.valueishtml="0"  name=cm_attd_daily_work_night_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주간공종1" border="0" color="33554432" x="193" y="3" height="14" width="94" html.valueishtml="0"  name=cm_exec_const_const_name1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주간공종2" border="0" color="33554432" x="321" y="3" height="14" width="85" html.valueishtml="0"  name=cm_exec_const_const_name2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="야간공종" border="0" color="33554432" x="441" y="3" height="14" width="85" html.valueishtml="0"  name=cm_exec_const_const_name3_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="41" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="95" y="2" height="17" width="96" format="@@@@@@-@@@@@@@" html.valueishtml="0"  name=labor_id visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=20 border="0" color="33554432" x="289" y="2" height="17" width="30" format="~tif( day_qty1 = ceiling(  day_qty1 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=day_qty1 visible="1" edit.limit=3 edit.case=any edit.format="0.0" edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=60 border="0" color="33554432" x="528" y="2" height="17" width="33" format="~tif( night_qty = ceiling(  night_qty ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=night_qty visible="1" edit.limit=3 edit.case=any edit.format="0.0" edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=10 border="0" color="33554432" x="193" y="2" height="17" width="94" format="[general]" html.valueishtml="0"  name=const_name1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=30 border="0" color="33554432" x="321" y="2" height="17" width="85" format="[general]" html.valueishtml="0"  name=const_name2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=40 border="0" color="33554432" x="408" y="2" height="17" width="31" format="~tif( day_qty2 = ceiling(  day_qty2 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=day_qty2 visible="1" edit.limit=3 edit.case=any edit.format="0.0" edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=50 border="0" color="33554432" x="441" y="2" height="17" width="85" format="[general]" html.valueishtml="0"  name=const_name3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="45" y="2" height="17" width="48" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="1" text="합계" border="0" color="33554432" x="45" y="2" height="14" width="48" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="'(' + rowcount() + ')명'"border="0" color="33554432" x="95" y="2" height="14" width="96" format="[General]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(qty_sum for all)"border="0" color="33554432" x="563" y="2" height="14" width="55" format="#,##0.0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum( night_qty  for all)"border="0" color="33554432" x="528" y="2" height="14" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum( day_qty1 for all)"border="0" color="33554432" x="289" y="2" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="sum( day_qty2  for all)"border="0" color="33554432" x="408" y="2" height="14" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="563" y="3" height="14" width="55" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(isNull(day_qty1),0, day_qty1)  +  if(isNull(day_qty2),0, day_qty2)  +  if(isNull(night_qty),0, night_qty) "border="0" color="33554432" x="563" y="2" height="17" width="55" format="#,##0.0" html.valueishtml="0"  name=qty_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="2" tabsequence=70 border="0" color="33554432" x="621" y="2" height="17" width="53" html.valueishtml="0"  name=in_time visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="2" tabsequence=80 border="0" color="33554432" x="677" y="2" height="17" width="62" html.valueishtml="0"  name=out_time visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="출근" border="0" color="33554432" x="620" y="3" height="14" width="54" html.valueishtml="0"  name=cm_attd_daily_work_in_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="퇴근" border="0" color="33554432" x="676" y="3" height="14" width="63" html.valueishtml="0"  name=cm_attd_daily_work_out_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

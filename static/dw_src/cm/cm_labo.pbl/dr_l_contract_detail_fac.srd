@@ -1,0 +1,259 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=16777215 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=1047 color="536870912" height.autosize=yes )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_labo_contract.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_labo_contract.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(60) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=char(600) updatewhereclause=yes name=address dbname="address" )
+ column=(type=char(60) updatewhereclause=yes name=phone dbname="cm_labo_master.phone" )
+ column=(type=char(60) updatewhereclause=yes name=hp dbname="cm_labo_master.hp" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_labo_contract.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=cm_labo_contract_reg_date dbname="cm_labo_contract.reg_date" )
+ column=(type=char(10) updatewhereclause=yes name=head_empno dbname="sm_code_project.head_empno" )
+ column=(type=char(8) updatewhereclause=yes name=association_name dbname="association_name" )
+ column=(type=char(301) updatewhereclause=yes name=proj_address dbname="proj_address" )
+ column=(type=char(6) updatewhereclause=yes name=cm_labo_account_bank_code dbname="cm_labo_account.bank_code" )
+ column=(type=char(40) updatewhereclause=yes name=bank_name dbname="hr_code_bank.bank_name" )
+ column=(type=char(20) updatewhereclause=yes name=bank_account dbname="cm_labo_account.bank_account" )
+ column=(type=decimal(0) updatewhereclause=yes name=pay_cost dbname="cm_labo_contract.pay_cost" )
+ column=(type=char(8) updatewhereclause=yes name=start_date dbname="cm_labo_contract.start_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="cm_labo_contract.end_date" )
+ column=(type=char(3) updatewhereclause=yes name=job_code dbname="cm_labo_contract.job_code" )
+ column=(type=char(250) updatewhereclause=yes name=job_name dbname="sm_comcode_d.job_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=time_amt dbname="cm_labo_contract.time_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=basic_amt dbname="cm_labo_contract.basic_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=ju_amt dbname="cm_labo_contract.ju_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=time_etc_amt dbname="cm_labo_contract.time_etc_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=holiday_cut_amt dbname="cm_labo_contract.holiday_cut_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=year_amt dbname="cm_labo_contract.year_amt" )
+ column=(type=decimal(1) updatewhereclause=yes name=basic_tax dbname="cm_labo_contract_tax.basic_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=ju_tax dbname="cm_labo_contract_tax.ju_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=time_etc_tax dbname="cm_labo_contract_tax.time_etc_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=holiday_cut_tax dbname="cm_labo_contract_tax.holiday_cut_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=year_tax dbname="cm_labo_contract_tax.year_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=total_tax dbname="cm_labo_contract_tax.total_tax" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=decimal(1) updatewhereclause=yes name=over_tax dbname="cm_labo_contract_tax.over_tax" )
+ column=(type=decimal(0) updatewhereclause=yes name=over_amt dbname="cm_labo_contract.over_amt" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         B.LABOR_NAME,
+         B.RRN_PRE || B.RRN_POST AS LABOR_ID,
+         B.ADDR1 || B.ADDR2      AS ADDRESS,
+         B.PHONE AS PHONE,
+         B.HP    AS HP,
+         A.PROJ_CODE,
+         C.PROJ_NAME,
+         A.REG_DATE,
+         C.HEAD_EMPNO AS HEAD_EMPNO, 
+         DECODE(:as_comp_code, '100', '(주)세보엠이씨', '(주)에스비테크') AS ASSOCIATION_NAME,
+         C.ADDR1 ||' '||C.ADDR2 AS PROJ_ADDRESS,         
+         D.BANK_CODE    AS BANK_CODE,
+         F.BANK_NAME, 
+         D.BANK_ACCOUNT AS BANK_ACCOUNT, 
+         A.PAY_COST,
+         A.START_DATE,
+         A.END_DATE,
+         A.JOB_CODE,
+         E.DNAME AS JOB_NAME,
+         A.TIME_AMT,
+         A.BASIC_AMT,
+         A.JU_AMT,
+         A.TIME_ETC_AMT,
+         A.HOLIDAY_CUT_AMT,
+         A.YEAR_AMT,
+         G.BASIC_TAX,
+         G.JU_TAX,
+         G.TIME_ETC_TAX,
+         G.HOLIDAY_CUT_TAX,
+         G.YEAR_TAX,
+         G.TOTAL_TAX,
+         H.EMP_NAME,
+         G.OVER_TAX,
+         A.OVER_AMT
+    FROM CM_LABO_CONTRACT A INNER JOIN CM_LABO_MASTER B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE AND A.LABOR_CODE = B.LABOR_CODE    
+                             LEFT JOIN SM_CODE_PROJECT C
+                                    ON A.PROJ_CODE = C.PROJ_CODE
+                             LEFT JOIN CM_LABO_ACCOUNT D
+                                    ON A.COMPANY_CODE = D.COMPANY_CODE AND A.LABOR_CODE = D.LABOR_CODE AND D.USE_YN = 'Y'    
+                             LEFT JOIN SM_COMCODE_D E
+                                    ON A.JOB_CODE = E.DCODE AND E.SYS_ID = 'CM' AND E.HCODE = 'JOBDIV' AND E.USE_YN = 'Y' 
+                             LEFT JOIN HR_CODE_BANK F
+                                    ON D.BANK_CODE = F.BANK_CODE
+                             LEFT JOIN CM_LABO_CONTRACT_TAX G
+                                    ON A.COMPANY_CODE = G.COMPANY_CODE
+                             LEFT JOIN HR_PERS_MASTER H
+                                    ON C.HEAD_EMPNO = H.EMP_NO
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.LABOR_CODE   = :as_labor_code
+     AND A.REG_DATE     = :as_reg_date
+ORDER BY A.REG_DATE   
+" arguments=(("as_comp_code", string),("as_labor_code", string),("as_reg_date", string)) )
+rectangle(band=detail x="559" y="11" height="37" width="148"  name=r_1 visible="1" brush.hatch="7" brush.color="570425344" pen.style="0" pen.width="2" pen.color="134217856"  background.mode="2" background.color="33554432" )
+bitmap(band=detail filename="\images\comp\세보배경90.jpg" x="123" y="244" height="583" width="500" border="0"  name=p_1 visible="1" )
+text(band=detail alignment="2" text="근로계약서(일당제)" border="0" color="0" x="150" y="12" height="37" width="377" html.valueishtml="0"  name=t_12 visible="1"  font.face="바탕체" font.height="-24" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="(근로자)" border="0" color="0" x="418" y="958" height="14" width="60" html.valueishtml="0"  name=t_75 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="주민번호  :" border="0" color="0" x="414" y="1015" height="14" width="84" html.valueishtml="0"  name=t_61 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="성         명 :" border="0" color="0" x="402" y="986" height="14" width="108" html.valueishtml="0"  name=t_17 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="(인)" border="0" color="0" x="671" y="986" height="14" width="26" html.valueishtml="0"  name=t_62 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="20" border="0" color="0" x="508" y="932" height="14" width="26" html.valueishtml="0"  name=t_63 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="일" border="0" color="0" x="675" y="932" height="14" width="14" html.valueishtml="0"  name=t_66 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="월" border="0" color="0" x="630" y="932" height="14" width="18" html.valueishtml="0"  name=t_65 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="년" border="0" color="0" x="577" y="932" height="14" width="18" html.valueishtml="0"  name=t_64 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="177" y1="426" x2="346" y2="426"  name=l_33 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="177" y1="443" x2="346" y2="443"  name=l_34 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="177" y1="460" x2="346" y2="460"  name=l_35 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="비                           고" border="0" color="0" x="424" y="344" height="12" width="200" html.valueishtml="0"  name=t_27 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="114" y1="477" x2="705" y2="477"  name=l_30 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="705" y1="341" x2="705" y2="478"  name=l_29 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="0" text="1) 기본급은 1일 8시간분의 기본시급에 해당하는 금액이며, 주휴수당은 1주 8시간분의" border="0" color="0" x="349" y="360" height="12" width="354" html.valueishtml="0"  name=t_45 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="    주휴수당을 분할한 금액이며, 시간외수당은 시간외 근로에 대한 법정수당으로 1일 1" border="0" color="0" x="349" y="373" height="12" width="354" html.valueishtml="0"  name=t_46 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="    시간 이상 분 및 1주 40시간 초과에 대한 가산분을 1일 평균하여 평균일당에 포함한" border="0" color="0" x="349" y="386" height="12" width="354" html.valueishtml="0"  name=t_47 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="2) 휴일가산분할수당은 휴일 근무에 대한 통상적인 임금외의 가산할증임금을 근무일수" border="0" color="0" x="349" y="412" height="12" width="354" html.valueishtml="0"  name=t_49 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="    법정수당으로 한다." border="0" color="0" x="349" y="438" height="12" width="354" html.valueishtml="0"  name=t_77 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="3) 기본급, 주휴수당,시간외수당,휴일근로수당 및 연차수당은 1개월 단위로 임금지급시" border="0" color="0" x="349" y="451" height="12" width="354" html.valueishtml="0"  name=t_78 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="   정산지급하며, 연차수당과는 별도로 乙은 휴가사용권을 행사할 수 있다." border="0" color="0" x="349" y="464" height="12" width="354" html.valueishtml="0"  name=t_79 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="429" height="12" width="28" html.valueishtml="0"  name=t_140 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="446" height="12" width="28" html.valueishtml="0"  name=t_141 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="463" height="12" width="28" html.valueishtml="0"  name=t_142 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="    금액으로 한다." border="0" color="0" x="349" y="399" height="12" width="354" html.valueishtml="0"  name=t_48 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="    평균으로 분할하여 지급하는 금액이며, 연차수당은 법정휴가 미사용을 전제로 책정된" border="0" color="0" x="349" y="425" height="12" width="354" html.valueishtml="0"  name=t_76 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="시간 외 수당" border="0" color="0" x="179" y="429" height="12" width="74" html.valueishtml="0"  name=t_33 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="휴일가산분할수당" border="0" color="0" x="180" y="446" height="12" width="73" html.valueishtml="0"  name=t_34 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="연차수당" border="0" color="0" x="180" y="463" height="12" width="73" html.valueishtml="0"  name=t_35 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="1" tabsequence=32766 border="0" color="255" x="258" y="429" height="11" width="54" format="#,###" html.valueishtml="0"  name=time_etc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=26 alignment="1" tabsequence=32766 border="0" color="255" x="258" y="446" height="11" width="54" format="#,###" html.valueishtml="0"  name=holiday_cut_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=27 alignment="1" tabsequence=32766 border="0" color="255" x="258" y="463" height="11" width="54" format="#,###" html.valueishtml="0"  name=year_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="                        ② 월지급액은 매월 초일부터 말일까지 정산하여 익월 10일 지급함을 윈칙으로 한다." border="0" color="0" x="43" y="483" height="12" width="663" html.valueishtml="0"  name=t_37 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                        ③ 근로소득세 및 고용보험료, 건강보험료, 국민연금 등 제세공과금을 원천징수한 후," border="0" color="0" x="42" y="499" height="12" width="415" html.valueishtml="0"  name=t_38 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="乙이 지정한 乙의 실명확인 은행계좌로 이체 지급함을 윈칙으" border="0" color="255" x="455" y="499" height="12" width="250" html.valueishtml="0"  name=t_44 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                            로 한다. 단, 근로소득세 공제와 관련하여 세법 등 관련 법령에 의한 공제금액을 고려하여 甲이 분할하여 원천징수하고, 甲은 소득세정산기간 확" border="0" color="255" x="42" y="515" height="12" width="663" html.valueishtml="0"  name=t_42 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                            정 후 정산하여 환급금액 발생시 乙에게 환급금을 지급하기로 한다." border="0" color="255" x="42" y="531" height="12" width="663" html.valueishtml="0"  name=t_43 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="제5조(계약기간)  ① 乙의 계약기간은                                부터                                       일 까지로 함을 원칙으로 하되,  乙이 수행하던공종이 종료된 경우에는" border="0" color="0" x="42" y="547" height="12" width="664" html.valueishtml="0"  name=t_20 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                           해당공종 종료일에 본 계약이 만료된 것으로 한다. 단, 발주처의 공사중단 및 설계변경 등의 상유로 甲이 불가피하게 공사를 계속활 수 없게된" border="0" color="0" x="42" y="563" height="12" width="663" html.valueishtml="0"  name=t_21 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                          때에는 해당공종 종료로 간주한다." border="0" color="0" x="44" y="579" height="12" width="661" html.valueishtml="0"  name=t_22 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="제6조(평가기간)  ① 신규 계약자의 경우 경력 유무에도 불구하고 3월의 평가기간을 적용하되 계약기간이 3월 미만인 자는 당해 기간을 평가기간으로 한다." border="0" color="0" x="42" y="595" height="12" width="663" html.valueishtml="0"  name=t_23 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                       ② 평가기간중 또는 평가기간 만료시 부적당하다고 판단될 경우 본 계약을 해지할 수 있다.단, 업무능력이 부작합 경우 단가를 본인 동의하에 하향가능" border="0" color="0" x="44" y="612" height="12" width="672" html.valueishtml="0"  name=t_24 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="제7조(계약종료)  ① 다음 각호의 1에 해당할 때에는 근로계약관계는 자동종료함을 원칙으로 한다." border="0" color="0" x="42" y="629" height="12" width="663" html.valueishtml="0"  name=t_50 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="②  甲은 乙이 다음 각호의 1에 해당할 때에는 근로계약관계를 해지 할  수 있다." border="0" color="0" x="113" y="728" height="12" width="573" html.valueishtml="0"  name=t_108 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="1. 甲의 동의 없이 타 사업장에 취업한 경우" border="0" color="0" x="132" y="646" height="12" width="573" html.valueishtml="0"  name=t_51 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="2. 연속하여 3일 이상 또는 월 5일 이상 무단결근한 경우" border="0" color="0" x="132" y="662" height="12" width="573" html.valueishtml="0"  name=t_52 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="3. 업무와 무관한 사유로 인하여 15일 이상 출근할 수 없게된 경우" border="0" color="0" x="132" y="678" height="12" width="573" html.valueishtml="0"  name=t_53 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="4. 제5조에 의하여 계약기간이 만료된 경우" border="0" color="0" x="132" y="695" height="12" width="573" html.valueishtml="0"  name=t_54 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="5. 파산, 금치산, 한정치산 및 형사상 유죄판결을 받았을 때" border="0" color="0" x="132" y="712" height="12" width="573" html.valueishtml="0"  name=t_55 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="1. 무단결근, 무단조퇴 등 근태가 불량한 경우" border="0" color="0" x="132" y="743" height="12" width="573" html.valueishtml="0"  name=t_56 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="2. 안전수칙을 위반하거나 관리자의 정당한 지시를 위반한 경우" border="0" color="0" x="132" y="760" height="12" width="573" html.valueishtml="0"  name=t_57 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="3. 고의 또는 부주의로 사고나 손실을 야기시킨 경우" border="0" color="0" x="132" y="777" height="12" width="573" html.valueishtml="0"  name=t_58 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="4. 신체 및 정신상 결함 등으로해당업무를 감당할 수 없거나 고혈압, 디스크, 당뇨 등 고질적 질환으로 당해 질병이 입무로 인하여 악화 또는" border="0" color="0" x="132" y="794" height="12" width="573" html.valueishtml="0"  name=t_59 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="   질병의 자연적인 악화를 촉진할 가능성이 있다고 판단될 경우" border="0" color="0" x="132" y="811" height="12" width="573" html.valueishtml="0"  name=t_109 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="5. 업무상 비밀을 누설하여 甲 또는 甲의 이해관계 회사 내지 이해관계인에게 손해를 끼친 경우" border="0" color="0" x="132" y="827" height="12" width="573" html.valueishtml="0"  name=t_110 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="6. 기타 乙의 귀책사유 등으로인하여 본 계약관계를 지속활 수  없다고 인정될 경우" border="0" color="0" x="132" y="843" height="12" width="573" html.valueishtml="0"  name=t_111 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="제8조(특약사항)" border="0" color="0" x="42" y="860" height="12" width="72" html.valueishtml="0"  name=t_60 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="1. 하루 식권은       매로 하며 그외 식대에 대해서는 급여에서 공제한다." border="0" color="0" x="132" y="860" height="12" width="573" html.valueishtml="0"  name=t_10 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="134217728" )
+text(band=detail alignment="0" text="2. 근로자는 급여통장(현금카드)을 직원 및 반장에 위임 및 관리를 주지 않는다." border="0" color="255" x="132" y="876" height="14" width="573" html.valueishtml="0"  name=t_14 visible="1"  font.face="Arial" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="134217728" )
+text(band=detail alignment="0" text="기타 상기에 명시되지 않은 내용은 일용직관련 규정 및 관계법령에 따른다." border="0" color="0" x="132" y="892" height="12" width="573" html.valueishtml="0"  name=t_134 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="134217728" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="134217735" x="208" y="546" height="14" width="77" format="####-##-##" html.valueishtml="0"  name=start_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="바탕체" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="134217735" x="335" y="546" height="14" width="77" format="####-##-##" html.valueishtml="0"  name=end_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="바탕체" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="제2조(근로장소) 乙의 근로장소는                                                                  현장,  직종은                                                으로 한다." border="0" color="0" x="42" y="244" height="12" width="663" html.valueishtml="0"  name=t_19 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="39" y1="62" x2="706" y2="62"  name=l_4 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="[乙]" border="0" color="0" x="92" y="153" height="14" width="24" html.valueishtml="0"  name=t_3 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="근로자" border="0" color="0" x="45" y="153" height="14" width="48" html.valueishtml="0"  name=t_4 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="39" y1="119" x2="705" y2="119"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="506" y1="120" x2="506" y2="148"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="506" y1="62" x2="506" y2="90"  name=l_36 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="122" y1="90" x2="705" y2="90"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="122" y1="148" x2="705" y2="148"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="122" y1="177" x2="705" y2="177"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="[甲]" border="0" color="0" x="92" y="85" height="14" width="24" html.valueishtml="0"  name=t_1 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="사용자" border="0" color="0" x="48" y="85" height="14" width="43" html.valueishtml="0"  name=t_2 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="사업장명" border="0" color="0" x="139" y="69" height="14" width="66" html.valueishtml="0"  name=t_5 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="392" y1="62" x2="392" y2="90"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="392" y1="120" x2="392" y2="148"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="현장대리인" border="0" color="0" x="411" y="69" height="14" width="78" html.valueishtml="0"  name=t_11 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="39" y1="62" x2="39" y2="206"  name=l_2 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="122" y1="62" x2="122" y2="206"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="225" y1="62" x2="225" y2="206"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="3" text="현장소재지" border="0" color="0" x="142" y="98" height="14" width="66" html.valueishtml="0"  name=t_6 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="134217735" x="231" y="98" height="14" width="470" format="[general]" html.valueishtml="0"  name=proj_address visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="성명" border="0" color="0" x="142" y="127" height="14" width="60" html.valueishtml="0"  name=t_7 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="134217735" x="231" y="127" height="14" width="156" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="주민등록번호" border="0" color="0" x="402" y="127" height="14" width="96" html.valueishtml="0"  name=t_13 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="134217735" x="512" y="127" height="14" width="188" format="######-#######" html.valueishtml="0"  name=labor_id visible="1" editmask.mask="######-#######" editmask.focusrectangle=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="주소" border="0" color="0" x="142" y="156" height="14" width="60" html.valueishtml="0"  name=t_8 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="134217735" x="231" y="156" height="14" width="469" format="[general]" html.valueishtml="0"  name=address visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="연락처" border="0" color="0" x="142" y="185" height="14" width="60" html.valueishtml="0"  name=t_9 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="39" y1="206" x2="706" y2="206"  name=l_5 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="392" y1="177" x2="392" y2="206"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="506" y1="177" x2="506" y2="206"  name=l_38 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="706" y1="62" x2="706" y2="206"  name=l_3 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="2" background.color="16777215" )
+column(band=detail id=16 alignment="0" tabsequence=32766 border="0" color="134217735" x="580" y="185" height="15" width="121" format="[general]" html.valueishtml="0"  name=bank_account visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="if(isNull(hp), phone, hp) "border="0" color="134217735" x="231" y="185" height="15" width="152" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="임금수령 계좌번호" border="0" color="0" x="380" y="185" height="14" width="138" html.valueishtml="0"  name=t_15 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="134217735" x="511" y="185" height="14" width="64" format="[general]" html.valueishtml="0"  name=bank_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="134217735" x="231" y="69" height="14" width="154" format="[general]" html.valueishtml="0"  name=association_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=34 alignment="0" tabsequence=32766 border="0" color="134217735" x="512" y="69" height="14" width="187" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text=" 위 당사자는 상호 신뢰를 바탕으로 근로자는 본 계약에 의한 근로를 제공하고 사용자는 본 계약에 의한 근로조건을 이행하기로 하는 근로계약을 체결한다." border="0" color="0" x="42" y="212" height="12" width="663" html.valueishtml="0"  name=t_16 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="439" y1="257" x2="569" y2="257"  name=l_1 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="188" y1="257" x2="394" y2="257"  name=l_12 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="2" background.color="16777215" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="134217735" x="193" y="243" height="14" width="178" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="0" tabsequence=32766 border="0" color="134217735" x="446" y="243" height="14" width="117" format="[general]" html.valueishtml="0"  name=job_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="제3조(근로시간)  ① 근무일의 시업 및  종업시각은 07:00~~18:00까지로하며, 계절 및 현장 여건을 고려하여 근로시간을 변경할 수 있다." border="0" color="0" x="42" y="260" height="12" width="663" html.valueishtml="0"  name=t_39 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                        ② 휴게시간은 오전 10:00부터, 오후 15:00부터 각각 30분의 휴게시간 및 중식시간(12:00~~13:00)을 포함하여 1일 2시간으로 한다." border="0" color="0" x="42" y="276" height="12" width="663" html.valueishtml="0"  name=t_40 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="                        ③ 乙은 주 1일의 주휴일과 1년간 15일 이상의 휴가를 사용할 수 있음을 원칙으로 한다." border="0" color="0" x="42" y="292" height="12" width="663" html.valueishtml="0"  name=t_41 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="제4조(임      금)  ① 乙의 임금은 아래에서 정한 시급을 기초로하여 각종 법정 수당을 포함한 일당을 적용하기로 한다." border="0" color="0" x="42" y="308" height="12" width="663" html.valueishtml="0"  name=t_25 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="제1조(직      무) 乙의 직무는 현장 일용공업무, 기타 이에 부수되는 직무를 수행한다." border="0" color="0" x="42" y="228" height="12" width="663" html.valueishtml="0"  name=t_18 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="출역
+평균
+일당
+내역" border="0" color="0" x="116" y="388" height="48" width="59" html.valueishtml="0"  name=t_36 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="금      액" border="0" color="0" x="258" y="326" height="12" width="86" html.valueishtml="0"  name=t_28 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="주휴수당" border="0" color="0" x="180" y="394" height="12" width="73" html.valueishtml="0"  name=t_32 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="구        분" border="0" color="0" x="116" y="326" height="12" width="137" html.valueishtml="0"  name=t_26 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="177" y1="391" x2="346" y2="391"  name=l_32 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="113" y1="357" x2="346" y2="357"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="113" y1="374" x2="346" y2="374"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="114" y1="340" x2="705" y2="340"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="원/시간" border="0" color="0" x="316" y="343" height="12" width="28" html.valueishtml="0"  name=t_136 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="360" height="12" width="28" html.valueishtml="0"  name=t_137 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="377" height="12" width="28" html.valueishtml="0"  name=t_138 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="394" height="12" width="28" html.valueishtml="0"  name=t_139 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="113" y1="322" x2="706" y2="322"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="기본시급" border="0" color="0" x="116" y="343" height="12" width="137" html.valueishtml="0"  name=t_29 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="134217735" x="258" y="343" height="11" width="54" format="#,###" html.valueishtml="0"  name=time_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="출역평균일당" border="0" color="0" x="116" y="360" height="12" width="137" html.valueishtml="0"  name=t_30 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="16711680" x="258" y="360" height="11" width="54" format="#,###" html.valueishtml="0"  name=pay_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="기본급" border="0" color="0" x="180" y="377" height="12" width="73" html.valueishtml="0"  name=t_31 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="113" y1="323" x2="113" y2="479"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="177" y1="374" x2="177" y2="478"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="255" y1="323" x2="255" y2="478"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="346" y1="323" x2="346" y2="478"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=detail x1="177" y1="409" x2="346" y2="409"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="토요가산수당" border="0" color="0" x="180" y="412" height="12" width="73" html.valueishtml="0"  name=t_143 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="원/일" border="0" color="0" x="316" y="412" height="12" width="28" html.valueishtml="0"  name=t_144 visible="1"  font.face="Arial" font.height="-7" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="1" tabsequence=32766 border="0" color="255" x="258" y="377" height="11" width="54" format="#,###" html.valueishtml="0"  name=basic_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="1" tabsequence=32766 border="0" color="255" x="258" y="395" height="11" width="54" format="#,###" html.valueishtml="0"  name=ju_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=36 alignment="1" tabsequence=32766 border="0" color="255" x="258" y="412" height="11" width="54" format="[general]" html.valueishtml="0"  name=over_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="(사용자)" border="0" color="0" x="50" y="980" height="14" width="54" html.valueishtml="0"  name=t_72 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="(주)세보엠이씨" border="0" color="0" x="118" y="981" height="14" width="154" html.valueishtml="0"  name=t_73 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="현장대리인 :" border="0" color="0" x="46" y="1014" height="14" width="90" html.valueishtml="0"  name=t_74 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="(인)" border="0" color="0" x="316" y="1012" height="14" width="26" html.valueishtml="0"  name=t_100 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=34 alignment="2" tabsequence=32766 border="0" color="134217735" x="138" y="1014" height="14" width="176" format="[general]" html.valueishtml="0"  name=emp_name_1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="배부받음 " border="0" color="16711680" x="563" y="17" height="24" width="92" html.valueishtml="0"  name=t_104 visible="1"  font.face="바탕체" font.height="-16" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="(인)" border="0" color="16711680" x="668" y="24" height="15" width="32" html.valueishtml="0"  name=t_105 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

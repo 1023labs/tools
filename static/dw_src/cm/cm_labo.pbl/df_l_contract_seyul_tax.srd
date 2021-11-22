@@ -1,0 +1,29 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=16777215 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=572 color="536870912" )
+table(column=(type=decimal(1) updatewhereclause=yes name=basic_tax dbname="SM_CODE_CONTRACT_TAX.basic_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=ju_tax dbname="SM_CODE_CONTRACT_TAX.ju_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=time_etc_tax dbname="SM_CODE_CONTRACT_TAX.time_etc_tax" )
+ column=(type=decimal(1) updatewhereclause=yes name=holiday_cut_tax dbname="SM_CODE_CONTRACT_TAX.holiday_cut_tax" )
+ column=(type=number updatewhereclause=yes name=year_tax dbname="year_tax" )
+ retrieve="SELECT BASIC_TAX AS BASIC_TAX,
+		 JU_TAX AS JU_TAX,
+		 TIME_ETC_TAX AS TIME_ETC_TAX,
+		 HOLIDAY_CUT_TAX AS HOLIDAY_CUT_TAX,
+		 (100 - (BASIC_TAX + JU_TAX + TIME_ETC_TAX + HOLIDAY_CUT_TAX)) AS YEAR_TAX
+  FROM SM_CODE_CONTRACT_TAX
+ WHERE YYYYMM = (SELECT MAX(YYYYMM)
+						 FROM SM_CODE_CONTRACT_TAX)" )
+column(band=detail id=1 alignment="1" tabsequence=32766 border="0" color="0" x="64" y="12" height="64" width="187" format="[General]" html.valueishtml="0"  name=basic_tax visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="0" x="64" y="132" height="64" width="187" format="[General]" html.valueishtml="0"  name=ju_tax visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="0" x="64" y="244" height="64" width="187" format="[General]" html.valueishtml="0"  name=time_etc_tax visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="0" x="64" y="360" height="64" width="187" format="[General]" html.valueishtml="0"  name=holiday_cut_tax visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="0" x="64" y="476" height="64" width="187" format="[general]" html.valueishtml="0"  name=year_tax visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

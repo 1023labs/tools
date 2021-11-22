@@ -1,0 +1,207 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=29 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=25 color="536870912" )
+detail(height=27 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(2) updatewhereclause=yes name=group_code dbname="group_code" )
+ column=(type=char(250) updatewhereclause=yes name=group_name dbname="group_name" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=pm_emp_name dbname="pm_emp_name" )
+ column=(type=number updatewhereclause=yes name=pre_retire_amt dbname="pre_retire_amt" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=number updatewhereclause=yes name=cont_amt dbname="cont_amt" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="pay_tot" )
+ column=(type=number updatewhereclause=yes name=cur_retire_amt dbname="cur_retire_amt" )
+ column=(type=number updatewhereclause=yes name=term_08 dbname="term_08" )
+ column=(type=number updatewhereclause=yes name=term_09 dbname="term_09" )
+ column=(type=number updatewhereclause=yes name=term_10 dbname="term_10" )
+ column=(type=number updatewhereclause=yes name=term_11 dbname="term_11" )
+ column=(type=number updatewhereclause=yes name=term_12 dbname="term_12" )
+ column=(type=number updatewhereclause=yes name=reti_amt dbname="reti_amt" )
+ retrieve="SELECT MA.COMPANY_CODE     AS COMPANY_CODE,
+       MA.GROUP_CODE       AS GROUP_CODE,
+       MA.GROUP_NAME       AS GROUP_NAME,
+       MA.PM_EMPNO         AS PM_EMPNO,
+       MA.PM_EMP_NAME      AS PM_EMP_NAME,
+       DE.PRE_RETIRE_AMT   AS PRE_RETIRE_AMT,
+       MA.PROJ_CODE        AS PROJ_CODE,
+       MA.PROJ_NAME        AS PROJ_NAME,
+       PRO.CONT_AMT        AS CONT_AMT,
+       PRO.PAY_TOT         AS PAY_TOT,
+       MA.CUR_RETIRE_AMT   AS CUR_RETIRE_AMT,
+       DA.TERM_08          AS TERM_08,
+       DA.TERM_09          AS TERM_09,
+       DA.TERM_10          AS TERM_10,
+       DA.TERM_11          AS TERM_11,
+       DA.TERM_12          AS TERM_12,
+       DA.RETI_AMT         AS RETI_AMT
+  FROM (SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+               A.GROUP_CODE    AS GROUP_CODE,
+               C.DNAME         AS GROUP_NAME,
+               B.PM_EMPNO      AS PM_EMPNO,
+               D.EMP_NAME      AS PM_EMP_NAME,
+               A.DEPT_CODE     AS PROJ_CODE,
+               B.PROJ_NAME     AS PROJ_NAME,
+               G.CUR_RETIRE_AMT AS CUR_RETIRE_AMT
+          FROM SM_CODE_DEPT A INNER JOIN SM_CODE_PROJECT B LEFT JOIN HR_PERS_MASTER D
+                                                                  ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                 AND B.PM_EMPNO     = D.EMP_NO
+                                      ON A.COMPANY_CODE = B.COMPANY_CODE
+                                     AND A.DEPT_CODE    = B.PROJ_CODE
+                                     AND B.MANAGE_TYPE = '1'
+                                     AND B.MANAGE_TAG  = '1'
+                                     AND B.PROJECT_TAG = '1'
+                               LEFT JOIN SM_COMCODE_D C
+                                      ON A.GROUP_CODE = C.DCODE
+                                     AND C.SYS_ID     = 'SM'
+                                     AND C.HCODE      = 'DEPTGROUP'
+                               LEFT JOIN (SELECT E.COMPANY_CODE    AS COMPANY_CODE,
+                                                 E.PROJ_CODE       AS PROJ_CODE,
+                                                 SUM(E.RETIRE_AMT) AS CUR_RETIRE_AMT
+                                            FROM CM_RTTE_RPAY_APPLY_LIST E INNER JOIN SM_CODE_PROJECT F
+                                                                                   ON E.COMPANY_CODE = F.COMPANY_CODE
+                                                                                  AND E.PROJ_CODE    = F.PROJ_CODE
+                                           WHERE SUBSTR(SUBMIT_DATE,1,6) BETWEEN SUBSTR(:AS_PAY_YYMM,1,4)||'01' AND :AS_PAY_YYMM   
+                                             AND F.PM_EMPNO  LIKE :AS_PM_EMPNO
+                                        GROUP BY E.COMPANY_CODE,
+                                                 E.PROJ_CODE) G
+                                      ON A.COMPANY_CODE = G.COMPANY_CODE
+                                     AND A.DEPT_CODE    = G.PROJ_CODE
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.GROUP_CODE NOT IN('30','40')
+           AND A.DEPT_CODE NOT IN('20000','201049','204013','201031','202071','20100008')
+           AND B.PM_EMPNO  LIKE :AS_PM_EMPNO) MA LEFT JOIN (SELECT E.COMPANY_CODE    AS COMPANY_CODE,
+                                                                   F.PM_EMPNO        AS PM_EMPNO,
+                                                                   SUM(E.RETIRE_AMT) AS PRE_RETIRE_AMT
+                                                              FROM CM_RTTE_RPAY_APPLY_LIST E INNER JOIN SM_CODE_PROJECT F
+                                                                                                     ON E.COMPANY_CODE = F.COMPANY_CODE
+                                                                                                    AND E.PROJ_CODE    = F.PROJ_CODE
+                                                             WHERE SUBMIT_DATE < SUBSTR(:AS_PAY_YYMM,1,4)||'0101'   
+                                                               AND F.PM_EMPNO LIKE :AS_PM_EMPNO
+                                                            GROUP BY E.COMPANY_CODE,
+                                                                     F.PM_EMPNO) DE
+                                                        ON MA.COMPANY_CODE = DE.COMPANY_CODE
+                                                       AND MA.PM_EMPNO     = DE.PM_EMPNO
+                                                 LEFT JOIN (SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+                                                                   A.PROJ_CODE                    AS PROJ_CODE,
+                                                                   SUM(DECODE(A.TERM_08,'N',0,1)) AS TERM_08,
+                                                                   SUM(DECODE(A.TERM_09,'N',0,1)) AS TERM_09,
+                                                                   SUM(DECODE(A.TERM_10,'N',0,1)) AS TERM_10,
+                                                                   SUM(DECODE(A.TERM_11,'N',0,1)) AS TERM_11,
+                                                                   SUM(DECODE(A.TERM_12,'N',0,1)) AS TERM_12,
+                                                                   SUM(A.RETI_AMT)                AS RETI_AMT
+                                                              FROM CM_RETI_PRE_SUM A
+                                                             WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                                               AND A.PAY_YYMM     = :AS_PAY_YYMM
+                                                          GROUP BY A.COMPANY_CODE,
+                                                                   A.PROJ_CODE) DA
+                                                        ON MA.COMPANY_CODE = DA.COMPANY_CODE
+                                                       AND MA.PROJ_CODE    = DA.PROJ_CODE
+                                                 LEFT JOIN (SELECT MA.COMPANY_CODE  AS COMPANY_CODE,
+                                                                   MA.PROJ_CODE     AS PROJ_CODE,
+                                                                   MA.CONT_AMT      AS CONT_AMT,
+                                                                   DE.PAY_TOT       AS PAY_TOT
+                                                             FROM (SELECT A.COMPANY_CODE                AS COMPANY_CODE,
+                                                                          A.PROJ_CODE                   AS PROJ_CODE,
+                                                                          SUM(NVL(A.MATERIAL_AMT,0)) +
+                                                                          SUM(NVL(A.LABOR_AMT,0)) +
+                                                                          SUM(NVL(A.COST_AMT,0))        AS CONT_AMT
+                                                                     FROM CM_CONT_CHANGE_INFO A
+                                                                    WHERE A.PROJ_CODE IN(SELECT PROJ_CODE
+                                                                                           FROM SM_CODE_PROJECT
+                                                                                          WHERE MANAGE_TYPE = '1'
+                                                                                            AND MANAGE_TAG  = '1'
+                                                                                            AND PROJECT_TAG = '1')
+                                                                      AND SUBSTR(A.REG_DATE,1,6) <= :AS_PAY_YYMM
+                                                                   GROUP BY A.COMPANY_CODE,
+                                                                            A.PROJ_CODE) MA LEFT JOIN (SELECT COMPANY_CODE AS COMPANY_CODE,
+                                                                                                              PROJ_CODE    AS PROJ_CODE,
+                                                                                                              SUM(PAY_TOT) AS PAY_TOT
+                                                                                                         FROM CM_SALY_LABOR_ACCOUNT
+                                                                                                        WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                                                                          AND PAY_YYMM    <= :AS_PAY_YYMM
+                                                                                                          AND PROJ_CODE IN(SELECT PROJ_CODE
+                                                                                                                             FROM SM_CODE_PROJECT
+                                                                                                                            WHERE MANAGE_TYPE = '1'
+                                                                                                                              AND MANAGE_TAG  = '1'
+                                                                                                                              AND PROJECT_TAG = '1')
+                                                                                                     GROUP BY COMPANY_CODE,
+                                                                                                              PROJ_CODE) DE
+                                                                                                   ON MA.COMPANY_CODE = DE.COMPANY_CODE
+                                                                                                  AND MA.PROJ_CODE    = DE.PROJ_CODE
+                                                             WHERE MA.COMPANY_CODE = :AS_COMP_CODE) PRO
+                                                        ON MA.COMPANY_CODE = PRO.COMPANY_CODE
+                                                       AND MA.PROJ_CODE    = PRO.PROJ_CODE
+ORDER BY MA.COMPANY_CODE, MA.GROUP_CODE, MA.PM_EMPNO, MA.PROJ_NAME" arguments=(("AS_COMP_CODE", string),("AS_PAY_YYMM", string),("AS_PM_EMPNO", string)) )
+group(level=1 header.height=0 trailer.height=27 by=("group_name" , "pm_emp_name" , "pre_retire_amt" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="8" height="14" width="30" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업부" border="0" color="33554432" x="34" y="8" height="14" width="86" html.valueishtml="0"  name=group_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM" border="0" color="33554432" x="122" y="8" height="14" width="59" html.valueishtml="0"  name=pm_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전년 퇴직급여액" border="0" color="33554432" x="183" y="8" height="14" width="101" html.valueishtml="0"  name=pre_retire_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="286" y="8" height="14" width="229" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약 총액" border="0" color="33554432" x="517" y="8" height="14" width="122" html.valueishtml="0"  name=cont_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노임 총액" border="0" color="33554432" x="641" y="8" height="14" width="127" html.valueishtml="0"  name=pay_tot_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당년 퇴직급여액" border="0" color="33554432" x="770" y="8" height="14" width="110" html.valueishtml="0"  name=cur_retire_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="8개월차" border="0" color="33554432" x="882" y="8" height="14" width="72" html.valueishtml="0"  name=term_08_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="9개월차" border="0" color="33554432" x="956" y="8" height="14" width="72" html.valueishtml="0"  name=term_09_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="10개월차" border="0" color="33554432" x="1030" y="8" height="14" width="72" html.valueishtml="0"  name=term_10_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="11개월차" border="0" color="33554432" x="1104" y="8" height="14" width="72" html.valueishtml="0"  name=term_11_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="12개월 이상" border="0" color="33554432" x="1178" y="8" height="14" width="72" html.valueishtml="0"  name=term_12_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="퇴직금지급(예상)" border="0" color="33554432" x="1252" y="8" height="14" width="112" html.valueishtml="0"  name=reti_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="1366" y="8" height="14" width="43" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Group Code" border="0" color="33554432" x="1411" y="8" height="14" width="48" html.valueishtml="0"  name=group_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Pm Empno" border="0" color="33554432" x="1461" y="8" height="14" width="54" html.valueishtml="0"  name=pm_empno_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Proj Code" border="0" color="33554432" x="1517" y="8" height="14" width="42" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="34" y="8" height="15" width="86" format="[general]" html.valueishtml="0"  name=group_name visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="122" y="8" height="15" width="59" format="[general]" html.valueishtml="0"  name=pm_emp_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="183" y="8" height="15" width="101" format="#,###" html.valueishtml="0"  name=pre_retire_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="286" y="8" height="15" width="229" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="517" y="8" height="15" width="122" format="#,###" html.valueishtml="0"  name=cont_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="8" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1366" y="7" height="15" width="43" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="1411" y="8" height="15" width="48" format="[general]" html.valueishtml="0"  name=group_code visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="1461" y="8" height="15" width="54" format="[general]" html.valueishtml="0"  name=pm_empno visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1517" y="8" height="15" width="42" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="641" y="8" height="15" width="127" format="#,###" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="770" y="8" height="15" width="110" format="#,###" html.valueishtml="0"  name=cur_retire_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="882" y="8" height="15" width="72" format="#,###" html.valueishtml="0"  name=term_08 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="956" y="8" height="15" width="72" format="#,###" html.valueishtml="0"  name=term_09 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="1030" y="8" height="15" width="72" format="#,###" html.valueishtml="0"  name=term_10 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="1104" y="8" height="15" width="72" format="#,###" html.valueishtml="0"  name=term_11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="1178" y="8" height="15" width="72" format="#,###" html.valueishtml="0"  name=term_12 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="1252" y="8" height="15" width="112" format="#,###" html.valueishtml="0"  name=reti_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=trailer.1 alignment="2" text="소                  계" border="0" color="134217856" x="286" y="7" height="14" width="229" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(cont_amt for group 1)"border="0" color="134217856" x="517" y="7" height="14" width="122" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(pay_tot for group 1)"border="0" color="134217856" x="641" y="7" height="14" width="127" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(cur_retire_amt for group 1)"border="0" color="134217856" x="770" y="7" height="14" width="110" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(term_08 for group 1)"border="0" color="134217856" x="882" y="7" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(term_09 for group 1)"border="0" color="134217856" x="956" y="7" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(term_10 for group 1)"border="0" color="134217856" x="1030" y="7" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(term_11 for group 1)"border="0" color="134217856" x="1104" y="7" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(term_12 for group 1)"border="0" color="134217856" x="1178" y="7" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(reti_amt for group 1)"border="0" color="134217856" x="1252" y="7" height="14" width="112" format="#,###" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합                  계" border="0" color="0" x="286" y="6" height="14" width="229" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(cont_amt for all)"border="0" color="0" x="517" y="5" height="14" width="122" format="#,###" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(pay_tot for all)"border="0" color="0" x="641" y="5" height="14" width="127" format="#,###" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(cur_retire_amt for all)"border="0" color="0" x="770" y="5" height="14" width="110" format="#,###" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(term_08 for all)"border="0" color="0" x="882" y="5" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_14 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(term_09 for all)"border="0" color="0" x="956" y="5" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_15 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(term_10 for all)"border="0" color="0" x="1030" y="5" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(term_11 for all)"border="0" color="0" x="1104" y="5" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(term_12 for all)"border="0" color="0" x="1178" y="5" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(reti_amt for all)"border="0" color="0" x="1252" y="5" height="14" width="112" format="#,###" html.valueishtml="0"  name=compute_19 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="group_code	group_name	pm_emp_name	pre_retire_amt")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

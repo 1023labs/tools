@@ -1,0 +1,108 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=19 color="553648127" )
+table(column=(type=char(2) update=yes updatewhereclause=yes name=large_code dbname="sm_code_material.large_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=middle_code dbname="sm_code_material.middle_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=small_code dbname="sm_code_material.small_code" )
+ column=(type=char(8) updatewhereclause=yes name=code dbname="code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=item_code dbname="sm_code_material.item_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=item_name dbname="sm_code_material.item_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=item_std dbname="sm_code_material.item_std" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=item_unit dbname="sm_code_material.item_unit" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=std_tag dbname="sm_code_material.std_tag" values="	1/	0" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=search_name dbname="sm_code_material.search_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=customer_code dbname="sm_code_material.customer_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=remarks dbname="sm_code_material.remarks" )
+ column=(type=decimal(0) updatewhereclause=yes name=estimate_cost dbname="m_code_material_cost.estimate_cost" )
+ column=(type=decimal(0) updatewhereclause=yes name=order_cost dbname="m_code_material_cost.order_cost" )
+ column=(type=char(30) updatewhereclause=yes name=customer_name dbname="m_code_customer.customer_name" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=gubun_tag dbname="sm_code_material.gubun_tag" values="	1/	0" )
+ retrieve="  select a.large_code,
+         a.middle_code,
+         a.small_code,
+         substr(a.item_code, 6, 4) as code,
+         a.item_code,
+         a.item_name,
+         a.item_std,
+         a.item_unit,
+         a.std_tag,
+         a.search_name,
+         a.customer_code,
+         a.remarks,
+         b.estimate_cost,
+         b.order_cost,
+         c.customer_name,
+         gubun_tag
+    from sm_code_material a,
+         m_code_material_cost b,
+         m_code_customer c
+   where a.item_code = b.item_code(+)
+     and a.customer_code = b.customer_code(+)
+     and a.customer_code = c.customer_code(+)
+     and a.large_code = :as_large
+     and a.middle_code = :as_middle
+     and a.small_code = :as_small   
+order by a.large_code, a.middle_code, small_code, code" update="sm_code_material" updatewhere=0 updatekeyinplace=no arguments=(("as_large", string),("as_middle", string),("as_small", string)) )
+text(band=header alignment="0" text="" border="0" color="33554432" x="1" y="0" height="19" width="1090" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="31451630" )
+line(band=header x1="0" y1="0" x2="1091" y2="0"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="0" y1="19" x2="1091" y2="19"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="0" y1="0" x2="0" y2="19"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="8388608" x="1" y="4" height="14" width="86" html.valueishtml="0"  name=div_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구매단가" border="0" color="8388608" x="712" y="4" height="14" width="86" html.valueishtml="0"  name=order_cost_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품명" border="0" color="8388608" x="88" y="4" height="14" width="245" html.valueishtml="0"  name=item_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="8388608" x="334" y="4" height="14" width="210" html.valueishtml="0"  name=item_std_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="최근납품처" border="0" color="8388608" x="861" y="4" height="14" width="230" html.valueishtml="0"  name=customer_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단위" border="0" color="8388608" x="545" y="4" height="14" width="53" html.valueishtml="0"  name=item_unit_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구분" border="0" color="8388608" x="599" y="4" height="14" width="25" html.valueishtml="0"  name=gubun_tag_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="협정단가" border="0" color="8388608" x="625" y="4" height="14" width="86" html.valueishtml="0"  name=estimate_cost_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단가율" border="0" color="8388608" x="799" y="4" height="14" width="61" html.valueishtml="0"  name=cost_rate_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="87" y1="0" x2="87" y2="19"  name=l_4 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="333" y1="0" x2="333" y2="19"  name=l_5 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="544" y1="0" x2="544" y2="19"  name=l_6 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="598" y1="0" x2="598" y2="19"  name=l_7 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="624" y1="0" x2="624" y2="19"  name=l_8 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="711" y1="0" x2="711" y2="19"  name=l_9 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="798" y1="0" x2="798" y2="19"  name=l_10 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="860" y1="0" x2="860" y2="19"  name=l_11 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=header x1="1091" y1="0" x2="1091" y2="19"  name=l_12 pointer="HyperLink!" visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+rectangle(band=detail x="0" y="0" height="19" width="1092"  name=r_1 visible="1~tif ( getrow() = currentrow(), 1, 0 )" brush.hatch="6" brush.color="24958134" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="33554432" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="33554432" x="923" y="2" height="14" width="166" format="[general]" html.valueishtml="0"  name=customer_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+compute(band=detail alignment="0" expression="large_code + middle_code + small_code + code"border="0" color="33554432" x="4" y="57" height="14" width="64" format="[GENERAL]" html.valueishtml="0"  name=div_code visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="0" y1="0" x2="0" y2="19"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="13" y1="0" x2="13" y2="19"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="30" y1="0" x2="30" y2="19"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="47" y1="0" x2="47" y2="19"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="87" y1="0" x2="87" y2="19"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="333" y1="0" x2="333" y2="19"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="544" y1="0" x2="544" y2="19"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="526" y1="0" x2="526" y2="19"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="598" y1="0" x2="598" y2="19"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="624" y1="0" x2="624" y2="19"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="711" y1="0" x2="711" y2="19"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="798" y1="0" x2="798" y2="19"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="860" y1="0" x2="860" y2="19"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="1091" y1="0" x2="1091" y2="19"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="920" y1="0" x2="920" y2="19"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+line(band=detail x1="0" y1="18" x2="1091" y2="18"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="26448787"  background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="3" y="2" height="14" width="8" format="[general]" html.valueishtml="0"  name=large_code visible="1" edit.limit=1 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="16" y="2" height="14" width="12" format="[general]" html.valueishtml="0"  name=middle_code visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="14" width="12" format="[general]" html.valueishtml="0"  name=small_code visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=4 alignment="0" tabsequence=10 border="0" color="33554432" x="50" y="2" height="14" width="35" format="[general]" html.valueishtml="0"  name=code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="553648127~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=6 alignment="0" tabsequence=20 border="0" color="33554432" x="90" y="2" height="14" width="241" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="553648127~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=7 alignment="0" tabsequence=30 border="0" color="33554432" x="336" y="2" height="14" width="188" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=9 alignment="1" tabsequence=40 border="0" color="33554432" x="529" y="2" height="14" width="13" format="[general]" html.valueishtml="0"  name=std_tag visible="1" checkbox.text="" checkbox.on="1" checkbox.off="0" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=8 alignment="0" tabsequence=50 border="0" color="33554432" x="547" y="2" height="14" width="49" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=16 alignment="2" tabsequence=60 border="0" color="33554432" x="601" y="2" height="14" width="21" format="[general]" html.valueishtml="0"  name=gubun_tag visible="1" checkbox.text="" checkbox.on="1" checkbox.off="0" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="627" y="2" height="14" width="82" format="#,##0" html.valueishtml="0"  name=estimate_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="714" y="2" height="14" width="82" format="[general]" html.valueishtml="0"  name=order_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+compute(band=detail alignment="1" expression=" if( isnull(  order_cost ), 0,  order_cost ) / if( isnull( estimate_cost ), 0,  estimate_cost ) "border="0" color="33554432" x="801" y="2" height="14" width="57" format="0.00%" html.valueishtml="0"  name=cost_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="863" y="2" height="14" width="55" format="[general]" html.valueishtml="0"  name=customer_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="0" background.color="536870912~tif ( getrow() = currentrow() , rgb(182,212,124), rgb(255, 255, 255) ) " )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,174 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=171 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(30) updatewhereclause=yes name=labor_name_e dbname="labor_name_e" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn_pre dbname="rrn_pre" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn_post dbname="rrn_post" )
+ column=(type=char(1) updatewhereclause=yes name=sex_div dbname="sex_div" values="남	1/여	2/" )
+ column=(type=char(100) updatewhereclause=yes name=picture dbname="picture" )
+ column=(type=char(3) updatewhereclause=yes name=nation_code dbname="nation_code" )
+ column=(type=char(1) updatewhereclause=yes name=foregn_div dbname="foregn_div" values="	Y/	N" )
+ column=(type=char(4000) updatewhereclause=yes name=hp dbname="hp" )
+ column=(type=char(4000) updatewhereclause=yes name=phone dbname="phone" )
+ column=(type=char(3) updatewhereclause=yes name=job_code_h dbname="job_code_h" )
+ column=(type=char(8) updatewhereclause=yes name=join_date_h dbname="join_date_h" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=gjoin_date dbname="gjoin_date" )
+ column=(type=char(8) updatewhereclause=yes name=rpay_date dbname="rpay_date" )
+ column=(type=char(8) updatewhereclause=yes name=retire_date dbname="retire_date" )
+ column=(type=char(1) updatewhereclause=yes name=continue_div dbname="continue_div" )
+ column=(type=char(1) updatewhereclause=yes name=pay_div dbname="pay_div" )
+ column=(type=char(100) updatewhereclause=yes name=id_card dbname="id_card" )
+ column=(type=char(7) updatewhereclause=yes name=zip_code dbname="zip_code" )
+ column=(type=char(4000) updatewhereclause=yes name=addr1 dbname="addr1" )
+ column=(type=char(4000) updatewhereclause=yes name=addr2 dbname="addr2" )
+ column=(type=char(1) updatewhereclause=yes name=office_div dbname="office_div" )
+ column=(type=char(1) updatewhereclause=yes name=disabled dbname="disabled" values="	Y/	N" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(515) updatewhereclause=yes name=pic_path dbname="pic_path" )
+ column=(type=char(520) updatewhereclause=yes name=pic_path_card dbname="pic_path_card" )
+ column=(type=char(200) updatewhereclause=yes name=password dbname="password" )
+ column=(type=char(2) updatewhereclause=yes name=flexible_yn dbname="flexible_yn" values="	Y/	N" )
+ column=(type=char(8) updatewhereclause=yes name=flex_start dbname="flex_start" )
+ column=(type=char(8) updatewhereclause=yes name=flex_end dbname="flex_end" )
+ column=(type=char(3) updatewhereclause=yes name=duty_code_h dbname="duty_code_h" )
+ column=(type=char(3) updatewhereclause=yes name=grade_code_h dbname="grade_code_h" )
+ column=(type=char(3) updatewhereclause=yes name=service_div_h dbname="service_div_h" )
+ column=(type=char(8) updatewhereclause=yes name=apply_pay_date_h dbname="apply_pay_date_h" )
+ column=(type=char(3) updatewhereclause=yes name=cont_miss_reason_h dbname="cont_miss_reason_h" )
+ column=(type=char(3) updatewhereclause=yes name=school_car_code dbname="school_car_code" )
+ column=(type=number updatewhereclause=yes name=work_month_cnt dbname="work_month_cnt" )
+ column=(type=char(1) updatewhereclause=yes name=daily_work_cnt dbname="daily_work_cnt" )
+ column=(type=char(1) updatewhereclause=yes name=pre_daily_work_cnt dbname="pre_daily_work_cnt" )
+ column=(type=char(1) updatewhereclause=yes name=cont_miss_yn dbname="cont_miss_yn" )
+ column=(type=char(10) updatewhereclause=yes name=retire_div dbname="retire_div" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.LABOR_NAME, 
+         A.LABOR_NAME_E, 
+         X_DECRYPT(A.RRN_PRE, '(enckey)')  AS RRN_PRE, 
+         X_DECRYPT(A.RRN_POST, '(enckey)') AS RRN_POST, 
+         A.SEX_DIV, 
+         A.PICTURE, 
+         A.NATION_CODE, 
+         A.FOREGN_DIV, 
+         X_DECRYPT(A.HP, '(enckey)')    AS HP, 
+         X_DECRYPT(A.PHONE, '(enckey)') AS PHONE, 
+         A.JOB_CODE_H, 
+         A.JOIN_DATE_H, 
+         A.PROJ_CODE, 
+         A.GJOIN_DATE, 
+         A.RPAY_DATE, 
+         A.RETIRE_DATE, 
+         A.CONTINUE_DIV, 
+         A.PAY_DIV, 
+         A.ID_CARD, 
+         A.ZIP_CODE, 
+         X_DECRYPT(A.ADDR1, '(enckey)') AS ADDR1, 
+         X_DECRYPT(A.ADDR2, '(enckey)') AS ADDR2,
+         A.OFFICE_DIV,
+         A.DISABLED,
+         B.PROJ_NAME,
+         trim('/'|| PIC_PATH.DNAME ||'/'||A.COMPANY_CODE||'/'||A.LABOR_CODE ||'.'|| PIC_PATH.DVALUE2) AS PIC_PATH,
+         trim('/'|| PIC_PATH.DNAME ||'/'||A.COMPANY_CODE||'/'||A.LABOR_CODE||'_CARD' ||'.'|| PIC_PATH.DVALUE2) AS PIC_PATH_CARD,
+         A.PASSWORD,
+         FLEXIBLE_YN,
+         FLEX_START,
+         FLEX_END,
+         A.DUTY_CODE_H,
+         A.GRADE_CODE_H,
+         A.SERVICE_DIV_H,
+         A.APPLY_PAY_DATE_H,
+         A.CONT_MISS_REASON_H,
+         A.SCHOOL_CAR_CODE,
+         NVL(CEIL(MONTHS_BETWEEN(SYSDATE,TO_DATE(A.JOIN_DATE_H,'YYYYMMDD'))),0) AS WORK_MONTH_CNT,
+         CASE WHEN NVL(TO_NUMBER(C.DAILY_WORK_CNT),0)     > 0 THEN 'O' ELSE '-' END AS DAILY_WORK_CNT,
+         CASE WHEN NVL(TO_NUMBER(D.PRE_DAILY_WORK_CNT),0) > 0 THEN 'O' ELSE '-' END AS PRE_DAILY_WORK_CNT,
+         CASE WHEN CONT_MISS_REASON_H IS NULL THEN 'N' ELSE 'Y' END AS CONT_MISS_YN,
+         A.RETIRE_DIV
+    FROM CM_HIRE_RETIRE_LIST A LEFT JOIN SM_CODE_PROJECT B
+                                      ON A.PROJ_CODE = B.PROJ_CODE
+                          LEFT JOIN (SELECT COMPANY_CODE, LABOR_CODE, NVL(SUM(NVL(WORK_QTY,0)),0) AS DAILY_WORK_CNT
+                                       FROM CM_SALY_LABOR_ACCOUNT
+                                      WHERE PAY_YYMM   = TO_CHAR(SYSDATE,'YYYYMM')
+                                      GROUP BY COMPANY_CODE, LABOR_CODE) C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.LABOR_CODE   = C.LABOR_CODE
+                          LEFT JOIN (SELECT COMPANY_CODE, LABOR_CODE, NVL(SUM(NVL(WORK_QTY,0)),0) AS PRE_DAILY_WORK_CNT
+                                       FROM CM_SALY_LABOR_ACCOUNT
+                                      WHERE PAY_YYMM   = TO_CHAR(ADD_MONTHS(SYSDATE,-1),'YYYYMM')
+                                      GROUP BY COMPANY_CODE, LABOR_CODE) D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE
+                                AND A.LABOR_CODE   = D.LABOR_CODE,
+         (  SELECT A.DNAME,
+                   A.DVALUE2
+              FROM SM_COMCODE_D A
+             WHERE HCODE = '115') PIC_PATH
+   WHERE A.COMPANY_CODE  = :as_code
+     --AND A.OFFICE_DIV LIKE :as_div
+     AND (A.LABOR_CODE LIKE :as_emp||'%' OR A.LABOR_NAME LIKE '%'||:as_emp||'%')
+     AND A.PROJECT_HIRE_YN = 'Y'
+     AND A.PROJ_CODE LIKE :as_proj
+     AND (  :as_month_div = '%' 
+         OR (CASE :as_month_div WHEN '1' THEN '1' ELSE '2' END = '1' AND NVL(CEIL(MONTHS_BETWEEN(SYSDATE,TO_DATE(A.JOIN_DATE_H,'YYYYMMDD'))),0) BETWEEN 1 AND 5)
+         OR (CASE :as_month_div WHEN '2' THEN '1' ELSE '2' END = '1' AND NVL(CEIL(MONTHS_BETWEEN(SYSDATE,TO_DATE(A.JOIN_DATE_H,'YYYYMMDD'))),0) > 5)
+         OR (CASE :as_month_div WHEN '3' THEN '1' ELSE '2' END = '1' AND NVL(CEIL(MONTHS_BETWEEN(SYSDATE,TO_DATE(A.JOIN_DATE_H,'YYYYMMDD'))),0) > 11)
+         OR (CASE :as_month_div WHEN '4' THEN '1' ELSE '2' END = '1' AND NVL(CEIL(MONTHS_BETWEEN(SYSDATE,TO_DATE(A.JOIN_DATE_H,'YYYYMMDD'))),0) > 17)
+         )
+ORDER BY A.LABOR_NAME,X_DECRYPT(A.RRN_PRE, '(enckey)')" arguments=(("as_code", string),("as_div", string),("as_emp", string),("as_proj", string),("as_month_div", string)) )
+rectangle(band=background x="149" y="21" height="51" width="82"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="409" y="21" height="51" width="82"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+line(band=background x1="5" y1="19" x2="987" y2="19"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="18" x2="987" y2="18"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="149" y1="45" x2="986" y2="45"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="149" y1="71" x2="986" y2="71"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="성명(한글)" border="0" color="18110176" x="155" y="26" height="14" width="70" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="주민번호" border="0" color="18110176" x="152" y="52" height="14" width="70" html.valueishtml="0"  name=rrn_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="~~" border="0" color="33554432" x="304" y="51" height="14" width="9" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=background alignment="1" text="성   별" border="0" color="27229506" x="414" y="25" height="14" width="70" html.valueishtml="0"  name=sex_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="322" y="106" height="26" width="82"  name=r_8  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="490" y="106" height="26" width="82"  name=r_4  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="150" y="79" height="102" width="82"  name=r_5  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+line(band=background x1="149" y1="79" x2="986" y2="79"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="149" y1="105" x2="986" y2="105"  name=l_11  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="149" y1="131" x2="986" y2="131"  name=l_12  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="근무현장" border="0" color="27229506" x="155" y="87" height="14" width="70" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="입사일" border="0" color="27229506" x="155" y="112" height="14" width="70" html.valueishtml="0"  name=join_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="퇴사일" border="0" color="27229506" x="329" y="111" height="14" width="70" html.valueishtml="0"  name=retire_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="주민등록주소" border="0" color="18110176" x="152" y="137" height="14" width="77" html.valueishtml="0"  name=addr1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="상세주소" border="0" color="27229506" x="152" y="163" height="14" width="77" html.valueishtml="0"  name=addr2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=background x1="149" y1="157" x2="571" y2="157"  name=l_13  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="4" y1="183" x2="987" y2="183"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="4" y1="182" x2="987" y2="182"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="휴대폰" border="0" color="18110176" x="497" y="112" height="14" width="70" html.valueishtml="0"  name=cell_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="237" y="11" height="15" width="63" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="306" y="11" height="15" width="92" format="[general]" html.valueishtml="0"  name=labor_name  tag="[R]" visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=30 alignment="0" tabsequence=32766 border="0" color="33554432" x="506" y="253" height="14" width="55" format="[general]" html.valueishtml="0"  name=password visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=80 border="0" color="33554432" x="234" y="36" height="15" width="63" format="[general]" html.valueishtml="0"  name=rrn_pre  tag="[R][E]" visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=90 border="0" color="33554432" x="320" y="36" height="15" width="81" format="[general]" html.valueishtml="0"  name=rrn_post  tag="[R][E]" visible="1" edit.limit=7 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=30 border="0" color="33554432" x="498" y="11" height="15" width="167" format="[general]" html.valueishtml="0"  name=sex_div visible="1" radiobuttons.columns=2 radiobuttons.scale=no radiobuttons.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+bitmap(band=detail filename="" x="9" y="14" height="145" width="134" border="6"  name=p_img visible="1" )
+column(band=detail id=22 alignment="2" tabsequence=50 border="0" color="33554432" x="238" y="122" height="15" width="60" format="###-###" html.valueishtml="0"  name=zip_code  tag="" visible="1" editmask.mask="###-###" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="0" tabsequence=60 border="0" color="33554432" x="306" y="122" height="15" width="259" format="[general]" html.valueishtml="0"  name=addr1  tag="[R][E]" visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="0" tabsequence=70 border="0" color="33554432" x="238" y="148" height="14" width="327" format="[general]" html.valueishtml="0"  name=addr2  tag="[E]" visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=40 border="0" color="33554432" x="579" y="97" height="15" width="100" format="[general]" html.valueishtml="0"  name=hp  tag="[E]" visible="1" editmask.mask="###-####-####" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="2" tabsequence=20 border="0" color="33554432" x="411" y="96" height="16" width="69" format="@@@@-@@-@@" html.valueishtml="0"  name=retire_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=27 alignment="0" tabsequence=32766 border="0" color="33554432" x="237" y="71" height="15" width="444" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=100 border="0" color="33554432" x="237" y="96" height="16" width="69" format="[general]" html.valueishtml="0"  name=join_date_h visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,51 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=30 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=23 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_bug_ent_list.company_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=bug_ym dbname="cm_bug_ent_list.bug_ym" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=ent_dept dbname="cm_bug_ent_list.ent_dept" )
+ column=(type=char(250) updatewhereclause=yes name=dname dbname="sm_comcode_d.dname" )
+ column=(type=number update=yes updatewhereclause=yes name=avr_point dbname="cm_bug_ent_list.avr_point" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=avr_01 dbname="cm_bug_ent_list.avr_01" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.BUG_YM,
+       A.ENT_DEPT,
+       B.DNAME,
+       A.AVR_POINT,
+       A.AVR_01
+  FROM CM_BUG_ENT_LIST A LEFT JOIN SM_COMCODE_D B
+                                ON B.SYS_ID = 'SM'
+                               AND B.HCODE = 'DEPTGRUP'
+                               AND A.ENT_DEPT = B.DCODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.BUG_YM       = :AS_YM" update="CM_BUG_ENT_LIST" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_YM", string)) )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="462" y="2" height="17" width="92" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="556" y="2" height="17" width="92" format="[general]" html.valueishtml="0"  name=bug_ym visible="0" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Bug Ent List
+Company Code" border="0" color="33554432" x="462" y="8" height="14" width="92" html.valueishtml="0"  name=cm_bug_ent_list_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Bug Ent List
+Bug Ym" border="0" color="33554432" x="556" y="8" height="14" width="92" html.valueishtml="0"  name=cm_bug_ent_list_bug_ym_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="37" y="2" height="17" width="156" format="[general]" html.valueishtml="0"  name=dname visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=10 border="0" color="33554432" x="195" y="2" height="17" width="76" format="[general]" html.valueishtml="0"  name=avr_point visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=20 border="0" color="33554432" x="273" y="2" height="17" width="78" format="[general]" html.valueishtml="0"  name=avr_01 visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="4" height="14" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="353" y="2" height="17" width="107" format="[general]" html.valueishtml="0"  name=ent_dept visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="8" height="14" width="33" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업부명" border="0" color="33554432" x="37" y="8" height="14" width="156" html.valueishtml="0"  name=sm_comcode_d_dname_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업부점수" border="0" color="33554432" x="195" y="8" height="14" width="76" html.valueishtml="0"  name=cm_bug_ent_list_avr_point_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업부등급" border="0" color="33554432" x="273" y="8" height="14" width="78" html.valueishtml="0"  name=cm_bug_ent_list_avr_01_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업부코드" border="0" color="33554432" x="353" y="8" height="14" width="107" html.valueishtml="0"  name=cm_bug_ent_list_ent_dept_t visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

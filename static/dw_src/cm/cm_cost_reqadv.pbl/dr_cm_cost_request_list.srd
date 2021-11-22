@@ -1,0 +1,58 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=16777215 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=150 color="553648127" )
+summary(height=0 color="553648127" )
+footer(height=1 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(10) updatewhereclause=yes name=req_div dbname="req_div" )
+ column=(type=char(100) updatewhereclause=yes name=req_contents dbname="cm_cost_request_adv.req_contents" )
+ column=(type=decimal(0) updatewhereclause=yes name=req_amount dbname="cm_cost_request_adv.req_amount" )
+ column=(type=char(8) updatewhereclause=yes name=ord_date dbname="cm_cost_request_adv.ord_date" )
+ column=(type=char(30) updatewhereclause=yes name=acnt_name dbname="ac_code_acnt.acnt_name" )
+ retrieve="SELECT C.PROJ_NAME,
+       DECODE(A.REQ_DIV,'1','정기전도금','2','추가전도금','3','개설전도금') AS REQ_DIV, 
+       A.REQ_CONTENTS,
+       A.REQ_AMOUNT,
+       A.ORD_DATE,
+       B.ACNT_NAME
+  FROM CM_COST_REQUEST_ADV A LEFT JOIN AC_CODE_ACNT B 
+                                    ON A.ACNT_CD = B.ACNT_CODE 
+                             LEFT JOIN SM_CODE_PROJECT C
+                                    ON A.PROJ_CODE = C.PROJ_CODE
+ WHERE A.COMPANY_CODE = :as_comp_code 
+   AND A.PROJ_CODE = :as_proj_code 
+   AND A.REQ_DATE LIKE :as_req_yymm||'%' 
+   AND A.REQ_DIV = :as_req_div 
+   AND A.STATUS_DIV <> '1' 
+ORDER BY A.REQ_DATE, A.REQ_SEQ" arguments=(("as_comp_code", string),("as_proj_code", string),("as_req_yymm", string),("as_req_div", string)) )
+line(band=header x1="27" y1="126" x2="27" y2="147"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+compute(band=header alignment="2" expression="  left(  ord_date , 4 ) + '년 ' + mid(  ord_date , 5, 2 ) + '월 전도금 청구 내역' "border="0" color="0" x="134" y="42" height="32" width="475" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="바탕체" font.height="-18" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" font.underline="1" background.mode="1" background.color="553648127" )
+line(band=header x1="121" y1="126" x2="121" y2="147"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="322" y1="126" x2="322" y2="147"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="730" y1="125" x2="730" y2="146"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="1" y1="126" x2="1" y2="147"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="535" y1="126" x2="535" y2="147"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="요청일자" border="0" color="0" x="449" y="130" height="15" width="83" html.valueishtml="0"  name=t_11 visible="1"  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="청구금액" border="0" color="0" x="326" y="130" height="15" width="116" html.valueishtml="0"  name=t_9 visible="1"  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="445" y1="126" x2="445" y2="147"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="회계계정" border="0" color="0" x="124" y="130" height="15" width="195" html.valueishtml="0"  name=t_8 visible="1"  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No" border="0" color="0" x="5" y="130" height="15" width="20" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="0" x="31" y="130" height="15" width="88" html.valueishtml="0"  name=t_10 visible="1"  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="현장명 : " border="0" color="0" x="3" y="104" height="15" width="72" html.valueishtml="0"  name=t_3 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=header id=1 alignment="0" tabsequence=32766 border="0" color="0" x="76" y="104" height="15" width="254" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="3" y="2" height="15" width="20" format="[GENERAL]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="0" x="449" y="2" height="15" width="83" format="[general]" html.valueishtml="0"  name=ord_date visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="0" x="326" y="2" height="15" width="108" format="#,##0" html.valueishtml="0"  name=req_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="0" x="124" y="2" height="15" width="195" format="[general]" html.valueishtml="0"  name=acnt_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="0" x="31" y="2" height="15" width="88" format="[general]" html.valueishtml="0"  name=req_div visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="1" y1="147" x2="731" y2="147"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="1" y1="125" x2="731" y2="125"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="청구내용" border="0" color="0" x="538" y="130" height="15" width="190" html.valueishtml="0"  name=t_16 visible="1"  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="0" x="547" y="2" height="15" width="181" format="[general]" html.valueishtml="0"  name=req_contents visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

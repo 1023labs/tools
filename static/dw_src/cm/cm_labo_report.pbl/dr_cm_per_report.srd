@@ -1,0 +1,113 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=4248 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=0 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=sm_code_project_proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=cm_labo_master_labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=char(2) updatewhereclause=yes name=cer_div dbname="cm_labor_certificate.cer_div" )
+ column=(type=char(10) updatewhereclause=yes name=cm_labor_certificate_cer_no dbname="cm_labor_certificate.cer_no" )
+ column=(type=char(8) updatewhereclause=yes name=submit_date dbname="cm_labor_certificate.submit_date" )
+ column=(type=char(8) updatewhereclause=yes name=s_date1 dbname="cm_labor_certificate.s_date1" )
+ column=(type=char(8) updatewhereclause=yes name=e_date1 dbname="cm_labor_certificate.e_date1" )
+ column=(type=char(8) updatewhereclause=yes name=s_date2 dbname="cm_labor_certificate.s_date2" )
+ column=(type=char(8) updatewhereclause=yes name=e_date2 dbname="cm_labor_certificate.e_date2" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labor_certificate_print_count dbname="cm_labor_certificate.print_count" )
+ column=(type=char(250) updatewhereclause=yes name=sm_comcode_d_use_name dbname="sm_comcode_d.use_name" )
+ column=(type=char(4000) updatewhereclause=yes name=address dbname="address" )
+ column=(type=char(250) updatewhereclause=yes name=sm_comcode_d_jikwi_name dbname="sm_comcode_d.jikwi_name" )
+ retrieve="SELECT C.PROJ_NAME                       AS PROJ_NAME,
+       B.LABOR_NAME                      AS LABOR_NAME,
+       X_DECRYPT(B.RRN_PRE, '[Mighty-X.2012.]')||X_DECRYPT(B.RRN_POST, '[Mighty-X.2012.]') AS JUMIN_NO,
+       A.CER_DIV                         AS CER_DIV,
+       A.CER_NO                          AS CER_NO,
+       A.SUBMIT_DATE                     AS SUBMIT_DATE,
+       A.S_DATE1                         AS S_DATE1,
+       A.E_DATE1                         AS E_DATE1,
+       A.S_DATE2                         AS S_DATE2,
+       A.E_DATE2                         AS E_DATE2,
+       A.PRINT_COUNT                     AS PRINT_COUNT,
+       E.DNAME                           AS USE_NAME,
+       X_DECRYPT(B.ADDR1, '[Mighty-X.2012.]')||X_DECRYPT(B.ADDR2, '[Mighty-X.2012.]') AS ADDRESS,
+       F.DNAME                           AS JIKWI_NAME
+  FROM CM_LABOR_CERTIFICATE A LEFT JOIN CM_LABO_MASTER B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.LABOR_CODE   = B.LABOR_CODE
+                              LEFT JOIN SM_CODE_PROJECT C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.PROJ_CODE = C.PROJ_CODE
+                              LEFT JOIN HR_PERS_MASTER D
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE
+                                    AND A.EMP_NO       = D.EMP_NO
+                              LEFT JOIN SM_COMCODE_D E
+                                     ON A.USE_DIV  = E.DCODE
+                                    AND E.SYS_ID = 'CM'
+                                    AND E.HCODE = 'REPORT_DIV'
+                              LEFT JOIN SM_COMCODE_D F
+                                     ON A.JIKWI_CODE  = F.DCODE
+                                    AND F.SYS_ID = 'CM'
+                                    AND F.HCODE = 'JIKWI_DIV'
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.CER_NO       = :AS_CER_NO
+   AND A.WORK_YYMM    = :AS_WORK_YYMM
+   AND A.LABOR_CODE   = :AS_LABOR_CODE" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CER_NO", string),("AS_WORK_YYMM", string),("AS_LABOR_CODE", string)) )
+line(band=header x1="114" y1="64" x2="3287" y2="64"  name=l_1 visible="1" pen.style="0" pen.width="9" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="84" x2="3259" y2="84"  name=l_10 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="635" y1="964" x2="635" y2="2316"  name=l_22 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="1842" y1="964" x2="1842" y2="1328"  name=l_23 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="2405" y1="964" x2="2405" y2="1328"  name=l_24 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="964" x2="3255" y2="964"  name=l_16 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="1148" x2="3255" y2="1148"  name=l_20 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="1524" x2="3255" y2="1524"  name=l_18 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="2160" x2="3255" y2="2160"  name=l_17 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="2312" x2="3255" y2="2312"  name=l_21 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="~tcase(  cer_div  when '01' then '상기와 같이 재직하고 있음을 증명함.' when '02' then '상기와 같이 경력을 증명함.' when '03' then '본인 개인사유로 인하여 퇴직 하였음을 증명함.' else '상기와 같이 근무하였음을 증명함.')" border="0" color="0" x="155" y="2592" height="88" width="3081" html.valueishtml="0"  name=t_35 visible="1"  font.face="굴림" font.height="-14" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="1328" x2="3255" y2="1328"  name=l_19 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직           위" border="0" color="0" x="1893" y="1200" height="72" width="485" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="0" x="1893" y="1032" height="72" width="485" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+bitmap(band=header filename="\images\comp\고용보험인감(MEC).jpg" x="2747" y="3392" height="276" width="338" border="0"  name=p_1 visible="1" )
+line(band=header x1="137" y1="4200" x2="3255" y2="4200"  name=l_12 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="114" y1="4224" x2="3282" y2="4224"  name=l_7 visible="1" pen.style="0" pen.width="9" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="114" y1="64" x2="114" y2="4224"  name=l_9 visible="1" pen.style="0" pen.width="9" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="137" y1="88" x2="137" y2="4204"  name=l_11 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="3287" y1="64" x2="3287" y2="4224"  name=l_8 visible="1" pen.style="0" pen.width="9" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=header x1="3259" y1="84" x2="3259" y2="4204"  name=l_13 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+column(band=header id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="2656" y="880" height="68" width="576" format="[general]" html.valueishtml="0"  name=cm_labor_certificate_cer_no visible="1" editmask.mask="XXXX-XX-XXX" editmask.focusrectangle=no  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="2418" y="1200" height="68" width="827" format="[general]" html.valueishtml="0"  name=sm_comcode_d_jikwi_name visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="658" y="1036" height="68" width="1157" format="[general]" html.valueishtml="0"  name=cm_labo_master_labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="658" y="1204" height="68" width="1166" format="[general]" html.valueishtml="0"  name=sm_code_project_proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2423" y="1036" height="68" width="818" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="137" y1="1852" x2="3255" y2="1852"  name=l_2 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="발급번호 :" border="0" color="0" x="2222" y="880" height="72" width="389" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="0" expression="left(  s_date1 , 4 ) + '년  ' + mid(  s_date1 , 5, 2 ) + '월    ' + right(  s_date1 , 2 ) +  '일  부터'"border="0" color="33554432" x="736" y="1592" height="72" width="1115" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1~tcase(  cer_div  when '02' then 1 when '04' then 1 else 0)"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="0" expression="left(  e_date1 , 4 ) + '년  ' + mid(  e_date1 , 5, 2 ) + '월    ' + right(  e_date1 , 2 ) +  '일  까지'"border="0" color="33554432" x="736" y="1728" height="72" width="1115" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1~tcase(  cer_div  when '02' then 1 when '04' then 1 else 0)"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="0" expression="left(  s_date2 , 4 ) + '년  ' + mid(  s_date2 , 5, 2 ) + '월    ' + right(  s_date2 , 2 ) +  '일  부터'"border="0" color="33554432" x="736" y="1912" height="72" width="1115" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="0" expression="left(  e_date2 , 4 ) + '년  ' + mid(  e_date2 , 5, 2 ) + '월    ' + right(  e_date2 , 2 ) +  '일  까지'"border="0" color="33554432" x="736" y="2048" height="72" width="1115" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="736" y="2204" height="68" width="1399" format="[general]" html.valueishtml="0"  name=sm_comcode_d_use_name visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="736" y="1400" height="68" width="2491" format="[general]" html.valueishtml="0"  name=address visible="1" edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성       명" border="0" color="0" x="174" y="1032" height="72" width="443" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소       속" border="0" color="0" x="174" y="1200" height="72" width="443" html.valueishtml="0"  name=t_19 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주       소" border="0" color="0" x="174" y="1396" height="72" width="443" html.valueishtml="0"  name=t_40 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기      간" border="0" color="0" x="174" y="1656" height="72" width="443" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기      간" border="0" color="0" x="174" y="1980" height="72" width="443" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="용       도" border="0" color="0" x="174" y="2200" height="72" width="443" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression="left(   submit_date  , 4 ) + '년  ' + mid(   submit_date , 5, 2 ) + '월   ' + right(   submit_date , 2 ) +  '일'"border="0" color="33554432" x="1856" y="3068" height="72" width="1275" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="~tcase(  cer_div  when '01' then '재 직 증 명 서' when '02' then '경 력 증 명 서' when '03' then '퇴 직 증 명 서' else '근 무 확 인 서')" border="0" color="0" x="169" y="340" height="168" width="3067" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-28" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="(재 직 중)" border="0" color="0" x="2030" y="2048" height="72" width="443" html.valueishtml="0"  name=t_7 visible="1~tcase(  cer_div  when '01' then 1  else 0)"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="서울시 서초구 효령로 341 인산빌딩" border="0" color="0" x="1513" y="3388" height="72" width="1248" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="주 식 회 사  세 보 엠 이 씨" border="0" color="0" x="1518" y="3500" height="72" width="1248" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="대 표 이 사   김 우 영" border="0" color="0" x="1518" y="3620" height="72" width="1248" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

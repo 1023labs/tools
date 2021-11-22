@@ -1,0 +1,42 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=81 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="cm_retire_remark.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_retire_remark.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(4000) updatewhereclause=yes name=remarks dbname="cm_retire_remark.remarks" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE,
+       A.PROJ_CODE    AS PROJ_CODE,
+       B.PROJ_NAME    AS PROJ_NAME,
+       A.REMARKS      AS REMARKS
+  FROM CM_RETIRE_REMARK A LEFT JOIN SM_CODE_PROJECT B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.PROJ_CODE    = B.PROJ_CODE
+ WHERE A.COMPANY_CODE = :as_comp_code
+   AND A.WORK_YYMM    = :as_pay_yymm" arguments=(("as_comp_code", string),("as_pay_yymm", string)) )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="290" y="2" height="74" width="477" format="[general]" html.valueishtml="0"  name=remarks visible="1" height.autosize=yes edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="10" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="37" y="10" height="14" width="251" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="참고사항" border="0" color="33554432" x="290" y="10" height="14" width="477" html.valueishtml="0"  name=cm_retire_remark_remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="769" y="2" height="17" width="21" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="792" y="2" height="17" width="19" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Retire Remark
+Company Code" border="0" color="33554432" x="769" y="10" height="14" width="21" html.valueishtml="0"  name=cm_retire_remark_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Retire Remark
+Proj Code" border="0" color="33554432" x="792" y="10" height="14" width="19" html.valueishtml="0"  name=cm_retire_remark_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="36" height="14" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="37" y="36" height="14" width="251" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

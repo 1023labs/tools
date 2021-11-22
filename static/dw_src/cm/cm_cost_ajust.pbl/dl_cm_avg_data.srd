@@ -1,0 +1,45 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=28 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=27 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_bug_data.company_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=bug_ym dbname="cm_bug_data.bug_ym" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=bug_seq dbname="cm_bug_data.bug_seq" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=bug_youl dbname="cm_bug_data.bug_youl" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=const_amt dbname="cm_bug_data.const_amt" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=bug_point dbname="cm_bug_data.bug_point" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.BUG_YM,
+       A.BUG_SEQ,
+       A.BUG_YOUL,
+       A.CONST_AMT,
+       A.BUG_POINT 
+  FROM CM_BUG_DATA A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.BUG_YM = :AS_YYMM" update="CM_BUG_DATA" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_YYMM", string)) )
+text(band=header alignment="2" text="순번" border="0" color="33554432" x="2" y="7" height="14" width="77" html.valueishtml="0"  name=bug_seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="81" y="7" height="14" width="126" html.valueishtml="0"  name=bug_youl_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="한도금액" border="0" color="33554432" x="209" y="7" height="14" width="194" html.valueishtml="0"  name=const_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="가감점" border="0" color="33554432" x="405" y="7" height="14" width="126" html.valueishtml="0"  name=bug_point_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="5" height="17" width="77" format="[general]" html.valueishtml="0"  name=bug_seq visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="81" y="5" height="17" width="126" format="[general]" html.valueishtml="0"  name=bug_youl visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="209" y="5" height="17" width="194" format="#,###" html.valueishtml="0"  name=const_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="405" y="5" height="17" width="126" format="[general]" html.valueishtml="0"  name=bug_point visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="533" y="7" height="14" width="89" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Bug Ym" border="0" color="33554432" x="624" y="7" height="14" width="45" html.valueishtml="0"  name=bug_ym_t visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="533" y="5" height="17" width="89" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="624" y="5" height="17" width="45" format="[general]" html.valueishtml="0"  name=bug_ym visible="0" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+
+sparse(names="bug_point")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

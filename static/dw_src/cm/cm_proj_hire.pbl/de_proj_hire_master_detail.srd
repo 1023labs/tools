@@ -1,0 +1,104 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes key=yes name=company_code dbname="cm_labo_master.company_code" )
+ column=(type=char(8) updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_master.labor_code" )
+ column=(type=char(3) updatewhereclause=yes name=job_code_h dbname="cm_labo_master.job_code_h" )
+ column=(type=char(3) updatewhereclause=yes name=duty_code_h dbname="cm_labo_master.duty_code_h" )
+ column=(type=char(3) updatewhereclause=yes name=grade_code_h dbname="cm_labo_master.grade_code_h" )
+ column=(type=char(3) updatewhereclause=yes name=service_div_h dbname="cm_labo_master.service_div_h" )
+ column=(type=char(8) updatewhereclause=yes name=apply_pay_date_h dbname="cm_labo_master.apply_pay_date_h" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=cont_miss_reason_h dbname="cm_labo_master.cont_miss_reason_h" )
+ column=(type=char(3) updatewhereclause=yes name=school_car_code dbname="cm_labo_master.school_car_code" )
+ column=(type=number updatewhereclause=yes name=career_h dbname="cm_labo_master.career_h" )
+ column=(type=number updatewhereclause=yes name=add_career_h dbname="cm_labo_master.add_career_h" )
+ column=(type=datetime updatewhereclause=yes name=cont_chg_date dbname="cont_chg_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=pay_amt dbname="cm_proj_hire_payx.pay_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=add_amt dbname="cm_proj_hire_payx.add_amt" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE,  
+         A.JOB_CODE_H,
+         A.DUTY_CODE_H,
+         A.GRADE_CODE_H,
+         A.SERVICE_DIV_H,
+         A.APPLY_PAY_DATE_H,
+         A.CONT_MISS_REASON_H,
+         A.SCHOOL_CAR_CODE,
+         A.CAREER_H,
+         A.ADD_CAREER_H, 
+         ADD_MONTHS(A.JOIN_DATE_H,6) AS CONT_CHG_DATE,
+         C.PAY_AMT,
+         C.ADD_AMT
+    FROM CM_LABO_MASTER A LEFT JOIN SM_CODE_PROJECT B
+                                 ON A.PROJ_CODE = B.PROJ_CODE
+                          LEFT JOIN CM_PROJ_HIRE_PAYX C
+                                 ON A.LABOR_CODE = C.LABOR_CODE
+                                AND A.PROJ_CODE  = C.PROJ_CODE
+   WHERE A.COMPANY_CODE  = :as_code
+     AND A.OFFICE_DIV LIKE :as_div
+     AND (A.LABOR_CODE LIKE :as_emp||'%' OR A.LABOR_NAME LIKE '%'||:as_emp||'%')
+     AND A.PROJECT_HIRE_YN = 'Y'
+   ORDER BY A.LABOR_NAME,X_DECRYPT(A.RRN_PRE, '(enckey)')" update="CM_LABO_MASTER" updatewhere=0 updatekeyinplace=no arguments=(("as_code", string),("as_div", string),("as_emp", string)) )
+rectangle(band=background x="2" y="7" height="79" width="85"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="161" y="58" height="26" width="115"  name=r_9  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="161" y="32" height="25" width="82"  name=r_8  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+line(band=background x1="149" y1="83" x2="715" y2="83"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="4" y1="84" x2="716" y2="84"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="4" y1="83" x2="716" y2="83"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+rectangle(band=background x="567" y="58" height="25" width="83"  name=r_11  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+line(band=background x1="7" y1="31" x2="162" y2="31"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="7" y1="57" x2="162" y2="57"  name=l_9  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="5" x2="716" y2="5"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="4" x2="716" y2="4"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="고용구분" border="0" color="18110176" x="4" y="13" height="14" width="78" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="재직구분" border="0" color="18110176" x="4" y="37" height="14" width="78" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="노임구분" border="0" color="27229506" x="167" y="37" height="14" width="70" html.valueishtml="0"  name=labor_name_e_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="계약직미전환사유" border="0" color="18110176" x="172" y="64" height="14" width="96" html.valueishtml="0"  name=cell_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="계약직 전환일" border="0" color="18110176" x="569" y="64" height="14" width="76" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="717" y="11" height="25" width="51"  name=r_7  tag="[B]" visible="0" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="추가경력" border="0" color="18110176" x="718" y="18" height="14" width="48" html.valueishtml="0"  name=t_8 visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=background x1="162" y1="57" x2="714" y2="57"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+rectangle(band=background x="529" y="32" height="25" width="82"  name=r_3  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="추가수당" border="0" color="27229506" x="534" y="37" height="14" width="74" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="613" y="6" height="25" width="34"  name=r_12  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="학력" border="0" color="18110176" x="618" y="13" height="14" width="25" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="525" y="7" height="25" width="34"  name=r_6  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="경력" border="0" color="18110176" x="531" y="13" height="14" width="25" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="401" y="6" height="25" width="52"  name=r_5  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="직위" border="0" color="18110176" x="405" y="13" height="14" width="45" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="270" y="6" height="25" width="52"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="직종" border="0" color="18110176" x="275" y="13" height="14" width="45" html.valueishtml="0"  name=rrn_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="134" y="8" height="23" width="52"  name=r_4  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="직무" border="0" color="18110176" x="138" y="13" height="14" width="45" html.valueishtml="0"  name=phone_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=background x="317" y="32" height="25" width="93"  name=r_10  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="2" text="기본급여" border="0" color="27229506" x="319" y="37" height="14" width="88" html.valueishtml="0"  name=sex_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=background x1="162" y1="31" x2="714" y2="31"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=detail alignment="0" text="현채직" border="0" color="33554432" x="89" y="10" height="14" width="36" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="89" y="36" height="14" width="71" format="[general]" html.valueishtml="0"  name=service_div_h visible="1" dddw.name=dddw_hr_ref_code dddw.displaycolumn=ref_name dddw.datacolumn=ref_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="월급" border="0" color="33554432" x="255" y="36" height="14" width="45" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="89" y="63" height="14" width="62" format="[general]" html.valueishtml="0"  name=apply_pay_date_h visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=10 border="0" color="33554432" x="281" y="63" height="14" width="277" format="[general]" html.valueishtml="0"  name=cont_miss_reason_h visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=yes dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="650" y="63" height="14" width="62" format="[shortdate] [time]" html.valueishtml="0"  name=cont_chg_date visible="1" editmask.mask="YYYY-MM-DD" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="769" y="15" height="14" width="26" format="#,##0" html.valueishtml="0"  name=add_career_h visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=20 border="0" color="33554432" x="616" y="36" height="14" width="96" format="#,##0" html.valueishtml="0"  name=add_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="651" y="10" height="14" width="59" format="[general]" html.valueishtml="0"  name=school_car_code visible="1" dddw.name=dddw_hr_school_car_code dddw.displaycolumn=school_car_name dddw.datacolumn=school_car_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="565" y="10" height="14" width="30" format="#,##0" html.valueishtml="0"  name=career_h visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="459" y="10" height="14" width="44" format="[general]" html.valueishtml="0"  name=grade_code_h visible="1" dddw.name=dddw_hr_code dddw.displaycolumn=grade_name dddw.datacolumn=grade_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="326" y="10" height="14" width="49" format="[general]" html.valueishtml="0"  name=job_code_h visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="188" y="10" height="14" width="52" format="[general]" html.valueishtml="0"  name=duty_code_h visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.required=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="410" y="36" height="14" width="114" format="#,##0" html.valueishtml="0"  name=pay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="최종단가변경일" border="0" color="27229506" x="3" y="64" height="14" width="84" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

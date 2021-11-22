@@ -1,0 +1,60 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=21 color="536870912" )
+detail(height=27 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osct_pay_rate_m.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osct_pay_rate_m.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=consult_code dbname="cm_osct_pay_rate_m.consult_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=consult_no dbname="cm_osct_pay_rate_m.consult_no" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=osct_div dbname="cm_osct_pay_rate_m.osct_div" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=rate_seq dbname="cm_osct_pay_rate_m.rate_seq" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=rate_cont dbname="cm_osct_pay_rate_m.rate_cont" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=rate dbname="cm_osct_pay_rate_m.rate" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=dem_date dbname="cm_osct_pay_rate_m.dem_date" )
+ column=(type=number update=yes updatewhereclause=yes name=gong_rate dbname="gong_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=mm_rate dbname="mm_rate" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONSULT_CODE,
+         A.CONSULT_NO,
+         A.OSCT_DIV,
+         A.RATE_SEQ,
+         C.RATE_CONT,
+         C.RATE,
+         A.DEM_DATE,
+         NVL(A.GONG_RATE,0) AS GONG_RATE,
+         NVL(A.GONG_RATE,0) - NVL(A.GONG_RATE_PRE,0) AS MM_RATE 
+    FROM CM_OSCT_PAY_RATE_M A LEFT JOIN ( SELECT COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE,
+                                                 RATE_SEQ, RATE_CONT, RATE, REMARKS, CONSULT_NO 
+                                            FROM CM_OSCT_RECOG_RATE
+                                           WHERE COMPANY_CODE  = :as_comp
+                                             AND PROJ_CODE     = :as_proj
+                                             AND OSCT_DIV      = :as_osct_div
+                                             AND CONSULT_CODE  = :as_cons_code ) C
+                                      ON A.COMPANY_CODE = C.COMPANY_CODE
+                                     AND A.PROJ_CODE    = C.PROJ_CODE
+                                     AND A.OSCT_DIV     = C.OSCT_DIV
+                                     AND A.CONSULT_CODE = C.CONSULT_CODE
+                                     AND A.CONSULT_NO   = C.CONSULT_NO
+                                     AND A.RATE_SEQ     = C.RATE_SEQ                                     
+   WHERE A.COMPANY_CODE  = :as_comp
+     AND A.PROJ_CODE     = :as_proj
+     AND A.OSCT_DIV      = :as_osct_div
+     AND A.CONSULT_CODE  = :as_cons_code
+     AND A.DEM_DATE   LIKE :as_dem_date||'%'
+ORDER BY RATE_SEQ" update="CM_OSCT_PAY_RATE_M" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_proj", string),("as_osct_div", string),("as_cons_code", string),("as_dem_date", string)) )
+compute(band=detail alignment="2" expression="rate +' %'/*rate / 100 * mm_rate +' %' */"border="0" color="33554432" x="285" y="7" height="15" width="64" format="[General]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="mm_rate + ' %'"border="0" color="33554432" x="368" y="7" height="15" width="64" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="gong_rate + ' %'"border="0" color="33554432" x="450" y="7" height="15" width="64" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=70 border="0" color="33554432" x="12" y="7" height="15" width="262" format="[general]" html.valueishtml="0"  name=rate_cont visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( rate / 100 * mm_rate for all) + ' %'"border="0" color="33554432" x="368" y="4" height="15" width="64" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( rate / 100 *  gong_rate for all) + ' %'"border="0" color="33554432" x="450" y="4" height="15" width="64" format="[GENERAL]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(rate) +' %'"border="0" color="33554432" x="285" y="4" height="15" width="64" format="[General]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합     계" border="0" color="33554432" x="12" y="4" height="15" width="262" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

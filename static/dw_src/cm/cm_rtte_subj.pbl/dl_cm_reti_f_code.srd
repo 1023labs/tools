@@ -1,0 +1,48 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=30 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=25 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="cm_code_retire.company_code" )
+ column=(type=char(2) updatewhereclause=yes name=reti_code dbname="cm_code_retire.reti_code" )
+ column=(type=char(250) updatewhereclause=yes name=reti_name dbname="sm_comcode_d.reti_name" )
+ column=(type=char(2) updatewhereclause=yes name=reti_det_code dbname="cm_code_retire.reti_det_code" )
+ column=(type=char(500) updatewhereclause=yes name=reti_det_name dbname="cm_code_retire.reti_det_name" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+       A.RETI_CODE     AS RETI_CODE,
+       B.DNAME         AS RETI_NAME,
+       A.RETI_DET_CODE AS RETI_DET_CODE,
+       A.RETI_DET_NAME AS RETI_DET_NAME
+  FROM CM_CODE_RETIRE A LEFT JOIN SM_COMCODE_D B
+                               ON A.RETI_CODE = B.DCODE
+                              AND B.SYS_ID    = 'CM'
+                              AND B.HCODE     = 'RTTEDIV'
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.RETI_CODE    LIKE :AS_RETI_CODE ||'%'
+ORDER BY A.RETI_CODE, A.RETI_DET_CODE
+" arguments=(("AS_COMP_CODE", string),("AS_RETI_CODE", string)) )
+text(band=header alignment="2" text="부코드명" border="0" color="33554432" x="2" y="8" height="14" width="81" html.valueishtml="0"  name=sm_comcode_d_reti_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="상세코드" border="0" color="33554432" x="85" y="8" height="14" width="72" html.valueishtml="0"  name=cm_code_retire_reti_det_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="상세내용" border="0" color="33554432" x="159" y="8" height="14" width="309" html.valueishtml="0"  name=cm_code_retire_reti_det_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Code Retire
+Company Code" border="0" color="33554432" x="470" y="8" height="14" width="34" html.valueishtml="0"  name=cm_code_retire_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Code Retire
+Reti Code" border="0" color="33554432" x="506" y="8" height="14" width="28" html.valueishtml="0"  name=cm_code_retire_reti_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="6" height="15" width="81" format="[general]" html.valueishtml="0"  name=reti_name visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="85" y="6" height="15" width="72" format="[general]" html.valueishtml="0"  name=reti_det_code visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="159" y="6" height="15" width="309" format="[general]" html.valueishtml="0"  name=reti_det_name visible="1" edit.limit=500 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="470" y="6" height="15" width="34" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="506" y="6" height="15" width="28" format="[general]" html.valueishtml="0"  name=reti_code visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+
+sparse(names="reti_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

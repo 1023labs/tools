@@ -1,0 +1,131 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="134217750" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_saly_labor_account.company_code" dbalias="A.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_saly_labor_account.proj_code" dbalias="A.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="D.proj_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=pay_yymm dbname="cm_saly_labor_account.pay_yymm" dbalias="A.pay_yymm" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=labor_code dbname="cm_saly_labor_account.labor_code" dbalias="A.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" dbalias="B.labor_name" )
+ column=(type=char(60) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=number updatewhereclause=yes name=work_day dbname="work_day" )
+ column=(type=char(1) updatewhereclause=yes name=pre_kuk_tag dbname="pre_kuk_tag" )
+ column=(type=char(1) updatewhereclause=yes name=pre_med_tag dbname="pre_med_tag" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="pay_tot" )
+ column=(type=number updatewhereclause=yes name=kukmin_amt dbname="kukmin_amt" )
+ column=(type=number updatewhereclause=yes name=medical_amt dbname="medical_amt" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=kukmin_tag dbname="kukmin_tag" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=medical_tag dbname="medical_tag" values="	Y/	N" )
+ column=(type=char(1) updatewhereclause=yes name=check4 dbname="check4" )
+ column=(type=char(1) updatewhereclause=yes name=check5 dbname="check5" )
+ column=(type=char(1) updatewhereclause=yes name=check6 dbname="check6" )
+ column=(type=char(1) updatewhereclause=yes name=check7 dbname="check7" )
+ column=(type=char(8) updatewhereclause=yes name=check8 dbname="check8" )
+ column=(type=char(30) updatewhereclause=yes name=rrn_pre dbname="rrn_pre" )
+ column=(type=char(30) updatewhereclause=yes name=medical_card dbname="medical_card" )
+ column=(type=char(1) updatewhereclause=yes name=check11 dbname="check11" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE,
+         D.PROJ_NAME,
+         A.PAY_YYMM,
+         A.LABOR_CODE,
+         B.LABOR_NAME,
+         MAX(B.RRN_PRE||B.RRN_POST) LABOR_ID,
+         SUM(A.WORK_DAY) WORK_DAY,
+         'N'  AS PRE_KUK_TAG,
+         'N'  AS PRE_MED_TAG,
+         SUM(A.PAY_TOT)     AS PAY_TOT,
+         SUM(A.KUKMIN_AMT)  AS KUKMIN_AMT,
+         SUM(A.MEDICAL_AMT) AS MEDICAL_AMT,
+         MAX(NVL(A.KUKMIN_TAG, 'N'))  AS KUKMIN_TAG,
+         MAX(NVL(A.MEDICAL_TAG,'N'))  AS MEDICAL_TAG,
+         MAX(NVL(C.CHECK4,'N'))  AS CHECK4,
+         MAX(NVL(C.CHECK5,'N'))  AS CHECK5,
+         MAX(NVL(C.CHECK6,'N'))  AS CHECK6,
+         MAX(NVL(C.CHECK7,'N'))  AS CHECK7,
+         MAX(NVL(C.CHECK8,'N'))  AS CHECK8,
+         MAX(B.RRN_PRE) AS RRN_PRE,
+         MAX(A.MEDICAL_CARD) MEDICAL_CARD,
+         MAX(NVL(C.CHECK11,'N'))  AS CHECK11
+    FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN CM_LABO_INSURANCE C
+                                        ON A.COMPANY_CODE = C.COMPANY_CODE AND A.LABOR_CODE = C.LABOR_CODE
+                                 LEFT JOIN CM_LABO_MASTER B   
+                                        ON A.COMPANY_CODE = B.COMPANY_CODE AND A.LABOR_CODE = B.LABOR_CODE
+                                 LEFT JOIN SM_CODE_PROJECT D 
+                                        ON A.COMPANY_CODE = D.COMPANY_CODE AND A.PROJ_CODE = D.PROJ_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE LIKE :as_proj_code
+     AND A.PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+     AND D.MANAGE_TYPE  LIKE :as_manage_type
+     AND NOT EXISTS ( SELECT 1 FROM CM_SALY_LABOR_ACCOUNT
+                       WHERE COMPANY_CODE = A.COMPANY_CODE
+                         AND LABOR_CODE   = A.LABOR_CODE  
+                         AND PROJ_CODE    = A.PROJ_CODE
+                         AND PAY_YYMM     = :as_pay_yymm)
+GROUP BY A.COMPANY_CODE, A.PROJ_CODE, D.PROJ_NAME, A.PAY_YYMM, A.LABOR_CODE, B.LABOR_NAME
+  HAVING (MAX(NVL(A.KUKMIN_TAG, 'N')) = 'Y' OR MAX(NVL(A.MEDICAL_TAG,'N')) = 'Y') AND SUM(A.WORK_DAY) >= 20
+ORDER BY B.LABOR_NAME" arguments=(("as_comp_code", string),("as_proj_code", string),("as_pay_yymm", string),("as_manage_type", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="37" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구" border="0" color="33554432" x="54" y="3" height="14" width="11" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상용직세율적용" border="0" color="33554432" x="1380" y="2" height="14" width="94" html.valueishtml="0"  name=check4_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기초수급대상자" border="0" color="33554432" x="1291" y="2" height="14" width="87" html.valueishtml="0"  name=check5_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="장기요양경감" border="0" color="33554432" x="1198" y="2" height="14" width="91" html.valueishtml="0"  name=cm_labo_insurance_check6_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="타연금수급자" border="0" color="33554432" x="1123" y="2" height="14" width="73" html.valueishtml="0"  name=cm_labo_insurance_check7_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="의료공제제외자" border="0" color="33554432" x="1021" y="2" height="14" width="100" html.valueishtml="0"  name=cm_labo_insurance_check8_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="국민" border="0" color="33554432" x="524" y="2" height="14" width="41" html.valueishtml="0"  name=kukmin_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="E Pre Kuk Tag" border="0" color="33554432" x="927" y="1" height="14" width="39" html.valueishtml="0"  name=e_pre_kuk_tag_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="E Pre Med Tag" border="0" color="33554432" x="968" y="1" height="14" width="51" html.valueishtml="0"  name=e_pre_med_tag_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="건강" border="0" color="33554432" x="567" y="2" height="14" width="46" html.valueishtml="0"  name=medical_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="105" y="2" height="14" width="51" html.valueishtml="0"  name=labor_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="158" y="2" height="14" width="90" html.valueishtml="0"  name=labor_id_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="출석일" border="0" color="33554432" x="250" y="2" height="14" width="43" html.valueishtml="0"  name=work_day_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="월급여" border="0" color="33554432" x="295" y="2" height="14" width="78" html.valueishtml="0"  name=pay_tot_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="국민연금" border="0" color="33554432" x="375" y="2" height="14" width="73" html.valueishtml="0"  name=kukmin_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건강보험" border="0" color="33554432" x="450" y="2" height="14" width="72" html.valueishtml="0"  name=medical_amt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증번호" border="0" color="33554432" x="615" y="2" height="14" width="90" html.valueishtml="0"  name=medical_card_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="707" y="2" height="14" width="218" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="105" y="3" height="14" width="51" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="158" y="3" height="14" width="90" format="@@@@@@-@@@@@@@" html.valueishtml="0"  name=labor_id visible="1" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="250" y="3" height="14" width="43" format="#,##0" html.valueishtml="0"  name=work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="3" height="14" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="if (1=0, '0', '■' )"border="0" color="33554432~tif( check5  = 'Y', rgb( 255, 0, 0), rgb( 190,190,190) ) " x="41" y="3" height="14" width="11" format="[General]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="if (1=0, '0', '■' )"border="0" color="33554432~tif( check6  = 'Y', rgb( 0, 0, 255), rgb( 190,190,190) ) " x="54" y="3" height="14" width="11" format="[General]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="if (1=0, '0', '■' )"border="0" color="33554432~tif( check7  = 'Y', rgb( 0, 255, 0), rgb( 190,190,190) ) " x="67" y="3" height="14" width="12" format="[General]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="if (1=0, '0', '■' )"border="0" color="33554432~tif( check11  = 'Y', rgb( 0, 0, 0), rgb( 190,190,190) ) " x="92" y="3" height="14" width="11" format="[General]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="295" y="3" height="14" width="78" format="#,##0" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="375" y="3" height="14" width="73" format="#,##0" html.valueishtml="0"  name=kukmin_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="450" y="3" height="14" width="72" format="#,##0" html.valueishtml="0"  name=medical_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432~tif( pre_kuk_tag  = 'Y', rgb(255,0,0), rgb(0,0,0))" x="524" y="3" height="14" width="41" format="[general]" html.valueishtml="0"  name=kukmin_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432~tif(  pre_med_tag = 'Y', rgb(255,0,0), rgb(0,0,0))" x="567" y="3" height="14" width="46" format="[general]" html.valueishtml="0"  name=medical_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432~tif(   check4  = 'Y',  rgb(0,0,255),  rgb(0,0,0))" x="707" y="3" height="14" width="218" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="1380" y="3" height="14" width="94" format="[general]" html.valueishtml="0"  name=check4 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="1291" y="3" height="14" width="87" format="[general]" html.valueishtml="0"  name=check5 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="2" tabsequence=40 border="0" color="33554432" x="1198" y="3" height="14" width="91" format="[general]" html.valueishtml="0"  name=check6 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="2" tabsequence=30 border="0" color="33554432" x="1123" y="3" height="14" width="73" format="[general]" html.valueishtml="0"  name=check7 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="2" tabsequence=20 border="0" color="33554432" x="1021" y="3" height="14" width="100" format="[general]" html.valueishtml="0"  name=check8 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="927" y="3" height="14" width="39" format="[general]" html.valueishtml="0"  name=pre_kuk_tag visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=10 border="0" color="33554432" x="968" y="3" height="14" width="51" format="[general]" html.valueishtml="0"  name=pre_med_tag visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="0" tabsequence=32766 border="0" color="33554432" x="615" y="2" height="14" width="90" format="[general]" html.valueishtml="0"  name=medical_card visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(pay_tot for all)"border="0" color="33554432" x="295" y="2" height="14" width="78" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(kukmin_amt for all)"border="0" color="33554432" x="375" y="2" height="14" width="73" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(medical_amt for all)"border="0" color="33554432" x="450" y="2" height="14" width="72" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="158" y="2" height="14" width="90" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="count( 1 for all )"border="0" color="33554432" x="2" y="2" height="14" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="if (1=0, '0', '■' )"border="0" color="33554432~tif( check8  = 'Y', rgb( 255, 215, 0), rgb( 190,190,190) ) " x="81" y="3" height="14" width="10" format="[General]" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=23 alignment="0" tabsequence=50 border="0" color="33554432" x="1477" y="1" height="14" width="73" html.valueishtml="0"  name=check11 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="해외공제" border="0" color="33554432" x="1476" y="1" height="14" width="74" html.valueishtml="0"  name=check11_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="분" border="0" color="33554432" x="81" y="3" height="14" width="10" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

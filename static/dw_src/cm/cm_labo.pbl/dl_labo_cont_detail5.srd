@@ -1,0 +1,139 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=25 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=cm_labo_owner_master_company_code dbname="cm_labo_owner_master.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=cm_labo_owner_master_labor_code dbname="cm_labo_owner_master.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=cm_labo_master_labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_labo_owner_master.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=ins_date dbname="cm_labo_owner_master.ins_date" )
+ column=(type=char(3) updatewhereclause=yes name=cm_labo_owner_master_proj_type dbname="cm_labo_owner_master.proj_type" )
+ column=(type=char(3) updatewhereclause=yes name=cm_labo_owner_master_proj_cnt dbname="cm_labo_owner_master.proj_cnt" )
+ column=(type=char(20) updatewhereclause=yes name=cm_labo_owner_master_proj_area dbname="cm_labo_owner_master.proj_area" )
+ column=(type=char(13) updatewhereclause=yes name=cm_labo_owner_master_hp dbname="cm_labo_owner_master.hp" )
+ column=(type=char(12) updatewhereclause=yes name=insert_empno dbname="cm_labo_owner_master.insert_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk01 dbname="cm_labo_owner_master.owner_chk01" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk02 dbname="cm_labo_owner_master.owner_chk02" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk03 dbname="cm_labo_owner_master.owner_chk03" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk04 dbname="cm_labo_owner_master.owner_chk04" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk05 dbname="cm_labo_owner_master.owner_chk05" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk06 dbname="cm_labo_owner_master.owner_chk06" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk07 dbname="cm_labo_owner_master.owner_chk07" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk08 dbname="cm_labo_owner_master.owner_chk08" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk09 dbname="cm_labo_owner_master.owner_chk09" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_labo_owner_master_owner_chk10 dbname="cm_labo_owner_master.owner_chk10" )
+ column=(type=char(1000) updatewhereclause=yes name=reamrks dbname="cm_labo_owner_master.reamrks" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+       A.LABOR_CODE    AS LABOR_CODE,
+       B.LABOR_NAME    AS LABOR_NAME,
+       A.PROJ_CODE     AS PROJ_CODE,
+       C.PROJ_NAME     AS PROJ_NAME,
+       A.INS_DATE      AS INS_DATE,
+       A.PROJ_TYPE     AS PROJ_TYPE,
+       A.PROJ_CNT      AS PROJ_CNT,
+       A.PROJ_AREA     AS PROJ_AREA,
+       A.HP            AS HP,
+       A.INSERT_EMPNO  AS INSERT_EMPNO,
+       D.EMP_NAME       AS EMP_NAME,
+       A.OWNER_CHK01   AS OWNER_CHK01,
+       A.OWNER_CHK02   AS OWNER_CHK02,
+       A.OWNER_CHK03   AS OWNER_CHK03,
+       A.OWNER_CHK04   AS OWNER_CHK04,
+       A.OWNER_CHK05   AS OWNER_CHK05,
+       A.OWNER_CHK06   AS OWNER_CHK06,
+       A.OWNER_CHK07   AS OWNER_CHK07,
+       A.OWNER_CHK08   AS OWNER_CHK08,
+       A.OWNER_CHK09   AS OWNER_CHK09,
+       A.OWNER_CHK10   AS OWNER_CHK10,
+       A.REMARKS       AS REAMRKS
+  FROM CM_LABO_OWNER_MASTER A LEFT JOIN CM_LABO_MASTER B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.LABOR_CODE   = B.LABOR_CODE
+                              LEFT JOIN SM_CODE_PROJECT C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.PROJ_CODE    = C.PROJ_CODE
+                              LEFT JOIN HR_PERS_MASTER D
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE
+                                   AND A.INSERT_EMPNO = D.EMP_NO
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.LABOR_CODE   = :as_labor
+ORDER BY A.INS_DATE DESC" arguments=(("as_comp", string),("as_labor", string)) )
+text(band=header alignment="2" text="입력일자" border="0" color="33554432" x="2" y="7" height="14" width="66" html.valueishtml="0"  name=cm_labo_owner_master_ins_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="70" y="7" height="14" width="204" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="276" y="7" height="14" width="255" html.valueishtml="0"  name=cm_labo_owner_master_reamrks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="작성자" border="0" color="33554432" x="533" y="7" height="14" width="65" html.valueishtml="0"  name=hr_pers_master_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Proj Code" border="0" color="33554432" x="600" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Company Code" border="0" color="33554432" x="1004" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Labor Code" border="0" color="33554432" x="738" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_labor_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="876" y="7" height="14" width="126" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Proj Type" border="0" color="33554432" x="1142" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_proj_type_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Proj Cnt" border="0" color="33554432" x="1280" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_proj_cnt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Proj Area" border="0" color="33554432" x="1418" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_proj_area_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Hp" border="0" color="33554432" x="1556" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_hp_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Insert Empno" border="0" color="33554432" x="1694" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_insert_empno_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk01" border="0" color="33554432" x="1832" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk01_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk02" border="0" color="33554432" x="1970" y="7" height="14" width="137" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk02_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk03" border="0" color="33554432" x="2109" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk03_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk04" border="0" color="33554432" x="2247" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk04_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk05" border="0" color="33554432" x="2385" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk05_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk06" border="0" color="33554432" x="2523" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk06_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk07" border="0" color="33554432" x="2661" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk07_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk08" border="0" color="33554432" x="2799" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk08_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk09" border="0" color="33554432" x="2937" y="7" height="14" width="136" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk09_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Owner Master
+Owner Chk10" border="0" color="33554432" x="3075" y="7" height="14" width="137" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk10_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="3" height="17" width="66" format="[general]" html.valueishtml="0"  name=ins_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="70" y="3" height="17" width="204" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="0" tabsequence=32766 border="0" color="33554432" x="276" y="3" height="17" width="255" format="[general]" html.valueishtml="0"  name=reamrks visible="1" edit.limit=1000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="533" y="3" height="17" width="65" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="600" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1004" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="738" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_labor_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="876" y="3" height="17" width="126" format="[general]" html.valueishtml="0"  name=cm_labo_master_labor_name visible="0" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1142" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_proj_type visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="1280" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_proj_cnt visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="1418" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_proj_area visible="0" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="1556" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_hp visible="0" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="1694" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=insert_empno visible="0" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="1832" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk01 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="1970" y="3" height="17" width="137" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk02 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="2109" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk03 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="2247" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk04 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="2385" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk05 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="33554432" x="2523" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk06 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="33554432" x="2661" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk07 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432" x="2799" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk08 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="2937" y="3" height="17" width="136" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk09 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432" x="3075" y="3" height="17" width="137" format="[general]" html.valueishtml="0"  name=cm_labo_owner_master_owner_chk10 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

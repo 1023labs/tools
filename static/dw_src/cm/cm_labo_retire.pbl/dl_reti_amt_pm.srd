@@ -1,0 +1,175 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=51 color="553648127" )
+summary(height=0 color="31379653" )
+footer(height=31 color="134217750" )
+detail(height=28 color="16777215~tif(mod(getRow(),2)=0,rgb(255,255,255),rgb(242,247,250))" )
+table(column=(type=char(20) updatewhereclause=yes name=emp_name dbname="emp_name" )
+ column=(type=number updatewhereclause=yes name=remain_provision_amt dbname="remain_provision_amt" )
+ column=(type=number updatewhereclause=yes name=year_provision_amt dbname="year_provision_amt" )
+ column=(type=number updatewhereclause=yes name=month_provision_amt dbname="month_provision_amt" )
+ column=(type=number updatewhereclause=yes name=year_retire_amt dbname="year_retire_amt" )
+ column=(type=number updatewhereclause=yes name=month_retire_amt dbname="month_retire_amt" )
+ column=(type=number updatewhereclause=yes name=pay_amt dbname="pay_amt" )
+ column=(type=number updatewhereclause=yes name=reti_amt dbname="reti_amt" )
+ retrieve="SELECT HM.EMP_NAME
+      ,TRUNC(SUM(T.REMAIN_PROVISION_AMT)/1000,0)                                 AS REMAIN_PROVISION_AMT -- 잔액 충당부채
+      ,TRUNC(SUM(T.YEAR_PROVISION_AMT)/1000,0)                                   AS YEAR_PROVISION_AMT   -- 당년 충당부채
+      ,TRUNC(SUM(T.MONTH_PROVISION_AMT)/1000,0)                                  AS MONTH_PROVISION_AMT  -- 당월 충당부채
+      ,TRUNC((SUM(T.YEAR_RETIRE_AMT))/1000,0)  AS YEAR_RETIRE_AMT      -- 당년 지급액
+      ,TRUNC((SUM(T.MONTH_RETIRE_AMT))/1000,0) AS MONTH_RETIRE_AMT     -- 당월 지급액
+      ,TRUNC((SUM(T.PAY_AMT))/1000,0)                                            AS PAY_AMT              -- 직접 노무비
+      ,TRUNC((SUM(T.RETI_AMT))/1000,0)                                           AS RETI_AMT             -- 예상 퇴직금
+  FROM ( SELECT A.COMPANY_CODE            AS COMPANY_CODE
+              ,A.PROJ_CODE        AS PROJ_CODE
+              ,SUM(NVL(A.PROVISION_AMT,0)) - SUM(NVL(A.COMP_PROVISION_AMT,0)) AS REMAIN_PROVISION_AMT
+              ,0 AS MONTH_PROVISION_AMT
+              ,0 AS MONTH_COMP_PROVISION_AMT
+              ,0 AS YEAR_PROVISION_AMT
+              ,0 AS YEAR_COMP_PROVISION_AMT
+              ,0 AS MONTH_RETIRE_AMT
+              ,0 AS YEAR_RETIRE_AMT
+              ,0 AS PAY_AMT
+              ,0 AS RETI_AMT
+          FROM NSNET.CM_LABOR_RETI_PV_RESULT A
+         WHERE A.COMPANY_CODE     = :as_comp
+           AND A.WORK_MONTH      <= :as_month
+         GROUP BY A.COMPANY_CODE, A.PROJ_CODE
+        UNION ALL
+        SELECT A.COMPANY_CODE            AS COMPANY_CODE
+              ,A.PROJ_CODE               AS PROJ_CODE
+              ,0                         AS REMAIN_PROVISION_AMT
+              ,SUM(CASE WHEN A.WORK_MONTH = :as_month THEN NVL(A.PROVISION_AMT,0) ELSE 0 END)      AS MONTH_PROVISION_AMT
+              ,SUM(CASE WHEN A.WORK_MONTH = :as_month THEN NVL(A.COMP_PROVISION_AMT,0) ELSE 0 END) AS MONTH_COMP_PROVISION_AMT
+              ,SUM(CASE WHEN A.WORK_MONTH BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month THEN NVL(A.PROVISION_AMT,0) ELSE 0 END)      AS YEAR_PROVISION_AMT
+              ,SUM(CASE WHEN A.WORK_MONTH BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month THEN NVL(A.COMP_PROVISION_AMT,0) ELSE 0 END) AS YEAR_COMP_PROVISION_AMT
+              ,0 AS MONTH_RETIRE_AMT
+              ,0 AS YEAR_RETIRE_AMT
+              ,0 AS PAY_AMT
+              ,0 AS RETI_AMT
+          FROM NSNET.CM_LABOR_RETI_PV_RESULT A
+         WHERE A.COMPANY_CODE     = :as_comp
+           AND A.WORK_MONTH BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month
+         GROUP BY A.COMPANY_CODE, A.PROJ_CODE
+        UNION ALL
+        SELECT B.COMPANY_CODE              AS COMPANY_CODE
+              ,B.PROJ_CODE                 AS PROJ_CODE
+              ,0 AS REMAIN_PROVISION_AMT
+              ,0 AS MONTH_PROVISION_AMT
+              ,0 AS MONTH_COMP_PROVISION_AMT
+              ,0 AS YEAR_PROVISION_AMT
+              ,0 AS YEAR_COMP_PROVISION_AMT
+              ,SUM(CASE WHEN SUBSTR(B.SUBMIT_DATE,1,6) = :as_month                                       THEN NVL(B.RETIRE_AMT,0) ELSE 0 END) AS MONTH_RETIRE_AMT
+              ,SUM(CASE WHEN SUBSTR(B.SUBMIT_DATE,1,6) BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month THEN NVL(B.RETIRE_AMT,0) ELSE 0 END) AS YEAR_RETIRE_AMT
+              ,0 AS PAY_AMT
+              ,0 AS RETI_AMT
+          FROM NSNET.CM_RTTE_RPAY_APPLY_LIST B
+         WHERE B.COMPANY_CODE   = :as_comp
+           AND SUBSTR(B.SUBMIT_DATE,1,6) BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month
+           AND B.RETIRE_TAG     = '2'
+           AND B.SLIP_DIV       = 'AP'
+         GROUP BY B.COMPANY_CODE, B.PROJ_CODE
+        UNION ALL
+        SELECT C.COMPANY_CODE
+              ,C.PROJ_CODE
+              ,0 AS REMAIN_PROVISION_AMT
+              ,0 AS MONTH_PROVISION_AMT
+              ,0 AS MONTH_COMP_PROVISION_AMT
+              ,0 AS YEAR_PROVISION_AMT
+              ,0 AS YEAR_COMP_PROVISION_AMT
+              ,0 AS MONTH_RETIRE_AMT
+              ,0 AS YEAR_RETIRE_AMT
+              ,SUM(NVL(C.COST_AMT,0)) AS PAY_AMT
+              ,0 AS RETI_AMT
+          FROM VW_CM_COST_SUM C
+         WHERE C.COMPANY_CODE = :as_comp
+           AND C.COST_YYMM BETWEEN SUBSTR(:as_month,1,4)||'01' AND :as_month
+           AND C.COST_ACNT_CODE IN('N10')
+         GROUP BY C.COMPANY_CODE, C.PROJ_CODE
+        UNION ALL
+        SELECT A.COMPANY_CODE         AS COMPANY_CODE
+              ,A.PROJ_CODE            AS PROJ_CODE
+              ,0 AS REMAIN_PROVISION_AMT
+              ,0 AS MONTH_PROVISION_AMT
+              ,0 AS MONTH_COMP_PROVISION_AMT
+              ,0 AS YEAR_PROVISION_AMT
+              ,0 AS YEAR_COMP_PROVISION_AMT
+              ,0 AS MONTH_RETIRE_AMT
+              ,0 AS YEAR_RETIRE_AMT
+              ,0 AS PAY_AMT
+              ,SUM(NVL(A.RETI_AMT,0)) AS RETI_AMT
+          FROM NSNET.CM_RETI_PRE_SUM A
+         WHERE A.COMPANY_CODE = :as_comp
+           AND PAY_YYMM BETWEEN :as_month AND :as_month
+         GROUP BY A.COMPANY_CODE, A.PROJ_CODE) T LEFT JOIN NSNET.SM_CODE_PROJECT P LEFT JOIN (SELECT EMP_NO
+                                                                                                    ,CASE WHEN EMP_NAME = '하태연' THEN '김성진' ELSE EMP_NAME END AS EMP_NAME 
+                                                                                                FROM NSNET.HR_PERS_MASTER) HM
+                                                                                          ON P.PM_EMPNO = HM.EMP_NO
+                                                        ON T.PROJ_CODE = P.PROJ_CODE
+ WHERE P.PM_EMPNO NOT IN ('20004', '10134') 
+   AND P.ENT_DEPT NOT IN ('30', '90')
+ GROUP BY HM.EMP_NAME
+ ORDER BY HM.EMP_NAME" arguments=(("as_comp", string),("as_month", string)) )
+bitmap(band=header filename="\images\dw\smis\row_bar_middle.gif" x="15" y="0" height="51" width="551" border="0"  name=p_2 visible="1" )
+bitmap(band=header filename="\images\dw\smis\row_bar_right.gif" x="561" y="0" height="51" width="26" border="0"  name=p_3 visible="1" )
+bitmap(band=header filename="\images\dw\smis\row_bar_left.gif" x="0" y="0" height="51" width="111" border="0"  name=p_1 visible="1" )
+line(band=detail x1="66" y1="3" x2="66" y2="26"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="131" y1="3" x2="131" y2="26"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="196" y1="3" x2="196" y2="26"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="261" y1="3" x2="261" y2="26"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="326" y1="3" x2="326" y2="26"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="391" y1="3" x2="391" y2="26"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="456" y1="3" x2="456" y2="26"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="134217741" x="5" y="5" height="19" width="59" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="134217741" x="200" y="4" height="19" width="59" format="#,###" html.valueishtml="0"  name=year_provision_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="134217741" x="265" y="5" height="19" width="59" format="#,###" html.valueishtml="0"  name=month_provision_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="134217741" x="330" y="5" height="19" width="59" format="#,###" html.valueishtml="0"  name=year_retire_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="134217741" x="395" y="5" height="19" width="59" format="#,###" html.valueishtml="0"  name=month_retire_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="134217741" x="70" y="5" height="19" width="59" format="#,###" html.valueishtml="0"  name=remain_provision_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="134217741" x="135" y="5" height="19" width="59" format="#,###" html.valueishtml="0"  name=reti_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="(year_provision_amt + year_retire_amt) / pay_amt"border="0" color="134217741" x="535" y="5" height="19" width="49" format="#,##0.0%" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="531" y1="3" x2="531" y2="26"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="134217732"  background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="134217741" x="460" y="5" height="19" width="69" format="#,###" html.valueishtml="0"  name=pay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(remain_provision_amt)"border="0" color="128" x="70" y="9" height="16" width="59" format="#,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(reti_amt)"border="0" color="128" x="135" y="9" height="16" width="59" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(year_provision_amt)"border="0" color="128" x="200" y="9" height="16" width="59" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(month_provision_amt)"border="0" color="128" x="265" y="9" height="16" width="59" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(year_retire_amt)"border="0" color="128" x="330" y="9" height="16" width="59" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(month_retire_amt)"border="0" color="128" x="395" y="9" height="16" width="59" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="(sum(year_provision_amt) + sum(year_retire_amt)) / sum(pay_amt)"border="0" color="128" x="535" y="9" height="16" width="49" format="#,##0.0%" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(pay_amt)"border="0" color="128" x="460" y="9" height="16" width="69" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="충당부채 귀속원가" border="0" color="16777215" x="202" y="8" height="14" width="122" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="16777215" x="265" y="28" height="14" width="59" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당년" border="0" color="16777215" x="330" y="28" height="14" width="59" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="16777215" x="395" y="28" height="14" width="59" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="충당부채
+잔여" border="0" color="16777215" x="70" y="11" height="26" width="59" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM명" border="0" color="16777215" x="5" y="16" height="14" width="59" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="66" y1="5" x2="66" y2="43"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="131" y1="5" x2="131" y2="43"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="199" y1="24" x2="587" y2="24"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="261" y1="24" x2="261" y2="45"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="326" y1="5" x2="326" y2="43"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="391" y1="24" x2="391" y2="45"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="456" y1="5" x2="456" y2="43"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="531" y1="24" x2="531" y2="45"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당년" border="0" color="16777215" x="200" y="28" height="14" width="59" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="예  상
+퇴직금" border="0" color="16777215" x="135" y="11" height="26" width="59" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="198" y1="5" x2="198" y2="43"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+line(band=header x1="196" y1="5" x2="196" y2="43"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="16777215"  background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직노" border="0" color="16777215" x="460" y="28" height="14" width="69" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="퇴직급여일용" border="0" color="16777215" x="330" y="8" height="14" width="124" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당년대비" border="0" color="16777215" x="459" y="8" height="14" width="123" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비율" border="0" color="16777215" x="535" y="28" height="14" width="49" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

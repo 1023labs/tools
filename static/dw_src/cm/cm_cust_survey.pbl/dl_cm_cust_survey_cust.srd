@@ -1,0 +1,56 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cust_survey_list_m.company_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=sur_yyyy dbname="cm_cust_survey_list_m.sur_yyyy" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=sur_half dbname="cm_cust_survey_list_m.sur_half" )
+ column=(type=char(13) update=yes updatewhereclause=yes key=yes name=sur_cust_code dbname="cm_cust_survey_list_m.sur_cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sur_amt dbname="cm_cust_survey_list_m.sur_amt" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=sur_cust_yn dbname="cm_cust_survey_list_m.sur_cust_yn" values="	Y/	N" )
+ retrieve="SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+       A.SUR_YYYY       AS SUR_YYYY,
+       A.SUR_HALF       AS SUR_HALF,
+       A.SUR_CUST_CODE  AS SUR_CUST_CODE,
+       B.CUST_NAME      AS CUST_NAME,
+       A.SUR_AMT        AS SUR_AMT,
+       A.SUR_CUST_YN    AS SUR_CUST_YN
+  FROM CM_CUST_SURVEY_LIST_M A INNER JOIN SM_CODE_CUST B
+                                       ON A.SUR_CUST_CODE = B.CUST_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.SUR_YYYY     = :AS_SUR_YYYY
+   AND A.SUR_HALF     = :AS_SUR_HALF
+ORDER BY A.SUR_YYYY, A.SUR_HALF, B.CUST_NAME" update="CM_CUST_SURVEY_LIST_M" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_SUR_YYYY", string),("AS_SUR_HALF", string)) )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="37" y="7" height="14" width="86" html.valueishtml="0"  name=pm_cust_survey_list_m_sur_cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="125" y="7" height="14" width="262" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="389" y="7" height="14" width="112" html.valueishtml="0"  name=pm_cust_survey_list_m_sur_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평가유무" border="0" color="33554432" x="503" y="7" height="14" width="65" html.valueishtml="0"  name=pm_cust_survey_list_m_sur_cust_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pm Cust Survey List M
+Company Code" border="0" color="33554432" x="570" y="7" height="14" width="26" html.valueishtml="0"  name=pm_cust_survey_list_m_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pm Cust Survey List M
+Sur Yyyy" border="0" color="33554432" x="598" y="7" height="14" width="22" html.valueishtml="0"  name=pm_cust_survey_list_m_sur_yyyy_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pm Cust Survey List M
+Sur Half" border="0" color="33554432" x="622" y="7" height="14" width="23" html.valueishtml="0"  name=pm_cust_survey_list_m_sur_half_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="7" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="37" y="6" height="14" width="86" format="[general]" html.valueishtml="0"  name=sur_cust_code visible="1" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="125" y="6" height="14" width="262" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="389" y="6" height="14" width="112" format="#,###" html.valueishtml="0"  name=sur_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=10 border="0" color="33554432" x="504" y="6" height="14" width="64" format="[general]" html.valueishtml="0"  name=sur_cust_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="570" y="6" height="14" width="26" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="598" y="6" height="14" width="22" format="[general]" html.valueishtml="0"  name=sur_yyyy visible="0" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="622" y="6" height="14" width="23" format="[general]" html.valueishtml="0"  name=sur_half visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="7" height="14" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

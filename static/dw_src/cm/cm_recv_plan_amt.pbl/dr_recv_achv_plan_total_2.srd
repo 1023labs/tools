@@ -1,0 +1,94 @@
+release 9;
+datawindow(units=3 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 0 print.margin.right = 0 print.margin.top = 0 print.margin.bottom = 0 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=6429 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=number updatewhereclause=yes name=new_this dbname="new_this" )
+ column=(type=number updatewhereclause=yes name=new_last dbname="new_last" )
+ column=(type=number updatewhereclause=yes name=new_last2 dbname="new_last2" )
+ column=(type=number updatewhereclause=yes name=plan_this dbname="plan_this" )
+ column=(type=number updatewhereclause=yes name=plan_last dbname="plan_last" )
+ column=(type=number updatewhereclause=yes name=plan_last2 dbname="plan_last2" )
+ column=(type=number updatewhereclause=yes name=goal_amt dbname="goal_amt" )
+ column=(type=number updatewhereclause=yes name=last_goal dbname="last_goal" )
+ column=(type=number updatewhereclause=yes name=last2_goal dbname="last2_goal" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         NVL(A.NEW_THIS,   0) AS NEW_THIS,
+         NVL(A.NEW_LAST,   0) AS NEW_LAST,
+         NVL(A.NEW_LAST2,  0) AS NEW_LAST2,
+         NVL(B.PLAN_THIS,  0) AS PLAN_THIS,
+         NVL(B.PLAN_LAST,  0) AS PLAN_LAST,
+         NVL(B.PLAN_LAST2, 0) AS PLAN_LAST2,
+         NVL(C.GOAL_AMT,   0) AS GOAL_AMT,
+         NVL(C.LAST_GOAL,  0) AS LAST_GOAL,
+         NVL(C.LAST2_GOAL, 0) AS LAST2_GOAL
+   FROM (SELECT A.COMPANY_CODE,         
+         SUM(CASE SUBSTR(A.CONTRACT_DATE,1,4) WHEN TO_CHAR(:as_year) THEN A.ACHV_AMT 
+                                              ELSE 0                  END) AS NEW_THIS,
+         SUM(CASE SUBSTR(A.CONTRACT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(:as_year)-1) THEN A.ACHV_AMT 
+                                              ELSE 0                  END) AS NEW_LAST,
+         SUM(CASE SUBSTR(A.CONTRACT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(:as_year)-2) THEN A.ACHV_AMT 
+                                              ELSE 0                  END) AS NEW_LAST2                    
+    FROM CM_RECV_ACHIEVE A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.RECV_DIV = '1'
+GROUP BY A.COMPANY_CODE) A LEFT JOIN  (SELECT A.COMPANY_CODE,         
+                                              SUM(CASE SUBSTR(A.CONTRACT_DATE,1,4) WHEN TO_CHAR(:as_year) THEN A.ACHV_AMT 
+                                                                                   ELSE 0                 END) AS PLAN_THIS,
+                                              SUM(CASE SUBSTR(A.CONTRACT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(:as_year)-1) THEN A.ACHV_AMT 
+                                                                                   ELSE 0                              END) AS PLAN_LAST,
+                                              SUM(CASE SUBSTR(A.CONTRACT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(:as_year)-2) THEN A.ACHV_AMT 
+                                                                                   ELSE 0                              END) AS PLAN_LAST2                    
+                                         FROM CM_RECV_ACHIEVE A
+                                        WHERE A.COMPANY_CODE = :as_comp
+                                          AND A.RECV_DIV = '2'
+                                     GROUP BY A.COMPANY_CODE) B
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE  
+                           LEFT JOIN  (SELECT A.COMPANY_CODE,
+                                              NVL(SUM(A.GOAL_AMT), 0) AS GOAL_AMT,
+                                              NVL(SUM(CASE SUBSTR(A.PLAY_YEAR,1,2) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,2))-1) THEN A.GOAL_AMT
+                                                                                   ELSE 0                                          END),0) AS LAST_GOAL,
+                                              NVL(SUM(CASE SUBSTR(A.PLAY_YEAR,1,2) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,2))-2) THEN A.GOAL_AMT
+                                                                                   ELSE 0                                          END),0) AS LAST2_GOAL
+                                         FROM CM_RECV_PLAN_AMOUNT A
+                                        WHERE A.COMPANY_CODE = :as_comp
+                                          AND A.PLAY_YEAR = :as_year
+                                     GROUP BY A.COMPANY_CODE,
+                                              A.PLAY_YEAR
+                                     ORDER BY A.COMPANY_CODE ASC) C                                 
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE" arguments=(("as_comp", string),("as_year", string)) )
+line(band=detail x1="582" y1="1323" x2="582" y2="6324"  name=l_3 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="3308" x2="11271" y2="3308"  name=l_8 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="4313" x2="11271" y2="4313"  name=l_10 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="5292" x2="11271" y2="5292"  name=l_11 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="6324" x2="11271" y2="6324"  name=l_12 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="3095" y1="2329" x2="3095" y2="6324"  name=l_4 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="수주금액" border="0" color="33554432" x="740" y="1667" height="370" width="10451" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="신규분" border="0" color="33554432" x="714" y="2673" height="370" width="2301" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="설계변경분" border="0" color="33554432" x="3201" y="2673" height="370" width="2672" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="달성율" border="0" color="33554432" x="8546" y="2646" height="370" width="2672" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="합계" border="0" color="33554432" x="6032" y="2673" height="370" width="2354" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="767" y="5689" height="449" width="2196" format="#,##0" html.valueishtml="0"  name=new_this visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="767" y="4684" height="449" width="2196" format="#,##0" html.valueishtml="0"  name=new_last visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="767" y="3678" height="370" width="2196" format="#,##0" html.valueishtml="0"  name=new_last2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( this_plan_sum / goal_amt * 100, 2) +~"%~""border="0" color="33554432" x="8704" y="5689" height="370" width="2434" format="[General]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( new_plan_sum /  last_goal  * 100 ,2) +~"%~""border="0" color="33554432" x="8704" y="4684" height="370" width="2434" format="[General]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( new_plan_sum2 / last2_goal * 100 ,2)+~"%~""border="0" color="33554432" x="8704" y="3678" height="370" width="2434" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="3280" y="3678" height="449" width="2513" format="#,##0" html.valueishtml="0"  name=plan_last2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="  new_last2 + plan_last2  "border="0" color="33554432" x="6111" y="3678" height="370" width="2196" format="#,##0" html.valueishtml="0"  name=new_plan_sum2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" new_this + plan_this "border="0" color="33554432" x="6111" y="5689" height="370" width="2196" format="#,##0" html.valueishtml="0"  name=this_plan_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" new_last + plan_last "border="0" color="33554432" x="6111" y="4684" height="370" width="2196" format="#,##0" html.valueishtml="0"  name=new_plan_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="3280" y="4684" height="449" width="2513" format="#,##0" html.valueishtml="0"  name=plan_last visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="3280" y="5689" height="449" width="2513" format="#,##0" html.valueishtml="0"  name=plan_this visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="582" y1="2302" x2="11271" y2="2302"  name=l_7 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="1297" x2="11271" y2="1297"  name=l_2 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="11271" y1="1323" x2="11271" y2="6350"  name=l_6 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="5926" y1="2329" x2="5926" y2="6324"  name=l_5 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="8440" y1="2329" x2="8440" y2="6324"  name=l_9 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,119 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 )
+header(height=128 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=number updatewhereclause=yes name=contract_amt dbname="contract_amt" )
+ column=(type=number updatewhereclause=yes name=plan_amt dbname="plan_amt" )
+ column=(type=number updatewhereclause=yes name=cost_amt dbname="cost_amt" )
+ column=(type=number updatewhereclause=yes name=completed_amt dbname="completed_amt" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="emp_name" )
+ column=(type=char(8) updatewhereclause=yes name=start_date dbname="start_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="end_date" )
+ retrieve="  SELECT A.COMPANY_CODE         AS COMPANY_CODE,
+         A.PROJ_CODE            AS PROJ_CODE,
+         A.PROJ_NAME            AS PROJ_NAME,
+         E.CONTRACT_AMT         AS CONTRACT_AMT,
+         F.PLAN_AMT             AS PLAN_AMT,
+         C.COST_AMT             AS COST_AMT,
+         D.COMPLETED_AMT        AS COMPLETED_AMT,
+         A.PM_EMPNO             AS PM_EMPNO,
+         G.EMP_NAME             AS EMP_NAME,
+         H.START_DATE           AS START_DATE,
+         H.END_DATE             AS END_DATE
+    FROM SM_CODE_PROJECT A INNER JOIN (SELECT COMPANY_CODE                              AS COMPANY_CODE,
+                                              PROJ_CODE                                 AS PROJ_CODE,
+                                              COST_YYMM                                 AS COST_YYMM,
+                                              SUM(NVL(COST_AMT,0) + NVL(ADJ_COST_AMT,0)) AS COST_AMT
+                                         FROM CM_COST_SUM 
+                                        WHERE COST_YYMM = :AS_YYMM
+                                          AND SUBSTR(COST_YYMM,5,2) <> '00'
+                                     GROUP BY COMPANY_CODE,
+                                              PROJ_CODE,
+                                              COST_YYMM) C
+                                   ON A.COMPANY_CODE = C.COMPANY_CODE
+                                  AND A.PROJ_CODE    = C.PROJ_CODE
+                            LEFT JOIN (SELECT COMPANY_CODE,
+                                              PROJ_CODE,
+                                              SUBSTR(COMPLETED_DATE,1,6) AS COMPLETED_DATE,
+                                              SUM(COMPLETED_AMT)         AS COMPLETED_AMT
+                                         FROM CM_CONSTRUCT_COMPLETED
+                                        WHERE SUBSTR(COMPLETED_DATE,1,6) = :AS_YYMM
+                                     GROUP BY COMPANY_CODE,
+                                              PROJ_CODE,
+                                              SUBSTR(COMPLETED_DATE,1,6)) D
+                                  ON A.COMPANY_CODE = D.COMPANY_CODE
+                                 AND A.PROJ_CODE = D.PROJ_CODE
+                           LEFT JOIN (SELECT COMPANY_CODE           AS COMPANY_CODE,
+                                             PROJ_CODE              AS PROJ_CODE,
+                                             SUM(NVL(MATERIAL_AMT,0)) + SUM(NVL(LABOR_AMT,0)) + SUM(NVL(COST_AMT,0))           AS CONTRACT_AMT
+                                        FROM CM_CONT_CHANGE_INFO
+                                       WHERE SUBSTR(REG_DATE,1,6) = :AS_YYMM
+                                         AND CONFIRM_TAG = 'Y'
+                                    GROUP BY COMPANY_CODE,
+                                             PROJ_CODE) E
+                                 ON A.COMPANY_CODE = E.COMPANY_CODE
+                                AND A.PROJ_CODE    = E.PROJ_CODE
+                          LEFT JOIN (SELECT COMPANY_CODE           AS COMPANY_CODE,
+                                            PROJ_CODE              AS PROJ_CODE,
+                                            SUM(NVL(MATERIAL_AMT,0)) + SUM(NVL(LABOR_AMT,0)) + SUM(NVL(COST_AMT,0))           AS PLAN_AMT
+                                       FROM CM_CONT_CHANGE_INFO
+                                      WHERE SUBSTR(REG_DATE,1,6) = :AS_YYMM
+                                        AND EXPECT_TAG = 'Y'
+                                   GROUP BY COMPANY_CODE,
+                                            PROJ_CODE) F
+                                ON A.COMPANY_CODE = F.COMPANY_CODE
+                               AND A.PROJ_CODE    = F.PROJ_CODE
+                         LEFT JOIN HR_PERS_MASTER G
+                                ON A.COMPANY_CODE = G.COMPANY_CODE
+                               AND A.PM_EMPNO     = G.EMP_NO
+                         LEFT JOIN (SELECT COMPANY_CODE     AS COMPANY_CODE,
+                                           PROJ_CODE        AS PROJ_CODE,
+                                           MIN(START_DATE)  AS START_DATE,
+                                           MAX(END_DATE)    AS END_DATE
+                                      FROM CM_CONT_CHANGE_INFO
+                                  GROUP BY COMPANY_CODE,
+                                           PROJ_CODE) H
+                                ON A.COMPANY_CODE = H.COMPANY_CODE
+                               AND A.PROJ_CODE    = H.PROJ_CODE
+ WHERE PROJECT_TAG = '1'
+   AND MANAGE_TAG = '1'
+   AND MANAGE_TYPE = '1'" arguments=(("AS_YYMM", string)) )
+text(band=header alignment="2" text="회사구분" border="0" color="33554432" x="14" y="32" height="56" width="407" html.valueishtml="0"  name=company_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="434" y="32" height="56" width="302" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="750" y="32" height="56" width="1399" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="2162" y="32" height="56" width="466" html.valueishtml="0"  name=contract_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="선공사금액" border="0" color="33554432" x="2647" y="32" height="56" width="480" html.valueishtml="0"  name=plan_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="투입원가" border="0" color="33554432" x="3145" y="32" height="56" width="489" html.valueishtml="0"  name=cost_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="14" y="8" height="68" width="407" format="[general]" html.valueishtml="0"  name=company_code visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="434" y="8" height="68" width="302" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="750" y="8" height="68" width="1399" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="2162" y="8" height="68" width="466" format="[general]" html.valueishtml="0"  name=contract_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="2647" y="8" height="68" width="480" format="[general]" html.valueishtml="0"  name=plan_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="3145" y="8" height="68" width="489" format="[general]" html.valueishtml="0"  name=cost_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="3648" y="8" height="68" width="622" format="[general]" html.valueishtml="0"  name=completed_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=0 border="0" color="33554432" x="4283" y="0" height="56" width="261" html.valueishtml="0"  name=pm_empno visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=0 border="0" color="33554432" x="4558" y="0" height="56" width="530" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=0 border="0" color="33554432" x="5102" y="0" height="56" width="315" html.valueishtml="0"  name=start_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=0 border="0" color="33554432" x="5431" y="0" height="56" width="325" html.valueishtml="0"  name=end_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="기성금액" border="0" color="33554432" x="3648" y="32" height="56" width="622" html.valueishtml="0"  name=completed_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="사번" border="0" color="33554432" x="4279" y="32" height="56" width="265" html.valueishtml="0"  name=pm_empno_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="PM명" border="0" color="33554432" x="4553" y="32" height="56" width="535" html.valueishtml="0"  name=emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="시작일자" border="0" color="33554432" x="5097" y="32" height="56" width="320" html.valueishtml="0"  name=start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="종료일자" border="0" color="33554432" x="5426" y="32" height="56" width="329" html.valueishtml="0"  name=end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

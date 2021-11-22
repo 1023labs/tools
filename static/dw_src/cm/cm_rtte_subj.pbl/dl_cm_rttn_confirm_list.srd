@@ -1,0 +1,81 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_rtte_subject_list.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_rtte_subject_list.proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=reg_date dbname="cm_rtte_subject_list.reg_date" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_rtte_subject_list.labor_code" )
+ column=(type=char(3) updatewhereclause=yes name=team_code dbname="cm_rtte_subject_list.team_code" )
+ column=(type=char(3) updatewhereclause=yes name=rtte_div dbname="cm_rtte_subject_list.rtte_div" )
+ column=(type=char(8) updatewhereclause=yes name=enter_date dbname="cm_rtte_subject_list.enter_date" )
+ column=(type=char(8) updatewhereclause=yes name=retire_date dbname="cm_rtte_subject_list.retire_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=absent_day dbname="cm_rtte_subject_list.absent_day" )
+ column=(type=char(1) updatewhereclause=yes name=confirm_yn dbname="cm_rtte_subject_list.confirm_yn" values="예정	1/확정	2/반려	3/" )
+ column=(type=char(3) updatewhereclause=yes name=confirm_div dbname="cm_rtte_subject_list.confirm_div" )
+ column=(type=decimal(0) updatewhereclause=yes name=work_month dbname="cm_rtte_subject_list.work_month" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(6) updatewhereclause=yes name=rrn_pre dbname="cm_labo_master.rrn_pre" )
+ column=(type=char(7) updatewhereclause=yes name=rrn_post dbname="cm_labo_master.rrn_post" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="cm_attd_teams.team_name" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE,         
+         A.REG_DATE,
+         A.LABOR_CODE,
+         A.TEAM_CODE,
+         A.RTTE_DIV,
+         A.ENTER_DATE,
+         A.RETIRE_DATE,
+         A.ABSENT_DAY,
+         A.CONFIRM_YN,
+         A.CONFIRM_DIV,
+         A.WORK_MONTH,
+         B.PROJ_NAME,
+         C.LABOR_NAME,
+         C.RRN_PRE,
+         C.RRN_POST,
+         D.TEAM_NAME
+    FROM CM_RTTE_SUBJECT_LIST A LEFT JOIN SM_CODE_PROJECT B
+                                       ON A.PROJ_CODE = B.PROJ_CODE
+                                LEFT JOIN CM_LABO_MASTER C
+                                       ON A.LABOR_CODE = C.LABOR_CODE
+                                LEFT JOIN CM_ATTD_TEAMS D
+                                       ON A.COMPANY_CODE = D.COMPANY_CODE
+                                      AND A.PROJ_CODE    = D.PROJ_CODE
+                                      AND A.TEAM_CODE = D.TEAM_CODE
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE LIKE :as_proj
+     AND SUBSTR(REG_DATE,1,6) BETWEEN :as_from AND :as_to
+     AND A.CONFIRM_YN = '2'
+ORDER BY A.PROJ_CODE ASC" arguments=(("as_comp", string),("as_proj", string),("as_from", string),("as_to", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="36" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="팀명" border="0" color="33554432" x="223" y="2" height="14" width="84" html.valueishtml="0"  name=team_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="대상자" border="0" color="33554432" x="309" y="2" height="14" width="57" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="368" y="2" height="14" width="105" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입사일자" border="0" color="33554432" x="545" y="2" height="14" width="76" html.valueishtml="0"  name=cm_rtte_subject_list_enter_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결근일수" border="0" color="33554432" x="623" y="2" height="14" width="56" html.valueishtml="0"  name=absent_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무개월" border="0" color="33554432" x="839" y="2" height="14" width="64" html.valueishtml="0"  name=work_month_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="반려사유" border="0" color="0" x="681" y="2" height="14" width="73" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="40" y="2" height="14" width="181" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="요청사유" border="0" color="33554432" x="475" y="2" height="14" width="68" html.valueishtml="0"  name=rtte_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확정일" border="0" color="33554432" x="756" y="2" height="14" width="81" html.valueishtml="0"  name=retire_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="36" format="[GENERAL]" html.valueishtml="0"  name=compute_2  tag="c_row" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="40" y="2" height="14" width="181" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="223" y="2" height="14" width="84" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="309" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression=" rrn_pre + ~"-~" +rrn_post "border="0" color="33554432" x="368" y="2" height="14" width="105" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="545" y="2" height="14" width="76" format="@@@@-@@-@@" html.valueishtml="0"  name=enter_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="623" y="2" height="14" width="56" format="[general]~t absent_day +~"일~"" html.valueishtml="0"  name=absent_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432~tif( continue_div =~"2~" , RGB(255, 0, 0), RGB(0, 0, 0))" x="839" y="2" height="14" width="64" format="[general]" html.valueishtml="0"  name=work_month visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="0" background.color="553648127~tif( continue_div =~"1~" , RGB(253,  224, 202), RGB(255, 255, 255))" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="681" y="2" height="14" width="73" format="[general]" html.valueishtml="0"  name=confirm_div pointer="HyperLink!" visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="475" y="2" height="14" width="68" format="[general]" html.valueishtml="0"  name=rtte_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="756" y="2" height="14" width="81" format="####-##-##" html.valueishtml="0"  name=retire_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,55 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=16777215 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=168 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_exec_work_budget_proj.company_code" dbalias=".company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_exec_work_budget_proj.proj_code" dbalias=".proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_exec_work_budget_proj.contract_code" dbalias=".contract_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=item_div dbname="cm_exec_work_budget_proj.item_div" dbalias=".item_div" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=item_code dbname="cm_exec_work_budget_proj.item_code" dbalias=".item_code" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=review dbname="cm_exec_work_budget_proj.review" dbalias=".review" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=deliver dbname="cm_exec_work_budget_proj.deliver" dbalias=".deliver" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=significant dbname="cm_exec_work_budget_proj.significant" dbalias=".significant" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=changereview dbname="cm_exec_work_budget_proj.changereview" dbalias=".changereview" )
+ retrieve="SELECT COMPANY_CODE,
+          PROJ_CODE,
+          CONTRACT_CODE,
+          ITEM_DIV,
+          ITEM_CODE,
+          REVIEW,
+          DELIVER,
+          SIGNIFICANT,
+          CHANGEREVIEW
+     FROM CM_EXEC_WORK_BUDGET_PROJ
+    WHERE COMPANY_CODE  = :as_comp_code
+      AND CONTRACT_CODE = :as_cont_code
+      AND ITEM_CODE = '0101'  
+      AND ITEM_DIV = '01'" update="CM_EXEC_WORK_BUDGET_PROJ" updatewhere=1 updatekeyinplace=yes arguments=(("as_comp_code", string),("as_cont_code", string)) )
+rectangle(band=detail x="379" y="3" height="165" width="68"  name=r_2 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="1" background.color="553648127" )
+rectangle(band=detail x="2" y="2" height="166" width="67"  name=r_1 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="1" background.color="553648127" )
+line(band=detail x1="1" y1="2" x2="1" y2="178"  name=l_1 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="검토사항" border="0" color="33554432" x="5" y="10" height="14" width="61" html.valueishtml="0"  name=review_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=10 border="0" color="33554432" x="71" y="6" height="157" width="305" format="[general]" html.valueishtml="0"  name=review  tag="" visible="1" edit.limit=1000 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.hscrollbar=yes edit.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="68" y1="2" x2="68" y2="178"  name=l_2 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="378" y1="2" x2="378" y2="178"  name=l_3 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="전달사항" border="0" color="33554432" x="383" y="10" height="14" width="61" html.valueishtml="0"  name=deliver_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=20 border="0" color="33554432" x="449" y="7" height="157" width="305" format="[general]" html.valueishtml="0"  name=deliver  tag="" visible="1" edit.limit=1000 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.hscrollbar=yes edit.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="447" y1="2" x2="447" y2="178"  name=l_4 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="758" y1="2" x2="758" y2="178"  name=l_5 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="758" y1="2" x2="0" y2="2"  name=l_6 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="758" y1="167" x2="0" y2="167"  name=l_7 visible="1" pen.style="0" pen.width="1~t0.5" pen.color="10789024"  background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="0" tabsequence=30 border="0" color="33554432" x="759" y="1" height="14" width="960" format="[general]" html.valueishtml="0"  name=significant visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=40 border="0" color="33554432" x="1720" y="1" height="14" width="960" html.valueishtml="0"  name=changereview visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

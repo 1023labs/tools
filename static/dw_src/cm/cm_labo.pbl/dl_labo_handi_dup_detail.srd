@@ -1,0 +1,99 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=cm_saly_labor_account_company_code dbname="cm_saly_labor_account.company_code" )
+ column=(type=char(6) updatewhereclause=yes name=pay_yymm dbname="cm_saly_labor_account.pay_yymm" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_saly_labor_account.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_saly_labor_account.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=number updatewhereclause=yes name=compute_0007 dbname="compute_0007" )
+ column=(type=number updatewhereclause=yes name=compute_0008 dbname="compute_0008" )
+ column=(type=number updatewhereclause=yes name=compute_0009 dbname="compute_0009" )
+ column=(type=char(14) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PAY_YYMM,
+       A.LABOR_CODE,
+       B.LABOR_NAME,
+       A.PROJ_CODE,
+       C.PROJ_NAME,
+       SUM(A.WORK_QTY),
+       SUM(A.WORK_DAY),
+       SUM(A.PAY_TOT),
+       B.RRN_PRE|| '-' || B.RRN_POST AS JUMIN_NO
+  FROM CM_SALY_LABOR_ACCOUNT A INNER JOIN CM_LABO_MASTER B
+                                       ON A.COMPANY_CODE = B.COMPANY_CODE
+                                      AND A.LABOR_CODE   = B.LABOR_CODE
+                                LEFT JOIN SM_CODE_PROJECT C
+                                       ON A.COMPANY_CODE = C.COMPANY_CODE
+                                      AND A.PROJ_CODE    = C.PROJ_CODE
+ WHERE A.PAY_YYMM = :as_pay_yymm
+   AND (A.PAY_YYMM, A.LABOR_CODE) IN(SELECT PJ_CNT.PAY_YYMM     AS PAY_YYMM,
+                                            PJ_CNT.LABOR_CODE   AS LABOR_CODE
+                                       FROM (SELECT A.COMPANY_CODE      AS COMPANY_CODE,
+                                                    A.PAY_YYMM          AS PAY_YYMM,
+                                                    A.LABOR_CODE        AS LABOR_CODE,
+                                                    COUNT(A.PROJ_CODE)  AS PROJ_CNT
+                                              FROM (SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+                                                           A.PAY_YYMM       AS PAY_YYMM,
+                                                           A.LABOR_CODE     AS LABOR_CODE,
+                                                           A.PROJ_CODE      AS PROJ_CODE,
+                                                           SUM(A.WORK_DAY)  AS WORK_DAY
+                                                      FROM CM_SALY_LABOR_ACCOUNT A
+                                                     WHERE A.COMPANY_CODE = :as_comp
+                                                       AND A.PAY_YYMM = :as_pay_yymm
+                                                  GROUP BY A.COMPANY_CODE,
+                                                           A.PAY_YYMM,
+                                                           A.LABOR_CODE,
+                                                           A.PROJ_CODE) A 
+                                         GROUP BY A.COMPANY_CODE,
+                                                  A.PAY_YYMM,
+                                                  A.LABOR_CODE) PJ_CNT
+                                      WHERE PJ_CNT.PROJ_CNT > 1)
+GROUP BY A.COMPANY_CODE,
+         A.PAY_YYMM,
+         A.LABOR_CODE,
+         B.LABOR_NAME,
+         B.RRN_PRE|| '-' || B.RRN_POST,
+         A.PROJ_CODE,
+         C.PROJ_NAME
+ORDER BY A.LABOR_CODE,
+         A.PAY_YYMM,
+         A.PROJ_CODE,
+         A.PROJ_CODE " arguments=(("as_comp", string),("as_pay_yymm", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="8" height="14" width="31" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="급여월" border="0" color="33554432" x="282" y="8" height="14" width="63" html.valueishtml="0"  name=cm_saly_labor_account_pay_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="34" y="8" height="14" width="72" html.valueishtml="0"  name=cm_saly_labor_account_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="108" y="8" height="14" width="65" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="347" y="8" height="14" width="70" html.valueishtml="0"  name=cm_saly_labor_account_proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="419" y="8" height="14" width="224" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="작업공수" border="0" color="33554432" x="645" y="8" height="14" width="56" html.valueishtml="0"  name=compute_0007_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="작업일수" border="0" color="33554432" x="703" y="8" height="14" width="57" html.valueishtml="0"  name=compute_0008_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지급금액" border="0" color="33554432" x="762" y="8" height="14" width="99" html.valueishtml="0"  name=compute_0009_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="175" y="8" height="14" width="105" html.valueishtml="0"  name=jumin_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="3" height="15" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="283" y="3" height="15" width="62" format="[general]" html.valueishtml="0"  name=pay_yymm visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="347" y="3" height="15" width="70" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="419" y="3" height="15" width="224" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="762" y="3" height="15" width="99" format="#,###" html.valueishtml="0"  name=compute_0009 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="34" y="3" height="15" width="72" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="108" y="3" height="15" width="65" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="175" y="3" height="15" width="105" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="645" y="3" height="15" width="56" format="[general]" html.valueishtml="0"  name=compute_0007 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="703" y="3" height="15" width="57" format="[general]" html.valueishtml="0"  name=compute_0008 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회사코드" border="0" color="33554432" x="863" y="8" height="14" width="48" html.valueishtml="0"  name=cm_saly_labor_account_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="863" y="3" height="15" width="48" format="[general]" html.valueishtml="0"  name=cm_saly_labor_account_company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

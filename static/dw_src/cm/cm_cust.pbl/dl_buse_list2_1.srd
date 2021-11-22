@@ -1,0 +1,80 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_cust_business.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_cust_business.proj_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=proj_name dbname="cm_cust_business.proj_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=pur_amount dbname="cm_cust_business.pur_amount" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=est_date dbname="cm_cust_business.est_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_cust_business.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_cust_business.end_date" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=const_type dbname="cm_cust_business.const_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=location dbname="cm_cust_business.location" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phone_no dbname="cm_cust_business.phone_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=pur_name dbname="cm_cust_business.pur_name" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=pur_type dbname="cm_cust_business.pur_type" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=cnst_code dbname="cm_cust_business.cnst_code" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" )
+ column=(type=decimal(4) update=yes updatewhereclause=yes name=tot_area dbname="cm_cust_business.tot_area" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=tot_scale dbname="cm_cust_business.tot_scale" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=structure dbname="cm_cust_business.structure" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=const_method dbname="cm_cust_business.const_method" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=cust_names dbname="cm_cust_business.cust_names" )
+ column=(type=char(400) update=yes updatewhereclause=yes name=special dbname="cm_cust_business.special" )
+ column=(type=char(12) updatewhereclause=yes name=ent_dept dbname="cm_cust_business.ent_dept" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="cm_cust_business.pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE, 
+         A.PROJ_NAME, 
+         A.PUR_AMOUNT, 
+         A.EST_DATE, 
+         A.START_DATE, 
+         A.END_DATE, 
+         A.CONST_TYPE,  
+         A.LOCATION, 
+         A.PHONE_NO, 
+         A.PUR_NAME, 
+         A.PUR_TYPE, 
+         A.CNST_CODE,
+         B.CNST_NAME,
+         A.TOT_AREA, 
+         A.TOT_SCALE, 
+         A.STRUCTURE, 
+         A.CONST_METHOD, 
+         A.CUST_NAMES, 
+         A.SPECIAL,
+         A.ENT_DEPT,
+         A.PM_EMPNO,
+         C.EMP_NAME
+    FROM CM_CUST_BUSINESS A LEFT JOIN CM_CUST_CONSTRUCT B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.CNST_CODE    = B.CNST_CODE
+                            LEFT JOIN HR_PERS_MASTER C
+                                   ON A.PM_EMPNO = C.EMP_NO
+   WHERE A.COMPANY_CODE = :as_comp
+ORDER BY A.PROJ_CODE ASC" arguments=(("as_comp", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="255" x="32" y="2" height="14" width="77" html.valueishtml="0"  name=proj_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사명" border="0" color="33554432" x="111" y="2" height="14" width="333" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현설예정일" border="0" color="33554432" x="446" y="2" height="14" width="92" html.valueishtml="0"  name=est_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM명" border="0" color="33554432" x="540" y="2" height="14" width="58" html.valueishtml="0"  name=hr_pers_master_emp_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="GETROW()"border="0" color="33554432" x="2" y="2" height="14" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="32" y="2" height="14" width="77" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="111" y="2" height="14" width="333" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="447" y="2" height="14" width="91" format="[general]" html.valueishtml="0"  name=est_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="2" tabsequence=32766 border="0" color="33554432" x="541" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

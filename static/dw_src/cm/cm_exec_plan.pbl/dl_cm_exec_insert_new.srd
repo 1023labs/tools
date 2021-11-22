@@ -1,0 +1,103 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=25 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=31 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_exec_plan_month3.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_exec_plan_month3.proj_code" dbalias="A.proj_code" )
+ column=(type=char(2) updatewhereclause=yes name=plan_gbn dbname="cm_exec_plan_month3.plan_gbn" dbalias="A.plan_gbn" )
+ column=(type=number updatewhereclause=yes name=plan_amt01 dbname="plan_amt01" )
+ column=(type=number updatewhereclause=yes name=plan_amt02 dbname="plan_amt02" )
+ column=(type=number updatewhereclause=yes name=plan_amt03 dbname="plan_amt03" )
+ column=(type=number updatewhereclause=yes name=plan_amt04 dbname="plan_amt04" )
+ column=(type=number updatewhereclause=yes name=plan_amt05 dbname="plan_amt05" )
+ column=(type=number updatewhereclause=yes name=plan_amt06 dbname="plan_amt06" )
+ column=(type=number updatewhereclause=yes name=plan_amt07 dbname="plan_amt07" )
+ column=(type=number updatewhereclause=yes name=plan_amt08 dbname="plan_amt08" )
+ column=(type=number updatewhereclause=yes name=plan_amt09 dbname="plan_amt09" )
+ column=(type=number updatewhereclause=yes name=plan_amt10 dbname="plan_amt10" )
+ column=(type=number updatewhereclause=yes name=plan_amt11 dbname="plan_amt11" )
+ column=(type=number updatewhereclause=yes name=plan_amt12 dbname="plan_amt12" )
+ column=(type=number updatewhereclause=yes name=plan_amt13 dbname="plan_amt13" )
+ column=(type=number updatewhereclause=yes name=plan_amt14 dbname="plan_amt14" )
+ column=(type=number updatewhereclause=yes name=plan_amt15 dbname="plan_amt15" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+       A.PROJ_CODE              AS PROJ_CODE,
+       A.PLAN_GBN                AS PLAN_GBN,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '01' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT01,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '02' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT02,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '03' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT03,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '04' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT04,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '05' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT05,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '06' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT06,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '07' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT07,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '08' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT08,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '09' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT09,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '10' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT10,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '11' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT11,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '12' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT12,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '13' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT13,
+       NVL(SUM(CASE WHEN A.PLAN_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '14' THEN A.PLAN_AMT ELSE 0 END),0) AS PLAN_AMT14,
+       NVL((SELECT SUM(PLAN_AMT)
+              FROM CM_EXEC_PLAN_MONTH3
+             WHERE PROJ_CODE = :AS_PROJ_CODE
+               AND PLAN_YYMM < SUBSTR(:AS_CC_YM, 1, 4)-1||'13'
+               AND SUBSTR(PLAN_YYMM,5,2) NOT IN('13','14')),0) AS PLAN_AMT15
+  FROM CM_EXEC_PLAN_MONTH3 A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.PLAN_GBN     = '1'
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.PLAN_GBN
+ORDER BY A.PLAN_GBN" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CC_YM", string)) )
+text(band=header alignment="2" text="1월" border="0" color="33554432" x="129" y="6" height="14" width="58" html.valueishtml="0"  name=plan_amt01_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="2월" border="0" color="33554432" x="189" y="6" height="14" width="58" html.valueishtml="0"  name=plan_amt02_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="3월" border="0" color="33554432" x="249" y="6" height="14" width="58" html.valueishtml="0"  name=plan_amt03_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="4월" border="0" color="33554432" x="309" y="6" height="14" width="56" html.valueishtml="0"  name=plan_amt04_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="5월" border="0" color="33554432" x="367" y="6" height="14" width="58" html.valueishtml="0"  name=plan_amt05_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="6월" border="0" color="33554432" x="427" y="6" height="14" width="59" html.valueishtml="0"  name=plan_amt06_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="7월" border="0" color="33554432" x="488" y="6" height="14" width="60" html.valueishtml="0"  name=plan_amt07_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="8월" border="0" color="33554432" x="550" y="6" height="14" width="58" html.valueishtml="0"  name=plan_amt08_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="9월" border="0" color="33554432" x="610" y="6" height="14" width="57" html.valueishtml="0"  name=plan_amt09_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="10월" border="0" color="33554432" x="669" y="6" height="14" width="59" html.valueishtml="0"  name=plan_amt10_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="11월" border="0" color="33554432" x="730" y="6" height="14" width="59" html.valueishtml="0"  name=plan_amt11_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총 계" border="0" color="33554432" x="2" y="6" height="14" width="65" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="12월" border="0" color="33554432" x="791" y="6" height="14" width="59" html.valueishtml="0"  name=plan_amt12_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회사코드" border="0" color="33554432" x="1021" y="6" height="14" width="28" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="972" y="6" height="14" width="25" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="999" y="6" height="14" width="20" html.valueishtml="0"  name=plan_gbn_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Y + 1" border="0" color="33554432" x="852" y="6" height="14" width="57" html.valueishtml="0"  name=plan_amt13_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Y + 2" border="0" color="33554432" x="911" y="6" height="14" width="59" html.valueishtml="0"  name=plan_amt14_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Y - 1" border="0" color="33554432" x="69" y="6" height="14" width="58" html.valueishtml="0"  name=plan_amt15_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" plan_amt01  +  plan_amt02  +  plan_amt03  +  plan_amt04  +  plan_amt05  +  plan_amt06  +  plan_amt07  +  plan_amt08  +  plan_amt09  +  plan_amt10  +  plan_amt11  +  plan_amt12  +  plan_amt13  +  plan_amt14  +  plan_amt15 "border="0" color="33554432" x="2" y="8" height="16" width="65" format="[General]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=10 border="0" color="33554432" x="129" y="8" height="17" width="58" format="[General]" html.valueishtml="0"  name=plan_amt01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="189" y="8" height="17" width="58" format="[General]" html.valueishtml="0"  name=plan_amt02 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=30 border="0" color="33554432" x="249" y="8" height="17" width="58" format="[General]" html.valueishtml="0"  name=plan_amt03 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=40 border="0" color="33554432" x="309" y="8" height="17" width="56" format="[General]" html.valueishtml="0"  name=plan_amt04 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=50 border="0" color="33554432" x="367" y="8" height="17" width="58" format="[General]" html.valueishtml="0"  name=plan_amt05 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=60 border="0" color="33554432" x="427" y="8" height="17" width="59" format="[General]" html.valueishtml="0"  name=plan_amt06 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=70 border="0" color="33554432" x="488" y="8" height="17" width="60" format="[General]" html.valueishtml="0"  name=plan_amt07 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=80 border="0" color="33554432" x="550" y="7" height="17" width="58" format="[General]" html.valueishtml="0"  name=plan_amt08 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=90 border="0" color="33554432" x="610" y="8" height="17" width="57" format="[General]" html.valueishtml="0"  name=plan_amt09 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=100 border="0" color="33554432" x="669" y="8" height="17" width="59" format="[General]" html.valueishtml="0"  name=plan_amt10 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=110 border="0" color="33554432" x="730" y="8" height="17" width="59" format="[General]" html.valueishtml="0"  name=plan_amt11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=120 border="0" color="33554432" x="791" y="8" height="17" width="59" format="[General]" html.valueishtml="0"  name=plan_amt12 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1021" y="8" height="17" width="28" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="972" y="8" height="17" width="25" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="999" y="8" height="17" width="20" format="[general]" html.valueishtml="0"  name=plan_gbn visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=130 border="0" color="33554432" x="852" y="8" height="17" width="57" format="[General]" html.valueishtml="0"  name=plan_amt13 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=140 border="0" color="33554432" x="911" y="8" height="17" width="59" format="[General]" html.valueishtml="0"  name=plan_amt14 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="33554432" x="69" y="8" height="17" width="58" format="[General]" html.valueishtml="0"  name=plan_amt15 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

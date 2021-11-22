@@ -1,0 +1,77 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=34 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes name=open_date dbname="sm_code_project.open_date" dbalias="A.open_date" )
+ column=(type=char(8) updatewhereclause=yes name=close_date dbname="sm_code_project.close_date" dbalias="A.close_date" )
+ column=(type=number updatewhereclause=yes name=house_cnt1 dbname="house_cnt1" )
+ column=(type=number updatewhereclause=yes name=house_cnt2 dbname="house_cnt2" )
+ column=(type=number updatewhereclause=yes name=house_cnt3 dbname="house_cnt3" )
+ retrieve="SELECT A.OPEN_DATE AS OPEN_DATE 
+,A.CLOSE_DATE AS CLOSE_DATE 
+,NVL(HOUSE_CNT1,0) AS HOUSE_CNT1
+,NVL(HOUSE_CNT2,0) AS HOUSE_CNT2
+,NVL(HOUSE_CNT3,0) AS HOUSE_CNT3
+FROM SM_CODE_PROJECT A LEFT JOIN
+(SELECT COMPANY_CODE 
+       ,PROJ_CODE
+       ,APPR_DIV
+       ,CONFIRM_YN 
+       ,SUM(CASE WHEN HOUSE_DIV2='001' THEN 1 ELSE 0 END) HOUSE_CNT1
+       ,SUM(CASE WHEN HOUSE_DIV2='002' THEN 1 ELSE 0 END) HOUSE_CNT2 
+       ,SUM(CASE WHEN HOUSE_DIV2='003' THEN 1 ELSE 0 END) HOUSE_CNT3  
+    FROM CM_COST_HOUSE_GW_LIST 
+  WHERE APPR_DIV = :AS_APPR_CODE
+    AND CONFIRM_YN = 'Y'   
+  GROUP BY COMPANY_CODE, PROJ_CODE, APPR_DIV,CONFIRM_YN ) B
+        ON A.COMPANY_CODE = B.COMPANY_CODE
+       AND A.PROJ_CODE    = B.PROJ_CODE
+  WHERE A.COMPANY_CODE = :AS_COMP_CODE
+    AND A.PROJ_CODE    = :AS_PROJ_CODE " arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_APPR_CODE", string)) )
+line(band=header x1="5" y1="14" x2="5" y2="51"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+rectangle(band=detail x="600" y="7" height="23" width="62"  name=r_6 visible="1" brush.hatch="6" brush.color="33488380" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="463" y="7" height="23" width="62"  name=r_5 visible="1" brush.hatch="6" brush.color="33488380" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="327" y="7" height="23" width="62"  name=r_3 visible="1" brush.hatch="6" brush.color="33488380" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="224" y="7" height="23" width="103"  name=r_1 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="5" y="7" height="23" width="69"  name=r_2 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+text(band=detail alignment="2" text="공사기간" border="0" color="33554432" x="15" y="11" height="14" width="48" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text=" ~~" border="0" color="33554432" x="138" y="12" height="14" width="18" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="임차 보유현황" border="0" color="33554432" x="236" y="12" height="14" width="76" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="작업장" border="0" color="33554432" x="331" y="12" height="14" width="54" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="5" y1="5" x2="650" y2="5"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="5" y1="6" x2="5" y2="29"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="74" y1="6" x2="74" y2="29"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="224" y1="6" x2="224" y2="29"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="327" y1="6" x2="327" y2="29"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="389" y1="6" x2="389" y2="29"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="6" y1="6" x2="6" y2="29"  name=l_39 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="737" y1="6" x2="737" y2="29"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="738" y1="6" x2="738" y2="29"  name=l_38 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="6" y1="28" x2="738" y2="28"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="6" y1="29" x2="738" y2="29"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="6" y1="5" x2="738" y2="5"  name=l_98 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="6" y1="4" x2="738" y2="4"  name=l_99 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=detail alignment="2" text="사무실" border="0" color="33554432" x="467" y="12" height="14" width="54" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="463" y1="6" x2="463" y2="29"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="524" y1="6" x2="524" y2="29"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="79" y="12" height="14" width="64" format="[General]" html.valueishtml="0"  name=open_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="159" y="12" height="14" width="62" format="[general]" html.valueishtml="0"  name=close_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="숙소" border="0" color="33554432" x="605" y="12" height="14" width="54" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="600" y1="6" x2="600" y2="29"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="661" y1="6" x2="661" y2="29"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="391" y="12" height="14" width="70" format="[general]" html.valueishtml="0"  name=house_cnt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="665" y="12" height="14" width="70" format="[general]" html.valueishtml="0"  name=house_cnt3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="527" y="12" height="14" width="70" format="[general]" html.valueishtml="0"  name=house_cnt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

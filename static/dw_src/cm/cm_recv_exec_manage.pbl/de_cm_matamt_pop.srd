@@ -1,0 +1,45 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=2 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(40) updatewhereclause=yes name=const_code dbname="em_siteconst_kind.const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="em_siteconst_kind.const_name" )
+ column=(type=number updatewhereclause=yes name=mat_cost dbname="mat_cost" )
+ column=(type=char(1) updatewhereclause=yes name=check_tag dbname="check_tag" values="	Y/	N" )
+ retrieve=" SELECT A.CONST_CODE,
+        A.CONST_NAME,
+        TRUNC(SUM(NVL(B.ITEM_QTY,0) * NVL(B.MAT_COST,0)), 3) MAT_COST,
+        'N' AS CHECK_TAG  
+    FROM EM_SITECONST_KIND A LEFT JOIN ( SELECT A.*
+                                           FROM EM_EST_EM A
+                                          WHERE A.USER_ID   = :as_user_id
+                                            AND A.BREAK_DIV = :as_break_div
+                                            AND A.EST_CODE  = :as_est_code
+                                            AND A.CONST_DIV = :as_const_div
+                                            AND A.CODE_TAG <> '82') B
+                               ON A.EST_CODE   = B.EST_CODE
+                              AND A.CONST_DIV  = B.CONST_DIV
+                              AND B.CONST_CODE LIKE A.CONST_CODE||'%'
+   WHERE A.EST_CODE  = :as_est_code
+     AND A.CONST_DIV = :as_const_div
+     AND A.LEVEL_NUM = '2'  
+GROUP BY A.CONST_CODE, A.CONST_NAME
+ORDER BY A.CONST_CODE" arguments=(("as_user_id", string),("as_est_code", string),("as_const_div", string),("as_break_div", string)) )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="348" y="2" height="14" width="49" html.valueishtml="0"  name=check_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="42" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="46" y="2" height="14" width="82" html.valueishtml="0"  name=const_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="130" y="2" height="14" width="122" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="254" y="2" height="14" width="92" html.valueishtml="0"  name=mat_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=10 border="0" color="33554432" x="348" y="2" height="14" width="49" format="[general]" html.valueishtml="0"  name=check_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="42" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="46" y="2" height="14" width="82" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="130" y="2" height="14" width="122" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="254" y="2" height="14" width="92" format="#,##0" html.valueishtml="0"  name=mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

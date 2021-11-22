@@ -1,0 +1,276 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=128 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=a_company_code dbname="cm_out_saly_labor_account.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=a_proj_code dbname="cm_out_saly_labor_account.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_project_proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=a_team_code dbname="cm_out_saly_labor_account.team_code" )
+ column=(type=char(50) updatewhereclause=yes name=cm_attd_teams_team_name dbname="cm_out_attd_teams.team_name" )
+ column=(type=char(8) updatewhereclause=yes name=a_labor_code dbname="cm_out_saly_labor_account.labor_code" )
+ column=(type=char(6) updatewhereclause=yes name=a_work_date dbname="cm_out_saly_labor_account.work_date" )
+ column=(type=char(20) updatewhereclause=yes name=b_labor_name dbname="cm_out_saly_labor_account.labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=number updatewhereclause=yes name=d01 dbname="d01" )
+ column=(type=number updatewhereclause=yes name=d02 dbname="d02" )
+ column=(type=number updatewhereclause=yes name=d03 dbname="d03" )
+ column=(type=number updatewhereclause=yes name=d04 dbname="d04" )
+ column=(type=number updatewhereclause=yes name=d05 dbname="d05" )
+ column=(type=number updatewhereclause=yes name=d06 dbname="d06" )
+ column=(type=number updatewhereclause=yes name=d07 dbname="d07" )
+ column=(type=number updatewhereclause=yes name=d08 dbname="d08" )
+ column=(type=number updatewhereclause=yes name=d09 dbname="d09" )
+ column=(type=number updatewhereclause=yes name=d10 dbname="d10" )
+ column=(type=number updatewhereclause=yes name=d11 dbname="d11" )
+ column=(type=number updatewhereclause=yes name=d12 dbname="d12" )
+ column=(type=number updatewhereclause=yes name=d13 dbname="d13" )
+ column=(type=number updatewhereclause=yes name=d14 dbname="d14" )
+ column=(type=number updatewhereclause=yes name=d15 dbname="d15" )
+ column=(type=number updatewhereclause=yes name=d16 dbname="d16" )
+ column=(type=number updatewhereclause=yes name=d17 dbname="d17" )
+ column=(type=number updatewhereclause=yes name=d18 dbname="d18" )
+ column=(type=number updatewhereclause=yes name=d19 dbname="d19" )
+ column=(type=number updatewhereclause=yes name=d20 dbname="d20" )
+ column=(type=number updatewhereclause=yes name=d21 dbname="d21" )
+ column=(type=number updatewhereclause=yes name=d22 dbname="d22" )
+ column=(type=number updatewhereclause=yes name=d23 dbname="d23" )
+ column=(type=number updatewhereclause=yes name=d24 dbname="d24" )
+ column=(type=number updatewhereclause=yes name=d25 dbname="d25" )
+ column=(type=number updatewhereclause=yes name=d26 dbname="d26" )
+ column=(type=number updatewhereclause=yes name=d27 dbname="d27" )
+ column=(type=number updatewhereclause=yes name=d28 dbname="d28" )
+ column=(type=number updatewhereclause=yes name=d29 dbname="d29" )
+ column=(type=number updatewhereclause=yes name=d30 dbname="d30" )
+ column=(type=number updatewhereclause=yes name=d31 dbname="d31" )
+ column=(type=decimal(2) updatewhereclause=yes name=cm_saly_labor_account_work_day dbname="cm_out_saly_labor_account.work_day" )
+ column=(type=decimal(2) updatewhereclause=yes name=cm_saly_labor_account_work_qty dbname="cm_out_saly_labor_account.work_qty" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_saly_labor_account_unit_amt dbname="cm_out_saly_labor_account.unit_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_saly_labor_account_pay_tot dbname="cm_out_saly_labor_account.pay_tot" )
+ column=(type=char(2) updatewhereclause=yes name=b_pay_div dbname="cm_out_saly_labor_account.pay_div" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         E.PROJ_NAME,
+         A.TEAM_CODE, 
+         D.TEAM_NAME,
+         A.LABOR_CODE,
+         A.WORK_DATE,
+         B.LABOR_NAME,
+         B.RRN_PRE||B.RRN_POST LABOR_ID,             
+         SUM(A.D01) D01, 
+         SUM(A.D02) D02, 
+         SUM(A.D03) D03, 
+         SUM(A.D04) D04, 
+         SUM(A.D05) D05, 
+         SUM(A.D06) D06, 
+         SUM(A.D07) D07, 
+         SUM(A.D08) D08, 
+         SUM(A.D09) D09, 
+         SUM(A.D10) D10, 
+         SUM(A.D11) D11, 
+         SUM(A.D12) D12, 
+         SUM(A.D13) D13, 
+         SUM(A.D14) D14, 
+         SUM(A.D15) D15, 
+         SUM(A.D16) D16, 
+         SUM(A.D17) D17, 
+         SUM(A.D18) D18, 
+         SUM(A.D19) D19, 
+         SUM(A.D20) D20, 
+         SUM(A.D21) D21, 
+         SUM(A.D22) D22, 
+         SUM(A.D23) D23, 
+         SUM(A.D24) D24, 
+         SUM(A.D25) D25, 
+         SUM(A.D26) D26, 
+         SUM(A.D27) D27, 
+         SUM(A.D28) D28, 
+         SUM(A.D29) D29, 
+         SUM(A.D30) D30, 
+         SUM(A.D31) D31,
+         C.WORK_DAY,
+         C.WORK_QTY,
+         C.UNIT_AMT,
+         C.PAY_TOT,
+         B.PAY_DIV
+    FROM (              
+          SELECT A.COMPANY_CODE, 
+                 A.PROJ_CODE,
+                 A.TEAM_CODE,
+                 A.LABOR_CODE,
+                 SUBSTR(A.WORK_DATE,1,6) WORK_DATE,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'01',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D01,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'02',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D02,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'03',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D03,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'04',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D04,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'05',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D05,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'06',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D06,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'07',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D07,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'08',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D08,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'09',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D09,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'10',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D10,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'11',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D11,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'12',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D12,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'13',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D13,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'14',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D14,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'15',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D15,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'16',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D16,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'17',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D17,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'18',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D18,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'19',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D19,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'20',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D20,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'21',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D21,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'22',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D22,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'23',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D23,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'24',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D24,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'25',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D25,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'26',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D26,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'27',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D27,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'28',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D28,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'29',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D29,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'30',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D30,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'31',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D31
+             FROM CM_OUT_ATTD_DAILY_WORK  A
+           WHERE A.COMPANY_CODE = :AS_COMP_CODE 
+             AND SUBSTR(A.WORK_DATE,1,6) = :AS_WORK_YYMM ) A LEFT JOIN (  SELECT A.COMPANY_CODE
+                                                                               , A.LABOR_CODE
+                                                                               , A.LABOR_NAME
+                                                                               , X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]') RRN_PRE
+                                                                               , X_DECRYPT(A.RRN_POST, '[Mighty-X.2012.]') RRN_POST
+                                                                               , SUBSTR(MAX(B.APPLY_DATE || NVL(B.PAY_DIV, ' ')), -1) PAY_DIV
+                                                                            FROM CM_OUT_LABO_MASTER A LEFT JOIN CM_OUT_LABO_SALARY B
+                                                                                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                                        AND A.LABOR_CODE   = B.LABOR_CODE
+                                                                                                        AND B.APPLY_DATE  <= :AS_WORK_YYMM || '31'
+                                                                           WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                                                        GROUP BY A.COMPANY_CODE, A.LABOR_CODE, A.LABOR_NAME, X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]'), X_DECRYPT(A.RRN_POST, '[Mighty-X.2012.]')) B
+                                                                    ON A.COMPANY_CODE = B.COMPANY_CODE AND A.LABOR_CODE = B.LABOR_CODE
+                                                             LEFT JOIN CM_OUT_SALY_LABOR_ACCOUNT C
+                                                                    ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                                   AND A.PROJ_CODE    = C.PROJ_CODE
+                                                                   AND A.TEAM_CODE    = C.TEAM_CODE
+                                                                   AND A.WORK_DATE    = C.PAY_YYMM 
+                                                                   AND A.LABOR_CODE   = C.LABOR_CODE    
+                                                             LEFT JOIN CM_OUT_ATTD_TEAMS D 
+                                                                    ON A.COMPANY_CODE = D.COMPANY_CODE 
+                                                                   AND A.PROJ_CODE    = D.PROJ_CODE 
+                                                                   AND A.TEAM_CODE    = D.TEAM_CODE
+                                                             LEFT JOIN SM_CODE_PROJECT E
+                                                                    ON A.COMPANY_CODE = E.COMPANY_CODE
+                                                                   AND A.PROJ_CODE    = E.PROJ_CODE
+GROUP BY A.COMPANY_CODE, A.PROJ_CODE,E.PROJ_NAME,A.TEAM_CODE, D.TEAM_NAME, A.LABOR_CODE,B.LABOR_NAME, B.RRN_PRE, B.RRN_POST, A.WORK_DATE,C.WORK_DAY,C.WORK_QTY,C.UNIT_AMT,C.PAY_TOT, B.PAY_DIV    
+ORDER BY D.TEAM_NAME, B.LABOR_NAME" arguments=(("AS_COMP_CODE", string),("AS_WORK_YYMM", string)) )
+text(band=header alignment="2" text="A
+Company Code" border="0" color="33554432" x="14" y="8" height="112" width="407" html.valueishtml="0"  name=a_company_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="A
+Proj Code" border="0" color="33554432" x="434" y="8" height="112" width="256" html.valueishtml="0"  name=a_proj_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="A
+Team Code" border="0" color="33554432" x="704" y="8" height="112" width="306" html.valueishtml="0"  name=a_team_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Attd Teams
+Team Name" border="0" color="33554432" x="1024" y="8" height="112" width="1399" html.valueishtml="0"  name=cm_attd_teams_team_name_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="A
+Labor Code" border="0" color="33554432" x="2437" y="8" height="112" width="302" html.valueishtml="0"  name=a_labor_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="A
+Work Date" border="0" color="33554432" x="2752" y="8" height="112" width="256" html.valueishtml="0"  name=a_work_date_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="B
+Labor Name" border="0" color="33554432" x="3026" y="8" height="112" width="576" html.valueishtml="0"  name=b_labor_name_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Labor Id" border="0" color="33554432" x="3616" y="8" height="56" width="846" html.valueishtml="0"  name=labor_id_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D01" border="0" color="33554432" x="4475" y="8" height="56" width="329" html.valueishtml="0"  name=d01_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D02" border="0" color="33554432" x="4818" y="8" height="56" width="329" html.valueishtml="0"  name=d02_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D03" border="0" color="33554432" x="5166" y="8" height="56" width="325" html.valueishtml="0"  name=d03_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D04" border="0" color="33554432" x="5509" y="8" height="56" width="329" html.valueishtml="0"  name=d04_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D05" border="0" color="33554432" x="5851" y="8" height="56" width="329" html.valueishtml="0"  name=d05_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D06" border="0" color="33554432" x="6194" y="8" height="56" width="329" html.valueishtml="0"  name=d06_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D07" border="0" color="33554432" x="6537" y="8" height="56" width="329" html.valueishtml="0"  name=d07_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D08" border="0" color="33554432" x="6880" y="8" height="56" width="329" html.valueishtml="0"  name=d08_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D09" border="0" color="33554432" x="7223" y="8" height="56" width="329" html.valueishtml="0"  name=d09_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D10" border="0" color="33554432" x="7566" y="8" height="56" width="329" html.valueishtml="0"  name=d10_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D11" border="0" color="33554432" x="7909" y="8" height="56" width="329" html.valueishtml="0"  name=d11_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D12" border="0" color="33554432" x="8251" y="8" height="56" width="329" html.valueishtml="0"  name=d12_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D13" border="0" color="33554432" x="8594" y="8" height="56" width="329" html.valueishtml="0"  name=d13_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D14" border="0" color="33554432" x="8937" y="8" height="56" width="329" html.valueishtml="0"  name=d14_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D15" border="0" color="33554432" x="9280" y="8" height="56" width="329" html.valueishtml="0"  name=d15_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D16" border="0" color="33554432" x="9623" y="8" height="56" width="329" html.valueishtml="0"  name=d16_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D17" border="0" color="33554432" x="9966" y="8" height="56" width="329" html.valueishtml="0"  name=d17_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D18" border="0" color="33554432" x="10309" y="8" height="56" width="329" html.valueishtml="0"  name=d18_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D19" border="0" color="33554432" x="10651" y="8" height="56" width="329" html.valueishtml="0"  name=d19_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D20" border="0" color="33554432" x="10994" y="8" height="56" width="329" html.valueishtml="0"  name=d20_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D21" border="0" color="33554432" x="11337" y="8" height="56" width="329" html.valueishtml="0"  name=d21_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D22" border="0" color="33554432" x="11680" y="8" height="56" width="329" html.valueishtml="0"  name=d22_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D23" border="0" color="33554432" x="12023" y="8" height="56" width="329" html.valueishtml="0"  name=d23_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D24" border="0" color="33554432" x="12366" y="8" height="56" width="329" html.valueishtml="0"  name=d24_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D25" border="0" color="33554432" x="12709" y="8" height="56" width="329" html.valueishtml="0"  name=d25_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D26" border="0" color="33554432" x="13051" y="8" height="56" width="329" html.valueishtml="0"  name=d26_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D27" border="0" color="33554432" x="13394" y="8" height="56" width="329" html.valueishtml="0"  name=d27_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D28" border="0" color="33554432" x="13737" y="8" height="56" width="329" html.valueishtml="0"  name=d28_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D29" border="0" color="33554432" x="14080" y="8" height="56" width="329" html.valueishtml="0"  name=d29_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D30" border="0" color="33554432" x="14423" y="8" height="56" width="329" html.valueishtml="0"  name=d30_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="D31" border="0" color="33554432" x="14766" y="8" height="56" width="329" html.valueishtml="0"  name=d31_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Saly Labor Account
+Work Day" border="0" color="33554432" x="15109" y="8" height="112" width="617" html.valueishtml="0"  name=cm_saly_labor_account_work_day_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Saly Labor Account
+Work Qty" border="0" color="33554432" x="15739" y="8" height="112" width="617" html.valueishtml="0"  name=cm_saly_labor_account_work_qty_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Saly Labor Account
+Unit Amt" border="0" color="33554432" x="16370" y="8" height="112" width="617" html.valueishtml="0"  name=cm_saly_labor_account_unit_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Saly Labor Account
+Pay Tot" border="0" color="33554432" x="17006" y="8" height="112" width="613" html.valueishtml="0"  name=cm_saly_labor_account_pay_tot_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="B
+Pay Div" border="0" color="33554432" x="17637" y="8" height="112" width="197" html.valueishtml="0"  name=b_pay_div_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Sm Code Project Proj Name" border="0" color="33554432" x="17842" y="4" height="76" width="1344" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="14" y="8" height="68" width="407" format="[general]" html.valueishtml="0"  name=a_company_code visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="434" y="8" height="68" width="256" format="[general]" html.valueishtml="0"  name=a_proj_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="704" y="8" height="68" width="306" format="[general]" html.valueishtml="0"  name=a_team_code visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="1024" y="8" height="68" width="1399" format="[general]" html.valueishtml="0"  name=cm_attd_teams_team_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="2437" y="8" height="68" width="302" format="[general]" html.valueishtml="0"  name=a_labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="2752" y="8" height="68" width="256" format="[general]" html.valueishtml="0"  name=a_work_date visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="3026" y="8" height="68" width="576" format="[general]" html.valueishtml="0"  name=b_labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="3616" y="8" height="68" width="846" format="[general]" html.valueishtml="0"  name=labor_id visible="1" edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="4475" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="4818" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d02 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="5166" y="8" height="68" width="325" format="[general]" html.valueishtml="0"  name=d03 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="5509" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d04 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="5851" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d05 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="6194" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d06 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="6537" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d07 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="6880" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d08 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="33554432" x="7223" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d09 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="33554432" x="7566" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d10 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432" x="7909" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="8251" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d12 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432" x="8594" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d13 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="1" tabsequence=32766 border="0" color="33554432" x="8937" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d14 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=24 alignment="1" tabsequence=32766 border="0" color="33554432" x="9280" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d15 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="1" tabsequence=32766 border="0" color="33554432" x="9623" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d16 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=26 alignment="1" tabsequence=32766 border="0" color="33554432" x="9966" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d17 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=27 alignment="1" tabsequence=32766 border="0" color="33554432" x="10309" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d18 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=28 alignment="1" tabsequence=32766 border="0" color="33554432" x="10651" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d19 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=29 alignment="1" tabsequence=32766 border="0" color="33554432" x="10994" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d20 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=30 alignment="1" tabsequence=32766 border="0" color="33554432" x="11337" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d21 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=31 alignment="1" tabsequence=32766 border="0" color="33554432" x="11680" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d22 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=32 alignment="1" tabsequence=32766 border="0" color="33554432" x="12023" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d23 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=33 alignment="1" tabsequence=32766 border="0" color="33554432" x="12366" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d24 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=34 alignment="1" tabsequence=32766 border="0" color="33554432" x="12709" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d25 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=35 alignment="1" tabsequence=32766 border="0" color="33554432" x="13051" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d26 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=36 alignment="1" tabsequence=32766 border="0" color="33554432" x="13394" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d27 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=37 alignment="1" tabsequence=32766 border="0" color="33554432" x="13737" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d28 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=38 alignment="1" tabsequence=32766 border="0" color="33554432" x="14080" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d29 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=39 alignment="1" tabsequence=32766 border="0" color="33554432" x="14423" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d30 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=40 alignment="1" tabsequence=32766 border="0" color="33554432" x="14766" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=d31 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=41 alignment="1" tabsequence=32766 border="0" color="33554432" x="15109" y="8" height="68" width="617" format="[general]" html.valueishtml="0"  name=cm_saly_labor_account_work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=42 alignment="1" tabsequence=32766 border="0" color="33554432" x="15739" y="8" height="68" width="617" format="[general]" html.valueishtml="0"  name=cm_saly_labor_account_work_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=43 alignment="1" tabsequence=32766 border="0" color="33554432" x="16370" y="8" height="68" width="617" format="[general]" html.valueishtml="0"  name=cm_saly_labor_account_unit_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=44 alignment="1" tabsequence=32766 border="0" color="33554432" x="17006" y="8" height="68" width="613" format="[general]" html.valueishtml="0"  name=cm_saly_labor_account_pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=45 alignment="0" tabsequence=32766 border="0" color="33554432" x="17637" y="8" height="68" width="197" format="[general]" html.valueishtml="0"  name=b_pay_div visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="17847" y="0" height="56" width="1339" format="[general]" html.valueishtml="0"  name=sm_code_project_proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

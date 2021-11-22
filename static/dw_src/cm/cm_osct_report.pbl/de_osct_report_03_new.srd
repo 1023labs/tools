@@ -1,0 +1,140 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=532 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="osct_div" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="consult_code" )
+ column=(type=number updatewhereclause=yes name=pre_labor_amt dbname="pre_labor_amt" )
+ column=(type=number updatewhereclause=yes name=pre_cost_amt dbname="pre_cost_amt" )
+ column=(type=number updatewhereclause=yes name=pre_gen_amt dbname="pre_gen_amt" )
+ column=(type=number updatewhereclause=yes name=cur_labor_amt dbname="cur_labor_amt" )
+ column=(type=number updatewhereclause=yes name=cur_cost_amt dbname="cur_cost_amt" )
+ column=(type=number updatewhereclause=yes name=cur_gen_amt dbname="cur_gen_amt" )
+ column=(type=number updatewhereclause=yes name=cur_vat_amt dbname="cur_vat_amt" )
+ column=(type=number updatewhereclause=yes name=tot_labor_amt dbname="tot_labor_amt" )
+ column=(type=number updatewhereclause=yes name=tot_cost_amt dbname="tot_cost_amt" )
+ column=(type=number updatewhereclause=yes name=tot_gen_amt dbname="tot_gen_amt" )
+ retrieve="SELECT CUR.COMPANY_CODE,
+       CUR.PROJ_CODE,
+       CUR.OSCT_DIV,
+       CUR.CONSULT_CODE,
+       PRE.LABOR_AMT  AS PRE_LABOR_AMT,
+       PRE.COST_AMT   AS PRE_COST_AMT,
+       PRE.GEN_AMT    AS PRE_GEN_AMT,
+       CUR.LABOR_AMT  AS CUR_LABOR_AMT,
+       CUR.COST_AMT   AS CUR_COST_AMT,
+       CUR.GEN_AMT    AS CUR_GEN_AMT,
+       CUR.VAT_AMT    AS CUR_VAT_AMT,
+       TOT.LABOR_AMT  AS TOT_LABOR_AMT,
+       TOT.COST_AMT   AS TOT_COST_AMT,
+       TOT.GEN_AMT    AS TOT_GEN_AMT
+  FROM
+(SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.OSCT_DIV,
+       A.CONSULT_CODE,
+       SUM(NVL(A.OUT_LABOR_AMT,0)) AS LABOR_AMT,
+       SUM(NVL(A.OUT_FOOD_AMT,0)) +
+       SUM(NVL(A.OUT_EQUIP_AMT,0)) +
+       SUM(NVL(A.OUT_TOOL_AMT,0)) +
+       SUM(NVL(A.OUT_HOUSE_AMT,0)) +
+       SUM(NVL(A.OUT_ETC_AMT,0))   AS COST_AMT,
+       SUM(NVL(A.GEN_AMT,0))       AS GEN_AMT
+  FROM CM_OSCT_COMPLETED A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.OSCT_DIV     = :AS_OSCT_DIV
+   AND A.CONSULT_CODE = :AS_CONSULT_CODE
+   AND SUBSTR(A.DEM_DATE,1,6) = (SELECT max(SUBSTR(B.DEM_DATE,1,6))
+                                   FROM CM_OSCT_COMPLETED B
+                                  WHERE B.COMPANY_CODE  = A.COMPANY_CODE
+                                    AND B.PROJ_CODE     = A.PROJ_CODE
+                                    AND B.OSCT_DIV      = A.OSCT_DIV
+                                    AND B.CONSULT_CODE  = A.CONSULT_CODE
+                                    AND SUBSTR(B.DEM_DATE,1,6) < :AS_DEM_MONTH)
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.OSCT_DIV,
+         A.CONSULT_CODE) PRE,
+(SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.OSCT_DIV,
+       A.CONSULT_CODE,
+       SUM(NVL(A.OUT_LABOR_AMT,0)) AS LABOR_AMT,
+       SUM(NVL(A.OUT_FOOD_AMT,0)) +
+       SUM(NVL(A.OUT_EQUIP_AMT,0)) +
+       SUM(NVL(A.OUT_TOOL_AMT,0)) +
+       SUM(NVL(A.OUT_HOUSE_AMT,0)) +
+       SUM(NVL(A.OUT_ETC_AMT,0))   AS COST_AMT,
+       SUM(NVL(A.GEN_AMT,0))       AS GEN_AMT,
+       SUM(NVL(A.VAT_AMT,0))       AS VAT_AMT
+  FROM CM_OSCT_COMPLETED A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.OSCT_DIV     = :AS_OSCT_DIV
+   AND A.CONSULT_CODE = :AS_CONSULT_CODE
+   AND SUBSTR(A.DEM_DATE,1,6) = :AS_DEM_MONTH
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.OSCT_DIV,
+         A.CONSULT_CODE) CUR,
+(SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.OSCT_DIV,
+       A.CONSULT_CODE,
+       SUM(NVL(A.OUT_LABOR_AMT,0)) AS LABOR_AMT,
+       SUM(NVL(A.OUT_FOOD_AMT,0)) +
+       SUM(NVL(A.OUT_EQUIP_AMT,0)) +
+       SUM(NVL(A.OUT_TOOL_AMT,0)) +
+       SUM(NVL(A.OUT_HOUSE_AMT,0)) +
+       SUM(NVL(A.OUT_ETC_AMT,0))   AS COST_AMT,
+       SUM(NVL(A.GEN_AMT,0))       AS GEN_AMT
+  FROM CM_OSCT_COMPLETED A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.OSCT_DIV     = :AS_OSCT_DIV
+   AND A.CONSULT_CODE = :AS_CONSULT_CODE
+   AND SUBSTR(A.DEM_DATE,1,6) <= :AS_DEM_MONTH
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.OSCT_DIV,
+         A.CONSULT_CODE) TOT
+ WHERE CUR.COMPANY_CODE = PRE.COMPANY_CODE(+)
+   AND CUR.PROJ_CODE    = PRE.PROJ_CODE(+)
+   AND CUR.OSCT_DIV     = PRE.OSCT_DIV(+)
+   AND CUR.CONSULT_CODE = PRE.CONSULT_CODE(+)
+   AND CUR.COMPANY_CODE = TOT.COMPANY_CODE(+)
+   AND CUR.PROJ_CODE    = TOT.PROJ_CODE(+)
+   AND CUR.OSCT_DIV     = TOT.OSCT_DIV(+)
+   AND CUR.CONSULT_CODE = TOT.CONSULT_CODE(+)" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CONSULT_CODE", string),("AS_OSCT_DIV", string),("AS_DEM_MONTH", string)) )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="41" y="12" height="68" width="398" format="#,###" html.valueishtml="0"  name=pre_labor_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="526" y="12" height="68" width="398" format="#,###" html.valueishtml="0"  name=pre_cost_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="1015" y="12" height="68" width="398" format="#,###" html.valueishtml="0"  name=pre_gen_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" pre_labor_amt  +  pre_cost_amt  +  pre_gen_amt "border="0" color="33554432" x="1504" y="12" height="60" width="398" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" cur_labor_amt  +  cur_cost_amt "border="0" color="33554432" x="1289" y="276" height="60" width="613" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="41" y="100" height="68" width="398" format="#,###" html.valueishtml="0"  name=cur_labor_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="41" y="192" height="68" width="398" format="#,###" html.valueishtml="0"  name=tot_labor_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="526" y="100" height="68" width="398" format="#,###" html.valueishtml="0"  name=cur_cost_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="1015" y="100" height="68" width="398" format="#,###" html.valueishtml="0"  name=cur_gen_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="1015" y="192" height="68" width="398" format="#,###" html.valueishtml="0"  name=tot_gen_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" cur_labor_amt  +  cur_cost_amt  +  cur_gen_amt "border="0" color="33554432" x="1504" y="100" height="60" width="398" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" tot_labor_amt  +  tot_cost_amt  +  tot_gen_amt "border="0" color="33554432" x="1504" y="192" height="60" width="398" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="526" y="192" height="68" width="398" format="#,###" html.valueishtml="0"  name=tot_cost_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" cur_labor_amt  +  cur_cost_amt  +  cur_gen_amt "border="0" color="33554432" x="1134" y="464" height="60" width="768" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="1499" y="368" height="68" width="402" format="#,###" html.valueishtml="0"  name=cur_vat_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" cur_gen_amt "border="0" color="33554432" x="526" y="368" height="60" width="398" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="援대┝" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

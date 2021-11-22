@@ -1,0 +1,73 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_attd_team_members_h.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_attd_team_members_h.proj_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=team_code dbname="cm_attd_team_members_h.team_code" criteria.dialog=yes)
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_attd_team_members_h.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(13) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cost dbname="cm_attd_team_members_h.cost" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=job_code dbname="cm_attd_team_members_h.job_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=work_yn dbname="cm_attd_team_members_h.work_yn" values="예	Y/아니오	N/" )
+ column=(type=number updatewhereclause=yes name=absent_day dbname="absent_day" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_attd_team_members_h.end_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=office_div dbname="cm_attd_team_members_h.office_div" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.TEAM_CODE,   
+         A.LABOR_CODE,  
+         B.LABOR_NAME,
+         (B.RRN_PRE || B.RRN_POST) LABOR_ID,       
+         A.COST,   
+         A.JOB_CODE,   
+         A.WORK_YN,
+         DECODE( C.LAST_DATE, NULL,  0, 
+                                 ( SELECT TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) - TO_DATE(C.LAST_DATE,'YYYYMMDD')-COUNT(B.HOLY_DATE) ABSENT_DAY 
+                                     FROM CM_HOLY_INFO B 
+                                    WHERE B.COMPANY_CODE = A.COMPANY_CODE 
+                                      AND B.PROJ_CODE    = A.PROJ_CODE 
+                                      AND B.HOLY_DATE BETWEEN C.LAST_DATE AND TO_CHAR(SYSDATE, 'YYYYMMDD' ))) ABSENT_DAY,
+         A.END_DATE,
+         A.OFFICE_DIV
+    FROM CM_ATTD_TEAM_MEMBERS_H A LEFT JOIN CM_LABO_MASTER B
+                                       ON A.COMPANY_CODE = B.COMPANY_CODE AND A.LABOR_CODE = B.LABOR_CODE
+                                LEFT JOIN (
+                                              SELECT A.COMPANY_CODE,
+                                                     A.PROJ_CODE,
+                                                     A.LABOR_CODE,
+                                                     MAX(A.WORK_DATE) LAST_DATE
+                                                FROM CM_ATTD_DAILY_WORK A
+                                               WHERE A.COMPANY_CODE = :as_comp_code
+                                                 AND A.WORK_DATE >= '20100101'
+                                            GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.LABOR_CODE ) C
+                                       ON A.COMPANY_CODE = C.COMPANY_CODE
+                                      AND A.PROJ_CODE    = C.PROJ_CODE
+                                      AND A.LABOR_CODE   = C.LABOR_CODE 
+   WHERE A.COMPANY_CODE  = :as_comp_code
+     AND A.PROJ_CODE     = :as_proj_code 
+     AND A.TEAM_CODE     = :as_team_code
+ORDER BY B.LABOR_NAME" update="CM_ATTD_TEAM_MEMBERS_H" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_team_code", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="46" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="201" y="2" height="14" width="59" html.valueishtml="0"  name=cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직종코드" border="0" color="33554432" x="262" y="2" height="14" width="75" html.valueishtml="0"  name=job_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무여부" border="0" color="33554432" x="339" y="2" height="14" width="114" html.valueishtml="0"  name=work_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="연속결근일" border="0" color="33554432" x="455" y="2" height="14" width="66" html.valueishtml="0"  name=absent_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="16711680" x="50" y="2" height="14" width="56" html.valueishtml="0"  name=labor_name_t  tag="labor_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="16711680" x="108" y="2" height="14" width="91" html.valueishtml="0"  name=labor_id_t  tag="labor_id" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="46" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="201" y="2" height="17" width="59" format="#,###" html.valueishtml="0"  name=cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432~tif( (absent_day >=6),  rgb(255,0,0),  rgb(0,0,0))" x="455" y="2" height="17" width="66" format="[general]" html.valueishtml="0"  name=absent_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="262" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=job_code  tag="[NB]" visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=30 border="0" color="33554432" x="339" y="2" height="17" width="114" format="[general]" html.valueishtml="0"  name=work_yn visible="1" radiobuttons.columns=2 radiobuttons.scale=no radiobuttons.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432~tif(office_div = '2', rgb(255,0,0), rgb(0,0,0))" x="50" y="2" height="17" width="56" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=20 border="0" color="33554432~tif(office_div = '2', rgb(255,0,0), rgb(0,0,0))" x="108" y="2" height="17" width="91" format="@@@@@@-@@@@@@@" html.valueishtml="0"  name=labor_id visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

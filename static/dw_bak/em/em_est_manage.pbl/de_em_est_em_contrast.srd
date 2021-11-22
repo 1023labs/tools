@@ -1,0 +1,117 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=19 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes key=yes name=item_code dbname="sm_code_material.item_code" )
+ column=(type=char(200) updatewhereclause=yes name=item_name dbname="sm_code_material.item_name" )
+ column=(type=char(200) updatewhereclause=yes name=item_size dbname="sm_code_material.item_size" )
+ column=(type=char(50) updatewhereclause=yes name=item_unit dbname="sm_code_material.item_unit" )
+ column=(type=decimal(6) updatewhereclause=yes name=item_qty dbname="sm_code_material.item_qty" )
+ column=(type=decimal(1) updatewhereclause=yes name=mat_cost dbname="sm_code_material.mat_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=lab_cost dbname="sm_code_material.lab_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=exp_cost dbname="sm_code_material.exp_cost" )
+ column=(type=char(20) updatewhereclause=yes name=supply_item dbname="sm_code_material.supply_item" )
+ column=(type=char(20) updatewhereclause=yes name=sptext1 dbname="sm_code_material.sptext1" )
+ column=(type=decimal(6) updatewhereclause=yes name=chg_item_qty dbname="sm_code_material.chg_item_qty" )
+ column=(type=decimal(1) updatewhereclause=yes name=chg_mat_cost dbname="sm_code_material.chg_mat_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=chg_lab_cost dbname="sm_code_material.chg_lab_cost" )
+ column=(type=decimal(1) updatewhereclause=yes name=chg_exp_cost dbname="sm_code_material.chg_exp_cost" )
+ column=(type=char(20) updatewhereclause=yes name=chg_supply_item dbname="sm_code_material.chg_supply_item" )
+ column=(type=char(20) updatewhereclause=yes name=chg_sptext1 dbname="sm_code_material.chg_sptext1" )
+ column=(type=char(5) updatewhereclause=yes name=code_tag dbname="code_tag" )
+ retrieve="SELECT A.ITEM_CODE,
+       A.ITEM_NAME,
+       A.ITEM_SIZE,
+       A.ITEM_UNIT,
+       B.ITEM_QTY,         
+       B.MAT_COST,
+       B.LAB_COST,
+       B.EXP_COST,
+       B.SUPPLY_ITEM,
+       B.SPTEXT1,
+       C.ITEM_QTY        CHG_ITEM_QTY,         
+       C.MAT_COST       CHG_MAT_COST,
+       C.LAB_COST        CHG_LAB_COST,
+       C.EXP_COST        CHG_EXP_COST,
+       C.SUPPLY_ITEM    CHG_SUPPLY_ITEM,
+       C.SPTEXT1        	  CHG_SPTEXT1,
+       NVL(B.CODE_TAG,C.CODE_TAG) CODE_TAG
+  FROM    
+        (SELECT DISTINCT ITEM_CODE, ITEM_NAME, ITEM_SIZE, ITEM_UNIT
+           FROM EM_EST_EM A
+          WHERE A.USER_ID     = :as_userid
+            AND A.BREAK_DIV IN ('03','04')
+            AND A.EST_CODE     = :as_estcode
+            AND A.CONST_CODE = :as_const
+            AND A.CODE_TAG NOT IN ('82')) A,        
+        (SELECT *
+           FROM EM_EST_EM A
+          WHERE A.USER_ID   = :as_userid
+            AND A.BREAK_DIV = '03'
+            AND A.EST_CODE  = :as_estcode
+            AND A.CONST_CODE = :as_const) B,
+        (SELECT *
+           FROM EM_EST_EM A
+          WHERE A.USER_ID   = :as_userid
+            AND A.BREAK_DIV = '04'
+            AND A.EST_CODE  = :as_estcode
+            AND A.CONST_CODE = :as_const) C,
+        SM_CODE_MATERIAL D
+WHERE A.ITEM_CODE = B.ITEM_CODE(+)
+  AND A.ITEM_CODE = C.ITEM_CODE(+)
+  AND A.ITEM_CODE = D.ITEM_CODE(+)       
+ORDER BY NVL(B.SORT_SEQ,C.SORT_SEQ)       
+             " update="SM_CODE_MATERIAL" updatewhere=1 updatekeyinplace=no arguments=(("as_userid", string),("as_estcode", string),("as_const", string)) )
+text(band=header alignment="2" text="품목코드" border="0" color="33554432" x="1209" y="2" height="13" width="80" html.valueishtml="0"  name=item_code_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="2" y="2" height="13" width="162" html.valueishtml="0"  name=item_name_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="166" y="2" height="13" width="117" html.valueishtml="0"  name=item_size_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="285" y="2" height="13" width="38" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="원수량" border="0" color="33554432" x="325" y="2" height="13" width="41" html.valueishtml="0"  name=item_qty_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지급자재" border="0" color="33554432" x="624" y="2" height="13" width="52" html.valueishtml="0"  name=supply_item_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="메이커" border="0" color="33554432" x="678" y="2" height="13" width="75" html.valueishtml="0"  name=sptext1_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경수량" border="0" color="33554432" x="755" y="2" height="13" width="53" html.valueishtml="0"  name=chg_item_qty_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지급자재" border="0" color="33554432" x="1071" y="2" height="13" width="57" html.valueishtml="0"  name=chg_supply_item_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="메이커" border="0" color="33554432" x="1130" y="2" height="13" width="77" html.valueishtml="0"  name=chg_sptext1_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="368" y="2" height="13" width="82" html.valueishtml="0"  name=t_1 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="452" y="2" height="13" width="82" html.valueishtml="0"  name=t_2 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="536" y="2" height="13" width="86" html.valueishtml="0"  name=t_3 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경자재비" border="0" color="33554432" x="810" y="2" height="13" width="83" html.valueishtml="0"  name=t_4 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경노무비" border="0" color="33554432" x="895" y="2" height="13" width="87" html.valueishtml="0"  name=t_5 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경경비" border="0" color="33554432" x="984" y="2" height="13" width="85" html.valueishtml="0"  name=t_6 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Code Tag" border="0" color="33554432" x="1291" y="1" height="13" width="23" html.valueishtml="0"  name=code_tag_t visible="0"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="2" y="2" height="17" width="162" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="1209" y="2" height="17" width="80" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="166" y="2" height="17" width="117" format="[general]" html.valueishtml="0"  name=item_size visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="285" y="2" height="17" width="38" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="325" y="2" height="17" width="41" format="#,##0" html.valueishtml="0"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="truncate( item_qty * mat_cost, 0)"border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="368" y="2" height="17" width="82" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="truncate( item_qty * lab_cost,0)"border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="452" y="2" height="17" width="82" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="624" y="2" height="17" width="52" format="[general]" html.valueishtml="0"  name=supply_item visible="1" dddw.name=dw_sm_comcode_supplymatdiv dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="678" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=sptext1 visible="1" dddw.name=dw_sm_comcode_maker dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="755" y="2" height="17" width="53" format="#,##0" html.valueishtml="0"  name=chg_item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="1071" y="2" height="17" width="57" format="[general]" html.valueishtml="0"  name=chg_supply_item visible="1" dddw.name=dw_sm_comcode_supplymatdiv dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="1130" y="2" height="17" width="77" format="[general]" html.valueishtml="0"  name=chg_sptext1 visible="1" dddw.name=dw_sm_comcode_maker dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="truncate( item_qty * exp_cost,0)"border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="536" y="2" height="17" width="86" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="truncate( chg_item_qty * chg_mat_cost, 0)"border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="810" y="2" height="17" width="83" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="truncate( chg_item_qty * chg_lab_cost, 0)"border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="895" y="2" height="17" width="87" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="truncate( chg_item_qty * chg_exp_cost, 0)"border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="984" y="2" height="17" width="85" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="0" tabsequence=32766 border="0" color="33554432~tif(supply_item in ('10','14','16','17'),rgb(255,0,0),if(code_tag = '11',rgb(53,120,202), if(code_tag = '23', rgb(0,0,255) ,rgb(0,0,0))))" x="1291" y="1" height="13" width="23" format="[general]" html.valueishtml="0"  name=code_tag visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(compute_1)"border="0" color="33554432" x="368" y="3" height="13" width="82" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(compute_2)"border="0" color="33554432" x="452" y="3" height="13" width="82" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(compute_3)"border="0" color="33554432" x="536" y="3" height="13" width="86" format="#,##0" html.valueishtml="0"  name=compute_9 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(compute_4)"border="0" color="33554432" x="810" y="3" height="13" width="83" format="#,##0" html.valueishtml="0"  name=compute_10 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(compute_5)"border="0" color="33554432" x="895" y="3" height="13" width="87" format="#,##0" html.valueishtml="0"  name=compute_11 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(compute_6)"border="0" color="33554432" x="984" y="3" height="13" width="85" format="#,##0" html.valueishtml="0"  name=compute_12 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

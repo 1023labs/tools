@@ -1,0 +1,53 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=iw_code dbname="em_iwlist.iw_code" )
+ column=(type=char(40) updatewhereclause=yes name=iw_name dbname="em_iwlist.iw_name" )
+ column=(type=char(30) updatewhereclause=yes name=iw_size dbname="em_iwlist.iw_size" )
+ column=(type=char(10) updatewhereclause=yes name=iw_unit dbname="em_iwlist.iw_unit" )
+ column=(type=char(2) updatewhereclause=yes name=iw_chk dbname="em_iwlist.iw_chk" )
+ column=(type=char(10) updatewhereclause=yes name=iw_div dbname="em_iwlist.iw_div" )
+ column=(type=char(20) updatewhereclause=yes name=remarks dbname="em_iwlist.remarks" )
+ column=(type=char(250) updatewhereclause=yes name=div_name dbname="vw_em_comcode_iwdivision.div_name" )
+ column=(type=char(250) updatewhereclause=yes name=apply_name dbname="vw_em_comcode_applymethod.apply_name" )
+ retrieve="  SELECT A.IW_CODE,
+         A.IW_NAME,
+         A.IW_SIZE,
+         A.IW_UNIT,
+         A.IW_CHK,
+         A.IW_DIV,
+         A.REMARKS,
+         B.DNAME DIV_NAME,
+         C.DNAME APPLY_NAME
+    FROM EM_IWLIST A LEFT JOIN VW_EM_COMCODE_IWDIVISION B
+                            ON A.IW_DIV = B.DCODE
+                     LEFT JOIN VW_EM_COMCODE_APPLYMETHOD C
+                            ON NVL(LTRIM(A.REMARKS), '000') = C.DCODE
+   WHERE (A.IW_CODE LIKE :as_find || '%' OR A.IW_NAME LIKE '%' || :as_find || '%')
+ORDER BY A.IW_NAME, LENGTH(TRIM(A.IW_SIZE)), A.IW_SIZE " arguments=(("as_find", string)) )
+text(band=header alignment="2" text="명칭" border="0" color="8388608" x="106" y="2" height="14" width="176" html.valueishtml="0"  name=iw_name_t  tag="iw_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="8388608" x="284" y="2" height="14" width="158" html.valueishtml="0"  name=iw_size_t  tag="iw_size" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="8388608" x="444" y="2" height="14" width="77" html.valueishtml="0"  name=iw_unit_t  tag="iw_unit" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="8388608" x="523" y="2" height="14" width="76" html.valueishtml="0"  name=vw_em_comcode_iwdivision_div_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용기준" border="0" color="8388608" x="601" y="2" height="14" width="120" html.valueishtml="0"  name=vw_em_comcode_applymethod_apply_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="모듈일위대가코드" border="0" color="8388608" x="2" y="2" height="14" width="102" html.valueishtml="0"  name=iw_code_t  tag="iw_code" visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="106" y="2" height="14" width="176" format="[general]" html.valueishtml="0"  name=iw_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="284" y="2" height="14" width="158" format="[general]" html.valueishtml="0"  name=iw_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="444" y="2" height="14" width="77" format="[general]" html.valueishtml="0"  name=iw_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="523" y="2" height="14" width="76" format="[general]" html.valueishtml="0"  name=div_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="601" y="2" height="14" width="120" format="[general]" html.valueishtml="0"  name=apply_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="102" format="[general]" html.valueishtml="0"  name=iw_code visible="0" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

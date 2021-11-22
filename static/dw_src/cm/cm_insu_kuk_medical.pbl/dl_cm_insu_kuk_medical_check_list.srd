@@ -1,0 +1,154 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(22) updatewhereclause=yes name=title dbname="title" )
+ column=(type=number updatewhereclause=yes name=count dbname="count" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="pay_tot" )
+ column=(type=number updatewhereclause=yes name=kukmin_amt dbname="kukmin_amt" )
+ column=(type=number updatewhereclause=yes name=medical_amt dbname="medical_amt" )
+ retrieve="  SELECT '[01] 전체건수' AS TITLE, COUNT(1) AS COUNT, SUM(A.PAY_TOT) AS PAY_TOT, SUM(A.KUKMIN_AMT) AS KUKMIN_AMT, SUM(A.MEDICAL_AMT) AS MEDICAL_AMT       
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE, SUM(A.WORK_DAY) AS WORK_DAY, SUM(A.PAY_TOT) AS PAY_TOT,
+                   SUM(A.KUKMIN_AMT)   AS KUKMIN_AMT, SUM(A.MEDICAL_AMT)  AS MEDICAL_AMT, MAX(NVL(A.KUKMIN_TAG, 'N'))  AS KUKMIN_TAG, MAX(NVL(A.MEDICAL_TAG,'N'))  AS MEDICAL_TAG
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE = :as_comp_code AND A.PROJ_CODE LIKE :as_proj_code AND A.PAY_YYMM = :as_pay_yymm AND B.MANAGE_TYPE LIKE :as_manage_type
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE ) A
+UNION
+  SELECT '[02] 20일이상', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)         
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE, SUM(A.WORK_DAY) AS WORK_DAY,
+                   SUM(A.PAY_TOT) AS PAY_TOT, SUM(A.KUKMIN_AMT) AS KUKMIN_AMT, SUM(A.MEDICAL_AMT)  AS MEDICAL_AMT
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE = :as_comp_code AND A.PROJ_CODE    LIKE :as_proj_code
+               AND A.PAY_YYMM     = :as_pay_yymm  AND B.MANAGE_TYPE  LIKE :as_manage_type
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE HAVING SUM(A.WORK_DAY) >= 20 ) A
+UNION 
+  SELECT '[03] 20일이상/신규', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)        
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE,
+                   SUM(A.WORK_DAY)     AS WORK_DAY,   SUM(A.PAY_TOT)      AS PAY_TOT,
+                   SUM(A.KUKMIN_AMT)   AS KUKMIN_AMT, SUM(A.MEDICAL_AMT)  AS MEDICAL_AMT
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE =    :as_comp_code AND A.PROJ_CODE    LIKE :as_proj_code
+               AND A.PAY_YYMM     =    :as_pay_yymm  AND B.MANAGE_TYPE  LIKE :as_manage_type
+               AND NOT EXISTS ( SELECT 1 FROM CM_SALY_LABOR_ACCOUNT X LEFT JOIN SM_CODE_PROJECT Y 
+                                           ON X.COMPANY_CODE = Y.COMPANY_CODE AND X.PROJ_CODE = Y.PROJ_CODE
+                                                                      LEFT JOIN CM_LABO_INSURANCE Z
+                                                                             ON X.COMPANY_CODE = Z.COMPANY_CODE 
+                                                                            AND X.LABOR_CODE   = Z.LABOR_CODE                                 
+                                 WHERE X.COMPANY_CODE = A.COMPANY_CODE AND X.PROJ_CODE LIKE A.PROJ_CODE
+                                   AND X.PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+                                   AND ((NVL(X.KUKMIN_TAG, 'N') = 'Y' AND ( NVL(Z.CHECK5,'N') <> 'Y' OR NVL(Z.CHECK8,'N') <> 'Y')) OR
+                                        (NVL(X.MEDICAL_TAG,'N') = 'Y' AND ( NVL(Z.CHECK5,'N') <> 'Y' OR NVL(Z.CHECK7,'N') <> 'Y')))
+                                   AND Y.MANAGE_TYPE LIKE :as_manage_type
+                                   AND X.LABOR_CODE = A.LABOR_CODE
+                                 GROUP BY X.COMPANY_CODE, X.PROJ_CODE, X.LABOR_CODE HAVING SUM(X.WORK_DAY) >= 20 )
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE HAVING SUM(A.WORK_DAY) >= 20 ) A
+UNION 
+  SELECT '[04] 20일이상/계속', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)         
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE, 
+                   SUM(A.WORK_DAY)   AS WORK_DAY,   SUM(A.PAY_TOT)     AS PAY_TOT,
+                   SUM(A.KUKMIN_AMT) AS KUKMIN_AMT, SUM(A.MEDICAL_AMT) AS MEDICAL_AMT
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE =    :as_comp_code AND A.PROJ_CODE    LIKE :as_proj_code
+               AND A.PAY_YYMM     =    :as_pay_yymm  AND B.MANAGE_TYPE  LIKE :as_manage_type
+               AND EXISTS ( SELECT 1 FROM CM_SALY_LABOR_ACCOUNT X LEFT JOIN SM_CODE_PROJECT Y 
+                                           ON X.COMPANY_CODE = Y.COMPANY_CODE AND X.PROJ_CODE = Y.PROJ_CODE
+                                                                      LEFT JOIN CM_LABO_INSURANCE Z
+                                                                             ON X.COMPANY_CODE = Z.COMPANY_CODE 
+                                                                            AND X.LABOR_CODE   = Z.LABOR_CODE                                 
+                                 WHERE X.COMPANY_CODE = A.COMPANY_CODE AND X.PROJ_CODE LIKE A.PROJ_CODE
+                                   AND X.PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+                                   AND ((NVL(X.KUKMIN_TAG, 'N') = 'Y' AND ( NVL(Z.CHECK5,'N') <> 'Y' OR NVL(Z.CHECK8,'N') <> 'Y')) OR
+                                        (NVL(X.MEDICAL_TAG,'N') = 'Y' AND ( NVL(Z.CHECK5,'N') <> 'Y' OR NVL(Z.CHECK7,'N') <> 'Y')))
+                                   AND Y.MANAGE_TYPE LIKE :as_manage_type
+                                   AND X.LABOR_CODE = A.LABOR_CODE
+                                 GROUP BY X.COMPANY_CODE, X.PROJ_CODE, X.LABOR_CODE HAVING SUM(X.WORK_DAY) >= 20 )
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE HAVING SUM(A.WORK_DAY) >= 20 ) A
+UNION 
+  SELECT '[10] 20일미만', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)         
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE, 
+                   SUM(A.WORK_DAY)    AS WORK_DAY,   SUM(A.PAY_TOT)     AS PAY_TOT,
+                   SUM(A.KUKMIN_AMT)  AS KUKMIN_AMT, SUM(A.MEDICAL_AMT) AS MEDICAL_AMT
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE = :as_comp_code AND A.PROJ_CODE   LIKE :as_proj_code
+               AND A.PAY_YYMM     = :as_pay_yymm  AND B.MANAGE_TYPE LIKE :as_manage_type
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE HAVING SUM(A.WORK_DAY) < 20 ) A
+UNION 
+  SELECT '[11] 20일미만/상실', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)         
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE,
+                   SUM(A.WORK_DAY)   AS WORK_DAY,   SUM(A.PAY_TOT)     AS PAY_TOT,
+                   SUM(A.KUKMIN_AMT) AS KUKMIN_AMT, SUM(A.MEDICAL_AMT) AS MEDICAL_AMT
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE =    :as_comp_code AND A.PROJ_CODE    LIKE :as_proj_code
+               AND A.PAY_YYMM     =    :as_pay_yymm  AND B.MANAGE_TYPE  LIKE :as_manage_type
+               AND EXISTS ( SELECT 1 FROM CM_SALY_LABOR_ACCOUNT X LEFT JOIN SM_CODE_PROJECT Y 
+                                       ON X.COMPANY_CODE = Y.COMPANY_CODE AND X.PROJ_CODE = Y.PROJ_CODE
+                             WHERE X.COMPANY_CODE = A.COMPANY_CODE AND X.PROJ_CODE LIKE A.PROJ_CODE
+                               AND X.PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+                               AND (NVL(X.KUKMIN_TAG, 'N') = 'Y' OR NVL(X.MEDICAL_TAG,'N') = 'Y')
+                               AND X.LABOR_CODE = A.LABOR_CODE
+                               AND Y.MANAGE_TYPE LIKE :as_manage_type
+                             GROUP BY X.COMPANY_CODE, X.PROJ_CODE, X.LABOR_CODE HAVING SUM(X.WORK_DAY) >= 20 )
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE HAVING SUM(A.WORK_DAY) < 20 ) A
+UNION 
+  SELECT '[12] 20일미만/단기출역', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)         
+    FROM (  SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE,
+                   SUM(A.WORK_DAY)    AS WORK_DAY,   SUM(A.PAY_TOT)     AS PAY_TOT,
+                   SUM(A.KUKMIN_AMT)  AS KUKMIN_AMT, SUM(A.MEDICAL_AMT) AS MEDICAL_AMT
+              FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B 
+                                                  ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE   
+             WHERE A.COMPANY_CODE = :as_comp_code AND A.PROJ_CODE   LIKE :as_proj_code
+               AND A.PAY_YYMM     = :as_pay_yymm  AND B.MANAGE_TYPE LIKE :as_manage_type
+               AND NOT EXISTS (SELECT 1 FROM CM_SALY_LABOR_ACCOUNT X LEFT JOIN SM_CODE_PROJECT Y 
+                                          ON X.COMPANY_CODE = Y.COMPANY_CODE AND X.PROJ_CODE = Y.PROJ_CODE
+                                WHERE X.COMPANY_CODE = A.COMPANY_CODE AND X.PROJ_CODE LIKE A.PROJ_CODE
+                                  AND X.PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+                                  AND (NVL(X.KUKMIN_TAG, 'N') = 'Y' OR NVL(X.MEDICAL_TAG,'N') = 'Y')
+                                  AND X.LABOR_CODE = A.LABOR_CODE
+                                  AND Y.MANAGE_TYPE LIKE :as_manage_type
+                                GROUP BY X.COMPANY_CODE, X.PROJ_CODE, X.LABOR_CODE HAVING SUM(X.WORK_DAY) >= 20 )
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.PAY_YYMM, A.LABOR_CODE HAVING SUM(A.WORK_DAY) < 20 ) A
+UNION
+  SELECT '[99] 상실/미출역', COUNT(1), SUM(A.PAY_TOT), SUM(A.KUKMIN_AMT), SUM(A.MEDICAL_AMT)         
+    FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN SM_CODE_PROJECT B
+                                        ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE
+                                 LEFT JOIN ( SELECT COMPANY_CODE, PROJ_CODE, LABOR_CODE, SUM(WORK_DAY) WORK_DAY, MAX(KUKMIN_TAG)  KUKMIN_TAG, MAX(MEDICAL_TAG) MEDICAL_TAG
+                                               FROM CM_SALY_LABOR_ACCOUNT
+                                              WHERE COMPANY_CODE = :as_comp_code AND PROJ_CODE LIKE :as_proj_code
+                                                AND PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+                                                AND (NVL(KUKMIN_TAG, 'N') = 'Y' OR NVL(MEDICAL_TAG,'Y') = 'N')
+                                           GROUP BY COMPANY_CODE, PROJ_CODE, LABOR_CODE
+                                             HAVING SUM(WORK_DAY) >= 20 ) E
+                                        ON A.COMPANY_CODE = E.COMPANY_CODE AND A.PROJ_CODE = E.PROJ_CODE AND A.LABOR_CODE = E.LABOR_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE LIKE :as_proj_code
+     AND A.PAY_YYMM     = TO_CHAR(ADD_MONTHS(TO_DATE(:as_pay_yymm,'YYYYMM'),-1),'YYYYMM')
+     AND B.MANAGE_TYPE  LIKE :as_manage_type
+     AND (E.KUKMIN_TAG = 'Y' OR E.MEDICAL_TAG = 'Y')
+     AND E.WORK_DAY >= 20
+     AND NOT EXISTS ( SELECT 1 FROM CM_SALY_LABOR_ACCOUNT
+                       WHERE COMPANY_CODE = A.COMPANY_CODE AND LABOR_CODE   = A.LABOR_CODE  
+                         AND PROJ_CODE    = A.PROJ_CODE AND PAY_YYMM     = :as_pay_yymm)" arguments=(("as_comp_code", string),("as_proj_code", string),("as_pay_yymm", string),("as_manage_type", string)) )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="2" y="2" height="14" width="161" html.valueishtml="0"  name=title_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인원" border="0" color="33554432" x="165" y="2" height="14" width="84" html.valueishtml="0"  name=count_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="급여액" border="0" color="33554432" x="251" y="2" height="14" width="106" html.valueishtml="0"  name=pay_tot_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="국민" border="0" color="33554432" x="359" y="2" height="14" width="102" html.valueishtml="0"  name=kukmin_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건강" border="0" color="33554432" x="463" y="2" height="14" width="108" html.valueishtml="0"  name=medical_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="18" width="161" format="[general]" html.valueishtml="0"  name=title visible="1" edit.limit=22 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="165" y="2" height="18" width="84" format="[general]" html.valueishtml="0"  name=count visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="251" y="2" height="18" width="106" format="#,###" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="359" y="2" height="18" width="102" format="#,###" html.valueishtml="0"  name=kukmin_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="463" y="2" height="18" width="108" format="#,###" html.valueishtml="0"  name=medical_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

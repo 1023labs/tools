@@ -1,0 +1,74 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=32435950 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=76 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=80 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=project_code dbname="g_outer_contract.project_code" )
+ column=(type=char(50) updatewhereclause=yes name=project_name dbname="project_name" )
+ column=(type=char(8) updatewhereclause=yes name=contract_code dbname="g_outer_contract.contract_code" )
+ column=(type=char(8) updatewhereclause=yes name=g_outer_contract_custno dbname="g_outer_contract.custno" )
+ column=(type=char(100) updatewhereclause=yes name=custname dbname="g_outer_contract.custname" )
+ column=(type=char(50) updatewhereclause=yes name=contract_name dbname="g_outer_contract.contract_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=contract_amt dbname="g_outer_contract.contract_amt" )
+ column=(type=datetime updatewhereclause=yes name=start_date dbname="g_outer_contract.start_date" )
+ column=(type=datetime updatewhereclause=yes name=end_date dbname="g_outer_contract.end_date" )
+ column=(type=number updatewhereclause=yes name=g_outer_contract_detail2_standard dbname="g_outer_contract_detail2.standard" )
+ column=(type=number updatewhereclause=yes name=g_outer_contract_detail2_extra_per dbname="g_outer_contract_detail2.extra_per" )
+ column=(type=number updatewhereclause=yes name=g_outer_contract_detail2_pay_avg_project dbname="g_outer_contract_detail2.pay_avg_project" )
+ column=(type=char(1) updatewhereclause=yes name=g_outer_contract_detail2_stay_tag dbname="g_outer_contract_detail2.stay_tag" values="제공	Y/미제공	N/" )
+ column=(type=char(1) updatewhereclause=yes name=g_outer_contract_detail2_food_tag dbname="g_outer_contract_detail2.food_tag" )
+ column=(type=char(1) updatewhereclause=yes name=g_outer_contract_detail2_valuation dbname="g_outer_contract_detail2.valuation" )
+ retrieve="select goc.project_code,
+		 (select project_name from code_project where project_code = goc.project_code) as project_name,
+		 goc.contract_code,
+		 goc.custno,
+		 goc.custname,
+		 goc.contract_name,
+		 goc.contract_amt,
+		 goc.start_date,
+		 goc.end_date,
+		 gocd2.standard,
+		 gocd2.extra_per,
+		 gocd2.pay_avg_project,
+		 gocd2.stay_tag,
+		 gocd2.food_tag,
+		 gocd2.valuation
+  from g_outer_contract goc,
+		 g_outer_contract_detail2 gocd2
+ where goc.project_code = gocd2.project_code(+) and
+		 goc.contract_code = gocd2.contract_code(+) and
+		 goc.custno like :arg_custno and
+		 goc.work_type like :arg_work_type" arguments=(("arg_custno", string),("arg_work_type", string)) )
+text(band=header alignment="2" text="평가" border="0" color="0" x="4677" y="8" height="56" width="325" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="거래처명" border="0" color="0" x="654" y="8" height="56" width="631" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="현장명" border="0" color="0" x="14" y="8" height="56" width="631" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="공사명" border="0" color="0" x="1294" y="8" height="56" width="631" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="공사금액" border="0" color="0" x="1934" y="8" height="56" width="425" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="공사기간" border="0" color="0" x="2368" y="8" height="56" width="631" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="정부품셈" border="0" color="0" x="3008" y="8" height="56" width="325" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="할증율" border="0" color="0" x="3342" y="8" height="56" width="325" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="평균단가" border="0" color="0" x="3675" y="8" height="56" width="325" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="숙박여부" border="0" color="0" x="4009" y="8" height="56" width="325" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="식대여부" border="0" color="0" x="4343" y="8" height="56" width="325" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+line(band=header x1="14" y1="72" x2="5010" y2="72"  name=l_1 visible="1" pen.style="0" pen.width="5" pen.color="0"  background.mode="2" background.color="16777215" )
+rectangle(band=detail x="9" y="4" height="72" width="4997"  name=r_1 visible="1~tif( getrow() = currentrow() , 1, 0)" brush.hatch="7" brush.color="553648127" pen.style="0" pen.width="5" pen.color="255"  background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="0" x="14" y="8" height="64" width="631" format="[general]" html.valueishtml="0"  name=project_name visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="0" x="654" y="8" height="64" width="631" format="[general]" html.valueishtml="0"  name=custname visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="0" x="1294" y="8" height="64" width="631" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="0" x="1934" y="8" height="64" width="425" format="#,##0" html.valueishtml="0"  name=contract_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+compute(band=detail alignment="2" expression="string( start_date, 'yy.mm.dd') + ' ~~ ' + string( end_date, 'yy.mm.dd')"border="0" color="0" x="2368" y="8" height="64" width="631" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="%" border="0" color="0" x="3278" y="8" height="56" width="55" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=detail alignment="2" text="%" border="0" color="0" x="3611" y="8" height="56" width="55" html.valueishtml="0"  name=t_15 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="0" x="3008" y="8" height="64" width="261" format="[general]" html.valueishtml="0"  name=g_outer_contract_detail2_standard visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="0" x="4677" y="8" height="64" width="325" format="[general]" html.valueishtml="0"  name=g_outer_contract_detail2_valuation visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="0" x="4343" y="8" height="64" width="325" format="[general]" html.valueishtml="0"  name=g_outer_contract_detail2_food_tag visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="0" x="4009" y="8" height="64" width="325" format="[general]" html.valueishtml="0"  name=g_outer_contract_detail2_stay_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="0" x="3675" y="8" height="64" width="325" format="#,##0" html.valueishtml="0"  name=g_outer_contract_detail2_pay_avg_project visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="0" x="3342" y="8" height="64" width="261" format="[general]" html.valueishtml="0"  name=g_outer_contract_detail2_extra_per visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

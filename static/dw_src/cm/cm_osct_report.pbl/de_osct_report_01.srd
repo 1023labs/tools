@@ -1,0 +1,96 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=144 color="536870912" )
+table(column=(type=number updatewhereclause=yes name=row_num dbname="row_num" )
+ column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=dem_date dbname="dem_date" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="consult_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="osct_div" )
+ column=(type=char(50) updatewhereclause=yes name=consult_name dbname="consult_name" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=decimal(2) updatewhereclause=yes name=completed_rate dbname="completed_rate" )
+ column=(type=decimal(2) updatewhereclause=yes name=paid_rate dbname="paid_rate" )
+ column=(type=number updatewhereclause=yes name=consult_amt dbname="consult_amt" )
+ column=(type=number updatewhereclause=yes name=consult_vat dbname="consult_vat" )
+ column=(type=char(4000) updatewhereclause=yes name=k_consult_amt dbname="k_consult_amt" )
+ column=(type=char(4000) updatewhereclause=yes name=k_consult_vat dbname="k_consult_vat" )
+ retrieve="  SELECT ROW_NUM,
+         A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.DEM_DATE,
+         A.CONSULT_CODE,
+         A.OSCT_DIV,
+         A.CONSULT_NAME,
+         A.PROJ_NAME,
+         A.COMPLETED_RATE, 
+         A.PAID_RATE,
+         A.CONSULT_AMT,
+         A.CONSULT_VAT,
+         A.K_CONSULT_AMT,
+         A.K_CONSULT_VAT
+  FROM(
+      SELECT ROWNUM AS ROW_NUM,
+             A.COMPANY_CODE,
+             A.PROJ_CODE,
+             C.DEM_DATE,
+             A.CONSULT_CODE,
+             A.OSCT_DIV,
+             A.CONSULT_NAME,
+             B.PROJ_NAME,
+             C.COMPLETED_RATE AS COMPLETED_RATE, 
+             C.PAID_RATE AS PAID_RATE,
+             D.CONSULT_AMT,
+             D.CONSULT_VAT,
+             FN_GET_KOREANNUMBER(D.CONSULT_AMT) K_CONSULT_AMT,
+             FN_GET_KOREANNUMBER(D.CONSULT_VAT) K_CONSULT_VAT
+        FROM CM_OSCT_CONSULT A INNER JOIN SM_CODE_PROJECT B
+                                       ON A.COMPANY_CODE = B.COMPANY_CODE
+                                      AND A.PROJ_CODE = B.PROJ_CODE
+                               INNER JOIN CM_OSCT_COMPLETED C  
+                                       ON A.COMPANY_CODE = C.COMPANY_CODE
+                                      AND A.PROJ_CODE = C.PROJ_CODE
+                                      AND A.OSCT_DIV = C.OSCT_DIV
+                                      AND A.CONSULT_CODE = C.CONSULT_CODE
+                               INNER JOIN ( SELECT COMPANY_CODE,
+                                                  PROJ_CODE,
+                                                  OSCT_DIV,
+                                                  CONSULT_CODE,
+                                                  SUM(OEXE_AMT) CONSULT_AMT,
+                                                  SUM(OEXE_VAT) CONSULT_VAT
+                                             FROM CM_OSCT_CONSULT_DETAIL
+                                            WHERE COMPANY_CODE = :as_comp
+                                              AND PROJ_CODE    = :as_proj
+                                              AND OSCT_DIV     = '3'
+                                              AND CONSULT_CODE = :as_consult
+                                              AND STATUS_DIV   = '4'                                          
+                                         GROUP BY COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE) D
+                                      ON A.COMPANY_CODE = D.COMPANY_CODE
+                                     AND A.PROJ_CODE = D.PROJ_CODE
+                                     AND A.CONSULT_CODE = D.CONSULT_CODE
+                                     AND A.OSCT_DIV = D.OSCT_DIV
+       WHERE A.COMPANY_CODE = :as_comp     
+         AND A.PROJ_CODE = :as_proj        
+         AND A.CONSULT_CODE = :as_consult  
+         AND A.OSCT_DIV = '3'              
+         AND SUBSTR(C.DEM_DATE,1,6) <= :as_dem_month 
+    ORDER BY C.DEM_DATE ) A      
+   WHERE A.ROW_NUM = :as_row_num" arguments=(("as_comp", string),("as_proj", string),("as_consult", string),("as_dem_month", string),("as_row_num", string)) )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="435" y="122" height="19" width="68" format="[general]" html.valueishtml="0"  name=paid_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="%" border="0" color="33554432" x="509" y="122" height="15" width="18" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="128" y="122" height="19" width="62" format="[general]" html.valueishtml="0"  name=completed_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="%" border="0" color="33554432" x="195" y="122" height="15" width="18" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" k_consult_amt +~"정~""border="0" color="33554432" x="117" y="69" height="19" width="180" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="~"(￦ ~"+  string(consult_amt, ~"#,##0~") +~" )~""border="0" color="33554432" x="313" y="69" height="19" width="151" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" k_consult_vat +~"정~""border="0" color="33554432" x="117" y="96" height="19" width="180" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="~"(￦ ~"+  string(consult_vat, ~"#,##0~") +~" )~""border="0" color="33554432" x="313" y="96" height="19" width="151" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="32" y="16" height="19" width="350" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="32" y="43" height="19" width="350" format="[general]" html.valueishtml="0"  name=consult_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-10" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

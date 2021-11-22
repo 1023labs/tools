@@ -1,0 +1,93 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=18 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=submit_date dbname="submit_date" )
+ column=(type=number updatewhereclause=yes name=exe_amount dbname="exe_amount" )
+ column=(type=number updatewhereclause=yes name=bid_amount dbname="bid_amount" )
+ column=(type=number updatewhereclause=yes name=bid_result dbname="bid_result" )
+ column=(type=number updatewhereclause=yes name=win_amount dbname="win_amount" )
+ column=(type=char(1) updatewhereclause=yes name=bid_div dbname="bid_div" )
+ column=(type=char(200) updatewhereclause=yes name=remarks dbname="remarks" )
+ column=(type=number updatewhereclause=yes name=est_count dbname="est_count" )
+ column=(type=number updatewhereclause=yes name=cnst_count dbname="cnst_count" )
+ column=(type=char(60) updatewhereclause=yes name=est_name dbname="est_name" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cnst_name" )
+ column=(type=char(6) updatewhereclause=yes name=month dbname="month" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         MAX(SUBSTR(A.SUBMIT_DATE,1,6)) AS SUBMIT_DATE ,
+         SUM(NVL(A.EXE_AMOUNT,0)) AS EXE_AMOUNT, 
+         SUM(NVL(A.BID_AMOUNT,0)) AS BID_AMOUNT, 
+         SUM(CASE A.BID_RESULT WHEN '1' THEN 1
+                               ELSE  0  END) AS BID_RESULT, 
+         SUM(NVL(A.WIN_AMOUNT,0)) AS WIN_AMOUNT, 
+         A.BID_DIV, 
+         A.REMARKS,
+         COUNT(B.EST_NAME)  AS EST_COUNT,
+         COUNT(C.CNST_NAME) AS CNST_COUNT,
+         MAX(B.EST_NAME) AS EST_NAME,
+         MAX(C.CNST_NAME) AS CNST_NAME,
+         D.MONTH                  
+    FROM (SELECT A.COMPANY_CODE, 
+                 A.EST_CODE, 
+                 A.CUST_CODE, 
+                 A.F_TYPE,
+                 A.SUBMIT_DATE,
+                 A.EXE_AMOUNT,
+                 A.BID_AMOUNT,
+                 A.NEGO_AMOUNT,
+                 A.BID_RESULT,
+                 A.WIN_AMOUNT,
+                 A.WIN_COMP, 
+                 A.BID_DIV, 
+                 A.REMARKS                 
+            FROM CM_ESTI_REGISTER A
+           WHERE A.COMPANY_CODE = :as_comp      
+             AND SUBSTR(A.SUBMIT_DATE,1,4) = :as_year     
+             AND A.BID_DIV = :as_div) A LEFT JOIN CM_ESTI_MASTER B 
+                                               ON A.COMPANY_CODE = B.COMPANY_CODE AND A.EST_CODE = B.EST_CODE 
+                                        LEFT JOIN CM_CUST_CONSTRUCT C 
+                                               ON A.CUST_CODE = C.CNST_CODE 
+                                       RIGHT JOIN  (SELECT A.MONTH
+                                                      FROM SM_CODE_MONTH A
+                                                     WHERE A.MONTH LIKE :as_year||'%') D
+                                               ON SUBSTR(A.SUBMIT_DATE,1,6) = D.MONTH
+   WHERE B.ENT_DEPT <> '50'
+GROUP BY A.COMPANY_CODE,
+         A.BID_DIV, 
+         A.REMARKS,
+         D.MONTH
+ORDER BY D.MONTH ASC" arguments=(("as_comp", string),("as_year", string),("as_div", string)) )
+text(band=header alignment="2" text="제출월" border="0" color="33554432" x="2" y="2" height="14" width="48" html.valueishtml="0"  name=month_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사명" border="0" color="33554432" x="52" y="2" height="14" width="249" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="790" y="2" height="14" width="163" html.valueishtml="0"  name=cm_esti_register_remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입찰금액" border="0" color="33554432" x="303" y="2" height="14" width="91" html.valueishtml="0"  name=bid_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수주금액" border="0" color="33554432" x="396" y="2" height="14" width="91" html.valueishtml="0"  name=win_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="견적예상실행" border="0" color="33554432" x="489" y="2" height="14" width="91" html.valueishtml="0"  name=exe_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수주건" border="0" color="33554432" x="737" y="2" height="14" width="51" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사" border="0" color="33554432" x="582" y="2" height="14" width="153" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="mid( month, 3,2)+~".~"+right(month,2)"border="0" color="33554432" x="2" y="2" height="18" width="48" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="est_name + if(est_count - 1 > 0 , ~" 외~"+string(est_count-1), ~"~")"border="0" color="33554432" x="52" y="2" height="18" width="249" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression=" cnst_name + if(cnst_count - 1 > 0 , ~" 외~"+string(cnst_count-1), ~"~")"border="0" color="33554432" x="582" y="2" height="18" width="153" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="790" y="2" height="18" width="163" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=200 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="303" y="2" height="18" width="91" format="#,##0" html.valueishtml="0"  name=bid_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="396" y="2" height="18" width="91" format="#,##0" html.valueishtml="0"  name=win_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="489" y="2" height="18" width="91" format="#,##0" html.valueishtml="0"  name=exe_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="bid_result+~"건~""border="0" color="33554432" x="737" y="2" height="18" width="51" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="52" y="2" height="14" width="249" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="견적실행률" border="0" color="33554432" x="582" y="2" height="14" width="153" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="round(exe_sum / bid_sum * 100 ,2) +~"%~""border="0" color="33554432" x="737" y="2" height="14" width="51" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(bid_amount for all)"border="0" color="33554432" x="303" y="2" height="14" width="91" format="#,##0" html.valueishtml="0"  name=bid_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(win_amount for all)"border="0" color="33554432" x="396" y="2" height="14" width="91" format="#,##0" html.valueishtml="0"  name=win_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(exe_amount for all)"border="0" color="33554432" x="489" y="2" height="14" width="91" format="#,##0" html.valueishtml="0"  name=exe_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="exe_amount / bid_amount"border="0" color="33554432" x="955" y="2" height="18" width="74" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="견적실행율" border="0" color="33554432" x="955" y="2" height="14" width="74" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

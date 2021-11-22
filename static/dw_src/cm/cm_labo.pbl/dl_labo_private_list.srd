@@ -1,0 +1,38 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_private.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_private.labor_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=reg_date dbname="cm_labo_private.reg_date" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=info_div dbname="cm_labo_private.info_div" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=black_tag dbname="cm_labo_private.black_tag" values="	Y/	N" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=contents dbname="cm_labo_private.contents" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.REG_DATE, 
+         A.INFO_DIV, 
+         A.BLACK_TAG,  
+         A.CONTENTS
+    FROM CM_LABO_PRIVATE A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.LABOR_CODE   = :as_labor
+ORDER BY A.REG_DATE ASC " update="CM_LABO_PRIVATE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_labor", string)) )
+text(band=header alignment="2" text="일자" border="0" color="33554432" x="35" y="2" height="14" width="80" html.valueishtml="0"  name=reg_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="정보구분" border="0" color="33554432" x="117" y="2" height="14" width="102" html.valueishtml="0"  name=info_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="체크" border="0" color="33554432" x="221" y="2" height="14" width="41" html.valueishtml="0"  name=black_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="내용" border="0" color="33554432" x="264" y="2" height="14" width="392" html.valueishtml="0"  name=contents_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="31" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="35" y="2" height="14" width="80" format="@@@@-@@-@@" html.valueishtml="0"  name=reg_date visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=10 border="0" color="33554432" x="117" y="2" height="14" width="102" format="[general]" html.valueishtml="0"  name=info_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="221" y="2" height="14" width="41" format="[general]" html.valueishtml="0"  name=black_tag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=30 border="0" color="33554432" x="264" y="2" height="14" width="392" format="[general]" html.valueishtml="0"  name=contents visible="1" edit.limit=200 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

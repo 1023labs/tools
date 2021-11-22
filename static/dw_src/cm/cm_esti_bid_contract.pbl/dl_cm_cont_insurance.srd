@@ -1,0 +1,113 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=32 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cont_insurance.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cont_insurance.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_cont_insurance.contract_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=reg_date dbname="cm_cont_insurance.reg_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=insu_div dbname="cm_cont_insurance.insu_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=insu_date1 dbname="cm_cont_insurance.insu_date1" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=insu_date2 dbname="cm_cont_insurance.insu_date2" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=insu_rate dbname="cm_cont_insurance.insu_rate" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=insu_amt dbname="cm_cont_insurance.insu_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=insu_fee dbname="cm_cont_insurance.insu_fee" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=insu_no dbname="cm_cont_insurance.insu_no" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=insu_code dbname="cm_cont_insurance.insu_code" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=specials dbname="cm_cont_insurance.specials" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=trans_tag dbname="cm_cont_insurance.trans_tag" values="	Y/	N" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=slip_no dbname="cm_cont_insurance.slip_no" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=ord_date dbname="cm_cont_insurance.ord_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cont_amt dbname="cm_cont_insurance.cont_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=reg_seq dbname="cm_cont_insurance.reg_seq" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=slip_div dbname="cm_cont_insurance.slip_div" values="AP	AP/GL	GL/" )
+ column=(type=number update=yes updatewhereclause=yes name=remain_seq dbname="remain_seq" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=dz_no_bdocu dbname="cm_cont_insurance.dz_no_bdocu" )
+ column=(type=number update=yes updatewhereclause=yes name=dz_no_bdoline dbname="cm_cont_insurance.dz_no_bdoline" )
+ column=(type=number update=yes updatewhereclause=yes name=dz_ban_seq dbname="cm_cont_insurance.dz_ban_seq" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.CONTRACT_CODE,   
+         A.REG_DATE,   
+         A.INSU_DIV,   
+         A.INSU_DATE1,   
+         A.INSU_DATE2,   
+         A.INSU_RATE,   
+         A.INSU_AMT,   
+         A.INSU_FEE,   
+         A.INSU_NO,   
+         A.INSU_CODE,   
+         A.SPECIALS,   
+         A.TRANS_TAG,   
+         A.SLIP_NO,
+         A.ORD_DATE ,
+         A.CONT_AMT,
+         A.REG_SEQ,
+         A.SLIP_DIV,
+         NVL(A.REMAIN_SEQ,0) REMAIN_SEQ,
+         A.DZ_NO_BDOCU,
+         A.DZ_NO_BDOLINE,
+         A.DZ_BAN_SEQ    
+    FROM CM_CONT_INSURANCE A   
+   WHERE A.COMPANY_CODE  = :as_comp_code
+     AND A.PROJ_CODE     = :as_proj_code
+     AND A.CONTRACT_CODE = :as_cont_code
+" update="CM_CONT_INSURANCE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_cont_code", string)) )
+text(band=header alignment="2" text="발행일자" border="0" color="33554432" x="161" y="2" height="14" width="69" html.valueishtml="0"  name=reg_date_t  tag="reg_date" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="255" x="232" y="2" height="14" width="81" html.valueishtml="0"  name=insu_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이체" border="0" color="33554432" x="1106" y="2" height="14" width="34" html.valueishtml="0"  name=trans_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결의서번호" border="0" color="33554432" x="1142" y="2" height="14" width="187" html.valueishtml="0"  name=slip_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="보증" border="0" color="33554432" x="315" y="2" height="14" width="64" html.valueishtml="0"  name=insu_date1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="381" y="2" height="14" width="62" html.valueishtml="0"  name=insu_date2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보증율(%)" border="0" color="33554432" x="554" y="2" height="14" width="64" html.valueishtml="0"  name=insu_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보증금액" border="0" color="33554432" x="620" y="2" height="14" width="78" html.valueishtml="0"  name=insu_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증권번호" border="0" color="33554432" x="851" y="2" height="14" width="103" html.valueishtml="0"  name=insu_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보증기관" border="0" color="33554432" x="956" y="2" height="14" width="83" html.valueishtml="0"  name=insu_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수수료" border="0" color="255" x="700" y="2" height="14" width="69" html.valueishtml="0"  name=insu_fee_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="요청일자" border="0" color="255" x="771" y="2" height="14" width="78" html.valueishtml="0"  name=ord_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사금액" border="0" color="33554432" x="445" y="2" height="14" width="107" html.valueishtml="0"  name=cont_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Reg Seq" border="0" color="33554432" x="1754" y="1" height="19" width="74" html.valueishtml="0"  name=reg_seq_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="전표구분" border="0" color="255" x="1041" y="2" height="14" width="63" html.valueishtml="0"  name=slip_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=140 border="0" color="33554432" x="1106" y="2" height="17" width="34" format="[general]" html.valueishtml="0"  name=trans_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="1142" y="2" height="17" width="187" format="[general]" html.valueishtml="0"  name=slip_no visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="161" y="2" height="17" width="69" format="####-##-##" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=reg_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=30 border="0" color="33554432" x="232" y="2" height="17" width="81" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_div  tag="[R]" visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=120 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=70 border="0" color="33554432" x="554" y="2" height="17" width="64" format="#,##0.00" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=110 border="0" color="33554432" x="851" y="2" height="17" width="103" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=40 border="0" color="33554432" x="315" y="2" height="17" width="64" format="####-##-##" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_date1 visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=50 border="0" color="33554432" x="381" y="2" height="17" width="62" format="####-##-##" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_date2 visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=90 border="0" color="33554432" x="700" y="2" height="17" width="69" format="#,###" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_fee  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="2" tabsequence=100 border="0" color="33554432" x="771" y="2" height="17" width="78" format="####-##-##" html.valueishtml="0"  name=ord_date  tag="[R]" visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="0" tabsequence=160 border="0" color="33554432" x="1754" y="1" height="14" width="74" format="[general]" html.valueishtml="0"  name=reg_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=60 border="0" color="33554432" x="445" y="2" height="17" width="107" format="#,##0" html.valueishtml="0"  name=cont_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=80 border="0" color="33554432" x="620" y="2" height="17" width="78" format="#,###" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=120 border="0" color="33554432" x="956" y="2" height="17" width="83" format="[general]" html.valueishtml="0" protect="0~tif( trans_tag = 'Y', 1, 0)"  name=insu_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="2" tabsequence=130 border="0" color="33554432" x="1041" y="2" height="17" width="63" format="[general]" html.valueishtml="0"  name=slip_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(cont_amt for all)"border="0" color="33554432" x="445" y="9" height="14" width="107" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(insu_amt for all)"border="0" color="33554432" x="620" y="9" height="14" width="78" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합  계" border="0" color="33554432" x="232" y="9" height="14" width="81" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="반제" border="0" color="33554432" x="38" y="2" height="14" width="68" html.valueishtml="0"  name=remain_seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="반제키" border="0" color="33554432" x="108" y="2" height="19" width="51" html.valueishtml="0"  name=dz_ban_seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="2" tabsequence=10 border="0" color="33554432" x="38" y="2" height="17" width="68" format="[general]" html.valueishtml="0"  name=remain_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.displayonly=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="0" tabsequence=32766 border="0" color="33554432" x="108" y="2" height="14" width="51" format="[general]" html.valueishtml="0"  name=dz_ban_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="더존 전표번호" border="0" color="33554432" x="1580" y="2" height="19" width="87" html.valueishtml="0"  name=dz_no_bdocu_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="특기사항" border="0" color="33554432" x="1331" y="2" height="14" width="247" html.valueishtml="0"  name=specials_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="더존 전표라인" border="0" color="33554432" x="1669" y="2" height="19" width="83" html.valueishtml="0"  name=dz_no_bdoline_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="0" tabsequence=150 border="0" color="33554432" x="1331" y="2" height="17" width="247" format="[general]" html.valueishtml="0"  name=specials visible="1" edit.limit=200 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="2" tabsequence=32766 border="0" color="33554432" x="1580" y="2" height="14" width="87" format="[general]" html.valueishtml="0"  name=dz_no_bdocu visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="2" tabsequence=32766 border="0" color="33554432" x="1669" y="2" height="14" width="83" format="[general]" html.valueishtml="0"  name=dz_no_bdoline visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

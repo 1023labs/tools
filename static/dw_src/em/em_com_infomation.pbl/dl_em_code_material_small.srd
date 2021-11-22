@@ -1,0 +1,39 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(2) update=yes updatewhereclause=yes name=large_code dbname="sm_code_material_small.large_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=middle_code dbname="sm_code_material_small.middle_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=small_code dbname="sm_code_material_small.small_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=small_name dbname="sm_code_material_small.small_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=account_code dbname="sm_code_material_small.account_code" )
+ column=(type=char(1) updatewhereclause=yes name=att_input_yn dbname="sm_code_material_small.att_input_yn" )
+ column=(type=char(30) updatewhereclause=yes name=acnt_name dbname="ac_code_acnt.acnt_name" )
+ retrieve="  SELECT A.LARGE_CODE,
+         A.MIDDLE_CODE,
+         A.SMALL_CODE,
+         A.SMALL_NAME,
+         A.ACCOUNT_CODE, 
+         A.ATT_INPUT_YN,
+         B.ACNT_NAME 
+    FROM SM_CODE_MATERIAL_SMALL A LEFT JOIN AC_CODE_ACNT B
+                                         ON A.ACCOUNT_CODE = B.ACNT_CODE
+   WHERE A.LARGE_CODE = :as_large
+     AND A.MIDDLE_CODE = :as_middle 
+ORDER BY A.LARGE_CODE, A.MIDDLE_CODE, A.SMALL_CODE" arguments=(("as_large", string),("as_middle", string)) )
+text(band=header alignment="1" text="코" border="0" color="8388608" x="2" y="4" height="14" width="30" html.valueishtml="0"  name=code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="드" border="0" color="8388608" x="34" y="4" height="14" width="30" html.valueishtml="0"  name=small_code_t  tag="" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="소분류명" border="0" color="8388608" x="66" y="4" height="14" width="122" html.valueishtml="0"  name=small_name_t  tag="" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계정과목" border="0" color="8388608" x="190" y="4" height="14" width="136" html.valueishtml="0"  name=acnt_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=10 border="0" color="33554432" x="34" y="2" height="14" width="30" format="[general]" html.valueishtml="0"  name=small_code  tag="[R]" visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=2  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="large_code + ' ' + middle_code"border="0" color="33554432" x="2" y="2" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=code visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=20 border="0" color="33554432" x="66" y="2" height="14" width="122" format="[general]" html.valueishtml="0"  name=small_name  tag="[R]" visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=2  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="190" y="2" height="14" width="136" format="[general]" html.valueishtml="0"  name=acnt_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

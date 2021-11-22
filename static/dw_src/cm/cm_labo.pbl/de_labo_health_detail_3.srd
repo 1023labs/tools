@@ -1,0 +1,87 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=141 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_health.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_health.labor_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=exam_date dbname="cm_labo_health.exam_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=exam_div dbname="cm_labo_health.exam_div" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=elec_diogram dbname="cm_labo_health.elec_diogram" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=vert_staus dbname="cm_labo_health.vert_staus" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=exam_office dbname="cm_labo_health.exam_office" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=blood_max dbname="cm_labo_health.blood_max" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=blood_min dbname="cm_labo_health.blood_min" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=serum_got dbname="cm_labo_health.serum_got" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=serum_gpt dbname="cm_labo_health.serum_gpt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=gama_gtp dbname="cm_labo_health.gama_gtp" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=exam_result dbname="cm_labo_health.exam_result" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=disease_yn dbname="cm_labo_health.disease_yn" values="YES	Y/NO	N/" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=specials dbname="cm_labo_health.specials" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_labo_health.proj_code" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE,  
+         A.EXAM_DATE, 
+         A.EXAM_DIV, 
+         A.ELEC_DIOGRAM, 
+         A.VERT_STAUS, 
+         A.EXAM_OFFICE, 
+         A.BLOOD_MAX, 
+         A.BLOOD_MIN, 
+         A.SERUM_GOT, 
+         A.SERUM_GPT, 
+         A.GAMA_GTP, 
+         A.EXAM_RESULT, 
+         A.DISEASE_YN, 
+         A.SPECIALS,
+         A.PROJ_CODE
+    FROM CM_LABO_HEALTH A 
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.LABOR_CODE   = :as_labor
+     AND A.EXAM_DATE    = :as_date
+ORDER BY EXAM_DATE ASC" update="CM_LABO_HEALTH" updatewhere=1 updatekeyinplace=yes arguments=(("as_comp", string),("as_labor", string),("as_date", string)) )
+rectangle(band=background x="202" y="18" height="138" width="86"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="5" y="16" height="140" width="77"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+line(band=background x1="5" y1="16" x2="973" y2="16"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="15" x2="973" y2="15"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+bitmap(band=background filename="\images\button\btn_calendar.gif" x="180" y="21" height="14" width="15" border="0"  name=cld_exam_date pointer="HyperLink!" visible="1" )
+text(band=background alignment="1" text="검진일" border="0" color="255" x="12" y="22" height="14" width="64" html.valueishtml="0"  name=exam_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="건강검진구분" border="0" color="255" x="208" y="22" height="14" width="72" html.valueishtml="0"  name=exam_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="5" y1="62" x2="202" y2="62"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="최고 :" border="0" color="33554432" x="292" y="45" height="14" width="32" html.valueishtml="0"  name=blood_max_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="검진기관명" border="0" color="27229506" x="12" y="45" height="14" width="64" html.valueishtml="0"  name=exam_office_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="혈압(mmHg)" border="0" color="27229506" x="208" y="56" height="14" width="72" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="혈청Got :" border="0" color="33554432" x="87" y="68" height="14" width="50" html.valueishtml="0"  name=serum_got_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="최저 :" border="0" color="33554432" x="292" y="68" height="14" width="32" html.valueishtml="0"  name=blood_min_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="혈청" border="0" color="27229506" x="12" y="91" height="14" width="64" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="5" y1="39" x2="975" y2="39"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="285" y1="62" x2="974" y2="62"  name=l_8  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="80" y1="85" x2="972" y2="85"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="80" y1="108" x2="972" y2="108"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="131" x2="975" y2="131"  name=l_7  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="질병유소견자" border="0" color="27229506" x="9" y="137" height="14" width="71" html.valueishtml="0"  name=disease_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="검진결과" border="0" color="27229506" x="208" y="137" height="14" width="72" html.valueishtml="0"  name=exam_result_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="혈청Gpt :" border="0" color="33554432" x="87" y="91" height="14" width="50" html.valueishtml="0"  name=serum_gpt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="심전도" border="0" color="27229506" x="208" y="91" height="14" width="72" html.valueishtml="0"  name=elec_diogram_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="감마Gtp :" border="0" color="33554432" x="87" y="114" height="14" width="51" html.valueishtml="0"  name=gama_gtp_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="척추상태" border="0" color="27229506" x="208" y="114" height="14" width="72" html.valueishtml="0"  name=vert_staus_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="5" y1="155" x2="973" y2="155"  name=l_9  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="154" x2="973" y2="154"  name=l_10  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+column(band=detail id=3 alignment="2" tabsequence=10 border="0" color="33554432" x="87" y="7" height="14" width="87" format="@@@@-@@-@@" html.valueishtml="0"  name=exam_date  tag="[R]" visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=20 border="0" color="33554432" x="292" y="7" height="14" width="96" format="[general]" html.valueishtml="0"  name=exam_div  tag="[R]" visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=30 border="0" color="33554432" x="87" y="30" height="14" width="109" format="[general]" html.valueishtml="0"  name=exam_office visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=40 border="0" color="33554432" x="329" y="30" height="14" width="31" format="[general]" html.valueishtml="0"  name=blood_max visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=60 border="0" color="33554432" x="144" y="53" height="14" width="36" format="[general]" html.valueishtml="0"  name=serum_got visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=50 border="0" color="33554432" x="329" y="53" height="14" width="31" format="[general]" html.valueishtml="0"  name=blood_min visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=110 border="0" color="33554432" x="87" y="122" height="14" width="111" format="[general]" html.valueishtml="0"  name=disease_yn visible="1" radiobuttons.columns=2 radiobuttons.scale=no radiobuttons.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=120 border="0" color="33554432" x="292" y="122" height="14" width="96" format="[general]" html.valueishtml="0"  name=exam_result visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=70 border="0" color="33554432" x="144" y="76" height="14" width="36" format="[general]" html.valueishtml="0"  name=serum_gpt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=90 border="0" color="33554432" x="292" y="76" height="14" width="96" format="[general]" html.valueishtml="0"  name=elec_diogram visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=80 border="0" color="33554432" x="144" y="99" height="14" width="36" format="[general]" html.valueishtml="0"  name=gama_gtp visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=100 border="0" color="33554432" x="292" y="99" height="14" width="96" format="[general]" html.valueishtml="0"  name=vert_staus visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

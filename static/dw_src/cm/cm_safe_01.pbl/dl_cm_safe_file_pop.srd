@@ -1,0 +1,81 @@
+release 11;
+datawindow(units=1 timer_interval=60000 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=24 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes key=yes name=company_code dbname="cm_labo_aged_stat.company_code" )
+ column=(type=number updatewhereclause=yes key=yes name=seq dbname="cm_labo_aged_stat.seq" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_labo_aged_stat.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_aged_stat.labor_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=safe_yn dbname="cm_labo_aged_stat.safe_yn" values="	Y/	N" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name dbname="cm_labo_aged_stat.file_name" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type dbname="cm_labo_aged_stat.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_labo_aged_stat.file_path" )
+ column=(type=datetime update=yes updatewhereclause=yes name=row_input_date dbname="cm_labo_aged_stat.row_input_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=safe_date dbname="cm_labo_aged_stat.safe_date" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=cm_labo_aged_stat_safe_empno dbname="cm_labo_aged_stat.safe_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ retrieve="SELECT A.COMPANY_CODE
+      ,A.SEQ
+      ,A.PROJ_CODE
+      ,B.PROJ_NAME
+      ,A.LABOR_CODE
+      ,A.SAFE_YN
+      ,A.FILE_NAME
+      ,A.FILE_TYPE
+      ,A.FILE_PATH
+      ,A.ROW_INPUT_DATE
+      ,A.SAFE_DATE
+      ,A.SAFE_EMPNO
+      ,C.EMP_NAME
+  FROM CM_LABO_AGED_STAT A LEFT JOIN SM_CODE_PROJECT B
+                                                           ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                          AND A.PROJ_CODE = B.PROJ_CODE
+                                                LEFT JOIN HR_PERS_MASTER C
+                                                           ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                         AND A.SAFE_EMPNO = C.EMP_NO
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.LABOR_CODE = :as_labor_code" update="CM_LABO_AGED_STAT" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_labor_code", string)) )
+text(band=header alignment="0" text="Company Code" border="0" color="33554432" x="1529" y="1" height="19" width="19" html.valueishtml="0"  name=company_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Seq" border="0" color="33554432" x="1550" y="1" height="19" width="551" html.valueishtml="0"  name=seq_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Proj Code" border="0" color="33554432" x="2103" y="1" height="19" width="82" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="파일명" border="0" color="33554432" x="513" y="7" height="14" width="162" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="File Type" border="0" color="33554432" x="1478" y="1" height="19" width="49" html.valueishtml="0"  name=file_type_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="File Path" border="0" color="33554432" x="778" y="1" height="19" width="698" html.valueishtml="0"  name=file_path_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="No" border="0" color="134217741" x="2" y="7" height="14" width="34" html.valueishtml="0"  name=c_row_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="134217741" x="238" y="7" height="19" width="196" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업로드일" border="0" color="134217741" x="436" y="7" height="19" width="75" html.valueishtml="0"  name=row_input_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="713" y="1" height="14" width="63" html.valueishtml="0"  name=safe_empno_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="승인체크" border="0" color="134217856" x="38" y="7" height="19" width="49" html.valueishtml="0"  name=safe_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="승인일" border="0" color="134217856" x="89" y="7" height="14" width="75" html.valueishtml="0"  name=safe_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="승인자" border="0" color="134217856" x="166" y="7" height="14" width="70" html.valueishtml="0"  name=emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Cm Labo Aged Stat Labor Code" border="0" color="33554432" x="2187" y="1" height="19" width="55" html.valueishtml="0"  name=labor_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="now()"border="0" color="1073741824" x="677" y="3" height="14" width="34" format="" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+button(band=detail text="DW" enabled=yes action="0" border="0" color="134217741" x="678" y="2" height="14" width="33" vtextalign="0" htextalign="0"  name=p_download visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="67108864" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1529" y="1" height="19" width="19" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="1550" y="1" height="19" width="551" format="[general]" html.valueishtml="0"  name=seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="2103" y="1" height="19" width="82" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=10 border="0" color="134217857" x="38" y="1" height="19" width="49" format="[general]" html.valueishtml="0"  name=safe_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="513" y="2" height="19" width="162" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="1478" y="1" height="19" width="49" format="[general]" html.valueishtml="0"  name=file_type visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="778" y="1" height="19" width="698" format="[general]" html.valueishtml="0"  name=file_path visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="436" y="1" height="19" width="75" format="[shortdate]" html.valueishtml="0"  name=row_input_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="134217741" x="2" y="2" height="14" width="34" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="238" y="2" height="19" width="196" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="89" y="1" height="19" width="75" format="yyyy-mm-dd" html.valueishtml="0"  name=safe_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="713" y="1" height="19" width="63" format="[general]" html.valueishtml="0"  name=cm_labo_aged_stat_safe_empno visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="166" y="1" height="19" width="70" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=20 border="0" color="33554432" x="2188" y="1" height="19" width="54" format="[general]" html.valueishtml="0"  name=labor_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

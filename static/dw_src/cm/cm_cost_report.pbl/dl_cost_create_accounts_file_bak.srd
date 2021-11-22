@@ -1,0 +1,77 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=f_proj_name dbname="cm_cost_create_buy.proj_name" )
+ column=(type=char(96) updatewhereclause=yes name=reamrks dbname="reamrks" )
+ column=(type=char(30) updatewhereclause=yes name=sm_code_cust_cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(20) updatewhereclause=yes name=cust_code dbname="cm_cost_create_buy.cust_code" )
+ column=(type=number updatewhereclause=yes name=amt dbname="amt" )
+ retrieve="SELECT F.PROJ_NAME,  
+       F.SUMMARY || CASE WHEN COUNT(A.CUST_CODE) > 1 THEN ' 외 '||TO_CHAR(COUNT(A.CUST_CODE)-1)||'건'  ELSE '' END REAMRKS,
+         C.CUST_NAME,
+         A.CUST_CODE,
+         SUM(NVL(A.SUPPLAY_AMT+ A.VAT_AMT, 0)) AMT
+    FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                      ON A.COMPANY_CODE = B.COMPANY_CODE
+                                     AND A.PROJ_CODE = B.PROJ_CODE
+                              INNER JOIN SM_CODE_CUST C
+                                      ON A.CUST_CODE = C.CUST_CODE
+                              INNER JOIN HR_PERS_MASTER D
+                                      ON B.COMPANY_CODE = D.COMPANY_CODE
+                                     AND B.PM_EMPNO = D.EMP_NO
+                              INNER JOIN ( SELECT B.PROJ_NAME, A.CUST_CODE, A.SUMMARY
+                                                FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                 AND A.PROJ_CODE = B.PROJ_CODE
+                                                                          INNER JOIN SM_CODE_CUST C
+                                                                                  ON A.CUST_CODE = C.CUST_CODE
+                                                                          INNER JOIN HR_PERS_MASTER D
+                                                                                  ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                                 AND B.PM_EMPNO = D.EMP_NO
+                                               WHERE A.COMPANY_CODE = :as_comp
+                                                 AND A.YYYYMM = :as_month
+                                                 AND A.CREATE_DIV IN ('1', '3')
+                                                 AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+                                                 AND (A.CUST_CODE, NVL(A.SUPPLAY_AMT+A.VAT_AMT, 0))    IN(
+                                                 SELECT A.CUST_CODE, MAX(NVL(A.SUPPLAY_AMT+ A.VAT_AMT, 0)) MAX_AMT
+                                                FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B
+                                                                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                 AND A.PROJ_CODE = B.PROJ_CODE
+                                                                          INNER JOIN SM_CODE_CUST C
+                                                                                  ON A.CUST_CODE = C.CUST_CODE
+                                                                          INNER JOIN HR_PERS_MASTER D
+                                                                                  ON B.COMPANY_CODE = D.COMPANY_CODE
+                                                                                 AND B.PM_EMPNO = D.EMP_NO
+                                               WHERE A.COMPANY_CODE = :as_comp
+                                                 AND A.PROJ_CODE LIKE :as_proj
+                                                 AND A.YYYYMM = :as_month
+                                                 AND A.CREATE_DIV IN ('1', '3')
+                                                 AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+                                               GROUP BY A.CUST_CODE )) F
+                                             ON  A.CUST_CODE = F.CUST_CODE 
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE LIKE :as_proj
+     AND A.YYYYMM = :as_month
+     AND A.CREATE_DIV IN ('1', '3')
+     AND SUBSTR(A.REQ_DATE, 7, 2) = '25'
+   GROUP BY A.CUST_CODE, C.CUST_NAME,  F.SUMMARY, F.PROJ_NAME
+   ORDER BY F.PROJ_NAME, C.CUST_NAME, A.CUST_CODE" arguments=(("as_comp", string),("as_proj", string),("as_month", string)) )
+text(band=header alignment="2" text="상호명" border="0" color="33554432" x="490" y="3" height="14" width="208" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업자 번호" border="0" color="33554432" x="700" y="3" height="15" width="118" html.valueishtml="0"  name=cust_code_t visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액(VAT 포함)" border="0" color="33554432" x="820" y="3" height="15" width="256" html.valueishtml="0"  name=amt_t visible="1"  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요" border="0" color="33554432" x="267" y="3" height="14" width="221" html.valueishtml="0"  name=reamrks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="2" y="3" height="14" width="263" html.valueishtml="0"  name=f_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="490" y="2" height="18" width="208" format="[general]" html.valueishtml="0"  name=sm_code_cust_cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="700" y="2" height="18" width="118" format="[general]" html.valueishtml="0"  name=cust_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="820" y="2" height="18" width="256" format="#,###" html.valueishtml="0"  name=amt visible="1" editmask.mask="###,###,###,###,###,###" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="267" y="2" height="18" width="221" format="[general]" html.valueishtml="0"  name=reamrks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="18" width="263" format="[general]" html.valueishtml="0"  name=f_proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

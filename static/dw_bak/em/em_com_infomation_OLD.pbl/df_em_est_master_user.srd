@@ -1,0 +1,36 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=user_id dbname="em_mqc_main.user_id" )
+ column=(type=char(40) updatewhereclause=yes name=user_name dbname="sm_auth_user.user_name" )
+ retrieve="  SELECT DISTINCT A.USER_ID,
+         B.USER_NAME
+    FROM EM_MQC_MAIN A JOIN SM_AUTH_USER B
+                         ON (A.USER_ID = B.USER_ID)
+   WHERE B.COMPANY_CODE = :as_code
+     AND A.EST_CODE = :as_estcode
+     AND :as_div = '1'
+     AND (A.USER_ID LIKE :as_find OR B.USER_NAME LIKE '%'||:as_find||'%')
+   UNION ALL
+  SELECT DISTINCT A.USER_ID,
+         B.USER_NAME
+    FROM EM_EST_EM A JOIN SM_AUTH_USER B
+                       ON (A.USER_ID = B.USER_ID)
+   WHERE B.COMPANY_CODE = :as_code
+     AND A.EST_CODE = :as_estcode
+     AND :as_div = '2'
+     AND (A.USER_ID LIKE :as_find OR B.USER_NAME LIKE '%'||:as_find||'%')
+ORDER BY USER_ID" arguments=(("as_code", string),("as_estcode", string),("as_div", string),("as_find", string)) )
+text(band=header alignment="2" text="사용자코드" border="0" color="33554432" x="2" y="2" height="14" width="91" html.valueishtml="0"  name=user_id_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사용자명" border="0" color="33554432" x="95" y="2" height="14" width="188" html.valueishtml="0"  name=user_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="91" format="[general]" html.valueishtml="0"  name=user_id visible="1" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="95" y="2" height="17" width="188" format="[general]" html.valueishtml="0"  name=user_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,77 @@
+release 7;
+datawindow(units=1 timer_interval=0 color=79741120 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+header(height=18 color="536870912" )
+summary(height=1 color="536870912" )
+footer(height=16 color="32237528" )
+detail(height=17 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=project_code dbname="g_contract_detail.project_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="g_contract_detail.contract_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=change_degree dbname="g_contract_detail.change_degree" )
+ column=(type=datetime update=yes updatewhereclause=yes name=change_date dbname="g_contract_detail.change_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=contract_term dbname="g_contract_detail.contract_term" )
+ column=(type=datetime update=yes updatewhereclause=yes name=contract_term2 dbname="g_contract_detail.contract_term2" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=contract_tag dbname="g_contract_detail.contract_tag" initial="1" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=supply_amt dbname="g_contract_detail.supply_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=supply_vat dbname="g_contract_detail.supply_vat" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=action_amt dbname="g_contract_detail.action_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=advance_amt dbname="g_contract_detail.advance_amt" initial="0" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=preconst_tag dbname="g_contract_detail.preconst_tag" initial="0" values="	1/	0" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=contpaper_tag dbname="g_contract_detail.contpaper_tag" initial="0" values="	1/	0" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remark dbname="g_contract_detail.remark" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=material_amt dbname="g_contract_detail.material_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=labor_amt dbname="g_contract_detail.labor_amt" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cost_amt dbname="g_contract_detail.cost_amt" initial="0" )
+ retrieve="  SELECT ~"G_CONTRACT_DETAIL~".~"PROJECT_CODE~",   
+         ~"G_CONTRACT_DETAIL~".~"CONTRACT_CODE~",   
+         ~"G_CONTRACT_DETAIL~".~"CHANGE_DEGREE~",   
+         ~"G_CONTRACT_DETAIL~".~"CHANGE_DATE~",   
+         ~"G_CONTRACT_DETAIL~".~"CONTRACT_TERM~",   
+         ~"G_CONTRACT_DETAIL~".~"CONTRACT_TERM2~",   
+         ~"G_CONTRACT_DETAIL~".~"CONTRACT_TAG~",   
+         ~"G_CONTRACT_DETAIL~".~"SUPPLY_AMT~",   
+         ~"G_CONTRACT_DETAIL~".~"SUPPLY_VAT~",   
+         ~"G_CONTRACT_DETAIL~".~"ACTION_AMT~",   
+         ~"G_CONTRACT_DETAIL~".~"ADVANCE_AMT~",   
+         ~"G_CONTRACT_DETAIL~".~"PRECONST_TAG~",   
+         ~"G_CONTRACT_DETAIL~".~"CONTPAPER_TAG~",   
+         ~"G_CONTRACT_DETAIL~".~"REMARK~",   
+         ~"G_CONTRACT_DETAIL~".~"MATERIAL_AMT~",   
+         ~"G_CONTRACT_DETAIL~".~"LABOR_AMT~",   
+         ~"G_CONTRACT_DETAIL~".~"COST_AMT~"  
+    FROM ~"G_CONTRACT_DETAIL~"  
+   WHERE ( ~"G_CONTRACT_DETAIL~".~"PROJECT_CODE~" = :arg_project_code ) AND  
+         ( ~"G_CONTRACT_DETAIL~".~"CONTRACT_CODE~" = :arg_contract_code )    
+" update="G_CONTRACT_DETAIL" updatewhere=1 updatekeyinplace=yes arguments=(("arg_project_code", string),("arg_contract_code", string)) )
+column(band=detail id=15 alignment="1" tabsequence=20 border="0" color="0~tif(  preconst_tag = '1', rgb( 255, 255, 255), rgb( 0, 0, 0) )" x="92" y="1" height="15" width="90" format="#,##0"  name=material_amt edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="0" background.color="1090519039~tif(  preconst_tag = '1', rgb( 190, 124, 124), rgb( 255, 255, 255) )" )
+button(band=header text="계약변경일"filename=""action="0" border="0" color="8388608" x="0" y="0" height="18" width="92" vtextalign="0" htextalign="0"  name=b_1  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="공급가액 계"filename=""action="0" border="0" color="8388608" x="365" y="0" height="18" width="91" vtextalign="0" htextalign="0"  name=b_4  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="부가세액"filename=""action="0" border="0" color="8388608" x="456" y="0" height="18" width="81" vtextalign="0" htextalign="0"  name=b_5  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="선급금액"filename=""action="0" border="0" color="8388608" x="537" y="0" height="18" width="81" vtextalign="0" htextalign="0"  name=b_3  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="공사기간"filename=""action="0" border="0" color="8388608" x="618" y="0" height="18" width="142" vtextalign="0" htextalign="0"  name=b_2  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="선공사"filename=""action="0" border="0" color="8388608" x="760" y="0" height="18" width="41" vtextalign="0" htextalign="0"  name=b_7  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="계약서"filename=""action="0" border="0" color="8388608" x="801" y="0" height="18" width="41" vtextalign="0" htextalign="0"  name=b_8  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="특기사항"filename=""action="0" border="0" color="8388608" x="842" y="0" height="18" width="150" vtextalign="0" htextalign="0"  name=b_6  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="자재비"filename=""action="0" border="0" color="8388608" x="92" y="0" height="18" width="91" vtextalign="0" htextalign="0"  name=b_9  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="노무비"filename=""action="0" border="0" color="8388608" x="183" y="0" height="18" width="91" vtextalign="0" htextalign="0"  name=b_10  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="경비"filename=""action="0" border="0" color="8388608" x="274" y="0" height="18" width="91" vtextalign="0" htextalign="0"  name=b_11  tag=""  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+column(band=detail id=3 alignment="2" tabsequence=130 border="6" color="0" x="2" y="2" height="12" width="15" format="[general]"  name=change_degree  tag="변경차수" edit.limit=2 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=100 border="0" color="0" x="760" y="1" height="15" width="40" format="[general]"  name=preconst_tag checkbox.text="" checkbox.on="1" checkbox.off="0" checkbox.scale=no checkbox.threed=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=110 border="0" color="0" x="801" y="1" height="15" width="40" format="[general]"  name=contpaper_tag checkbox.text="" checkbox.on="1" checkbox.off="0" checkbox.scale=no checkbox.threed=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=120 border="0" color="0" x="842" y="1" height="15" width="150" format="[general]"  name=remark edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=5 alignment="2" tabsequence=80 border="0" color="0" x="618" y="1" height="15" width="70" format="yyyy-mm-dd"  name=contract_term  tag="계약일자" editmask.mask="yyyy-mm-dd"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32237528" )
+column(band=detail id=6 alignment="2" tabsequence=90 border="0" color="0" x="689" y="1" height="15" width="70" format="yyyy-mm-dd"  name=contract_term2  tag="계약일자2" editmask.mask="yyyy-mm-dd"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32237528" )
+column(band=detail id=4 alignment="2" tabsequence=10 border="0" color="0" x="21" y="1" height="15" width="70" format="yyyy-mm-dd"  name=change_date editmask.mask="yyyy-mm-dd"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32497648" )
+compute(band=footer alignment="1" expression="sum( supply_vat )"border="0" color="16711680" x="456" y="1" height="15" width="80" format="#,###"  name=supply_vat_sum  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( advance_amt )"border="0" color="16711680" x="537" y="1" height="15" width="80" format="#,###"  name=advance_amt_sum  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( supply_amt )"border="0" color="16711680" x="365" y="1" height="15" width="90" format="#,###"  name=supply_amt_sum  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( material_amt )"border="0" color="16711680" x="92" y="1" height="15" width="90" format="#,###"  name=compute_1  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( labor_amt )"border="0" color="16711680" x="183" y="1" height="15" width="90" format="#,###"  name=compute_2  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( cost_amt )"border="0" color="16711680" x="274" y="1" height="15" width="90" format="#,###"  name=compute_3  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=30 border="0" color="0~tif(  preconst_tag = '1', rgb( 255, 255, 255), rgb( 0, 0, 0) )" x="183" y="1" height="15" width="90" format="#,##0"  name=labor_amt edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="0" background.color="1090519039~tif(  preconst_tag = '1', rgb( 190, 124, 124), rgb( 255, 255, 255) )" )
+column(band=detail id=17 alignment="1" tabsequence=40 border="0" color="0~tif(  preconst_tag = '1', rgb( 255, 255, 255), rgb( 0, 0, 0) )" x="274" y="1" height="15" width="90" format="#,##0"  name=cost_amt edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="0" background.color="1090519039~tif(  preconst_tag = '1', rgb( 190, 124, 124), rgb( 255, 255, 255) )" )
+column(band=detail id=8 alignment="1" tabsequence=50 border="0" color="0~tif(  preconst_tag = '1', rgb( 255, 255, 255), rgb( 0, 0, 0) )" x="365" y="1" height="15" width="90" format="#,###"  name=supply_amt  tag="공급가액" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="0" background.color="1090519039~tif(  preconst_tag = '1', rgb( 190, 124, 124), rgb( 255, 255, 255) )" )
+column(band=detail id=9 alignment="1" tabsequence=60 border="0" color="0~tif(  preconst_tag = '1', rgb( 255, 255, 255), rgb( 0, 0, 0) )" x="456" y="1" height="15" width="80" format="#,###"  name=supply_vat  tag="부가세액" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="0" background.color="1090519039~tif(  preconst_tag = '1', rgb( 190, 124, 124), rgb( 255, 255, 255) )" )
+column(band=detail id=11 alignment="1" tabsequence=70 border="0" color="0~tif(  preconst_tag = '1', rgb( 255, 255, 255), rgb( 0, 0, 0) )" x="537" y="1" height="15" width="80" format="#,###"  name=advance_amt edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="0" background.color="1090519039~tif(  preconst_tag = '1', rgb( 190, 124, 124), rgb( 255, 255, 255) )" )
+rectangle(band=detail x="19" y="0" height="17" width="975"  name=r_1 visible="1~tif( getrow() = currentrow(), 1, 0)" brush.hatch="7" brush.color="553648127" pen.style="0" pen.width="1" pen.color="16711680"  background.mode="2" background.color="16777215" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )

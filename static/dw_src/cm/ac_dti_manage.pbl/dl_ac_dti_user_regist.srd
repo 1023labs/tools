@@ -1,0 +1,42 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=16 color="536870912" )
+table(column=(type=char(30) update=yes updatewhereclause=yes key=yes name=fnd_user dbname="xxsb_dti_sm_user.fnd_user" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=fnd_regno dbname="xxsb_dti_sm_user.fnd_regno" )
+ column=(type=char(30) updatewhereclause=yes name=office_name dbname="sm_code_office.office_name" )
+ column=(type=char(15) update=yes updatewhereclause=yes name=fnd_user_name dbname="xxsb_dti_sm_user.fnd_user_name" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=smart_id dbname="xxsb_dti_sm_user.smart_id" )
+ column=(type=char(35) update=yes updatewhereclause=yes name=smart_password dbname="xxsb_dti_sm_user.smart_password" )
+ retrieve="  SELECT A.FND_USER, 
+         A.FND_REGNO, 
+         B.OFFICE_NAME,
+         A.FND_USER_NAME,
+         A.SMART_ID, 
+         A.SMART_PASSWORD
+    FROM XXSB_DTI_SM_USER A LEFT JOIN SM_CODE_OFFICE B
+                                   ON A.FND_REGNO = B.COMP_NO
+   WHERE A.FND_REGNO = :as_regno   
+" update="XXSB_DTI_SM_USER" updatewhere=1 updatekeyinplace=no arguments=(("as_regno", string)) )
+text(band=header alignment="2" text="Smart Id" border="0" color="33554432" x="507" y="1" height="14" width="99" html.valueishtml="0"  name=smart_id_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Smart Password" border="0" color="33554432" x="608" y="1" height="14" width="223" html.valueishtml="0"  name=smart_password_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="1" height="14" width="40" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업자번호" border="0" color="33554432" x="44" y="1" height="14" width="86" html.valueishtml="0"  name=fnd_regno_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업장명" border="0" color="33554432" x="132" y="1" height="14" width="178" html.valueishtml="0"  name=sm_code_office_office_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="16711680" x="312" y="1" height="14" width="88" html.valueishtml="0"  name=fnd_user_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="16711680" x="402" y="1" height="14" width="103" html.valueishtml="0"  name=fnd_user_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=30 border="0" color="33554432" x="507" y="1" height="14" width="99" format="[general]" html.valueishtml="0"  name=smart_id visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=40 border="0" color="33554432" x="608" y="1" height="14" width="223" format="*********" html.valueishtml="0"  name=smart_password visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.password=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="14" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="44" y="1" height="14" width="86" format="@@@-@@-@@@@@" html.valueishtml="0"  name=fnd_regno visible="1" editmask.mask="XXX-XX-XXXXX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="132" y="1" height="14" width="178" format="[general]" html.valueishtml="0"  name=office_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="33554432" x="312" y="1" height="14" width="88" format="[general]" html.valueishtml="0"  name=fnd_user visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=20 border="0" color="33554432" x="402" y="1" height="14" width="103" format="[general]" html.valueishtml="0"  name=fnd_user_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

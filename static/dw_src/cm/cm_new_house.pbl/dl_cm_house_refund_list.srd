@@ -1,0 +1,90 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=yes print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=38 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=19 color="67108864" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_cost_house_gw_list.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_cost_house_gw_list.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(13) update=yes updatewhereclause=yes name=cust_code dbname="cm_cost_house_gw_list.cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(8) updatewhereclause=yes name=rent_date dbname="cm_cost_house_gw_list.rent_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=rent_seq dbname="cm_cost_house_gw_list.rent_seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=rent_cost dbname="cm_cost_house_gw_list.rent_cost" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_cost_house_gw_list.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_cost_house_gw_list.end_date" )
+ column=(type=char(300) update=yes updatewhereclause=yes name=addr dbname="cm_cost_house_gw_list.addr" )
+ column=(type=number updatewhereclause=yes name=refund_cnt dbname="refund_cnt" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE
+      ,A.PROJ_CODE    AS PROJ_CODE
+      ,B.PROJ_NAME    AS PROJ_NAME
+      ,A.CUST_CODE    AS CUST_CODE
+      ,C.CUST_NAME    AS CUST_NAME
+      ,A.RENT_DATE    AS RENT_DATE
+      ,A.RENT_SEQ     AS RENT_SEQ
+      ,A.RENT_COST    AS RENT_COST 
+      ,A.START_DATE   AS START_DATE
+      ,A.END_DATE     AS END_DATE
+      ,A.ADDR         AS ADDR
+      ,(SELECT COUNT(*)
+          FROM CM_COST_HOUSE_REFUND_LIST T
+        WHERE T.COMPANY_CODE = A.COMPANY_CODE
+          AND T.PROJ_CODE    = A.PROJ_CODE
+          AND T.CUST_CODE    = A.CUST_CODE
+          AND T.RENT_DATE    = A.RENT_DATE
+          AND T.RENT_SEQ     = A.RENT_SEQ
+          AND T.RECEIVE_YN   = 'N')
+       AS REFUND_CNT
+  FROM CM_COST_HOUSE_GW_LIST A
+  LEFT JOIN SM_CODE_PROJECT B 
+    ON A.COMPANY_CODE = B.COMPANY_CODE 
+   AND A.PROJ_CODE = B.PROJ_CODE
+  LEFT JOIN SM_CODE_CUST C 
+    ON A.CUST_CODE = C.CUST_CODE 
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE LIKE :AS_PROJ_CODE
+   AND A.APPR_DIV = '3'
+   AND A.CONFIRM_YN = 'Y'
+   AND A.RENT_COST IS NOT NULL
+ ORDER BY B.PROJ_NAME" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string)) )
+text(band=header alignment="2" text="주소" border="0" color="33554432" x="600" y="14" height="14" width="220" html.valueishtml="0"  name=addr_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보증금" border="0" color="33554432" x="510" y="14" height="14" width="88" html.valueishtml="0"  name=rent_cost_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="210" y="21" height="14" width="72" html.valueishtml="0"  name=cust_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="거래처" border="0" color="134217856" x="210" y="5" height="15" width="72" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업자번호(주민번호)" border="0" color="33554432" x="284" y="21" height="14" width="144" html.valueishtml="0"  name=cust_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="시작일" border="0" color="33554432" x="1071" y="21" height="14" width="71" html.valueishtml="0"  name=start_date_t pointer="HyperLink!" visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="만료일" border="0" color="134217857" x="430" y="14" height="14" width="78" html.valueishtml="0"  name=end_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="회사코드" border="0" color="33554432" x="1144" y="1" height="19" width="36" html.valueishtml="0"  name=company_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="현장코드" border="0" color="33554432" x="1182" y="1" height="19" width="46" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="계약일자" border="0" color="33554432" x="999" y="1" height="19" width="70" html.valueishtml="0"  name=rent_date_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="계약순번" border="0" color="33554432" x="822" y="1" height="19" width="63" html.valueishtml="0"  name=rent_seq_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="보증금반납여부" border="0" color="33554432" x="887" y="1" height="19" width="110" html.valueishtml="0"  name=refund_cnt_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="14" height="14" width="29" html.valueishtml="0"  name=c_row_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="33" y="14" height="14" width="175" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="1071" y="1" height="14" width="71" format="[general]" html.valueishtml="0"  name=start_date visible="0" editmask.mask="XXXX/XX/XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1144" y="1" height="14" width="36" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="1182" y="1" height="14" width="46" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="999" y="1" height="14" width="70" format="[general]" html.valueishtml="0"  name=rent_date visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="822" y="1" height="14" width="63" format="[general]" html.valueishtml="0"  name=rent_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="887" y="1" height="14" width="110" format="[general]" html.valueishtml="0"  name=refund_cnt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="2" y="2" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="14" width="175" format="[general]" html.valueishtml="0" protect="0~tif( refund_cnt > 0, rgb(255,0,0),rgb(0,0,0))"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="210" y="2" height="14" width="72" format="[general]" html.valueishtml="0" protect="0~tif( refund_cnt > 0, rgb(255,0,0),rgb(0,0,0))"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="284" y="2" height="14" width="144" format="[General]" html.valueishtml="0" protect="0~tif( refund_cnt > 0, rgb(255,0,0),rgb(0,0,0))"  name=cust_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="431" y="2" height="14" width="77" format="[general]" html.valueishtml="0" protect="0~tif( refund_cnt > 0, rgb(255,0,0),rgb(0,0,0))"  name=end_date visible="1" editmask.mask="XXXX/XX/XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="134217729" x="510" y="2" height="14" width="88" format="#,###" html.valueishtml="0" protect="0~tif( refund_cnt > 0, rgb(255,0,0),rgb(0,0,0))"  name=rent_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="600" y="2" height="14" width="220" format="[general]" html.valueishtml="0" protect="0~tif( refund_cnt > 0, rgb(255,0,0),rgb(0,0,0))"  name=addr visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="총 합계 :" border="0" color="33554432" x="430" y="1" height="19" width="78" html.valueishtml="0"  name=t_1 visible="1"  font.face="Tahoma" font.height="-12" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(rent_cost for all)"border="0" color="134217729" x="510" y="5" height="14" width="88" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

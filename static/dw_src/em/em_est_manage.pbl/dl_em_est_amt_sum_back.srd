@@ -1,0 +1,179 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=141 color="536870912" )
+table(column=(type=number updatewhereclause=yes name=mat_cost1 dbname="mat_cost1" )
+ column=(type=number updatewhereclause=yes name=lab_cost1 dbname="lab_cost1" )
+ column=(type=number updatewhereclause=yes name=out_cost1 dbname="out_cost1" )
+ column=(type=number updatewhereclause=yes name=exp_cost1 dbname="exp_cost1" )
+ column=(type=number updatewhereclause=yes name=mat_cost2 dbname="mat_cost2" )
+ column=(type=number updatewhereclause=yes name=lab_cost2 dbname="lab_cost2" )
+ column=(type=number updatewhereclause=yes name=out_cost2 dbname="out_cost2" )
+ column=(type=number updatewhereclause=yes name=exp_cost2 dbname="exp_cost2" )
+ retrieve="  SELECT MAX(MAT_COST1) MAT_COST1,
+         MAX(LAB_COST1) LAB_COST1,
+         MAX(OUT_COST1) OUT_COST1,
+         MAX(EXP_COST1) EXP_COST1,
+         MAX(MAT_COST2) MAT_COST2,
+         MAX(LAB_COST2) LAB_COST2,
+         MAX(OUT_COST2) OUT_COST2,
+         MAX(EXP_COST2) EXP_COST2
+    FROM ( SELECT TRUNC(NVL(SUM(ITEM_QTY * MAT_COST), 0), 3) MAT_COST1,
+                  TRUNC(NVL(SUM(ITEM_QTY * LAB_COST), 0), 3) LAB_COST1,
+                  MAX((SELECT TRUNC(NVL(SUM(ITEM_QTY * MAT_COST), 0), 3) +
+                              TRUNC(NVL(SUM(ITEM_QTY * LAB_COST), 0), 3) +
+                              TRUNC(NVL(SUM(ITEM_QTY * EXP_COST), 0), 3)
+                         FROM EM_EST_EM
+                        WHERE USER_ID = :as_userid
+                          AND BREAK_DIV = :as_breakdiv
+                          AND CONST_CODE = :as_constcode
+                          AND CONST_DIV = :as_constdiv
+                          AND SUPPLY_ITEM = '15')) OUT_COST1,
+                  TRUNC(NVL(SUM(ITEM_QTY * EXP_COST), 0), 3) EXP_COST1,
+                  0 MAT_COST2,
+                  0 LAB_COST2,
+                  0 OUT_COST2,
+                  0 EXP_COST2
+             FROM EM_EST_EM
+            WHERE USER_ID = :as_userid
+              AND BREAK_DIV = :as_breakdiv
+              AND CONST_DIV = :as_constdiv
+              AND SUPPLY_ITEM IS NULL
+              AND CODE_TAG <> '82'
+            UNION ALL
+           SELECT 0 MAT_COST1,
+                  0 LAB_COST1,
+                  0 OUT_COST1,
+                  0 EXP_COST1,
+                  TRUNC(NVL(SUM(A.ITEM_QTY * A.MAT_COST), 0), 3) MAT_COST2,
+                  TRUNC(NVL(SUM(A.ITEM_QTY * A.LAB_COST), 0), 3) LAB_COST2,
+                  MAX((SELECT TRUNC(NVL(SUM(ITEM_QTY * MAT_COST), 0), 3) +
+                              TRUNC(NVL(SUM(ITEM_QTY * LAB_COST), 0), 3) +
+                              TRUNC(NVL(SUM(ITEM_QTY * EXP_COST), 0), 3)
+                         FROM EM_EST_EM A JOIN (SELECT BREAK_DIV, EST_CODE, CONST_DIV, CONST_CODE
+                                                  FROM ( SELECT '01' BREAK_DIV, EST_CODE, CONST_DIV, CONST_CODE
+                                                           FROM EM_SITECONST_KIND
+                                                          START WITH EST_CODE = :as_estcode
+                                                            AND CONST_DIV = :as_constdiv
+                                                            AND CONST_CODE = :as_constcode
+                                                        CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                            AND EST_CODE = :as_estcode
+                                                            AND CONST_DIV = :as_constdiv
+                                                          UNION ALL
+                                                         SELECT '02' BREAK_DIV, :as_estcode EST_CODE, :as_constdiv CONST_DIV, CONST_CODE
+                                                           FROM CM_CONTRACT_CONST
+                                                          START WITH COMPANY_CODE = :as_compcode
+                                                            AND PROJ_CODE = :as_projcode
+                                                            AND CONST_CODE = :as_constcode
+                                                        CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                            AND COMPANY_CODE = :as_compcode
+                                                            AND PROJ_CODE = :as_projcode
+                                                          UNION ALL
+                                                         SELECT '03' BREAK_DIV, :as_estcode EST_CODE, :as_constdiv CONST_DIV, CONST_CODE
+                                                           FROM CM_EXEC_CONST
+                                                          START WITH COMPANY_CODE = :as_compcode
+                                                            AND PROJ_CODE = :as_projcode
+                                                            AND CONST_CODE = :as_constcode
+                                                        CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                            AND COMPANY_CODE = :as_compcode
+                                                            AND PROJ_CODE = :as_projcode
+                                                          UNION ALL
+                                                         SELECT '04' BREAK_DIV, :as_estcode EST_CODE, :as_constdiv CONST_DIV, CONST_CODE
+                                                           FROM CM_CONTRACT_CONST
+                                                          START WITH COMPANY_CODE = :as_compcode
+                                                            AND PROJ_CODE = :as_projcode
+                                                            AND CONST_CODE = :as_constcode
+                                                        CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                            AND COMPANY_CODE = :as_compcode
+                                                            AND PROJ_CODE = :as_projcode )
+                                                 WHERE BREAK_DIV = :as_breakdiv ) B
+                                            ON A.EST_CODE = B.EST_CODE
+                                           AND A.CONST_DIV = B.CONST_DIV
+                                           AND A.CONST_CODE = B.CONST_CODE
+                        WHERE A.USER_ID = :as_userid
+                          AND A.BREAK_DIV = :as_breakdiv
+                          AND A.CONST_DIV = :as_constdiv
+                          AND A.SUPPLY_ITEM = '15')) OUT_COST2,
+                  TRUNC(NVL(SUM(A.ITEM_QTY * A.EXP_COST), 0), 3) EXP_COST2
+             FROM EM_EST_EM A JOIN (SELECT BREAK_DIV, EST_CODE, CONST_DIV, CONST_CODE
+                                      FROM ( SELECT '01' BREAK_DIV, EST_CODE, CONST_DIV, CONST_CODE
+                                               FROM EM_SITECONST_KIND
+                                              START WITH EST_CODE = :as_estcode
+                                                AND CONST_DIV = :as_constdiv
+                                                AND CONST_CODE = :as_constcode
+                                            CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                AND EST_CODE = :as_estcode
+                                                AND CONST_DIV = :as_constdiv
+                                              UNION ALL
+                                             SELECT '02' BREAK_DIV, :as_estcode EST_CODE, :as_constdiv CONST_DIV, CONST_CODE
+                                               FROM CM_CONTRACT_CONST
+                                              START WITH COMPANY_CODE = :as_compcode
+                                                AND PROJ_CODE = :as_projcode
+                                                AND CONST_CODE = :as_constcode
+                                            CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                AND COMPANY_CODE = :as_compcode
+                                                AND PROJ_CODE = :as_projcode
+                                              UNION ALL
+                                             SELECT '03' BREAK_DIV, :as_estcode EST_CODE, :as_constdiv CONST_DIV, CONST_CODE
+                                               FROM CM_EXEC_CONST
+                                              START WITH COMPANY_CODE = :as_compcode
+                                                AND PROJ_CODE = :as_projcode
+                                                AND CONST_CODE = :as_constcode
+                                            CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                AND COMPANY_CODE = :as_compcode
+                                                AND PROJ_CODE = :as_projcode
+                                              UNION ALL
+                                             SELECT '04' BREAK_DIV, :as_estcode EST_CODE, :as_constdiv CONST_DIV, CONST_CODE
+                                               FROM CM_CONTRACT_CONST
+                                              START WITH COMPANY_CODE = :as_compcode
+                                                AND PROJ_CODE = :as_projcode
+                                                AND CONST_CODE = :as_constcode
+                                            CONNECT BY PRIOR CONST_CODE = HIGH_CONST_CODE
+                                                AND COMPANY_CODE = :as_compcode
+                                                AND PROJ_CODE = :as_projcode )
+                                     WHERE BREAK_DIV = :as_breakdiv ) B
+                                ON A.EST_CODE = B.EST_CODE
+                               AND A.CONST_DIV = B.CONST_DIV
+                               AND A.CONST_CODE = B.CONST_CODE
+            WHERE A.USER_ID = :as_userid
+              AND A.BREAK_DIV = :as_breakdiv
+              AND A.CONST_DIV = :as_constdiv
+              AND A.SUPPLY_ITEM IS NULL
+              AND A.CODE_TAG <> '82' )" arguments=(("as_compcode", string),("as_projcode", string),("as_userid", string),("as_breakdiv", string),("as_estcode", string),("as_constdiv", string),("as_constcode", string)) )
+rectangle(band=background x="5" y="18" height="132" width="97"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+column(band=detail id=1 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="10" height="17" width="84" format="#,###" html.valueishtml="0"  name=mat_cost1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="36" height="17" width="84" format="#,###" html.valueishtml="0"  name=lab_cost1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="10" height="17" width="84" format="#,###" html.valueishtml="0"  name=mat_cost2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="36" height="17" width="84" format="#,###" html.valueishtml="0"  name=lab_cost2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="62" height="17" width="84" format="#,###" html.valueishtml="0"  name=out_cost1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="88" height="17" width="84" format="#,###" html.valueishtml="0"  name=exp_cost1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="62" height="17" width="84" format="#,###" html.valueishtml="0"  name=out_cost2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="88" height="17" width="84" format="#,###" html.valueishtml="0"  name=exp_cost2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="mat_cost1 + lab_cost1 + out_cost1 + exp_cost1"border="0" color="33554432" x="105" y="114" height="17" width="84" format="#,###" html.valueishtml="0"  name=c_sum1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="mat_cost2 + lab_cost2 + out_cost2 + exp_cost2"border="0" color="33554432" x="194" y="114" height="17" width="84" format="#,###" html.valueishtml="0"  name=c_sum2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="합계/소계" border="0" color="27229506" x="11" y="130" height="14" width="84" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="경비" border="0" color="27229506" x="11" y="104" height="14" width="84" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="외주비" border="0" color="27229506" x="11" y="78" height="14" width="84" html.valueishtml="0"  name=play_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="노무비" border="0" color="27229506" x="11" y="52" height="14" width="84" html.valueishtml="0"  name=const_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="자재비" border="0" color="27229506" x="11" y="26" height="14" width="84" html.valueishtml="0"  name=cnst_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="5" y1="18" x2="282" y2="18"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="71" x2="282" y2="71"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="97" x2="282" y2="97"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="123" x2="282" y2="123"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="149" x2="282" y2="149"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="45" x2="282" y2="45"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="19" x2="282" y2="19"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="150" x2="282" y2="150"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

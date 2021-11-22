@@ -1,0 +1,133 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=16777215 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=150 color="536870912" )
+summary(height=0 color="553648127" )
+footer(height=1 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_cost_reqadv_settle.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=project_code dbname="cm_cost_reqadv_settle.project_code" )
+ column=(type=char(12) updatewhereclause=yes name=yyyymm dbname="yyyymm" )
+ column=(type=char(3) updatewhereclause=yes name=seq dbname="cm_cost_reqadv_settle.seq" )
+ column=(type=char(50) updatewhereclause=yes name=description dbname="cm_cost_reqadv_settle.description" )
+ column=(type=char(8) updatewhereclause=yes name=acnt_cd dbname="cm_cost_reqadv_settle.acnt_cd" )
+ column=(type=char(30) updatewhereclause=yes name=acnt_name dbname="ac_code_acnt.acnt_name" )
+ column=(type=char(4000) updatewhereclause=yes name=const_account dbname="const_account" )
+ column=(type=decimal(0) updatewhereclause=yes name=income_amt dbname="cm_cost_reqadv_settle.income_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=outgo_amt dbname="cm_cost_reqadv_settle.outgo_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=outgo_amt2 dbname="cm_cost_reqadv_settle.outgo_amt2" )
+ column=(type=decimal(0) updatewhereclause=yes name=vat_amt dbname="cm_cost_reqadv_settle.vat_amt" )
+ column=(type=char(8) updatewhereclause=yes name=supply_date dbname="cm_cost_reqadv_settle.supply_date" )
+ column=(type=char(3) updatewhereclause=yes name=supply_type dbname="cm_cost_reqadv_settle.supply_type" )
+ column=(type=char(3) updatewhereclause=yes name=vat_code dbname="cm_cost_reqadv_settle.vat_code" )
+ column=(type=char(20) updatewhereclause=yes name=customer_code dbname="cm_cost_reqadv_settle.customer_code" )
+ column=(type=char(20) updatewhereclause=yes name=card_no dbname="cm_cost_reqadv_settle.card_no" )
+ column=(type=char(10) updatewhereclause=yes name=card_user dbname="cm_cost_reqadv_settle.card_user" )
+ column=(type=decimal(0) updatewhereclause=yes name=balance_amt dbname="cm_cost_reqadv_close.balance_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_cost_reqadv_close_remain_amt dbname="cm_cost_reqadv_close.remain_amt" )
+ column=(type=char(1) updatewhereclause=yes name=close_tag dbname="cm_cost_reqadv_close.close_tag" )
+ column=(type=char(200) updatewhereclause=yes name=remarks dbname="cm_cost_reqadv_settle.remarks" )
+ column=(type=char(40) updatewhereclause=yes name=slip_no dbname="cm_cost_reqadv_settle.slip_no" )
+ column=(type=char(1) updatewhereclause=yes name=cm_cost_reqadv_settle_close_tag dbname="cm_cost_reqadv_settle.close_tag" )
+ column=(type=char(1) updatewhereclause=yes name=trans_tag dbname="cm_cost_reqadv_settle.trans_tag" )
+ column=(type=char(50) updatewhereclause=yes name=project_name dbname="sm_code_project.project_name" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE            AS PROJECT_CODE,   
+         SUBSTR(A.SET_DATE,1,6) AS YYYYMM,   
+         A.SET_SEQ              AS SEQ,   
+         A.DISCRIPTION          AS DESCRIPTION, 
+         A.ACNT_CD,
+         B.ACNT_NAME,         
+         FN_CM_GET_CONST_ACNT_NAME(A.ACNT_CD) CONST_ACCOUNT,
+         A.INCOME_AMT,   
+         A.OUTGO_AMT, 
+         A.OUTGO_AMT2, 
+         A.VAT_AMT,  
+         A.SUPPLY_DATE,   
+         A.SUPPLY_TYPE,   
+         A.VAT_CODE,   
+         A.CUST_CODE            AS CUSTOMER_CODE,  
+         A.CARD_NO,   
+         A.CARD_USER, 
+         C.BALANCE_AMT,
+         C.REMAIN_AMT,
+         C.CLOSE_TAG,
+         A.REMARKS,  
+         A.SLIP_NO,
+         A.CLOSE_TAG, 
+         A.TRANS_TAG,
+         P.PROJ_NAME            AS PROJECT_NAME
+    FROM CM_COST_REQADV_SETTLE A LEFT JOIN AC_CODE_ACNT B
+                                        ON A.ACNT_CD = B.ACNT_CODE 
+                                 LEFT JOIN CM_COST_REQADV_CLOSE C
+                                        ON A.COMPANY_CODE = C.COMPANY_CODE
+                                       AND A.PROJ_CODE    = C.PROJ_CODE
+                                       AND A.SET_DATE LIKE  C.CLOSE_YYYYMM||'%' 
+                                 LEFT JOIN SM_CODE_PROJECT P
+                                        ON A.COMPANY_CODE = P.COMPANY_CODE
+                                       AND A.PROJ_CODE    = P.PROJ_CODE        
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.SET_DATE  LIKE :as_set_yymm||'%'
+     AND A.TRANS_TAG    = 'Y'
+ORDER BY A.PROJ_CODE, P.PROJ_NAME, A.SET_DATE, A.SET_SEQ" arguments=(("as_comp_code", string),("as_proj_code", string),("as_set_yymm", string)) )
+group(level=1 header.height=0 trailer.height=44 by=("project_code" ) newpage=yes header.color="536870912" trailer.color="536870912" )
+line(band=header x1="293" y1="126" x2="293" y2="147"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="368" y1="126" x2="368" y2="147"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="495" y1="126" x2="495" y2="147"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="587" y1="126" x2="587" y2="147"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="1" y1="147" x2="740" y2="147"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="출력일" border="0" color="16777215" x="603" y="90" height="15" width="55" html.valueishtml="0"  name=t_25 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="10789024" )
+compute(band=header alignment="2" expression="today()"border="0" color="0" x="659" y="90" height="15" width="80" format="yyyy-mm-dd" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="페이지" border="0" color="16777215" x="603" y="106" height="15" width="55" html.valueishtml="0"  name=t_26 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="10789024" )
+compute(band=header alignment="2" expression="string(page(),~"#,###~") + '/' + string(pageCount(),~"#,###~")"border="0" color="0" x="659" y="106" height="15" width="80" format="[General]" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="27" y1="126" x2="27" y2="147"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+compute(band=header alignment="2" expression=" left( yyyymm , 4 ) + '년 ' + right( yyyymm , 2 ) + '월 전도금 정산 리스트'"border="0" color="0" x="134" y="42" height="32" width="475" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-18" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" font.underline="1" background.mode="1" background.color="553648127" )
+line(band=header x1="100" y1="126" x2="100" y2="147"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="234" y1="126" x2="234" y2="147"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="740" y1="126" x2="740" y2="147"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+line(band=header x1="1" y1="126" x2="1" y2="147"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="공사계정" border="0" color="0" x="237" y="130" height="15" width="54" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="443" y1="126" x2="443" y2="147"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+column(band=header id=24 alignment="0" tabsequence=32766 border="0" color="0" x="1001" y="100" height="14" width="185" format="[general]" html.valueishtml="0"  name=cm_cost_reqadv_settle_close_tag visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="처리일자" border="0" color="0" x="28" y="130" height="15" width="72" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="0" x="2" y="130" height="15" width="25" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요" border="0" color="0" x="103" y="130" height="15" width="129" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지출" border="0" color="0" x="296" y="130" height="15" width="70" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="1" y1="125" x2="740" y2="125"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="2" background.color="16777215" )
+text(band=header alignment="2" text="부가세" border="0" color="0" x="446" y="130" height="15" width="47" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="0" x="498" y="130" height="15" width="87" html.valueishtml="0"  name=t_13 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지출(면세)" border="0" color="0" x="371" y="130" height="15" width="70" html.valueishtml="0"  name=t_16 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="카드번호" border="0" color="0" x="590" y="130" height="15" width="148" html.valueishtml="0"  name=t_14 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="현장명 : " border="0" color="0" x="41" y="104" height="15" width="59" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=header id=26 alignment="0" tabsequence=32766 border="0" color="0" x="105" y="104" height="15" width="300" format="[general]" html.valueishtml="0"  name=project_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="0" x="235" y="2" height="14" width="58" format="[general]" html.valueishtml="0"  name=const_account visible="1~t if(  const_account = 'IN' , 0, 1 )" dddw.name=dddw_const_acnt dddw.displaycolumn=const_acnt_name dddw.datacolumn=const_acnt_code dddw.percentwidth=150 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="전도금" border="0" color="0" x="235" y="2" height="14" width="58" html.valueishtml="0"  name=t_in visible="1~t if(  const_account = 'IN' , 1, 0 )"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="0" x="28" y="2" height="14" width="72" format="@@@@-@@-@@" html.valueishtml="0"  name=supply_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="getrow()"border="0" color="0" x="2" y="2" height="14" width="25" format="[GENERAL]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="0" x="103" y="2" height="14" width="129" format="[general]" html.valueishtml="0"  name=description visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="0" tabsequence=32766 border="0" color="0" x="590" y="2" height="14" width="148" format="[general]" html.valueishtml="0"  name=card_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="0" x="296" y="2" height="14" width="70" format="#,###" html.valueishtml="0"  name=outgo_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="0" x="371" y="2" height="14" width="70" format="#,###" html.valueishtml="0"  name=outgo_amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="0" x="446" y="2" height="14" width="47" format="#,###" html.valueishtml="0"  name=vat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="0" x="498" y="2" height="14" width="88" format="[general]" html.valueishtml="0"  name=income_amt visible="1~t if(  const_account = 'IN' , 1, 0 )" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(isNull(outgo_amt),0, outgo_amt)  + if(isNull(outgo_amt2),0,outgo_amt2) + if(isNull(vat_amt),0,vat_amt) "border="0" color="0" x="498" y="2" height="14" width="88" format="#,###" html.valueishtml="0"  name=cm_outgo visible="1~t if(  const_account = 'IN' , 0, 1 )"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=trailer.1 alignment="2" text="지출합계" border="0" color="0" x="496" y="9" height="15" width="91" html.valueishtml="0"  name=t_15 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+text(band=trailer.1 alignment="2" text="당월 잔액" border="0" color="0" x="588" y="9" height="15" width="116" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+compute(band=trailer.1 alignment="1" expression="  if( isnull( balance_amt ) , 0 , balance_amt ) + sum( if( isnull( income_amt ) , 0 , income_amt ) for group 1 ) - sum( if( isnull( outgo_amt ) , 0 , outgo_amt ) + if( isnull( outgo_amt2 ) , 0 , outgo_amt2 ) + if( isnull(  vat_amt ) , 0 , vat_amt ) for group 1 ) "border="0" color="0" x="588" y="27" height="16" width="116" format="#,###" html.valueishtml="0"  name=remain_amt visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+compute(band=trailer.1 alignment="1" expression=" sum( if( isnull( outgo_amt ) , 0 , outgo_amt ) + if( isnull( outgo_amt2 ) , 0 , outgo_amt2 ) + if( isnull( vat_amt ) , 0 , vat_amt ) for group 1 ) "border="0" color="0" x="496" y="27" height="16" width="91" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+text(band=trailer.1 alignment="2" text="지출금액" border="0" color="0" x="294" y="9" height="15" width="74" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+compute(band=trailer.1 alignment="1" expression=" sum(  if( isnull( outgo_amt ) , 0 , outgo_amt ) for group 1 ) "border="0" color="0" x="294" y="27" height="16" width="74" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32237528" )
+text(band=trailer.1 alignment="2" text="지출(면세)" border="0" color="0" x="369" y="9" height="15" width="74" html.valueishtml="0"  name=t_17 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+text(band=trailer.1 alignment="2" text="부가세" border="0" color="0" x="444" y="9" height="15" width="51" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+compute(band=trailer.1 alignment="1" expression=" sum(  if( isnull( vat_amt ) , 0 , vat_amt ) for group 1 ) "border="0" color="0" x="444" y="27" height="16" width="51" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32237528" )
+text(band=trailer.1 alignment="2" text="수입금액" border="0" color="0" x="202" y="9" height="15" width="91" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+compute(band=trailer.1 alignment="1" expression=" sum(  if( isnull( outgo_amt2 ) , 0 , outgo_amt2 ) for group 1 ) "border="0" color="0" x="369" y="27" height="16" width="74" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32237528" )
+text(band=trailer.1 alignment="2" text="전월 이월금액" border="0" color="0" x="85" y="9" height="15" width="116" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+compute(band=trailer.1 alignment="1" expression=" sum( if( isnull( income_amt ) , 0, income_amt ) for group 1 ) "border="0" color="0" x="202" y="27" height="16" width="91" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32237528" )
+column(band=trailer.1 id=19 alignment="1" tabsequence=32766 border="0" color="0" x="85" y="27" height="16" width="116" format="#,###" html.valueishtml="0"  name=balance_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="32237528" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

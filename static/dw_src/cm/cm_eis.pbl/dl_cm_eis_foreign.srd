@@ -1,0 +1,58 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=24 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=comp_cd dbname="cm_eis_foreign.comp_cd" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=cm_ym dbname="cm_eis_foreign.cm_ym" )
+ column=(type=char(100) update=yes updatewhereclause=yes key=yes name=eis_div dbname="cm_eis_foreign.eis_div" values="사업총괄	0/공사총괄	1/" )
+ column=(type=number update=yes updatewhereclause=yes name=cont_amt dbname="cm_eis_foreign.cont_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=sal_amt dbname="cm_eis_foreign.sal_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=cost_amt dbname="cm_eis_foreign.cost_amt" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=rate dbname="cm_eis_foreign.rate" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=foreign_div dbname="cm_eis_foreign.foreign_div" values="베트남	01/필리핀	02/	/" )
+ retrieve="SELECT COMP_CD AS COMP_CD
+      ,CM_YM AS CM_YM
+      ,EIS_DIV AS EIS_DIV
+      ,CONT_AMT AS CONT_AMT
+      ,SAL_AMT AS SAL_AMT
+      ,COST_AMT AS COST_AMT
+      ,RATE AS RATE
+      ,FOREIGN_DIV AS FOREIGN_DIV
+  FROM CM_EIS_FOREIGN
+ WHERE COMP_CD = :as_comp
+   AND SUBSTR(CM_YM,1,4) = :as_year
+   AND EIS_DIV = :as_eis_div
+ ORDER BY CM_YM DESC, FOREIGN_DIV " update="CM_EIS_FOREIGN" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_year", string),("as_eis_div", number)) )
+text(band=header alignment="2" text="원가율실적" border="0" color="33554432" x="598" y="3" height="19" width="73" html.valueishtml="0"  name=rate_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="66" y="3" height="19" width="58" html.valueishtml="0"  name=cm_ym_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="매출실적" border="0" color="33554432" x="369" y="3" height="19" width="110" html.valueishtml="0"  name=sal_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="원가실적" border="0" color="33554432" x="481" y="3" height="19" width="115" html.valueishtml="0"  name=cost_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="126" y="3" height="19" width="72" html.valueishtml="0"  name=eis_div_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지역구분" border="0" color="33554432" x="200" y="3" height="19" width="54" html.valueishtml="0"  name=foreign_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Comp Cd" border="0" color="33554432" x="2" y="3" height="19" width="62" html.valueishtml="0"  name=comp_cd_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="66" y="4" height="19" width="58" format="[general]" html.valueishtml="0"  name=cm_ym visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=60 border="0" color="33554432" x="598" y="4" height="19" width="73" format="#,##0.000" html.valueishtml="0"  name=rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=40 border="0" color="33554432" x="369" y="4" height="19" width="110" format="#,##0" html.valueishtml="0"  name=sal_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=50 border="0" color="33554432" x="481" y="4" height="19" width="115" format="#,##0" html.valueishtml="0"  name=cost_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="126" y="4" height="19" width="72" format="[general]" html.valueishtml="0"  name=eis_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=20 border="0" color="33554432" x="200" y="4" height="19" width="54" format="[general]" html.valueishtml="0"  name=foreign_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="4" height="19" width="62" format="[general]" html.valueishtml="0"  name=comp_cd visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(SAL_AMT)"border="0" color="33554432" x="369" y="5" height="14" width="110" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(COST_AMT)"border="0" color="33554432" x="481" y="5" height="14" width="115" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="COMPUTE_3/COMPUTE_2*100"border="0" color="33554432" x="598" y="5" height="14" width="73" format="#,##0.000" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수주실적" border="0" color="33554432" x="256" y="3" height="19" width="111" html.valueishtml="0"  name=cont_amt_t visible="1~tif(eis_div='1',1,0)"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=30 border="0" color="33554432" x="256" y="4" height="19" width="111" format="#,##0" html.valueishtml="0"  name=cont_amt visible="1~tif(eis_div='1',1,0)" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(CONT_AMT)"border="0" color="33554432" x="256" y="5" height="14" width="111" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1~tif(eis_div='1',1,0)"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

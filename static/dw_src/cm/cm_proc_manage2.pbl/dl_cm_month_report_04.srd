@@ -1,0 +1,80 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=29 color="536870912" )
+detail(height=25 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_month_r_detail3.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_month_r_detail3.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=ins_yymm dbname="cm_month_r_detail3.ins_yymm" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="cm_month_r_detail3.const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="cm_exec_const.const_name" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=work_qty dbname="cm_month_r_detail3.work_qty" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tot_qty dbname="cm_month_r_detail3.tot_qty" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=ext_rate dbname="cm_month_r_detail3.ext_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=cur_rate dbname="cm_month_r_detail3.cur_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tot_rate dbname="cm_month_r_detail3.tot_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=cur_gong_rate dbname="cm_month_r_detail3.cur_gong_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tot_gong_rate dbname="cm_month_r_detail3.tot_gong_rate" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.INS_YYMM,
+       A.CONST_CODE,
+       B.CONST_NAME,
+       A.WORK_QTY,
+       A.TOT_QTY,
+       A.EXT_RATE,
+       A.CUR_RATE,
+       A.TOT_RATE,
+       A.CUR_GONG_RATE,
+       A.TOT_GONG_RATE
+  FROM CM_MONTH_R_DETAIL3 A LEFT JOIN CM_EXEC_CONST B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                                  AND A.CONST_CODE   = B.CONST_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.INS_YYMM     = :AS_INS_YYMM 
+ORDER BY A.CONST_CODE " update="CM_MONTH_R_DETAIL3" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_INS_YYMM", string)) )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="2" y="9" height="14" width="54" html.valueishtml="0"  name=cm_month_r_detail3_const_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="58" y="9" height="14" width="155" html.valueishtml="0"  name=cm_exec_const_const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금월공수" border="0" color="33554432" x="215" y="9" height="14" width="76" html.valueishtml="0"  name=cm_month_r_detail3_work_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계공수" border="0" color="33554432" x="293" y="9" height="14" width="72" html.valueishtml="0"  name=cm_month_r_detail3_tot_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보할율" border="0" color="33554432" x="367" y="9" height="14" width="62" html.valueishtml="0"  name=cm_month_r_detail3_ext_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금월진척" border="0" color="33554432" x="431" y="9" height="14" width="67" html.valueishtml="0"  name=cm_month_r_detail3_cur_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계진척" border="0" color="33554432" x="500" y="9" height="14" width="67" html.valueishtml="0"  name=cm_month_r_detail3_tot_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회사구분" border="0" color="33554432" x="714" y="9" height="14" width="70" html.valueishtml="0"  name=cm_month_r_detail3_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="786" y="9" height="14" width="69" html.valueishtml="0"  name=cm_month_r_detail3_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="등록년월" border="0" color="33554432" x="857" y="9" height="14" width="71" html.valueishtml="0"  name=cm_month_r_detail3_ins_yymm_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월공정율" border="0" color="33554432" x="569" y="9" height="14" width="73" html.valueishtml="0"  name=cm_month_r_detail3_cur_gong_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계공정율" border="0" color="33554432" x="644" y="9" height="14" width="68" html.valueishtml="0"  name=cm_month_r_detail3_tot_gong_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="6" height="16" width="54" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="58" y="6" height="16" width="155" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="714" y="6" height="16" width="70" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="786" y="6" height="16" width="69" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="215" y="6" height="16" width="76" format="#,##0.00" html.valueishtml="0"  name=work_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="293" y="6" height="16" width="72" format="#,##0.00" html.valueishtml="0"  name=tot_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=10 border="0" color="33554432" x="367" y="6" height="16" width="62" format="[general]" html.valueishtml="0"  name=ext_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=20 border="0" color="33554432" x="431" y="6" height="16" width="67" format="#,##0.00" html.valueishtml="0"  name=cur_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=30 border="0" color="33554432" x="500" y="6" height="16" width="67" format="#,##0.00" html.valueishtml="0"  name=tot_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="857" y="6" height="16" width="71" format="[general]" html.valueishtml="0"  name=ins_yymm visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="569" y="6" height="16" width="73" format="#,##0.00" html.valueishtml="0"  name=cur_gong_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="644" y="6" height="16" width="68" format="#,##0.00" html.valueishtml="0"  name=tot_gong_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(work_qty for all)"border="0" color="33554432" x="215" y="7" height="15" width="76" format="#,##0.00" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(tot_qty for all)"border="0" color="33554432" x="293" y="7" height="15" width="72" format="#,##0.00" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(ext_rate for all)"border="0" color="33554432" x="367" y="7" height="15" width="62" format="#,##0.00" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(cur_rate for all)"border="0" color="33554432" x="431" y="7" height="15" width="67" format="#,##0.00" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(tot_rate for all)"border="0" color="33554432" x="500" y="7" height="15" width="67" format="#,##0.00" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(cur_gong_rate for all)"border="0" color="33554432" x="569" y="7" height="15" width="73" format="#,##0.00" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(tot_gong_rate for all)"border="0" color="33554432" x="644" y="7" height="15" width="68" format="#,##0.00" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

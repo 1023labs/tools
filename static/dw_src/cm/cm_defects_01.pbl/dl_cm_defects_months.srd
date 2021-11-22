@@ -1,0 +1,64 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes key=yes name=company_code dbname="cm_defects_months_d.company_code" dbalias=".company_code" )
+ column=(type=char(6) updatewhereclause=yes key=yes name=yyyymm dbname="cm_defects_months_d.yyyymm" dbalias=".yyyymm" )
+ column=(type=char(20) updatewhereclause=yes key=yes name=gongjong dbname="cm_defects_months_d.gongjong" dbalias=".gongjong" )
+ column=(type=char(100) updatewhereclause=yes name=gongjong_name dbname="cm_defects_months_d.gongjong_name" dbalias=".gongjong_name" )
+ column=(type=decimal(3) updatewhereclause=yes name=mat_amt dbname="cm_defects_months_d.mat_amt" dbalias=".mat_amt" )
+ column=(type=decimal(3) updatewhereclause=yes name=lab_amt dbname="cm_defects_months_d.lab_amt" dbalias=".lab_amt" )
+ column=(type=decimal(3) updatewhereclause=yes name=exp_amt dbname="cm_defects_months_d.exp_amt" dbalias=".exp_amt" )
+ column=(type=decimal(3) updatewhereclause=yes name=rew_amt dbname="cm_defects_months_d.rew_amt" dbalias=".rew_amt" )
+ column=(type=decimal(3) updatewhereclause=yes name=lab_cnt dbname="cm_defects_months_d.lab_cnt" dbalias=".lab_cnt" )
+ column=(type=char(256) updatewhereclause=yes name=remarks dbname="cm_defects_months_d.remarks" dbalias=".remarks" )
+ retrieve="SELECT COMPANY_CODE, 
+       YYYYMM, 
+       GONGJONG, 
+       GONGJONG_NAME,
+       MAT_AMT,
+       LAB_AMT,
+       EXP_AMT,
+       REW_AMT,
+       LAB_CNT,
+       REMARKS
+  FROM CM_DEFECTS_MONTHS_D 
+ WHERE COMPANY_CODE = :as_comp
+   AND YYYYMM       = :as_yymm" update="CM_DEFECTS_MONTHS_D" updatewhere=1 updatekeyinplace=yes arguments=(("as_comp", string),("as_yymm", string)) )
+column(band=detail id=3 alignment="2" tabsequence=0 border="0" color="33554432" x="3" y="1" height="19" width="68" html.valueishtml="0"  name=gongjong visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="0" tabsequence=0 border="0" color="33554432" x="74" y="1" height="19" width="171" html.valueishtml="0"  name=gongjong_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="1" tabsequence=0 border="0" color="33554432" x="760" y="1" height="19" width="65" format="#,##0.0" html.valueishtml="0"  name=lab_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="2" tabsequence=0 border="0" color="33554432" x="828" y="1" height="19" width="181" html.valueishtml="0"  name=remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="1" tabsequence=0 border="0" color="33554432" x="248" y="1" height="19" width="97" format="#,##0" html.valueishtml="0"  name=mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=0 border="0" color="33554432" x="348" y="1" height="19" width="100" format="#,##0" html.valueishtml="0"  name=lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="1" tabsequence=0 border="0" color="33554432" x="451" y="1" height="19" width="92" format="#,##0" html.valueishtml="0"  name=exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="1" tabsequence=0 border="0" color="33554432" x="546" y="1" height="19" width="94" format="#,##0" html.valueishtml="0"  name=rew_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression=" mat_amt + lab_amt + exp_amt + rew_amt "border="0" color="33554432" x="642" y="0" height="19" width="116" format="#,##0" html.valueishtml="0"  name=total_amt visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="2" y="11" height="14" width="69" html.valueishtml="0"  name=gongjong_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="73" y="11" height="14" width="172" html.valueishtml="0"  name=gongjong_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="재료비" border="0" color="33554432" x="247" y="11" height="14" width="98" html.valueishtml="0"  name=mat_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="347" y="11" height="14" width="101" html.valueishtml="0"  name=lab_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="450" y="11" height="14" width="93" html.valueishtml="0"  name=exp_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="투입공수" border="0" color="33554432" x="759" y="11" height="14" width="66" html.valueishtml="0"  name=lab_cnt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="827" y="11" height="14" width="182" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보상비" border="0" color="33554432" x="545" y="11" height="14" width="95" html.valueishtml="0"  name=rew_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="642" y="11" height="14" width="116" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(mat_amt)"border="0" color="33554432" x="247" y="4" height="14" width="98" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(lab_amt)"border="0" color="33554432" x="347" y="4" height="14" width="101" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(exp_amt)"border="0" color="33554432" x="450" y="4" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(rew_amt)"border="0" color="33554432" x="545" y="4" height="14" width="95" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(total_amt)"border="0" color="33554432" x="642" y="4" height="14" width="116" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(lab_cnt)"border="0" color="33554432" x="760" y="4" height="14" width="65" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

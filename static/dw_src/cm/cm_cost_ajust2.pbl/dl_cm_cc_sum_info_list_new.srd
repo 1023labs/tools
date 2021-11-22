@@ -1,0 +1,112 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=21 color="553648127" )
+detail(height=18 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(6) updatewhereclause=yes name=yyyymm dbname="yyyymm" )
+ column=(type=number updatewhereclause=yes name=amt6 dbname="amt6" )
+ column=(type=number updatewhereclause=yes name=amt7 dbname="amt7" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=pm_name dbname="pm_name" )
+ retrieve="  SELECT A.PROJ_CODE
+       , A.PROJ_NAME
+       , TO_CHAR(TO_DATE(:AS_CC_YM, 'YYYYMM'), 'YYYYMM')               YYYYMM
+       , SUM(CASE WHEN B.CC_YM = :AS_CC_YM THEN B.COST_AMT ELSE 0 END) AMT6
+       , SUM(B.COST_AMT)                                               AMT7
+       , P.PM_EMPNO 
+       , P.PM_NAME 
+    FROM (SELECT COMPANY_CODE
+               , PROJ_CODE
+               , PROJ_NAME
+            FROM VW_C_CM_USER_PROJECT
+           WHERE COMPANY_CODE = :AS_COMP_CODE
+             AND PROJ_CODE LIKE :AS_PROJ_CODE
+             AND USER_ID      = :AS_USER_ID
+             AND PROJECT_TAG  = '1'
+          UNION
+            SELECT A.COMPANY_CODE
+                 , A.PROJ_CODE
+                 , B.PROJ_NAME
+              FROM (SELECT COMPANY_CODE  COMPANY_CODE
+                         , DEPT_CODE     PROJ_CODE
+                         , COST_TOT      COST_AMT
+                      FROM CM_CC_SUM
+                     WHERE COMPANY_CODE = :AS_COMP_CODE
+                       AND CC_YM BETWEEN SUBSTR(:AS_CC_YM, 1, 4) AND :AS_CC_YM
+                       AND DEPT_CODE LIKE :AS_PROJ_CODE
+                       AND CDEPT_CODE   = :AS_CDEPT_CODE
+                    UNION ALL
+                    SELECT COMPANY_CODE
+                         , PROJ_CODE
+                         , SUPPLAY_AMT COST_AMT
+                      FROM CM_COST_AJUST_CLOSE
+                     WHERE COMPANY_CODE = :AS_COMP_CODE
+                       AND YYYYMM BETWEEN SUBSTR(:AS_CC_YM, 1, 4) AND :AS_CC_YM
+                       AND PROJ_CODE LIKE :AS_PROJ_CODE) A INNER JOIN VW_C_CM_USER_PROJECT B
+                                                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                  AND B.USER_ID      = :AS_USER_ID
+                                                                  AND B.PROJ_CODE LIKE :AS_PROJ_CODE
+          GROUP BY A.COMPANY_CODE, A.PROJ_CODE, B.PROJ_NAME
+          HAVING SUM(A.COST_AMT) <> 0) A LEFT JOIN (SELECT COMPANY_CODE
+                                                         , DEPT_CODE    PROJ_CODE
+                                                         , CC_YM
+                                                         , COST_TOT     COST_AMT
+                                                      FROM CM_CC_SUM
+                                                     WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                       AND CC_YM       <= :AS_CC_YM
+                                                       AND CDEPT_CODE   = :AS_CDEPT_CODE
+                                                       AND DEPT_CODE LIKE :AS_PROJ_CODE
+                                                       AND COST_ACNT_CODE IS NOT NULL
+                                                    UNION ALL
+                                                    SELECT COMPANY_CODE
+                                                         , PROJ_CODE
+                                                         , YYYYMM
+                                                         , SUPPLAY_AMT
+                                                      FROM CM_COST_AJUST_CLOSE
+                                                     WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                       AND YYYYMM      <= :AS_CC_YM
+                                                       AND PROJ_CODE LIKE :AS_PROJ_CODE
+                                                       AND COST_ACNT_CODE IS NOT NULL) B
+                                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                                               AND A.PROJ_CODE    = B.PROJ_CODE
+             LEFT JOIN ( SELECT A.COMPANY_CODE, A.PROJ_CODE, A.PROJ_NAME, A.MANAGE_TYPE, A.PM_EMPNO, B.EMP_NAME PM_NAME
+                           FROM SM_CODE_PROJECT A LEFT JOIN HR_PERS_MASTER B
+                                                         ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PM_EMPNO = B.EMP_NO ) P
+                    ON A.COMPANY_CODE = P.COMPANY_CODE AND A.PROJ_CODE = P.PROJ_CODE
+WHERE P.PM_EMPNO LIKE :AS_EMPNO
+GROUP BY A.PROJ_CODE, A.PROJ_NAME, P.PM_EMPNO, P.PM_NAME 
+HAVING SUM(B.COST_AMT) <> 0
+ORDER BY P.PM_NAME, A.PROJ_NAME
+
+" arguments=(("AS_COMP_CODE", string),("AS_CC_YM", string),("AS_PROJ_CODE", stringlist),("AS_CDEPT_CODE", string),("AS_USER_ID", string),("AS_EMPNO", string)) )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="190" y="2" height="14" width="170" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월금액" border="0" color="33554432" x="362" y="2" height="14" width="92" html.valueishtml="0"  name=amt6_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="46" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계금액" border="0" color="33554432" x="456" y="2" height="14" width="93" html.valueishtml="0"  name=amt7_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="127" y="2" height="14" width="61" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM 명" border="0" color="33554432" x="50" y="2" height="14" width="75" html.valueishtml="0"  name=pm_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="3" height="14" width="46" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="190" y="3" height="14" width="170" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="127" y="3" height="14" width="61" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="362" y="3" height="14" width="92" format="#,###" html.valueishtml="0"  name=amt6 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="456" y="3" height="14" width="93" format="#,###" html.valueishtml="0"  name=amt7 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="50" y="1" height="14" width="75" format="[general]" html.valueishtml="0"  name=pm_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(amt7 for all)"border="0" color="0" x="456" y="6" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(amt6 for all)"border="0" color="0" x="362" y="6" height="14" width="92" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합계" border="0" color="33554432" x="190" y="6" height="14" width="170" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="pm_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

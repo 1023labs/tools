@@ -1,0 +1,47 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_est_iwlist.est_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=iw_code dbname="em_est_iwlist.iw_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=iw_name dbname="em_est_iwlist.iw_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=iw_size dbname="em_est_iwlist.iw_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=iw_unit dbname="em_est_iwlist.iw_unit" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=mat_amt dbname="em_est_iwlist.mat_amt" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=lab_amt dbname="em_est_iwlist.lab_amt" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=exp_amt dbname="em_est_iwlist.exp_amt" )
+ retrieve="  select a.est_code,
+         a.iw_code,
+         a.iw_name,
+         a.iw_size,
+         a.iw_unit,
+         a.mat_amt,
+         a.lab_amt,
+         a.exp_amt
+    from em_est_iwlist a
+   where est_code = :as_estcode
+     and 0 = (select count(b.est_code)
+                from em_est_iwitem b
+               where b.est_code = a.est_code
+                 and b.iw_code = a.iw_code)
+   order by iw_code" update="em_est_iwlist" updatewhere=1 updatekeyinplace=no arguments=(("as_estcode", string)) )
+text(band=header alignment="2" text="경비(내역)" border="0" color="33554432" x="582" y="4" height="14" width="85" html.valueishtml="0"  name=exp_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="명칭" border="0" color="33554432" x="2" y="4" height="14" width="189" html.valueishtml="0"  name=iw_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="193" y="4" height="14" width="157" html.valueishtml="0"  name=iw_size_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="352" y="4" height="14" width="54" html.valueishtml="0"  name=iw_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재비(내역)" border="0" color="33554432" x="408" y="4" height="14" width="85" html.valueishtml="0"  name=mat_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비(내역)" border="0" color="33554432" x="495" y="4" height="14" width="85" html.valueishtml="0"  name=lab_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="189" format="[general]" html.valueishtml="0"  name=iw_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="193" y="2" height="14" width="157" format="[general]" html.valueishtml="0"  name=iw_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="352" y="2" height="14" width="54" format="[general]" html.valueishtml="0"  name=iw_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="408" y="2" height="14" width="85" format="~t'#,###' + if ( mat_amt = truncate ( mat_amt, 0 ), '',  '.####' )" html.valueishtml="0"  name=mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="495" y="2" height="14" width="85" format="~t'#,###' + if ( lab_amt = truncate ( lab_amt, 0 ), '',  '.####' )" html.valueishtml="0"  name=lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="582" y="2" height="14" width="85" format="~t'#,###' + if ( exp_amt = truncate ( exp_amt, 0 ), '',  '.####' )" html.valueishtml="0"  name=exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

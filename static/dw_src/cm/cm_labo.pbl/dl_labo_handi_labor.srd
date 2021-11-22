@@ -1,0 +1,92 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=1236 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=0 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_labo_handicap.company_code" dbalias="A.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_labo_handicap.labor_code" dbalias="A.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" dbalias="B.labor_name" )
+ column=(type=char(14) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=char(8) updatewhereclause=yes name=join_date dbname="cm_labo_master.join_date" dbalias="B.join_date" )
+ column=(type=char(8) updatewhereclause=yes name=handi_date dbname="cm_labo_handicap.handi_date" dbalias="A.handi_date" )
+ column=(type=char(4) updatewhereclause=yes name=handi_type dbname="cm_labo_handicap.handi_type" dbalias="A.handi_type" )
+ column=(type=char(4) updatewhereclause=yes name=handi_level dbname="cm_labo_handicap.handi_level" dbalias="A.handi_level" )
+ column=(type=char(2) updatewhereclause=yes name=handi_yn dbname="cm_labo_handicap.handi_yn" dbalias="A.handi_yn" values="	Y/	N/	0" )
+ column=(type=char(500) updatewhereclause=yes name=remarks dbname="cm_labo_handicap.remarks" dbalias="A.remarks" )
+ column=(type=char(352) updatewhereclause=yes name=card1_path dbname="card1_path" )
+ column=(type=char(352) updatewhereclause=yes name=card2_path dbname="card2_path" )
+ column=(type=char(352) updatewhereclause=yes name=report_path dbname="report_path" )
+ column=(type=char(100) updatewhereclause=yes name=handi_card dbname="cm_labo_handicap.handi_card" dbalias="A.handi_card" )
+ column=(type=char(100) updatewhereclause=yes name=handi_card2 dbname="cm_labo_handicap.handi_card2" dbalias="A.handi_card2" )
+ column=(type=char(100) updatewhereclause=yes name=handi_report dbname="cm_labo_handicap.handi_report" dbalias="A.handi_report" )
+ retrieve=" SELECT A.COMPANY_CODE, 
+        A.LABOR_CODE, 
+        B.LABOR_NAME, 
+        B.RRN_PRE||'-'||B.RRN_POST AS JUMIN_NO,
+        B.JOIN_DATE,
+        A.HANDI_DATE, 
+        A.HANDI_TYPE, 
+        A.HANDI_LEVEL, 
+        A.HANDI_YN, 
+        A.REMARKS,
+        trim('/'|| C.DNAME  ||'/'|| A.HANDI_CARD) as CARD1_PATH,
+        trim('/'|| C.DNAME  ||'/'|| A.HANDI_CARD2) as CARD2_PATH,
+        trim('/'|| C.DNAME  ||'/'|| A.HANDI_REPORT) as REPORT_PATH,
+        A.HANDI_CARD,
+        A.HANDI_CARD2,
+        A.HANDI_REPORT
+   FROM CM_LABO_HANDICAP A INNER JOIN CM_LABO_MASTER B 
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                  AND A.LABOR_CODE = B.LABOR_CODE 
+                            LEFT JOIN SM_COMCODE_D C
+                                   ON C.HCODE = 'HANDIPIC'
+  WHERE A.COMPANY_CODE = :as_comp 
+    AND A.LABOR_CODE = :as_labor_code" arguments=(("as_comp", string),("as_labor_code", string)) )
+rectangle(band=background x="2098" y="8" height="276" width="462"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="955" y="8" height="276" width="462"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="9" y="8" height="372" width="462"  name=r_6  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="32571376"  background.mode="2" background.color="33554432" )
+column(band=header id=14 alignment="0" tabsequence=0 border="0" color="33554432" x="3195" y="56" height="56" width="416" html.valueishtml="0"  name=handi_card visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="480" y="296" height="68" width="2679" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=500 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=15 alignment="0" tabsequence=0 border="0" color="33554432" x="3195" y="160" height="56" width="416" html.valueishtml="0"  name=handi_card2 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=16 alignment="0" tabsequence=0 border="0" color="33554432" x="3195" y="572" height="56" width="416" html.valueishtml="0"  name=handi_report visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="9" y1="372" x2="3163" y2="372"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="9" y1="280" x2="3163" y2="280"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="9" y1="192" x2="3163" y2="192"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="9" y1="104" x2="3163" y2="104"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="5" pen.color="29409472"  background.mode="2" background.color="33554431" )
+column(band=header id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="480" y="40" height="56" width="453" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="1417" y="40" height="56" width="663" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="2555" y="40" height="56" width="603" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" edit.limit=14 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="2555" y="128" height="56" width="603" format="[general]" html.valueishtml="0"  name=handi_level visible="1" dddw.name=dddw_ref_code dddw.displaycolumn=ref_name dddw.datacolumn=ref_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="1417" y="128" height="56" width="663" format="[general]" html.valueishtml="0"  name=handi_type visible="1" dddw.name=dddw_ref_code dddw.displaycolumn=ref_name dddw.datacolumn=ref_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="480" y="128" height="56" width="453" format="[general]" html.valueishtml="0"  name=join_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="480" y="216" height="56" width="453" format="[general]" html.valueishtml="0"  name=handi_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="1682" y="216" height="56" width="142" format="[general]" html.valueishtml="0"  name=handi_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.other="0" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="장애인등록증" border="1" color="33554432" x="2203" y="624" height="56" width="425" html.valueishtml="0"  name=report_path_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="복지카드[뒤]" border="1" color="33554432" x="1120" y="624" height="56" width="425" html.valueishtml="0"  name=card2_path_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="복지카드[앞]" border="1" color="33554432" x="27" y="624" height="56" width="425" html.valueishtml="0"  name=card1_path_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=header filename="/img/cm/labo/noimage.jpg" x="32" y="712" height="428" width="978" border="6"  name=path_card1 visible="1" )
+bitmap(band=header filename="/img/cm/labo/noimage.jpg" x="1115" y="712" height="428" width="978" border="6"  name=path_card2 visible="1" )
+bitmap(band=header filename="/img/cm/labo/noimage.jpg" x="2208" y="712" height="428" width="978" border="6"  name=path_report visible="1" )
+line(band=background x1="9" y1="4" x2="3163" y2="4"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="9" y1="8" x2="3163" y2="8"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="5" pen.color="27618874"  background.mode="2" background.color="33554431" )
+text(band=header alignment="1" text="사번" border="0" color="8388608" x="27" y="40" height="56" width="425" html.valueishtml="0"  name=cm_labo_handicap_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="입사일" border="0" color="8388608" x="27" y="128" height="56" width="425" html.valueishtml="0"  name=cm_labo_master_join_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="장애인정일" border="0" color="8388608" x="27" y="216" height="56" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="비고" border="0" color="8388608" x="27" y="296" height="68" width="425" html.valueishtml="0"  name=cm_labo_handicap_remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="중증여부" border="0" color="8388608" x="974" y="216" height="56" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="장애유형" border="0" color="8388608" x="974" y="128" height="48" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_type_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="성명" border="0" color="8388608" x="974" y="40" height="56" width="425" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="주민등록번호" border="0" color="8388608" x="2112" y="40" height="48" width="425" html.valueishtml="0"  name=jumin_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="장애등급" border="0" color="8388608" x="2112" y="128" height="48" width="425" html.valueishtml="0"  name=cm_labo_handicap_handi_level_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

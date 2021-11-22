@@ -1,0 +1,52 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_family.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_family.labor_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_labo_family.seq" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=relation_div dbname="cm_labo_family.relation_div" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=family_name dbname="cm_labo_family.family_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=rrn_pre dbname="cm_labo_family.rrn_pre" )
+ column=(type=char(7) update=yes updatewhereclause=yes name=rrn_post dbname="cm_labo_family.rrn_post" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=school_div dbname="cm_labo_family.school_div" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=job dbname="cm_labo_family.job" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=together_yn dbname="cm_labo_family.together_yn" values="동거	1/비동거	2/" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.SEQ, 
+         A.RELATION_DIV, 
+         A.FAMILY_NAME, 
+         A.RRN_PRE, 
+         A.RRN_POST, 
+         A.SCHOOL_DIV, 
+         A.JOB, 
+         A.TOGETHER_YN	
+    FROM CM_LABO_FAMILY A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.LABOR_CODE = :as_labor
+ORDER BY SEQ ASC" update="CM_LABO_FAMILY" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_labor", string)) )
+text(band=header alignment="2" text="관계" border="0" color="33554432" x="33" y="2" height="14" width="72" html.valueishtml="0"  name=relation_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="107" y="2" height="14" width="68" html.valueishtml="0"  name=family_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="학력" border="0" color="33554432" x="289" y="2" height="14" width="94" html.valueishtml="0"  name=school_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무처" border="0" color="33554432" x="385" y="2" height="14" width="147" html.valueishtml="0"  name=job_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="동거유무" border="0" color="33554432" x="534" y="2" height="14" width="59" html.valueishtml="0"  name=together_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="주민등" border="0" color="33554432" x="177" y="2" height="14" width="54" html.valueishtml="0"  name=rrn_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="록번호" border="0" color="33554432" x="233" y="2" height="14" width="54" html.valueishtml="0"  name=rrn_post_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=10 border="0" color="33554432" x="33" y="2" height="14" width="72" format="[general]" html.valueishtml="0"  name=relation_div visible="1" dddw.name=dddw_family_relation dddw.displaycolumn=relation_name dddw.datacolumn=relation_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=20 border="0" color="33554432" x="107" y="2" height="14" width="68" format="[general]" html.valueishtml="0"  name=family_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=50 border="0" color="33554432" x="289" y="2" height="14" width="94" format="[general]" html.valueishtml="0"  name=school_div visible="1" dddw.name=dddw_school dddw.displaycolumn=school_car_name dddw.datacolumn=school_car_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=60 border="0" color="33554432" x="385" y="2" height="14" width="147" format="[general]" html.valueishtml="0"  name=job visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=70 border="0" color="33554432" x="534" y="2" height="14" width="59" format="[general]" html.valueishtml="0"  name=together_yn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=30 border="0" color="33554432" x="177" y="2" height="14" width="54" format="@@@@@@-" html.valueishtml="0"  name=rrn_pre visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=40 border="0" color="33554432" x="233" y="2" height="14" width="54" format="@@@@@@@" html.valueishtml="0"  name=rrn_post visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

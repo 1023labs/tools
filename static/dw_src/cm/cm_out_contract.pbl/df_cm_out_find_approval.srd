@@ -1,0 +1,44 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 )
+header(height=128 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(6) updatewhereclause=yes name=ndocno dbname="ndocno" )
+ column=(type=decimal(0) updatewhereclause=yes name=napprono dbname="approval.napprono" )
+ column=(type=char(100) updatewhereclause=yes name=strtitle dbname="approval.strtitle" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(8) updatewhereclause=yes name=ins_date dbname="ins_date" )
+ retrieve="SELECT DECODE(A.NDOCNO,'19','외주공사품의','163','컨설팅품의','168','변경계약품의') AS NDOCNO,
+       A.NAPPRONO,
+       A.STRTITLE,
+       B.EMP_NAME,
+       TO_CHAR(A.DATEDAY,'YYYYMMDD') INS_DATE
+  FROM SEBOGW.APPROVAL A LEFT JOIN HR_PERS_MASTER B
+                                ON A.STRPERSONNO = B.EMP_NO
+ WHERE A.NDOCNO IN('19','163','168')
+   AND A.ISREPORTEND = 'Y'
+   AND A.ISREPORTPROGRESS = '2'
+   AND A.STRDEPARTMENTNO = :AS_PROJ_CODE
+ ORDER BY A.DATEDAY DESC" arguments=(("AS_PROJ_CODE", string)) )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="14" y="8" height="68" width="407" format="[general]" html.valueishtml="0"  name=ndocno visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="434" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=napprono visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="777" y="8" height="68" width="1522" format="[general]" html.valueishtml="0"  name=strtitle visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="2313" y="8" height="68" width="576" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="2903" y="8" height="68" width="526" format="[general]" html.valueishtml="0"  name=ins_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="문서구분" border="0" color="33554432" x="14" y="36" height="56" width="407" html.valueishtml="0"  name=ndocno_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="문서번호" border="0" color="33554432" x="434" y="36" height="56" width="329" html.valueishtml="0"  name=approval_napprono_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="제목" border="0" color="33554432" x="777" y="36" height="56" width="1522" html.valueishtml="0"  name=approval_strtitle_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="작성자" border="0" color="33554432" x="2313" y="36" height="56" width="576" html.valueishtml="0"  name=hr_pers_master_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="상신일자" border="0" color="33554432" x="2903" y="36" height="56" width="526" html.valueishtml="0"  name=ins_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

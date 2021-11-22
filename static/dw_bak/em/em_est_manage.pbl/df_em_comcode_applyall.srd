@@ -1,0 +1,60 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=dcode_1 dbname="vw_em_comcode_applymethod.dcode_1" )
+ column=(type=char(250) updatewhereclause=yes name=dname_1 dbname="vw_em_comcode_applymethod.dname_1" )
+ column=(type=char(250) updatewhereclause=yes name=dname1_1 dbname="vw_em_comcode_applymethod.dname1_1" )
+ column=(type=char(250) updatewhereclause=yes name=dname2_1 dbname="vw_em_comcode_applymethod.dname2_1" )
+ column=(type=decimal(3) updatewhereclause=yes name=dvalue_1 dbname="vw_em_comcode_applymethod.dvalue_1" )
+ column=(type=char(250) updatewhereclause=yes name=dvalue2_1 dbname="vw_em_comcode_applymethod.dvalue2_1" )
+ column=(type=char(20) updatewhereclause=yes name=relate_code1_1 dbname="vw_em_comcode_applymethod.relate_code1_1" )
+ column=(type=char(20) updatewhereclause=yes name=relate_code2_1 dbname="vw_em_comcode_applymethod.relate_code2_1" )
+ column=(type=char(50) updatewhereclause=yes name=dcode_2 dbname="vw_em_comcode_applymaker.dcode_2" )
+ column=(type=char(250) updatewhereclause=yes name=dname_2 dbname="vw_em_comcode_applymaker.dname_2" )
+ column=(type=char(250) updatewhereclause=yes name=dname1_2 dbname="vw_em_comcode_applymaker.dname1_2" )
+ column=(type=char(250) updatewhereclause=yes name=dname2_2 dbname="vw_em_comcode_applymaker.dname2_2" )
+ column=(type=decimal(3) updatewhereclause=yes name=dvalue_2 dbname="vw_em_comcode_applymaker.dvalue_2" )
+ column=(type=char(250) updatewhereclause=yes name=dvalue2_2 dbname="vw_em_comcode_applymaker.dvalue2_2" )
+ column=(type=char(20) updatewhereclause=yes name=relate_code1_2 dbname="vw_em_comcode_applymaker.relate_code1_2" )
+ column=(type=char(20) updatewhereclause=yes name=relate_code2_2 dbname="vw_em_comcode_applymaker.relate_code2_2" )
+ retrieve="  SELECT B.DCODE DCODE_1,
+         B.DNAME DNAME_1,
+         B.DNAME1 DNAME1_1,
+         B.DNAME2 DNAME2_1,
+         B.DVALUE DVALUE_1,
+         B.DVALUE2 DVALUE2_1,
+         B.RELATE_CODE1 RELATE_CODE1_1,
+         B.RELATE_CODE2 RELATE_CODE2_1,
+         C.DCODE DCODE_2,
+         C.DNAME DNAME_2,
+         C.DNAME1 DNAME1_2,
+         C.DNAME2 DNAME2_2,
+         C.DVALUE DVALUE_2,
+         C.DVALUE2 DVALUE2_2,
+         C.RELATE_CODE1 RELATE_CODE1_2,
+         C.RELATE_CODE2 RELATE_CODE2_2
+    FROM SM_CODE_MATERIAL_PLAB A JOIN VW_EM_COMCODE_APPLYMETHOD B
+                                   ON A.SPTEXT1 = B.DCODE
+                                 JOIN VW_EM_COMCODE_APPLYMAKER C
+                                   ON A.SPTEXT2 = C.DCODE
+     AND A.ITEM_CODE = :as_code
+     AND ((:as_chk = '1' AND (B.DCODE LIKE '%'||:as_find||'%' OR B.DNAME LIKE '%'||:as_find||'%'))
+      OR (:as_chk = '2' AND (C.DCODE LIKE '%'||:as_find||'%' OR C.DNAME LIKE '%'||:as_find||'%')))
+ORDER BY B.DCODE, C.DCODE" arguments=(("as_code", string),("as_chk", string),("as_find", string)) )
+text(band=header alignment="2" text="품셈기준코드" border="0" color="33554432" x="2" y="2" height="14" width="98" html.valueishtml="0"  name=dcode_1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품셈기준명" border="0" color="33554432" x="102" y="2" height="14" width="174" html.valueishtml="0"  name=dname_1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="제조사기준코드" border="0" color="33554432" x="278" y="2" height="14" width="98" html.valueishtml="0"  name=dcode_2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="제조사기준명" border="0" color="33554432" x="378" y="2" height="14" width="174" html.valueishtml="0"  name=dname_2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="98" format="[general]" html.valueishtml="0"  name=dcode_1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="102" y="2" height="17" width="174" format="[general]" html.valueishtml="0"  name=dname_1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="278" y="2" height="17" width="98" format="[general]" html.valueishtml="0"  name=dcode_2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="378" y="2" height="17" width="174" format="[general]" html.valueishtml="0"  name=dname_2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

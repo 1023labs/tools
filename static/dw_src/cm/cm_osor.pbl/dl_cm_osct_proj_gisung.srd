@@ -1,0 +1,87 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_osct_completed.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_osct_completed.proj_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="cm_osct_completed.osct_div" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="cm_osct_completed.consult_code" )
+ column=(type=char(8) updatewhereclause=yes name=dem_date dbname="cm_osct_completed.dem_date" )
+ column=(type=char(50) updatewhereclause=yes name=consult_name dbname="cm_osct_consult.consult_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=recv_amt dbname="cm_osct_consult_detail.recv_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=mexe_amt dbname="cm_osct_consult_detail.mexe_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=oexe_amt dbname="cm_osct_consult_detail.oexe_amt" )
+ column=(type=number updatewhereclause=yes name=tot_amt dbname="cm_osct_completed.tot_amt" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         A.OSCT_DIV, 
+         A.CONSULT_CODE, 
+         A.DEM_DATE,
+         B.CONSULT_NAME,
+         C.RECV_AMT,
+         C.MEXE_AMT,
+         C.OEXE_AMT,
+         D.TOT_AMT
+    FROM CM_OSCT_COMPLETED A INNER JOIN CM_OSCT_CONSULT B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.PROJ_CODE = B.PROJ_CODE
+                                    AND A.OSCT_DIV = B.OSCT_DIV
+                                    AND A.CONSULT_CODE = B.CONSULT_CODE
+                             INNER JOIN CM_OSCT_CONSULT_DETAIL C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.PROJ_CODE = C.PROJ_CODE
+                                    AND A.OSCT_DIV = C.OSCT_DIV
+                                    AND A.CONSULT_CODE = C.CONSULT_CODE
+                             INNER JOIN   (SELECT COMPANY_CODE,
+                                                  PROJ_CODE,
+                                                  OSCT_DIV,
+                                                  CONSULT_CODE,
+                                                  SUM(GEN_AMT + VAT_AMT) TOT_AMT 
+                                             FROM CM_OSCT_COMPLETED 
+                                            WHERE COMPANY_CODE = :as_comp
+                                              AND PROJ_CODE LIKE :as_proj
+                                              AND SUBSTR(DEM_DATE,1,4) <= :as_date
+                                              AND OSCT_DIV = '3'
+                                         GROUP BY COMPANY_CODE,
+                                                  PROJ_CODE,
+                                                  OSCT_DIV,
+                                                  CONSULT_CODE) D
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE
+                                    AND A.PROJ_CODE = D.PROJ_CODE
+                                    AND A.CONSULT_CODE = D.CONSULT_CODE
+                                    AND A.OSCT_DIV = D.OSCT_DIV
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE LIKE :as_proj
+     AND A.DEM_DATE LIKE :as_date||'%'
+     AND A.OSCT_DIV = '3'" arguments=(("as_comp", string),("as_proj", string),("as_date", string)) )
+text(band=header alignment="2" text="공사명" border="0" color="33554432" x="32" y="2" height="14" width="195" html.valueishtml="0"  name=consult_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="집행금액" border="0" color="33554432" x="664" y="2" height="14" width="113" html.valueishtml="0"  name=tot_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행금액" border="0" color="33554432" x="342" y="2" height="14" width="112" html.valueishtml="0"  name=mexe_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="외주금액" border="0" color="33554432" x="503" y="2" height="14" width="111" html.valueishtml="0"  name=oexe_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="도급금액" border="0" color="33554432" x="229" y="2" height="14" width="111" html.valueishtml="0"  name=recv_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="2" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행율" border="0" color="33554432" x="456" y="2" height="14" width="45" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="외주율" border="0" color="33554432" x="616" y="2" height="14" width="46" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="잔여금액" border="0" color="33554432" x="779" y="2" height="14" width="112" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="18" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="32" y="2" height="18" width="195" format="[general]" html.valueishtml="0"  name=consult_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="664" y="2" height="18" width="113" format="#,##0" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="342" y="2" height="18" width="112" format="#,##0" html.valueishtml="0"  name=mexe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="503" y="2" height="18" width="111" format="#,##0" html.valueishtml="0"  name=oexe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="229" y="2" height="18" width="111" format="#,##0" html.valueishtml="0"  name=recv_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" mexe_amt /  recv_amt * 100"border="0" color="33554432" x="456" y="2" height="18" width="45" format="#,###.0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" oexe_amt /  recv_amt * 100"border="0" color="33554432" x="616" y="2" height="18" width="46" format="#,###.0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" oexe_amt -  tot_amt "border="0" color="33554432" x="779" y="2" height="18" width="112" format="#,##0" html.valueishtml="0"  name=balance visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(balance for all)"border="0" color="33554432" x="779" y="2" height="18" width="112" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(tot_amt  for all)"border="0" color="33554432" x="664" y="2" height="18" width="113" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(recv_amt  for all)"border="0" color="33554432" x="229" y="2" height="18" width="111" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(mexe_amt for all)"border="0" color="33554432" x="342" y="2" height="18" width="112" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(oexe_amt  for all)"border="0" color="33554432" x="503" y="2" height="18" width="111" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

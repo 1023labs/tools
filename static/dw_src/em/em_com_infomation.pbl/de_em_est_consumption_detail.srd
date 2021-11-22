@@ -1,0 +1,56 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=user_id dbname="em_est_consumption_detail.user_id" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=break_div dbname="em_est_consumption_detail.break_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_est_consumption_detail.est_code" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=const_div dbname="em_est_consumption_detail.const_div" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="em_est_consumption_detail.const_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=item_seq dbname="em_est_consumption_detail.item_seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="em_est_consumption_detail.seq" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=use_yn dbname="em_est_consumption_detail.use_yn" values="	Y/	N" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sum_amt dbname="em_est_consumption_detail.sum_amt" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=consum_div dbname="em_est_consumption_detail.consum_div" )
+ column=(type=char(1) updatewhereclause=yes name=same_tag dbname="same_tag" )
+ retrieve="  SELECT A.USER_ID,
+         A.BREAK_DIV,
+         A.EST_CODE,
+         A.CONST_DIV,
+         A.CONST_CODE,
+         A.ITEM_SEQ,
+         A.SEQ,
+         A.USE_YN,
+         A.SUM_AMT,
+         A.CONSUM_DIV,
+         CASE WHEN A.CONSUM_DIV = B.CONSUM_DIV THEN 'Y' ELSE 'N' END SAME_TAG
+    FROM EM_EST_CONSUMPTION_DETAIL A LEFT JOIN EM_EST_CONSUMPTION B
+                                            ON A.USER_ID = B.USER_ID
+                                           AND A.BREAK_DIV = B.BREAK_DIV
+                                           AND A.EST_CODE = B.EST_CODE
+                                           AND A.CONST_DIV = B.CONST_DIV
+                                           AND A.CONST_CODE = B.CONST_CODE
+                                           AND A.ITEM_SEQ = B.ITEM_SEQ
+   WHERE A.USER_ID = :as_userid
+     AND A.BREAK_DIV = :as_breakdiv
+     AND A.EST_CODE = :as_estcode
+     AND A.CONST_DIV = :as_constdiv
+     AND A.CONST_CODE = :as_constcode
+     AND A.ITEM_SEQ = :as_itemseq
+ORDER BY A.SEQ" update="EM_EST_CONSUMPTION_DETAIL" updatewhere=1 updatekeyinplace=no arguments=(("as_userid", string),("as_breakdiv", string),("as_estcode", string),("as_constdiv", string),("as_constcode", string),("as_itemseq", string)) )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="2" y="4" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="32" y="4" height="14" width="24" html.valueishtml="0"  name=use_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="집계급액" border="0" color="33554432" x="58" y="4" height="14" width="84" html.valueishtml="0"  name=sum_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소모품종류" border="0" color="33554432" x="144" y="4" height="14" width="217" html.valueishtml="0"  name=consum_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="consum_div"border="0" color="33554432" x="2" y="2" height="14" width="28" format="[GENERAL]" html.valueishtml="0"  name=con_div visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="58" y="2" height="14" width="84" format="#,##0" html.valueishtml="0"  name=sum_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=10 border="0" color="33554432" x="32" y="2" height="14" width="24" format="[general]" html.valueishtml="0"  name=use_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="144" y="2" height="14" width="217" format="[general]" html.valueishtml="0"  name=consum_div visible="1" dddw.name=dw_sm_comcode_supplieskind_name dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=10 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

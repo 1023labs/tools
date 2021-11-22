@@ -1,0 +1,42 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=sm_bud_dept_company_code dbname="sm_bud_dept.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=dept_code dbname="sm_bud_dept.dept_code" dbalias="A.dept_code" )
+ column=(type=char(100) updatewhereclause=yes name=dept_name dbname="sm_code_dept.dept_name" dbalias="B.dept_name" )
+ column=(type=char(22) updatewhereclause=yes name=bud_code dbname="sm_bud_dept.bud_code" dbalias="A.bud_code" )
+ column=(type=char(1) updatewhereclause=yes name=chk dbname="chk" values="	1/	0" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.DEPT_CODE,
+       B.DEPT_NAME,
+       A.BUD_CODE,
+      '0' as chk
+  FROM SM_BUD_DEPT A INNER JOIN SM_CODE_DEPT B
+                             ON A.COMPANY_CODE = B.COMPANY_CODE
+                            AND A.DEPT_CODE    = B.DEPT_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+     AND A.DEPT_CODE LIKE :as_proj" arguments=(("as_comp", string),("as_proj", string)) )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="36" y="2" height="17" width="74" format="[general]" html.valueishtml="0"  name=dept_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="113" y="2" height="17" width="222" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="338" y="2" height="17" width="114" format="[general]" html.valueishtml="0"  name=bud_code visible="1" edit.limit=18 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="3" height="14" width="32" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="10" height="14" width="32" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부서코드" border="0" color="33554432" x="36" y="10" height="14" width="74" html.valueishtml="0"  name=sm_bud_dept_dept_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부서명" border="0" color="33554432" x="113" y="10" height="14" width="222" html.valueishtml="0"  name=sm_code_dept_dept_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="예산코드" border="0" color="33554432" x="338" y="10" height="14" width="114" html.valueishtml="0"  name=sm_bud_dept_bud_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="455" y="3" height="14" width="29" html.valueishtml="0"  name=chk visible="1" checkbox.text="" checkbox.on="1" checkbox.off="0" checkbox.scale=yes checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="454" y="10" height="14" width="30" html.valueishtml="0"  name=chk_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

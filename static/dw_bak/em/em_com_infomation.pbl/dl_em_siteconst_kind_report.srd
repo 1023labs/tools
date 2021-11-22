@@ -1,0 +1,67 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=142 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(4000) update=yes updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_code dbname="em_siteconst_kind.const_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=level_num dbname="em_siteconst_kind.level_num" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=high_const_code dbname="em_siteconst_kind.high_const_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=direct_div dbname="em_siteconst_kind.direct_div" values="직접비	1/간접비	2/" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=const_div dbname="em_siteconst_kind.const_div" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=query_seq dbname="em_siteconst_kind.query_seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=const_seq dbname="em_siteconst_kind.const_seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=high_const_seq dbname="em_siteconst_kind.high_const_seq" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=est_code dbname="em_siteconst_kind.est_code" )
+ column=(type=char(60) updatewhereclause=yes name=est_name dbname="cm_esti_master.est_name" )
+ retrieve="  SELECT LPAD(' ', (A.LEVEL_NUM-1)*4)||A.CONST_NAME CONST_NAME,
+         A.CONST_CODE,
+         A.LEVEL_NUM,
+         A.HIGH_CONST_CODE,
+         A.DIRECT_DIV,
+         A.CONST_DIV,
+         A.QUERY_SEQ,
+         A.CONST_SEQ,
+         A.HIGH_CONST_SEQ,
+         A.EST_CODE,
+         B.EST_NAME
+    FROM EM_SITECONST_KIND A JOIN CM_ESTI_MASTER B
+                               ON A.EST_CODE = B.EST_CODE
+   WHERE A.EST_CODE = :as_estcode
+     AND A.CONST_DIV LIKE :as_constdiv
+ORDER BY A.QUERY_SEQ" arguments=(("as_estcode", string),("as_constdiv", string)) )
+line(band=header x1="9" y1="124" x2="9" y2="141"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1064" y1="124" x2="1064" y2="142"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="618" y1="124" x2="618" y2="142"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="805" y1="124" x2="805" y2="142"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="966" y1="124" x2="966" y2="142"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="623" y="128" height="14" width="90" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상위공종코드" border="0" color="33554432" x="810" y="128" height="14" width="150" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직간구분" border="0" color="33554432" x="972" y="128" height="14" width="86" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="717" y1="124" x2="717" y2="142"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="레벨" border="0" color="33554432" x="721" y="128" height="14" width="78" html.valueishtml="0"  name=level_num_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="9" y1="141" x2="1064" y2="141"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="9" y1="124" x2="1064" y2="124"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공종 현황" border="0" color="33554432" x="9" y="48" height="24" width="1055" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-15" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="13" y="128" height="14" width="602" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="9" y1="0" x2="9" y2="18"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1064" y1="0" x2="1064" y2="18"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="814" y="2" height="14" width="147" format="[general]" html.valueishtml="0"  name=high_const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="972" y="2" height="14" width="86" format="[general]" html.valueishtml="0"  name=direct_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=detail x1="618" y1="0" x2="618" y2="18"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="624" y="2" height="14" width="87" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=detail x1="805" y1="0" x2="805" y2="18"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="966" y1="0" x2="966" y2="18"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="717" y1="0" x2="717" y2="18"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="721" y="3" height="12" width="79" format="[general]" html.valueishtml="0"  name=level_num visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="9" y1="17" x2="1064" y2="17"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="13" y="3" height="12" width="602" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="현 설 :" border="0" color="33554432" x="11" y="105" height="14" width="56" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=header id=11 alignment="0" tabsequence=0 border="0" color="33554432" x="76" y="105" height="14" width="360" html.valueishtml="0"  name=est_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,62 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=user_id dbname="em_est_consumption.user_id" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=break_div dbname="em_est_consumption.break_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_est_consumption.est_code" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=const_div dbname="em_est_consumption.const_div" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="em_est_consumption.const_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=item_seq dbname="em_est_consumption.item_seq" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=use_yn dbname="em_est_consumption.use_yn" initial=" " values="	Y/	N" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sum_amt dbname="em_est_consumption.sum_amt" initial="0" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=consum_div dbname="em_est_consumption.consum_div" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=tariff dbname="em_est_consumption.tariff" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=unit_cut dbname="em_est_consumption.unit_cut" )
+ column=(type=char(15) update=yes updatewhereclause=yes name=calc_amt dbname="em_est_consumption.calc_amt" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=app_exp dbname="em_est_consumption.app_exp" values="재료비	M/노무비	L/경비	E/" )
+ retrieve="  SELECT USER_ID,
+         BREAK_DIV,
+         EST_CODE,
+         CONST_DIV,
+         CONST_CODE,
+         ITEM_SEQ,
+         USE_YN,
+         SUM_AMT,
+         CONSUM_DIV,
+         TARIFF,
+         UNIT_CUT,
+         CALC_AMT,
+         APP_EXP
+    FROM EM_EST_CONSUMPTION
+   WHERE USER_ID = :as_userid
+     AND BREAK_DIV = :as_breakdiv
+     AND EST_CODE = :as_estcode
+     AND CONST_DIV = :as_constdiv
+     AND CONST_CODE = :as_constcode
+     AND ITEM_SEQ LIKE :as_itemseq
+   ORDER BY ITEM_SEQ" update="EM_EST_CONSUMPTION" updatewhere=1 updatekeyinplace=no arguments=(("as_userid", string),("as_breakdiv", string),("as_estcode", string),("as_constdiv", string),("as_constcode", string),("as_itemseq", string)) )
+text(band=header alignment="2" text="집계금액" border="0" color="33554432" x="59" y="4" height="14" width="84" html.valueishtml="0"  name=sum_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="소모품종류" border="0" color="33554432" x="145" y="4" height="14" width="217" html.valueishtml="0"  name=consum_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="요율" border="0" color="33554432" x="364" y="4" height="14" width="50" html.valueishtml="0"  name=tariff_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단위절삭" border="0" color="33554432" x="416" y="4" height="14" width="99" html.valueishtml="0"  name=unit_cut_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="32" y="4" height="14" width="25" html.valueishtml="0"  name=use_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="2" y="4" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용비목" border="0" color="33554432" x="517" y="4" height="14" width="57" html.valueishtml="0"  name=app_exp_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계산금액" border="0" color="33554432" x="576" y="4" height="14" width="94" html.valueishtml="0"  name=calc_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="145" y="2" height="14" width="217" format="[general]" html.valueishtml="0"  name=consum_div visible="1" dddw.name=dw_sm_comcode_supplieskind_name dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=10 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=20 border="0" color="33554432" x="364" y="2" height="14" width="50" format="[general]" html.valueishtml="0"  name=tariff visible="1" editmask.mask="###.0%" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=30 border="2" color="33554432" x="416" y="2" height="14" width="99" format="[general]" html.valueishtml="0"  name=unit_cut visible="1" dddw.name=dw_sm_comcode_unitcut dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=10 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=10 border="0" color="33554432" x="32" y="2" height="14" width="25" format="[general]" html.valueishtml="0" protect="0~tif ( left ( item_seq, 3 ) = 'XXX', 0, 1 )"  name=use_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="consum_div"border="0" color="33554432" x="2" y="2" height="14" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=50 border="0" color="16711935" x="576" y="2" height="14" width="94" format="~tstring ( number ( calc_amt ), '#,##0' )" html.valueishtml="0" protect="0~tif ( unit_cut = '06', 0, 1 )"  name=calc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=40 border="0" color="33554432" x="517" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=app_exp visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="59" y="2" height="14" width="84" format="#,##0" html.valueishtml="0"  name=sum_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

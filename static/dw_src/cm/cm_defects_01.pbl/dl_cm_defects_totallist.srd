@@ -1,0 +1,108 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(45) updatewhereclause=yes name=defects dbname="defects" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=project_code dbname="cm_defects_master.project_code" dbalias="A.project_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="B.proj_name" )
+ column=(type=datetime update=yes updatewhereclause=yes name=rqst_date dbname="cm_defects_master.rqst_date" dbalias="A.rqst_date" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=year dbname="cm_defects_master.year" dbalias="A.year" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=defects_no dbname="cm_defects_master.defects_no" dbalias="A.defects_no" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=level_tag dbname="cm_defects_master.level_tag" dbalias="A.level_tag" )
+ column=(type=datetime update=yes updatewhereclause=yes name=complete_date dbname="cm_defects_master.complete_date" dbalias="A.complete_date" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=gong_tag dbname="cm_defects_master.gong_tag" dbalias="A.gong_tag" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=defects_tag dbname="cm_defects_master.defects_tag" dbalias="A.defects_tag" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=defects_cause dbname="cm_defects_master.defects_cause" dbalias="A.defects_cause" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=defects_couse dbname="cm_defects_master.defects_couse" dbalias="A.defects_couse" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=process_result dbname="cm_defects_master.process_result" dbalias="A.process_result" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=compensation dbname="cm_defects_master.compensation" dbalias="A.compensation" )
+ column=(type=char(1000) update=yes updatewhereclause=yes name=cause_analysis dbname="cm_defects_master.cause_analysis" dbalias="A.cause_analysis" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=status_tag dbname="cm_defects_master.status_tag" dbalias="A.status_tag" values="등록	1/처리	2/	/	/" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name1 dbname="cm_defects_master.file_name1" dbalias="A.file_name1" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type1 dbname="cm_defects_master.file_type1" dbalias="A.file_type1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path1 dbname="cm_defects_master.file_path1" dbalias="A.file_path1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name2 dbname="cm_defects_master.file_name2" dbalias="A.file_name2" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type2 dbname="cm_defects_master.file_type2" dbalias="A.file_type2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path2 dbname="cm_defects_master.file_path2" dbalias="A.file_path2" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name3 dbname="cm_defects_master.file_name3" dbalias="A.file_name3" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type3 dbname="cm_defects_master.file_type3" dbalias="A.file_type3" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path3 dbname="cm_defects_master.file_path3" dbalias="A.file_path3" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=ea dbname="cm_defects_master.ea" dbalias="A.ea" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=doc_no dbname="cm_defects_master.doc_no" dbalias="A.doc_no" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=place dbname="cm_defects_master.place" dbalias="A.place" )
+ column=(type=char(250) updatewhereclause=yes name=c_dname dbname="cm_defects_master.dname" dbalias=".dname" )
+ retrieve="SELECT A.YEAR||'-'||A.DEFECTS_NO DEFECTS,
+       A.PROJECT_CODE,
+       B.PROJ_NAME,
+       A.RQST_DATE,
+       A.YEAR           ,    
+       A.DEFECTS_NO     ,  
+       A.LEVEL_TAG      ,        
+       A.COMPLETE_DATE  ,  
+       A.GONG_TAG       ,  
+       A.DEFECTS_TAG    ,  
+       A.DEFECTS_CAUSE  ,  
+       A.DEFECTS_COUSE  ,  
+       A.PROCESS_RESULT ,  
+       A.COMPENSATION   ,  
+       A.CAUSE_ANALYSIS ,  
+       A.STATUS_TAG     ,  
+       A.FILE_NAME1     ,  
+       A.FILE_TYPE1     ,  
+       A.FILE_PATH1     ,  
+       A.FILE_NAME2     ,  
+       A.FILE_TYPE2     ,  
+       A.FILE_PATH2     ,  
+       A.FILE_NAME3     ,  
+       A.FILE_TYPE3     ,  
+       A.FILE_PATH3     ,  
+       A.EA             ,  
+       A.DOC_NO         ,
+       A.PLACE          ,
+       C.DNAME
+  FROM CM_DEFECTS_MASTER A,
+       SM_CODE_PROJECT   B,
+       (SELECT * FROM SM_COMCODE_D WHERE SYS_ID = 'CM' AND HCODE = 'CONSTTYPE') C
+ WHERE A.PROJECT_CODE = B.PROJ_CODE
+   AND A.YEAR         = :as_year
+   AND A.PROJECT_CODE LIKE :as_projcode
+   AND A.STATUS_TAG  LIKE :as_state
+   AND B.GROUPING_CODE = C.DCODE(+)
+ORDER BY  A.PROJECT_CODE,  A.RQST_DATE" arguments=(("as_year", string),("as_projcode", string),("as_state", string)) )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="37" y="11" height="14" width="193" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="11" height="14" width="33" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="접수일자" border="0" color="33554432" x="323" y="11" height="14" width="67" html.valueishtml="0"  name=cm_defects_master_rqst_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상태" border="0" color="33554432" x="392" y="11" height="14" width="35" html.valueishtml="0"  name=status_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="장소" border="0" color="33554432" x="429" y="11" height="14" width="107" html.valueishtml="0"  name=place_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="원인분석" border="0" color="33554432" x="538" y="11" height="14" width="232" html.valueishtml="0"  name=defects_couse_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="하자유형" border="0" color="33554432" x="1186" y="11" height="14" width="65" html.valueishtml="0"  name=defects_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="하자원인" border="0" color="33554432" x="1253" y="11" height="14" width="68" html.valueishtml="0"  name=defects_cause_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종" border="0" color="33554432" x="1323" y="11" height="14" width="62" html.valueishtml="0"  name=gong_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장유형" border="0" color="33554432" x="232" y="11" height="14" width="89" html.valueishtml="0"  name=c_dname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="37" y="2" height="17" width="193" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="323" y="2" height="17" width="67" format="[shortdate] [time]" html.valueishtml="0"  name=rqst_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="392" y="2" height="17" width="35" format="[general]" html.valueishtml="0"  name=status_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=28 alignment="0" tabsequence=32766 border="0" color="33554432" x="429" y="2" height="17" width="107" format="[general]" html.valueishtml="0"  name=place visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="538" y="2" height="17" width="232" format="[general]" html.valueishtml="0"  name=defects_couse visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="1186" y="2" height="17" width="65" format="[general]" html.valueishtml="0"  name=defects_tag visible="1" dddw.name=dddw_com_defectscode_01 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="1253" y="2" height="17" width="68" format="[general]" html.valueishtml="0"  name=defects_cause visible="1" dddw.name=dddw_com_defectscode_03 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="1323" y="2" height="17" width="62" format="[general]" html.valueishtml="0"  name=gong_tag visible="1" dddw.name=dddw_com_defectscode_02 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=29 alignment="0" tabsequence=32766 border="0" color="33554432" x="232" y="2" height="17" width="89" format="[general]" html.valueishtml="0"  name=c_dname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="772" y="2" height="17" width="214" format="[general]" html.valueishtml="0"  name=process_result visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=0 border="0" color="33554432" x="989" y="2" height="17" width="196" html.valueishtml="0"  name=compensation visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="하자내용" border="0" color="33554432" x="772" y="11" height="14" width="214" html.valueishtml="0"  name=process_result_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="처리내용" border="0" color="33554432" x="988" y="11" height="14" width="197" html.valueishtml="0"  name=compensation_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

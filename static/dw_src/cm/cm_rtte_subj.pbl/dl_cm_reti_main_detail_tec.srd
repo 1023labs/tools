@@ -1,0 +1,101 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=29 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=26 color="536870912" )
+detail(height=24 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_reti_pre_sum.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_reti_pre_sum.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=pay_yymm dbname="cm_reti_pre_sum.pay_yymm" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_reti_pre_sum.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(61) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=unit_amt dbname="cm_reti_pre_sum.unit_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=term_08 dbname="term_08" values="1	1/	0/" )
+ column=(type=number update=yes updatewhereclause=yes name=term_09 dbname="term_09" values="1	1/	0/" )
+ column=(type=number update=yes updatewhereclause=yes name=term_10 dbname="term_10" values="1	1/	0/" )
+ column=(type=number update=yes updatewhereclause=yes name=term_11 dbname="term_11" values="1	1/	0/" )
+ column=(type=number update=yes updatewhereclause=yes name=term_12 dbname="term_12" values="1	1/	0/" )
+ column=(type=number update=yes updatewhereclause=yes name=reti_amt dbname="reti_amt" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=send_yn dbname="cm_reti_pre_sum.send_yn" values="	Y/	N" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=close_yn dbname="cm_reti_pre_sum.close_yn" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=term_cnt dbname="cm_reti_pre_sum.term_cnt" )
+ retrieve="SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+       A.PROJ_CODE                    AS PROJ_CODE,
+       A.PAY_YYMM                     AS PAY_YYMM,
+       A.LABOR_CODE                   AS LABOR_CODE,
+       B.LABOR_NAME                   AS LABOR_NAME,
+       B.RRN_PRE||'-'||B.RRN_POST     AS JUMIN_NO,
+       A.UNIT_AMT                     AS UNIT_AMT,
+       DECODE(A.TERM_08,'N',0,'Y',1)  AS TERM_08,
+       DECODE(A.TERM_09,'N',0,'Y',1)  AS TERM_09,
+       DECODE(A.TERM_10,'N',0,'Y',1)  AS TERM_10,
+       DECODE(A.TERM_11,'N',0,'Y',1)  AS TERM_11,
+       DECODE(A.TERM_12,'N',0,'Y',1)  AS TERM_12,
+       NVL(A.RETI_AMT,0)              AS RETI_AMT,
+       A.SEND_YN                      AS SEND_YN,
+       A.CLOSE_YN                     AS CLOSE_YN,
+      A.TERM_CNT               AS TERM_CNT
+  FROM CM_RETI_PRE_SUM A LEFT JOIN CM_LABO_MASTER B
+                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                               AND A.LABOR_CODE   = B.LABOR_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.PAY_YYMM     = :AS_PAY_YYMM
+ORDER BY A.SEND_YN DESC,  B.LABOR_NAME" update="CM_RETI_PRE_SUM" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_PAY_YYMM", string)) )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="108" y="8" height="14" width="77" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="187" y="8" height="14" width="106" html.valueishtml="0"  name=jumin_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="295" y="8" height="14" width="69" html.valueishtml="0"  name=cm_reti_pre_sum_unit_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="퇴직금(예상)" border="0" color="33554432" x="441" y="8" height="14" width="108" html.valueishtml="0"  name=cm_reti_pre_sum_reti_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Reti Pre Sum
+Company Code" border="0" color="33554432" x="922" y="8" height="14" width="42" html.valueishtml="0"  name=cm_reti_pre_sum_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Reti Pre Sum
+Proj Code" border="0" color="33554432" x="966" y="8" height="14" width="60" html.valueishtml="0"  name=cm_reti_pre_sum_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Reti Pre Sum
+Pay Yymm" border="0" color="33554432" x="1028" y="8" height="14" width="57" html.valueishtml="0"  name=cm_reti_pre_sum_pay_yymm_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="8" height="14" width="31" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="35" y="8" height="14" width="71" html.valueishtml="0"  name=cm_reti_pre_sum_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Cm Reti Pre Sum Close Yn" border="0" color="33554432" x="1087" y="1" height="14" width="26" html.valueishtml="0"  name=cm_reti_pre_sum_close_yn_t visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무개월수" border="0" color="33554432" x="366" y="8" height="14" width="73" html.valueishtml="0"  name=cm_reti_pre_sum_term_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="6" height="14" width="31" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="108" y="6" height="14" width="77" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="187" y="6" height="14" width="106" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" edit.limit=14 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="295" y="6" height="14" width="69" format="#,###" html.valueishtml="0"  name=unit_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="441" y="6" height="14" width="108" format="#,##0" html.valueishtml="0"  name=reti_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="922" y="6" height="14" width="42" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="966" y="6" height="14" width="60" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="1028" y="6" height="14" width="57" format="[general]" html.valueishtml="0"  name=pay_yymm visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="35" y="6" height="14" width="71" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=20 border="0" color="33554432" x="1087" y="6" height="14" width="26" format="[general]" html.valueishtml="0"  name=close_yn visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="366" y="6" height="14" width="73" format="[general]" html.valueishtml="0"  name=term_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="rowcount() + '   명'"border="0" color="33554432" x="35" y="6" height="14" width="71" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합        계" border="0" color="33554432" x="187" y="5" height="14" width="106" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(reti_amt for all)"border="0" color="33554432" x="441" y="5" height="14" width="108" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="8개월" border="0" color="33554432" x="865" y="8" height="14" width="55" html.valueishtml="0"  name=cm_reti_pre_sum_term_08_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="9개월" border="0" color="33554432" x="809" y="8" height="14" width="54" html.valueishtml="0"  name=cm_reti_pre_sum_term_09_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="10개월" border="0" color="33554432" x="754" y="8" height="14" width="53" html.valueishtml="0"  name=cm_reti_pre_sum_term_10_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="11개월" border="0" color="33554432" x="694" y="8" height="14" width="58" html.valueishtml="0"  name=cm_reti_pre_sum_term_11_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="12개월 이상" border="0" color="33554432" x="621" y="8" height="14" width="71" html.valueishtml="0"  name=cm_reti_pre_sum_term_12_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지급유/무" border="0" color="33554432" x="551" y="8" height="14" width="68" html.valueishtml="0"  name=cm_reti_pre_sum_send_yn_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=10 border="0" color="33554432" x="551" y="6" height="14" width="68" format="[general]" html.valueishtml="0"  name=send_yn visible="0" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="865" y="6" height="14" width="55" format="[general]" html.valueishtml="0"  name=term_08 visible="0" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="809" y="6" height="14" width="54" format="[general]" html.valueishtml="0"  name=term_09 visible="0" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="754" y="6" height="14" width="53" format="[general]" html.valueishtml="0"  name=term_10 visible="0" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="694" y="6" height="14" width="58" format="[general]" html.valueishtml="0"  name=term_11 visible="0" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="621" y="6" height="14" width="71" format="[general]" html.valueishtml="0"  name=term_12 visible="0" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="sum(term_08 for all)"border="0" color="33554432" x="865" y="5" height="14" width="55" format="[GENERAL]" html.valueishtml="0"  name=compute_9 visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="sum(term_09 for all)"border="0" color="33554432" x="809" y="5" height="14" width="54" format="[GENERAL]" html.valueishtml="0"  name=compute_10 visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="sum(term_10 for all)"border="0" color="33554432" x="754" y="5" height="14" width="53" format="[GENERAL]" html.valueishtml="0"  name=compute_11 visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="sum(term_11 for all)"border="0" color="33554432" x="694" y="5" height="14" width="58" format="[GENERAL]" html.valueishtml="0"  name=compute_12 visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="sum(term_12 for all)"border="0" color="33554432" x="621" y="5" height="14" width="71" format="[GENERAL]" html.valueishtml="0"  name=compute_13 visible="0"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

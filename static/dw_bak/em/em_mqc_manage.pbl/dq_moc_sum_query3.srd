@@ -1,0 +1,65 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=user_id dbname="em_mqc_sum.user_id" dbalias="A.user_id" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_mqc_sum.est_code" dbalias="A.est_code" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=const_div dbname="em_mqc_sum.const_div" dbalias="A.const_div" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="em_mqc_sum.const_code" dbalias="A.const_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=item_code dbname="em_mqc_sum.item_code" dbalias="A.item_code" )
+ column=(type=char(200) update=yes updatewhereclause=yes key=yes name=item_name dbname="em_mqc_sum.item_name" dbalias="A.item_name" )
+ column=(type=char(200) update=yes updatewhereclause=yes key=yes name=item_size dbname="em_mqc_sum.item_size" dbalias="A.item_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=item_unit dbname="em_mqc_sum.item_unit" dbalias="A.item_unit" )
+ column=(type=decimal(6) updatewhereclause=yes name=item_qty dbname="em_mqc_sum.item_qty" dbalias="A.item_qty" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=extra dbname="em_mqc_sum.extra" dbalias="A.extra" )
+ column=(type=decimal(6) update=yes updatewhereclause=yes name=a_qty dbname="em_mqc_sum.a_qty" dbalias="A.a_qty" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=remarks dbname="em_mqc_sum.remarks" dbalias="A.remarks" )
+ column=(type=char(3) updatewhereclause=yes name=sptext dbname="em_mqc_sum.sptext" dbalias="A.sptext" )
+ column=(type=char(5) updatewhereclause=yes name=code_tag dbname="code_tag" )
+ retrieve="  SELECT A.USER_ID,
+         A.EST_CODE,
+         A.CONST_DIV,
+         A.CONST_CODE,
+         A.ITEM_CODE,   
+         A.ITEM_NAME,   
+         A.ITEM_SIZE,   
+         A.ITEM_UNIT,   
+         A.F_QTY as item_qty,   
+         A.EXTRA,    
+         A.A_QTY,   
+         A.REMARKS,
+         A.SPTEXT,
+         (SELECT DECODE(SUBSTR(A.ITEM_CODE,1,2), 'IW', '11', MAX(P.CODE_TAG)) 
+            FROM EM_MQC_MAIN P 
+           WHERE P.USER_ID = A.USER_ID 
+             AND P.EST_CODE = A.EST_CODE AND P.CONST_DIV = A.CONST_DIV 
+             AND P.ITEM_CODE = A.ITEM_CODE) AS CODE_TAG
+    FROM EM_MQC_SUM A
+   WHERE A.USER_ID    = :as_userid
+     AND A.EST_CODE   = :as_estcode
+     AND A.CONST_DIV  = :as_constdiv
+     AND A.CONST_CODE = :as_constcode
+ORDER BY A.ITEM_CODE" update="EM_MQC_SUM" updatewhere=1 updatekeyinplace=yes arguments=(("as_userid", string),("as_estcode", string),("as_constdiv", string),("as_constcode", string)) )
+text(band=header alignment="2" text="품명" border="0" color="8388608" x="2" y="4" height="14" width="204" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="8388608" x="208" y="4" height="14" width="140" html.valueishtml="0"  name=item_size_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단위" border="0" color="8388608" x="350" y="4" height="14" width="73" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="수량" border="0" color="8388608" x="425" y="4" height="14" width="83" html.valueishtml="0"  name=item_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="8388608" x="510" y="4" height="14" width="52" html.valueishtml="0"  name=extra_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="0" x="2" y="2" height="14" width="204" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="0" x="208" y="2" height="14" width="140" format="[general]" html.valueishtml="0"  name=item_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="0" x="350" y="2" height="14" width="73" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="0" x="425" y="2" height="14" width="83" format="#,##0.00" html.valueishtml="0"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="0" x="510" y="2" height="14" width="52" format="###,###.00" html.valueishtml="0"  name=extra visible="0" editmask.mask="###,###.00" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

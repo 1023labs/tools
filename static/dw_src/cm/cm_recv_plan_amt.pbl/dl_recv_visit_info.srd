@@ -1,0 +1,44 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_recv_visit_info.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=visit_date dbname="cm_recv_visit_info.visit_date" )
+ column=(type=char(50) update=yes updatewhereclause=yes key=yes name=cnst_name dbname="cm_recv_visit_info.cnst_name" )
+ column=(type=char(50) update=yes updatewhereclause=yes key=yes name=dept_name dbname="cm_recv_visit_info.dept_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=name1 dbname="cm_recv_visit_info.name1" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=name2 dbname="cm_recv_visit_info.name2" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=contents dbname="cm_recv_visit_info.contents" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.VISIT_DATE,   
+         A.CNST_NAME,   
+         A.DEPT_NAME,   
+         A.NAME1,   
+         A.NAME2,   
+         A.CONTENTS  
+    FROM CM_RECV_VISIT_INFO A   
+   WHERE A.COMPANY_CODE = :as_comp_code
+	  AND A.VISIT_DATE BETWEEN :as_from AND :as_to
+ORDER BY A.VISIT_DATE, A.CNST_NAME" update="CM_RECV_VISIT_INFO" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_from", string),("as_to", string)) )
+text(band=header alignment="2" text="방문일자" border="0" color="33554432" x="51" y="2" height="14" width="73" html.valueishtml="0"  name=visit_date_t  tag="visit_date" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="방문건설사" border="0" color="33554432" x="126" y="2" height="14" width="125" html.valueishtml="0"  name=cnst_name_t  tag="cnst_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="부서명" border="0" color="33554432" x="253" y="2" height="14" width="134" html.valueishtml="0"  name=dept_name_t  tag="dept_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="임원" border="0" color="33554432" x="389" y="2" height="14" width="91" html.valueishtml="0"  name=name1_t  tag="name1" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="담당자" border="0" color="33554432" x="482" y="2" height="14" width="88" html.valueishtml="0"  name=name2_t  tag="name2" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="내용(영업정보)" border="0" color="33554432" x="572" y="2" height="14" width="464" html.valueishtml="0"  name=contents_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="47" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="18" width="47" format="" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="51" y="2" height="18" width="73" format="####-##-##" html.valueishtml="0"  name=visit_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="126" y="2" height="18" width="125" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=20 border="0" color="33554432" x="253" y="2" height="18" width="134" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=30 border="0" color="33554432" x="389" y="2" height="18" width="91" format="[general]" html.valueishtml="0"  name=name1 visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=40 border="0" color="33554432" x="482" y="2" height="18" width="88" format="[general]" html.valueishtml="0"  name=name2 visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=50 border="0" color="33554432" x="572" y="2" height="18" width="464" format="[general]" html.valueishtml="0"  name=contents visible="1" edit.limit=200 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

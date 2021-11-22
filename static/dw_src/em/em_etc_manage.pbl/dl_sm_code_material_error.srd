@@ -1,0 +1,120 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=item_code dbname="item_code" )
+ column=(type=char(50) updatewhereclause=yes name=item_name dbname="item_name" )
+ column=(type=char(30) updatewhereclause=yes name=item_std dbname="item_std" )
+ column=(type=char(5) updatewhereclause=yes name=item_unit dbname="item_unit" )
+ column=(type=number updatewhereclause=yes name=mat_cost dbname="mat_cost" )
+ column=(type=number updatewhereclause=yes name=lab_cost dbname="lab_cost" )
+ column=(type=number updatewhereclause=yes name=exp_cost dbname="exp_cost" )
+ column=(type=char(20) updatewhereclause=yes name=acc_gb dbname="acc_gb" )
+ retrieve="  SELECT DISTINCT A.ITEM_CODE, 
+         A.ITEM_NAME,
+         A.ITEM_STD,
+         A.ITEM_UNIT,
+         A.MAT_COST,
+         A.LAB_COST,
+         A.EXP_COST,
+         A.ACC_GB
+    FROM (SELECT A.ITEM_CODE,
+                 A.ITEM_NAME,
+                 A.ITEM_STD,
+                 A.ITEM_UNIT,
+                 CASE A.STD_MAT_AMT WHEN 1 THEN A.MASTER_COST
+                                    WHEN 2 THEN A.ORDER_COST
+                                    WHEN 3 THEN A.ETC_COST END MAT_COST,
+                 0 LAB_COST,
+                 0 EXP_COST,
+                 A.ACC_GB
+            FROM (SELECT A.ITEM_CODE,
+                         A.ITEM_NAME,
+                         A.ITEM_STD,
+                         A.ITEM_UNIT,
+                         (SELECT STD_MAT_AMT
+                            FROM CM_ESTI_MASTER
+                           WHERE EST_CODE = :as_estcode) STD_MAT_AMT,
+                         A.ORDER_COST,
+                         A.ETC_COST,
+                         A.ACC_GB,
+                         NVL(B.ORDER_COST, 0) MASTER_COST
+                    FROM SM_CODE_MATERIAL A LEFT JOIN PM_UNPR_MASTER B
+                                                   ON A.ITEM_CODE = B.ITEM_CODE
+                                                  AND B.MASTER_YN = 'Y'
+                   WHERE A.ACC_GB NOT LIKE '2%') A
+          UNION ALL
+          SELECT A.ITEM_CODE,
+                 A.ITEM_NAME,
+                 A.ITEM_STD,
+                 A.ITEM_UNIT,
+                 0 MAT_COST,
+                 CASE A.STD_LAB_AMT WHEN 1 THEN A.MASTER_COST
+                                    WHEN 2 THEN A.ORDER_COST
+                                    WHEN 3 THEN A.ETC_COST END LAB_COST,
+                 0 EXP_COST,
+                 A.ACC_GB
+            FROM (SELECT A.ITEM_CODE,
+                         A.ITEM_NAME,
+                         A.ITEM_STD,
+                         A.ITEM_UNIT,
+                         (SELECT STD_LAB_AMT
+                            FROM CM_ESTI_MASTER
+                           WHERE EST_CODE = :as_estcode) STD_LAB_AMT,
+                         CASE NVL(B.MASTER_UCOST, 0) WHEN 0 THEN NVL(A.MASTER_COST, 0) ELSE B.MASTER_UCOST END MASTER_COST,
+                         CASE NVL(B.ORDER_UCOST, 0) WHEN 0 THEN NVL(A.ORDER_COST, 0) ELSE B.ORDER_UCOST END ORDER_COST,
+                         CASE NVL(B.ETC_UCOST, 0) WHEN 0 THEN NVL(A.ETC_COST, 0) ELSE B.ETC_UCOST END ETC_COST,
+                         A.ACC_GB
+                    FROM SM_CODE_MATERIAL A LEFT JOIN SM_CODE_MATERIAL_PLAB B
+                                                   ON A.ITEM_CODE = B.ITEM_CODE
+                   WHERE A.ACC_GB LIKE '2%'
+                     AND (B.SPTEXT IS NULL OR B.SPTEXT = '000')) A ) A JOIN (SELECT EST_CODE,
+                                                                                    SEQ,
+                                                                                    ITEM_CODE,
+                                                                                    ITEM_NAME,
+                                                                                    CODE_TAG,
+                                                                                    MAT_COST,
+                                                                                    LAB_COST,
+                                                                                    EXP_COST
+                                                                               FROM EM_EST_EM
+                                                                              WHERE USER_ID = :as_userid
+                                                                                AND BREAK_DIV = :as_breakdiv
+                                                                                AND EST_CODE = :as_estcode
+                                                                                AND CONST_DIV = :as_constdiv
+                                                                                AND CODE_TAG IN ('21', '22', '91')
+                                                                              UNION ALL
+                                                                             SELECT EST_CODE,
+                                                                                    IW_ITEM_SEQ SEQ,
+                                                                                    ITEM_CODE,
+                                                                                    IW_NAME ITEM_NAME,
+                                                                                    CODE_TAG,
+                                                                                    MAT_UCOST MAT_COST,
+                                                                                    LAB_UCOST LAB_COST,
+                                                                                    EXP_UCOST EXP_COST
+                                                                               FROM EM_EST_IWITEM 
+                                                                              WHERE EST_CODE = :as_estcode ) B
+                                                                         ON A.ITEM_CODE = B.ITEM_CODE
+   WHERE ((A.ACC_GB NOT LIKE '2%' AND NVL(A.MAT_COST, 0) > 0 AND (NVL(A.MAT_COST, 0) <> NVL(B.MAT_COST, 0)))
+      OR (A.ACC_GB LIKE '2%' AND NVL(A.LAB_COST, 0) > 0 AND (NVL(A.LAB_COST, 0) <> NVL(B.LAB_COST, 0))))
+     AND ((:as_check = 'Y' AND A.ACC_GB = '22') OR :as_check = 'N')
+ORDER BY A.ITEM_CODE" arguments=(("as_userid", string),("as_breakdiv", string),("as_estcode", string),("as_constdiv", string),("as_check", string)) )
+text(band=header alignment="2" text="명칭" border="0" color="33554432" x="2" y="4" height="14" width="189" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비단가" border="0" color="33554432" x="408" y="4" height="14" width="85" html.valueishtml="0"  name=mat_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비단가" border="0" color="33554432" x="495" y="4" height="14" width="85" html.valueishtml="0"  name=lab_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비단가" border="0" color="33554432" x="582" y="4" height="14" width="85" html.valueishtml="0"  name=exp_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="193" y="4" height="14" width="157" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="352" y="4" height="14" width="54" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432~tif ( acc_gb1 = '22', rgb(0,0,255), rgb(0,0,0) )" x="2" y="2" height="14" width="189" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432~tif ( acc_gb1 = '22', rgb(0,0,255), rgb(0,0,0) )" x="193" y="2" height="14" width="157" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432~tif ( acc_gb1 = '22', rgb(0,0,255), rgb(0,0,0) )" x="495" y="2" height="14" width="85" format="~t'#,###' + if ( lab_cost = truncate ( lab_cost, 0 ), '',  '.####' )" html.valueishtml="0"  name=lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432~tif ( acc_gb1 = '22', rgb(0,0,255), rgb(0,0,0) )" x="582" y="2" height="14" width="85" format="~t'#,###' + if ( exp_cost = truncate ( exp_cost, 0 ), '',  '.####' )" html.valueishtml="0"  name=exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tif ( acc_gb1 = '22', rgb(0,0,255), rgb(0,0,0) )" x="352" y="2" height="14" width="54" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432~tif ( acc_gb1 = '22', rgb(0,0,255), rgb(0,0,0) )" x="408" y="2" height="14" width="85" format="~t'#,###' + if ( mat_cost = truncate ( mat_cost, 0 ), '',  '.####' )" html.valueishtml="0"  name=mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

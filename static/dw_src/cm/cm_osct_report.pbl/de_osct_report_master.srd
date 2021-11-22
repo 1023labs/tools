@@ -1,0 +1,124 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=553648127 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 12 print.margin.right = 12 print.margin.top = 13 print.margin.bottom = 13 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=1064 color="536870912"  height.autosize=yes)
+table(column=(type=number updatewhereclause=yes name=row_num dbname="cm_osct_consult.row_num" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_osct_consult.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_osct_consult.proj_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=osct_div dbname="cm_osct_consult.osct_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=consult_code dbname="cm_osct_consult.consult_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=dem_date dbname="cm_osct_consult.dem_date" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cm_osct_consult.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(10) updatewhereclause=yes name=owner dbname="sm_code_cust.owner" )
+ retrieve="  SELECT A.ROW_NUM,
+         A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.OSCT_DIV,
+         A.CONSULT_CODE,
+         A.DEM_DATE,
+         B.CUST_CODE,
+         C.CUST_NAME,
+         C.OWNER
+    FROM (
+          SELECT ROWNUM AS ROW_NUM,
+                 A.COMPANY_CODE,
+                 A.PROJ_CODE,
+                 A.OSCT_DIV,
+                 A.CONSULT_CODE,
+                 A.DEM_DATE
+            FROM CM_OSCT_COMPLETED A
+           WHERE A.COMPANY_CODE = :as_comp
+             AND A.PROJ_CODE = :as_proj
+             AND A.OSCT_DIV = '3'
+             AND A.CONSULT_CODE = :as_consult) A INNER JOIN CM_OSCT_CONSULT B
+                                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                        AND A.PROJ_CODE = B.PROJ_CODE
+                                                        AND A.OSCT_DIV = B.OSCT_DIV
+                                                        AND A.CONSULT_CODE = B.CONSULT_CODE
+                                                  LEFT JOIN SM_CODE_CUST C
+                                                         ON B.CUST_CODE = C.CUST_CODE
+   WHERE ROW_NUM = :as_row_num" arguments=(("as_comp", string),("as_proj", string),("as_consult", string),("as_dem_month", string),("as_row_num", string)) )
+line(band=detail x1="10" y1="90" x2="738" y2="90"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="~"제(  ~" + row_num +~"  )회 외주 기성금 신청서~""border="0" color="33554432" x="14" y="112" height="27" width="721" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-15" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+report(band=detail dataobject="de_osct_report_01" x="136" y="152" height="30" width="603" border="0"  height.autosize=yes criteria="" nest_arguments=((" as_comp "),(" as_proj "),(" as_consult "),(" as_dem_month "),(" as_row_num ")) trail_footer = yes  name=dw_1 visible="1"  slideup=directlyabove )
+line(band=detail x1="10" y1="159" x2="738" y2="159"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="10" y1="189" x2="738" y2="189"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="10" y1="219" x2="738" y2="219"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="외주공사명" border="0" color="33554432" x="13" y="196" height="18" width="139" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="현  장  명" border="0" color="33554432" x="13" y="166" height="18" width="139" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="계 약 금 액" border="0" color="33554432" x="13" y="241" height="18" width="139" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="386" y1="280" x2="386" y2="309"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="517" y1="280" x2="517" y2="309"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="기  성  율" border="0" color="33554432" x="389" y="287" height="18" width="126" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="10" y1="279" x2="738" y2="279"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="10" y1="309" x2="738" y2="309"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="155" y1="249" x2="739" y2="249"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="155" y1="339" x2="739" y2="339"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="공  정  율" border="0" color="33554432" x="13" y="287" height="18" width="139" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="기성인정율
+(공정율)" border="0" color="33554432" x="13" y="418" height="36" width="139" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+report(band=detail dataobject="de_osct_report_02" x="142" y="212" height="30" width="582" border="0"  height.autosize=yes criteria="" nest_arguments=((" as_comp "),(" as_proj "),(" as_consult "),(" as_dem_month ")) trail_footer = yes  name=dw_2 visible="1"  slideup=directlyabove )
+text(band=detail alignment="2" text="구   분" border="0" color="33554432" x="158" y="316" height="18" width="246" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="보할  (%)" border="0" color="33554432" x="410" y="316" height="18" width="108" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="당월  (%)" border="0" color="33554432" x="524" y="316" height="18" width="108" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="누계  (%)" border="0" color="33554432" x="638" y="316" height="18" width="98" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="155" y1="429" x2="739" y2="429"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="155" y1="399" x2="739" y2="399"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="155" y1="369" x2="739" y2="369"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="금회기성" border="0" color="33554432" x="158" y="633" height="18" width="90" html.valueishtml="0"  name=t_13 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="155" y1="459" x2="739" y2="459"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="155" y1="489" x2="739" y2="489"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="155" y1="519" x2="739" y2="519"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="10" y1="549" x2="738" y2="549"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="406" y1="310" x2="406" y2="549"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="520" y1="310" x2="520" y2="549"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="634" y1="310" x2="634" y2="549"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="11" y1="729" x2="739" y2="729"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="12" y1="759" x2="740" y2="759"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="기  성  금  액" border="0" color="33554432" x="13" y="622" height="18" width="141" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="하자증권발급여부" border="0" color="33554432" x="14" y="736" height="18" width="139" html.valueishtml="0"  name=t_15 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="제출(       )      미제출(       )" border="0" color="33554432" x="161" y="736" height="18" width="288" html.valueishtml="0"  name=t_16 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="155" y1="159" x2="155" y2="760"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="249" y1="550" x2="249" y2="729"  name=l_29 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="누계기성" border="0" color="33554432" x="158" y="691" height="18" width="90" html.valueishtml="0"  name=t_14 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="156" y1="609" x2="740" y2="609"  name=l_32 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="156" y1="669" x2="740" y2="669"  name=l_30 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="전회기성" border="0" color="33554432" x="158" y="573" height="18" width="90" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+report(band=detail dataobject="de_osct_report_03" x="261" y="554" height="30" width="459" border="0"  height.autosize=yes criteria="" nest_arguments=((" as_comp "),(" as_proj "),(" as_consult "),(" as_dem_month ")) trail_footer = yes  name=dw_3 visible="1" )
+compute(band=detail alignment="0" expression="left( dem_date ,4)+ ~"  년  ~" + mid(dem_date,5,2) + ~" 월 ~" + right( dem_date ,2) + ~" 일~""border="0" color="33554432" x="181" y="805" height="18" width="313" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="316" y="845" height="18" width="267" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="316" y="873" height="18" width="104" format="@@@-@@-@@@@@" html.valueishtml="0"  name=cust_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression=" owner + ~"(인)~""border="0" color="33554432" x="319" y="900" height="18" width="120" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=detail x1="10" y1="1040" x2="738" y2="1040"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="492" y1="947" x2="492" y2="1040"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="521" y1="969" x2="738" y2="969"  name=l_33 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="520" y1="947" x2="520" y2="1040"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="593" y1="948" x2="593" y2="1041"  name=l_34 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="666" y1="948" x2="666" y2="1041"  name=l_35 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="0" text="확
+인
+결
+재" border="0" color="33554432" x="498" y="959" height="72" width="19" html.valueishtml="0"  name=t_23 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="작성자" border="0" color="33554432" x="524" y="950" height="18" width="66" html.valueishtml="0"  name=t_24 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="과,차장" border="0" color="33554432" x="596" y="950" height="18" width="68" html.valueishtml="0"  name=t_25 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="소장" border="0" color="33554432" x="670" y="950" height="18" width="66" html.valueishtml="0"  name=t_26 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="(주) 세 보 엠 이 씨" border="0" color="33554432" x="291" y="1043" height="12" width="187" html.valueishtml="0"  name=t_27 visible="1"  font.face="굴림체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="1" text="현장관련양식" border="0" color="33554432" x="551" y="1043" height="12" width="187" html.valueishtml="0"  name=t_29 visible="1"  font.face="굴림체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="0" text="양식 - 공사지원" border="0" color="33554432" x="13" y="1042" height="12" width="187" html.valueishtml="0"  name=t_28 visible="1"  font.face="굴림체" font.height="-10" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=detail x1="492" y1="947" x2="738" y2="947"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="10" y1="90" x2="10" y2="1040"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="738" y1="90" x2="738" y2="1040"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="0" text="상기와 같이 공사가 진행되어 기성금을 청구합니다." border="0" color="33554432" x="18" y="770" height="18" width="388" html.valueishtml="0"  name=t_17 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="신  청  자" border="0" color="33554432" x="100" y="841" height="18" width="88" html.valueishtml="0"  name=t_18 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="상      호 :" border="0" color="33554432" x="207" y="845" height="18" width="96" html.valueishtml="0"  name=t_20 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="사업자번호 :" border="0" color="33554432" x="207" y="873" height="18" width="96" html.valueishtml="0"  name=t_19 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="0" text="대  표  자 :" border="0" color="33554432" x="207" y="900" height="18" width="96" html.valueishtml="0"  name=t_21 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=detail alignment="2" text="(주) 세 보 엠 이 씨   귀하" border="0" color="33554432" x="171" y="927" height="18" width="357" html.valueishtml="0"  name=t_22 visible="1"  font.face="굴림체" font.height="-12" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

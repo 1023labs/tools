@@ -1,0 +1,62 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=23 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="cm_cust_survey_plan.company_code" )
+ column=(type=char(4) updatewhereclause=yes name=sur_yyyy dbname="cm_cust_survey_plan.sur_yyyy" )
+ column=(type=char(2) updatewhereclause=yes name=sur_half dbname="cm_cust_survey_plan.sur_half" values="상반기	1/하반기	2/" )
+ column=(type=char(50) updatewhereclause=yes name=sur_half_name dbname="cm_cust_survey_plan.sur_half_name" )
+ column=(type=char(8) updatewhereclause=yes name=sur_ins_date dbname="cm_cust_survey_plan.sur_ins_date" )
+ column=(type=char(10) updatewhereclause=yes name=sur_ins_empno dbname="cm_cust_survey_plan.sur_ins_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(100) updatewhereclause=yes name=sur_remark dbname="cm_cust_survey_plan.sur_remark" )
+ retrieve="SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+       A.SUR_YYYY       AS SUR_YYYY,
+       A.SUR_HALF       AS SUR_HALF,
+       A.SUR_HALF_NAME  AS SUR_HALF_NAME,
+       A.SUR_INS_DATE   AS SUR_INS_DATE,
+       A.SUR_INS_EMPNO  AS SUR_INS_EMPNO,
+       B.EMP_NAME         AS EMP_NAME,
+       A.SUR_REMARK     AS SUR_REMARK 
+  FROM CM_CUST_SURVEY_PLAN A LEFT JOIN HR_PERS_MASTER B
+                                                              ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                            AND A.SUR_INS_EMPNO = B.EMP_NO
+                                                    INNER JOIN CM_CUST_SURVEY_LIST_P C
+                                                              ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                            AND A.SUR_YYYY     = C.SUR_YYYY
+                                                           AND A.SUR_HALF     = C.SUR_HALF
+                                                           AND C.SUR_PROJ_CODE = :AS_PROJ_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.SUR_YYYY     = :AS_YYYY
+   AND A.SUR_HALF     LIKE :AS_HALF" arguments=(("AS_COMP_CODE", string),("AS_YYYY", string),("AS_HALF", string),("AS_PROJ_CODE", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="5" height="17" width="33" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="평가년도" border="0" color="33554432" x="36" y="5" height="17" width="63" html.valueishtml="0"  name=sur_yyyy_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="평가시기" border="0" color="33554432" x="101" y="5" height="17" width="57" html.valueishtml="0"  name=sur_half_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="내용" border="0" color="33554432" x="160" y="5" height="17" width="286" html.valueishtml="0"  name=sur_half_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="생성일자" border="0" color="33554432" x="448" y="5" height="17" width="78" html.valueishtml="0"  name=sur_ins_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="620" y="5" height="17" width="379" html.valueishtml="0"  name=sur_remark_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="생성자" border="0" color="33554432" x="528" y="5" height="17" width="90" html.valueishtml="0"  name=hr_pers_master_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Sur Ins Empno" border="0" color="33554432" x="1073" y="5" height="17" width="37" html.valueishtml="0"  name=sur_ins_empno_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회사" border="0" color="33554432" x="1001" y="5" height="17" width="70" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="36" y="5" height="17" width="63" format="[general]" html.valueishtml="0"  name=sur_yyyy visible="1" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="101" y="5" height="17" width="57" format="[general]" html.valueishtml="0"  name=sur_half visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="160" y="5" height="17" width="286" format="[general]" html.valueishtml="0"  name=sur_half_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="449" y="5" height="17" width="77" format="[general]" html.valueishtml="0"  name=sur_ins_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="620" y="5" height="17" width="379" format="[general]" html.valueishtml="0"  name=sur_remark visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="528" y="5" height="17" width="90" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="1073" y="5" height="17" width="37" format="[general]" html.valueishtml="0"  name=sur_ins_empno visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="1001" y="5" height="17" width="70" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="5" height="17" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

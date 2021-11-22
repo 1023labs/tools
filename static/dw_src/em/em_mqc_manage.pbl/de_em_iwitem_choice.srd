@@ -1,0 +1,72 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=item_code dbname="em_est_em.item_code" dbalias="A.item_code" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="em_est_em.const_code" dbalias="A.const_code" )
+ column=(type=char(5) updatewhereclause=yes name=seq dbname="em_est_em.seq" dbalias="A.seq" )
+ column=(type=char(10) updatewhereclause=yes name=const_div dbname="em_est_em.const_div" dbalias="A.const_div" )
+ column=(type=char(20) updatewhereclause=yes name=supply_item dbname="em_est_em.supply_item" dbalias="A.supply_item" )
+ column=(type=decimal(6) updatewhereclause=yes name=item_qty dbname="em_est_em.item_qty" dbalias="A.item_qty" )
+ column=(type=char(10) updatewhereclause=yes name=iw_diviw dbname="iw_diviw" )
+ column=(type=char(10) updatewhereclause=yes name=iw_divsupply dbname="iw_divsupply" )
+ retrieve="  SELECT A.ITEM_CODE,A.CONST_CODE,A.SEQ,A.CONST_DIV,A.SUPPLY_ITEM,A.ITEM_QTY,NVL(C.IW_DIV,'N') IW_DIVIW, NVL(D.IW_DIV,'Y') IW_DIVSUPPLY       
+      FROM EM_EST_EM     A,
+           EM_EST_IWLIST B,
+           (SELECT USER_ID, GUBUN, BREAK_DIV, EST_CODE, CONST_DIV, IW_DIV, DISJOIN_TAG
+              FROM EM_EST_IWITEM_SELECT
+             WHERE USER_ID   = :as_user_id
+               AND GUBUN     = '1'
+               AND BREAK_DIV = :as_break_div
+               AND EST_CODE  = :as_estcode ) C,
+           (SELECT USER_ID, GUBUN, BREAK_DIV, EST_CODE, CONST_DIV, IW_DIV, DISJOIN_TAG
+              FROM EM_EST_IWITEM_SELECT
+             WHERE USER_ID   = :as_user_id
+               AND GUBUN     = '2'
+               AND BREAK_DIV = :as_break_div
+               AND EST_CODE  = :as_estcode ) D    
+     WHERE A.USER_ID     = :as_user_id
+       AND A.BREAK_DIV   = :as_break_div
+       AND A.EST_CODE    = :as_estcode
+       AND A.CONST_DIV   = :as_constdiv
+       AND A.CONST_CODE  LIKE :as_constcode
+       AND A.CODE_TAG    = '11'        
+       AND NVL(A.SUPPLY_ITEM,' ') NOT IN ('10','14','16')
+       AND A.USER_ID     = B.USER_ID
+       AND A.BREAK_DIV   = B.BREAK_DIV
+       AND A.EST_CODE    = B.EST_CODE
+       AND A.ITEM_CODE   = B.IW_CODE
+       AND B.IW_DIV      = C.IW_DIV(+)
+       AND A.SUPPLY_ITEM = D.IW_DIV(+)" arguments=(("as_user_id", string),("as_constdiv", string),("as_estcode", string),("as_break_div", string),("as_constcode", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="3" y="0" height="21" width="31"  name=c_row_bg visible="1" brush.hatch="6" brush.color="15780518" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="15780518" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="34" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=0 border="0" color="33554432" x="39" y="1" height="19" width="82" html.valueishtml="0"  name=item_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Em Est Em Item Code" border="0" color="33554432" x="38" y="1" height="19" width="83" html.valueishtml="0"  name=em_est_em_item_code_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=0 border="0" color="33554432" x="124" y="1" height="19" width="278" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Em Est Em Const Code" border="0" color="33554432" x="123" y="1" height="19" width="279" html.valueishtml="0"  name=em_est_em_const_code_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=0 border="0" color="33554432" x="405" y="1" height="19" width="33" html.valueishtml="0"  name=seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Em Est Em Seq" border="0" color="33554432" x="404" y="1" height="19" width="34" html.valueishtml="0"  name=em_est_em_seq_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="0" tabsequence=0 border="0" color="33554432" x="441" y="1" height="19" width="68" html.valueishtml="0"  name=const_div visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Em Est Em Const Div" border="0" color="33554432" x="440" y="1" height="19" width="69" html.valueishtml="0"  name=em_est_em_const_div_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=0 border="0" color="33554432" x="512" y="1" height="19" width="138" html.valueishtml="0"  name=supply_item visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Em Est Em Supply Item" border="0" color="33554432" x="511" y="1" height="19" width="139" html.valueishtml="0"  name=em_est_em_supply_item_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="0" tabsequence=0 border="0" color="33554432" x="653" y="1" height="19" width="551" html.valueishtml="0"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Em Est Em Item Qty" border="0" color="33554432" x="652" y="1" height="19" width="552" html.valueishtml="0"  name=em_est_em_item_qty_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=0 border="0" color="33554432" x="1207" y="1" height="19" width="68" html.valueishtml="0"  name=iw_diviw visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Iw Diviw" border="0" color="33554432" x="1206" y="1" height="19" width="69" html.valueishtml="0"  name=iw_diviw_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="0" tabsequence=0 border="0" color="33554432" x="1278" y="1" height="19" width="68" html.valueishtml="0"  name=iw_divsupply visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Iw Divsupply" border="0" color="33554432" x="1277" y="1" height="19" width="69" html.valueishtml="0"  name=iw_divsupply_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

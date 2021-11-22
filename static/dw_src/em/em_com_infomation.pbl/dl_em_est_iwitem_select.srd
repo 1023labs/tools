@@ -1,0 +1,37 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=user_id dbname="em_est_iwitem_select.user_id" )
+ column=(type=char(1) updatewhereclause=yes name=gubun dbname="em_est_iwitem_select.gubun" )
+ column=(type=char(8) updatewhereclause=yes name=est_code dbname="em_est_iwitem_select.est_code" )
+ column=(type=char(10) updatewhereclause=yes name=const_div dbname="em_est_iwitem_select.const_div" )
+ column=(type=char(12) updatewhereclause=yes name=item_code dbname="em_est_iwitem_select.item_code" )
+ column=(type=char(40) updatewhereclause=yes name=iw_name dbname="em_est_iwitem_select.iw_name" )
+ column=(type=char(1) updatewhereclause=yes name=disjoin_tag dbname="em_est_iwitem_select.disjoin_tag" )
+ retrieve="  SELECT DISTINCT USER_ID,
+         GUBUN,
+         EST_CODE,
+         CONST_DIV,
+         ITEM_CODE,
+         IW_NAME,
+         DISJOIN_TAG
+    FROM EM_EST_IWITEM_SELECT
+   WHERE USER_ID = :as_userid
+     AND GUBUN = :as_gubun
+     AND EST_CODE = :as_estcode
+ORDER BY ITEM_CODE" arguments=(("as_userid", string),("as_gubun", string),("as_estcode", string)) )
+rectangle(band=detail x="2" y="1" height="20" width="30"  name=c_row_bg visible="1" brush.hatch="6" brush.color="15780518" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="15780518" )
+text(band=header alignment="2" text="자재코드" border="0" color="33554432" x="34" y="2" height="14" width="72" html.valueishtml="0"  name=item_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="108" y="2" height="14" width="279" html.valueishtml="0"  name=iw_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="108" y="2" height="17" width="279" format="[general]" html.valueishtml="0"  name=iw_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="34" y="2" height="17" width="72" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="2" height="17" width="31" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

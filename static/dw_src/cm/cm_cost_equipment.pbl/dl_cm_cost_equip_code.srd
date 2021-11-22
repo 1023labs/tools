@@ -1,0 +1,28 @@
+release 9;
+datawindow(units=2 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 250 print.margin.right = 250 print.margin.top = 250 print.margin.bottom = 250 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=187 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=218 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cost_equip_code.company_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=equip_code dbname="cm_cost_equip_code.equip_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=equip_name dbname="cm_cost_equip_code.equip_name" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.EQUIP_CODE,   
+         A.EQUIP_NAME  
+    FROM CM_COST_EQUIP_CODE A   
+   WHERE A.COMPANY_CODE = :as_comp_code
+ORDER BY A.EQUIP_CODE
+" update="CM_COST_EQUIP_CODE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string)) )
+text(band=header alignment="2" text="장비명" border="0" color="33554432" x="1020" y="20" height="145" width="1479" html.valueishtml="0"  name=equip_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="20" y="20" height="145" width="500" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="541" y="20" height="145" width="458" html.valueishtml="0"  name=equip_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="1020" y="21" height="177" width="1479" format="[general]" html.valueishtml="0"  name=equip_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="541" y="21" height="177" width="458" format="[general]" html.valueishtml="0"  name=equip_code visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="20" y="21" height="177" width="500" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,59 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=28 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=23 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_esti_insurance_mst.company_code" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cm_esti_insurance_mst.cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(13) updatewhereclause=yes name=order_comp dbname="cm_esti_insurance_mst.order_comp" )
+ column=(type=char(400) updatewhereclause=yes name=order_name dbname="sm_code_cust.order_name" )
+ column=(type=number updatewhereclause=yes name=cnt dbname="cnt" )
+ column=(type=number updatewhereclause=yes name=contract_amt dbname="contract_amt" )
+ column=(type=number updatewhereclause=yes name=supply_amt dbname="supply_amt" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.CUST_CODE,
+       B.CUST_NAME,
+       A.ORDER_COMP,
+       C.CUST_NAME AS ORDER_NAME,
+       COUNT(A.SEQ) AS CNT,
+       SUM(CONTRACT_AMT) AS CONTRACT_AMT,
+       SUM(A.SUPPLY_AMT) AS SUPPLY_AMT      
+FROM CM_ESTI_INSURANCE_MST A LEFT JOIN SM_CODE_CUST B
+                                ON A.CUST_CODE = B.CUST_CODE
+                         LEFT JOIN SM_CODE_CUST C
+                                ON A.ORDER_COMP = C.CUST_CODE
+WHERE A.COMPANY_CODE = :as_comp_code
+    AND A.REG_DATE LIKE :as_reg_yymm||'%'
+GROUP BY A.COMPANY_CODE,
+         A.CUST_CODE,
+         B.CUST_NAME,
+         A.ORDER_COMP,
+         C.CUST_NAME" arguments=(("as_comp_code", string),("as_reg_yymm", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="7" height="14" width="27" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처" border="0" color="33554432" x="31" y="7" height="14" width="221" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="고객사" border="0" color="33554432" x="254" y="7" height="14" width="235" html.valueishtml="0"  name=sm_code_cust_order_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="보증금액" border="0" color="33554432" x="622" y="7" height="14" width="155" html.valueishtml="0"  name=supply_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건수" border="0" color="33554432" x="779" y="7" height="14" width="77" html.valueishtml="0"  name=cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="491" y="7" height="14" width="129" html.valueishtml="0"  name=contract_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="5" height="14" width="27" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="31" y="5" height="14" width="221" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="254" y="5" height="14" width="235" format="[general]" html.valueishtml="0"  name=order_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="622" y="5" height="14" width="155" format="#,###" html.valueishtml="0"  name=supply_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="779" y="5" height="14" width="77" format="[general]" html.valueishtml="0"  name=cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="491" y="5" height="14" width="129" format="#,###" html.valueishtml="0"  name=contract_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(contract_amt)"border="0" color="33554432" x="491" y="5" height="14" width="129" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(supply_amt)"border="0" color="33554432" x="622" y="5" height="14" width="155" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+
+sparse(names="cust_name	order_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

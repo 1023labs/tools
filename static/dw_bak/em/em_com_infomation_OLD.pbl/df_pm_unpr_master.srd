@@ -1,0 +1,42 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=item_code dbname="pm_unpr_master.item_code" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="pm_unpr_master.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(1) updatewhereclause=yes name=master_yn dbname="pm_unpr_master.master_yn" values="	Y/	N" )
+ column=(type=decimal(2) updatewhereclause=yes name=order_cost dbname="pm_unpr_master.order_cost" )
+ column=(type=char(250) updatewhereclause=yes name=maker_name dbname="maker_name" )
+ retrieve="  SELECT A.ITEM_CODE,
+         A.CUST_CODE,
+         B.CUST_NAME,
+         A.MASTER_YN,
+         A.ORDER_COST, 
+         NVL(V.DNAME,'') MAKER_NAME  
+    FROM PM_UNPR_MASTER A JOIN SM_CODE_CUST B
+                            ON A.CUST_CODE = B.CUST_CODE 
+                          LEFT JOIN VW_C_PM_MATMAKER V 
+                            ON A.ITEM_MAKER = V.DCODE  
+   WHERE A.ITEM_CODE = :as_itemcode
+     AND (A.CUST_CODE LIKE '%'||:as_find||'%' OR B.CUST_NAME LIKE '%'||:as_find||'%') 
+     AND A.OPEN_YN = 'Y' 
+ORDER BY B.CUST_NAME " arguments=(("as_itemcode", string),("as_find", string)) )
+text(band=header alignment="2" text="제조사" border="0" color="33554432" x="311" y="2" height="14" width="147" html.valueishtml="0"  name=maker_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구매단가" border="0" color="33554432" x="460" y="2" height="14" width="94" html.valueishtml="0"  name=order_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="460" y="2" height="17" width="94" format="#,##0.00" html.valueishtml="0"  name=order_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="311" y="2" height="17" width="147" format="[general]" html.valueishtml="0"  name=maker_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="2" y="2" height="14" width="81" html.valueishtml="0"  name=cust_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="마스터" border="0" color="33554432" x="271" y="2" height="14" width="38" html.valueishtml="0"  name=master_yn_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="81" format="[general]" html.valueishtml="0"  name=cust_code visible="0" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="271" y="2" height="17" width="38" format="[general]" html.valueishtml="0"  name=master_yn visible="0" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업자명" border="0" color="33554432" x="85" y="2" height="14" width="184" html.valueishtml="0"  name=cust_name_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="85" y="2" height="17" width="184" format="[general]" html.valueishtml="0"  name=cust_name visible="0" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

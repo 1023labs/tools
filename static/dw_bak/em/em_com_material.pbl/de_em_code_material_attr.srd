@@ -1,0 +1,30 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(10) update=yes updatewhereclause=yes key=yes name=ent_dept dbname="sm_code_material_attr.ent_dept" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=item_code dbname="sm_code_material_attr.item_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=item_name dbname="sm_code_material_attr.item_name" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=item_std dbname="sm_code_material_attr.item_std" )
+ retrieve="SELECT A.ENT_DEPT,
+       A.ITEM_CODE,
+       A.ITEM_NAME,
+       A.ITEM_STD
+FROM  SM_CODE_MATERIAL_ATTR A
+WHERE A.ITEM_CODE = :as_itemcode" update="SM_CODE_MATERIAL_ATTR" updatewhere=1 updatekeyinplace=no arguments=(("as_itemcode", string)) )
+text(band=header alignment="2" text="사업부코드" border="0" color="33554432" x="2" y="4" height="14" width="92" html.valueishtml="0"  name=ent_dept_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재코드" border="0" color="33554432" x="96" y="4" height="14" width="74" html.valueishtml="0"  name=item_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품명" border="0" color="33554432" x="172" y="4" height="14" width="168" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="342" y="4" height="14" width="111" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=10 border="0" color="33554432" x="2" y="2" height="14" width="92" format="[general]" html.valueishtml="0"  name=ent_dept visible="1" dddw.name=dw_sm_code_dept dddw.displaycolumn=dept_name dddw.datacolumn=dept_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="96" y="2" height="14" width="74" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=20 border="0" color="33554432" x="172" y="2" height="14" width="168" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=30 border="0" color="33554432" x="342" y="2" height="14" width="111" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

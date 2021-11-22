@@ -1,0 +1,53 @@
+release 7;
+datawindow(units=1 timer_interval=0 color=79741120 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+header(height=18 color="536870912" )
+summary(height=3 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=datetime update=yes updatewhereclause=yes key=yes name=apply_date dbname="l_code_tax.apply_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=deduct_amt dbname="l_code_tax.deduct_amt" initial="0" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=income_rate dbname="l_code_tax.income_rate" initial="0" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=resident_rate dbname="l_code_tax.resident_rate" initial="0" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=deduct_rate dbname="l_code_tax.deduct_rate" initial="0" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=unemploy_rate dbname="l_code_tax.unemploy_rate" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cut_code dbname="l_code_tax.cut_code" initial="0" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=medical_rate dbname="l_code_tax.medical_rate" initial="0" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=kukmin_rate dbname="l_code_tax.kukmin_rate" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=medical_old_rate dbname="l_code_tax.medical_old_rate" )
+ retrieve="  SELECT ~"L_CODE_TAX~".~"APPLY_DATE~",   
+         ~"L_CODE_TAX~".~"DEDUCT_AMT~",   
+         ~"L_CODE_TAX~".~"INCOME_RATE~",   
+         ~"L_CODE_TAX~".~"RESIDENT_RATE~",   
+         ~"L_CODE_TAX~".~"DEDUCT_RATE~",   
+         ~"L_CODE_TAX~".~"UNEMPLOY_RATE~",   
+         ~"L_CODE_TAX~".~"CUT_CODE~",   
+         ~"L_CODE_TAX~".~"MEDICAL_RATE~",   
+         ~"L_CODE_TAX~".~"KUKMIN_RATE~",
+			~"L_CODE_TAX~".~"MEDICAL_OLD_RATE~"
+    FROM ~"L_CODE_TAX~"  
+ORDER BY ~"L_CODE_TAX~".~"APPLY_DATE~" ASC   
+" update="L_CODE_TAX" updatewhere=2 updatekeyinplace=yes )
+button(band=header text="적용일"filename=""action="0" border="0" color="8388608" x="0" y="0" height="18" width="102" vtextalign="0" htextalign="0"  name=b_1  tag="apply_date"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="공제금액"filename=""action="0" border="0" color="8388608" x="102" y="0" height="18" width="77" vtextalign="0" htextalign="0"  name=b_2  tag="deduct_amt"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="소득세율"filename=""action="0" border="0" color="8388608" x="179" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_3  tag="income_rate"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="주민세율"filename=""action="0" border="0" color="8388608" x="250" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_4  tag="resident_rate"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="공제세율"filename=""action="0" border="0" color="8388608" x="321" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_5  tag="deduct_rate"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="고용보험율"filename=""action="0" border="0" color="8388608" x="392" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_6  tag="unemploy_rate"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="건강보험률"filename=""action="0" border="0" color="8388608" x="463" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_8  tag="madical_rate"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="국민연금률"filename=""action="0" border="0" color="8388608" x="534" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_9  tag="kukmin_rate"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="절삭구분"filename=""action="0" border="0" color="8388608" x="605" y="0" height="18" width="71" vtextalign="0" htextalign="0"  name=b_7  tag="cut_code"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="노인장기율"filename=""action="0" border="0" color="8388608" x="676" y="0" height="18" width="72" vtextalign="0" htextalign="0"  name=b_10  tag="cut_code"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+compute(band=detail alignment="2" expression="GETROW()"border="6" color="8421504" x="2" y="2" height="12" width="15" format="[general]"  name=getrow  font.face="Arial Narrow" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="79741120" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="0" x="21" y="1" height="15" width="80" format="[shortdate] [time]"  name=apply_date  tag="적용일자" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="32497648" )
+column(band=detail id=2 alignment="1" tabsequence=20 border="0" color="0" x="102" y="1" height="15" width="76" format="#,###"  name=deduct_amt  tag="공제금액" edit.limit=0 edit.case=any edit.autoselect=no edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=3 alignment="1" tabsequence=30 border="0" color="0" x="179" y="1" height="15" width="70" format="#,##0.00"  name=income_rate  tag="소득세율" edit.limit=0 edit.case=any edit.autoselect=no edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=4 alignment="1" tabsequence=40 border="0" color="0" x="250" y="1" height="15" width="70" format="#,##0.00"  name=resident_rate  tag="주민세율" edit.limit=0 edit.case=any edit.autoselect=no edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=5 alignment="1" tabsequence=50 border="0" color="0" x="321" y="1" height="15" width="70" format="#,##0.00"  name=deduct_rate  tag="공제세율" edit.limit=0 edit.case=any edit.autoselect=no edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=6 alignment="1" tabsequence=60 border="0" color="0" x="392" y="1" height="15" width="70" format="#,##0.00"  name=unemploy_rate  tag="고용보험율" edit.limit=0 edit.case=any edit.autoselect=no edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=8 alignment="1" tabsequence=70 border="0" color="0" x="463" y="1" height="15" width="70" format="#,##0.000"  name=medical_rate edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=9 alignment="1" tabsequence=80 border="0" color="0" x="534" y="1" height="15" width="70" format="#,##0.000"  name=kukmin_rate edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=7 alignment="1" tabsequence=90 border="0" color="0" x="605" y="1" height="15" width="70" format="#,###"  name=cut_code  tag="절삭구분" edit.limit=0 edit.case=any edit.autoselect=no edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+column(band=detail id=10 alignment="1" tabsequence=100 border="0" color="0" x="677" y="1" height="15" width="70" format="#,##0.000"  name=medical_old_rate edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1090519039" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )
+ 

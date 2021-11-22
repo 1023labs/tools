@@ -1,0 +1,83 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=136 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_proj_close_mst.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_proj_close_mst.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=seq dbname="cm_proj_close_mst.seq" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=close_yn dbname="cm_proj_close_mst.close_yn" values="현장마감	Y/미완료	N/" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=req_date dbname="cm_proj_close_mst.req_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date1 dbname="cm_proj_close_mst.check_date1" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date2 dbname="cm_proj_close_mst.check_date2" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date3 dbname="cm_proj_close_mst.check_date3" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date4 dbname="cm_proj_close_mst.check_date4" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date5 dbname="cm_proj_close_mst.check_date5" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date6 dbname="cm_proj_close_mst.check_date6" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=check_date7 dbname="cm_proj_close_mst.check_date7" )
+ column=(type=char(1) updatewhereclause=yes name=res_yn dbname="res_yn" values="	Y/	N" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE,
+       A.PROJ_CODE    AS PROJ_CODE,
+       B.PROJ_NAME    AS PROJ_NAME,
+       A.SEQ          AS SEQ,
+       A.CLOSE_YN     AS CLOSE_YN,
+       A.REQ_DATE     AS REQ_DATE,
+       A.CHECK_DATE1  AS CHECK_DATE1,
+       A.CHECK_DATE2  AS CHECK_DATE2,
+       A.CHECK_DATE3  AS CHECK_DATE3,
+       A.CHECK_DATE4  AS CHECK_DATE4,
+       A.CHECK_DATE5  AS CHECK_DATE5,
+       A.CHECK_DATE6  AS CHECK_DATE6,
+       A.CHECK_DATE7  AS CHECK_DATE7,
+       'N' AS RES_YN
+  FROM CM_PROJ_CLOSE_MST A INNER JOIN SM_CODE_PROJECT B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.PROJ_CODE    = B.PROJ_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    LIKE :AS_PROJ_CODE
+   AND A.CLOSE_YN LIKE :AS_CLOSE_YN
+   AND SUBSTR(A.REQ_DATE,1,6) BETWEEN :AS_FROMDATE AND :AS_TODATE" update="CM_PROJ_CLOSE_MST" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_FROMDATE", string),("AS_TODATE", string),("AS_CLOSE_YN", string)) )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="329" y="44" height="56" width="334" html.valueishtml="0"  name=cm_proj_close_mst_proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="672" y="44" height="56" width="1061" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="차수" border="0" color="33554432" x="1742" y="44" height="56" width="183" html.valueishtml="0"  name=cm_proj_close_mst_seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="요청일자" border="0" color="33554432" x="1934" y="44" height="56" width="338" html.valueishtml="0"  name=cm_proj_close_mst_req_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="선급금" border="0" color="33554432" x="2281" y="44" height="56" width="347" html.valueishtml="0"  name=cm_proj_close_mst_check_date1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="보증금" border="0" color="33554432" x="2638" y="44" height="56" width="361" html.valueishtml="0"  name=cm_proj_close_mst_check_date2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전도금" border="0" color="33554432" x="3008" y="44" height="56" width="361" html.valueishtml="0"  name=cm_proj_close_mst_check_date3_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="무전기" border="0" color="33554432" x="3378" y="44" height="56" width="357" html.valueishtml="0"  name=cm_proj_close_mst_check_date4_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="카메라" border="0" color="33554432" x="3744" y="44" height="56" width="366" html.valueishtml="0"  name=cm_proj_close_mst_check_date5_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="차량" border="0" color="33554432" x="4119" y="44" height="56" width="370" html.valueishtml="0"  name=cm_proj_close_mst_check_date6_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사무용품" border="0" color="33554432" x="4498" y="44" height="56" width="370" html.valueishtml="0"  name=cm_proj_close_mst_check_date7_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Proj Close Mst
+Company Code" border="0" color="33554432" x="5207" y="44" height="56" width="137" html.valueishtml="0"  name=cm_proj_close_mst_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="9" y="44" height="56" width="160" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="128" x="178" y="44" height="56" width="142" html.valueishtml="0"  name=res_yn_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="마감여부" border="0" color="33554432" x="4878" y="44" height="56" width="320" html.valueishtml="0"  name=cm_proj_close_mst_close_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="329" y="8" height="68" width="334" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="672" y="8" height="68" width="1061" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="1742" y="8" height="68" width="183" format="[general]" html.valueishtml="0"  name=seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="1938" y="8" height="68" width="334" format="[general]" html.valueishtml="0"  name=req_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="64" width="160" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=20 border="0" color="33554432" x="2286" y="8" height="68" width="343" format="[general]" html.valueishtml="0"  name=check_date1 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=30 border="0" color="33554432" x="2642" y="8" height="68" width="357" format="[general]" html.valueishtml="0"  name=check_date2 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=40 border="0" color="33554432" x="3013" y="8" height="68" width="357" format="[general]" html.valueishtml="0"  name=check_date3 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=50 border="0" color="33554432" x="3383" y="8" height="68" width="352" format="[general]" html.valueishtml="0"  name=check_date4 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=60 border="0" color="33554432" x="3749" y="8" height="68" width="361" format="[general]" html.valueishtml="0"  name=check_date5 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=70 border="0" color="33554432" x="4123" y="8" height="68" width="366" format="[general]" html.valueishtml="0"  name=check_date6 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=80 border="0" color="33554432" x="4503" y="8" height="68" width="366" format="[general]" html.valueishtml="0"  name=check_date7 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="5207" y="8" height="68" width="137" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=10 border="0" color="134217858" x="178" y="12" height="56" width="142" format="[general]" html.valueishtml="0"  name=res_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432~tif(  close_yn = 'N', rgb( 255, 0, 0), rgb( 0, 0, 255) )" x="4878" y="8" height="68" width="320" format="[general]" html.valueishtml="0"  name=close_yn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

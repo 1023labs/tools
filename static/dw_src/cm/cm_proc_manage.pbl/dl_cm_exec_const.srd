@@ -1,0 +1,47 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_exec_const.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_exec_const.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="cm_exec_const.const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="cm_exec_const.const_name" )
+ column=(type=char(4000) updatewhereclause=yes name=disp_name dbname="disp_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=const_seq dbname="cm_exec_const.const_seq" )
+ column=(type=decimal(0) updatewhereclause=yes name=query_seq dbname="cm_exec_const.query_seq" )
+ column=(type=decimal(0) updatewhereclause=yes name=level_num dbname="cm_exec_const.level_num" )
+ column=(type=char(40) updatewhereclause=yes name=high_const_code dbname="cm_exec_const.high_const_code" )
+ column=(type=char(10) updatewhereclause=yes name=direct_div dbname="cm_exec_const.direct_div" )
+ column=(type=decimal(0) updatewhereclause=yes name=high_const_seq dbname="cm_exec_const.high_const_seq" )
+ retrieve="  SELECT A.COMPANY_CODE
+       , A.PROJ_CODE
+       , B.PROJ_NAME
+       , A.CONST_CODE
+       , A.CONST_NAME
+       , LPAD('    ', (A.LEVEL_NUM - 1) * 4) || A.CONST_NAME DISP_NAME
+       , A.CONST_SEQ
+       , A.QUERY_SEQ
+       , A.LEVEL_NUM
+       , A.HIGH_CONST_CODE
+       , A.DIRECT_DIV
+       , A.HIGH_CONST_SEQ
+    FROM CM_EXEC_CONST A INNER JOIN SM_CODE_PROJECT B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.PROJ_CODE    = B.PROJ_CODE
+   WHERE A.COMPANY_CODE = :AS_COMP_CODE
+     AND A.PROJ_CODE    = :AS_PROJ_CODE
+ORDER BY A.QUERY_SEQ
+" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string)) )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="4" height="16" width="73" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="77" y="4" height="16" width="300" format="[general]" html.valueishtml="0"  name=disp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="2" y="2" height="14" width="73" html.valueishtml="0"  name=cm_exec_const_const_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="77" y="2" height="14" width="300" html.valueishtml="0"  name=disp_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

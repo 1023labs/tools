@@ -1,0 +1,105 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=22 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=1 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(1) updatewhereclause=yes name=chk dbname="chk" values="	Y/	N" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_accid_pay.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_accid_pay.proj_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=pay_yymm dbname="cm_accid_pay.pay_yymm" )
+ column=(type=char(13) updatewhereclause=yes name=biz_no dbname="sm_code_cust.biz_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=seq dbname="cm_accid_pay.seq" )
+ column=(type=char(400) updatewhereclause=yes name=ori_cust_name dbname="sm_code_cust.ori_cust_name" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=accid_gubun dbname="cm_accid_pay.accid_gubun" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=real_emp_name dbname="cm_accid_pay.real_emp_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=input_date dbname="cm_accid_pay.input_date" )
+ column=(type=number update=yes updatewhereclause=yes name=supply_amt dbname="cm_accid_pay.supply_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=vat_amt dbname="cm_accid_pay.vat_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=total_amt dbname="cm_accid_pay.total_amt" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=pay_div dbname="cm_accid_pay.pay_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=vat_tag dbname="cm_accid_pay.vat_tag" values="매입공제[카드]	10/매입공제	11/매입계산서	13/공통매입불공제	14/기타불공제	24/현금영수증공제	41/매입영세율	12/불공제(없음)	/" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=cust_tag dbname="cm_accid_pay.cust_tag" )
+ column=(type=char(13) update=yes updatewhereclause=yes name=real_cust_code dbname="cm_accid_pay.real_cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=real_cust_name dbname="sm_code_cust.real_cust_name" )
+ column=(type=char(6) updatewhereclause=yes name=bank_code dbname="sm_code_cust.bank_code" )
+ column=(type=char(30) updatewhereclause=yes name=bank_name dbname="sm_code_bank.bank_name" )
+ column=(type=char(30) updatewhereclause=yes name=deposit_no dbname="sm_code_cust.deposit_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=card_no dbname="cm_accid_pay.card_no" )
+ retrieve="SELECT 'N' AS CHK,
+       A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.PAY_YYMM,
+       B.BIZ_NO,
+       A.SEQ,
+       B.CUST_NAME AS ORI_CUST_NAME,
+       A.ACCID_GUBUN,
+       A.REAL_EMP_NAME,
+       A.INPUT_DATE,
+       A.SUPPLY_AMT,
+       A.VAT_AMT,
+       A.TOTAL_AMT,
+       A.PAY_DIV,
+       A.VAT_TAG,
+       A.CUST_TAG,
+       A.REAL_CUST_CODE,
+       C.CUST_NAME AS REAL_CUST_NAME,
+       C.BANK_CODE,
+       D.BANK_NAME,
+       C.DEPOSIT_NO,
+       A.CARD_NO
+FROM CM_ACCID_PAY A LEFT JOIN SM_CODE_CUST B
+                           ON A.CUST_CODE = B.CUST_CODE
+                    LEFT JOIN SM_CODE_CUST C LEFT JOIN SM_CODE_BANK D
+                                                    ON C.BANK_CODE = D.BANK_CODE
+                           ON A.REAL_CUST_CODE = C.CUST_CODE
+WHERE A.COMPANY_CODE = :as_comp_code
+    AND A.PROJ_CODE LIKE '%'||:as_proj_code||'%'
+    AND A.PAY_YYMM = :as_pay_yymm
+ORDER BY A.PROJ_CODE, 
+         A.SEQ    " arguments=(("as_comp_code", string),("as_proj_code", string),("as_pay_yymm", string)) )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="2" y="1" height="14" width="25" html.valueishtml="0"  name=chk_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="33554432" x="2" y="1" height="14" width="25" format="[general]" html.valueishtml="0"  name=chk visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=40 border="0" color="33554432" x="247" y="1" height="19" width="84" format="[general]" html.valueishtml="0"  name=accid_gubun visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="2" tabsequence=60 border="0" color="33554432" x="417" y="1" height="19" width="95" format="[general]" html.valueishtml="0"  name=input_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="2" tabsequence=70 border="0" color="33554432" x="514" y="1" height="19" width="93" format="[general]" html.valueishtml="0"  name=supply_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="2" tabsequence=80 border="0" color="33554432" x="609" y="1" height="19" width="103" format="[general]" html.valueishtml="0"  name=vat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="714" y="1" height="19" width="91" format="[general]" html.valueishtml="0"  name=total_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=14 alignment="2" tabsequence=90 border="0" color="33554432" x="807" y="1" height="19" width="75" format="[general]" html.valueishtml="0"  name=pay_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=15 alignment="2" tabsequence=100 border="0" color="33554432" x="884" y="1" height="19" width="77" format="[general]" html.valueishtml="0"  name=vat_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=16 alignment="2" tabsequence=110 border="0" color="33554432" x="963" y="1" height="19" width="73" format="[general]" html.valueishtml="0"  name=cust_tag visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="1740" y="1" height="19" width="89" format="[general]" html.valueishtml="0"  name=real_cust_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=20 alignment="2" tabsequence=32766 border="0" color="33554432" x="1320" y="0" height="19" width="208" format="[general]" html.valueishtml="0" protect="0~tif( cust_tag = '01', 1, 0)"  name=bank_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=21 alignment="2" tabsequence=32766 border="0" color="33554432" x="1530" y="1" height="19" width="208" format="[general]" html.valueishtml="0" protect="0~tif( cust_tag = '01', 1, 0)"  name=deposit_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="2" tabsequence=50 border="0" color="33554432" x="333" y="1" height="14" width="82" format="[general]" html.valueishtml="0" protect="0~tif( accid_gubun = '01' or  accid_gubun = '04', 0, 1)"  name=real_emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="2" tabsequence=120 border="0" color="33554432" x="1038" y="1" height="14" width="142" format="[general]" html.valueishtml="0" protect="0~tif( cust_tag = '01', 1, 0)"  name=real_cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=22 alignment="0" tabsequence=32766 border="0" color="33554432" x="1182" y="1" height="14" width="136" format="[general]" html.valueishtml="0"  name=card_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="사업자번호" border="0" color="33554432" x="29" y="1" height="14" width="100" html.valueishtml="0"  name=sm_code_cust_biz_no_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증빙일자" border="0" color="33554432" x="417" y="1" height="14" width="95" html.valueishtml="0"  name=cm_accid_pay_input_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="514" y="1" height="14" width="93" html.valueishtml="0"  name=cm_accid_pay_supply_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세액" border="0" color="33554432" x="609" y="1" height="14" width="103" html.valueishtml="0"  name=cm_accid_pay_vat_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="714" y="1" height="14" width="91" html.valueishtml="0"  name=cm_accid_pay_total_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증빙구분" border="0" color="33554432" x="807" y="1" height="14" width="75" html.valueishtml="0"  name=cm_accid_pay_pay_div_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세코드" border="0" color="33554432" x="884" y="1" height="14" width="77" html.valueishtml="0"  name=cm_accid_pay_vat_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지급처" border="0" color="33554432" x="963" y="1" height="14" width="73" html.valueishtml="0"  name=cm_accid_pay_cust_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지급거래처" border="0" color="33554432" x="1740" y="1" height="14" width="89" html.valueishtml="0"  name=cm_accid_pay_real_cust_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="은행명" border="0" color="33554432" x="1320" y="1" height="14" width="208" html.valueishtml="0"  name=sm_code_bank_bank_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계좌번호" border="0" color="33554432" x="1530" y="1" height="14" width="208" html.valueishtml="0"  name=sm_code_cust_deposit_no_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="247" y="1" height="14" width="84" html.valueishtml="0"  name=cm_accid_pay_accid_gubun_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근로자" border="0" color="33554432" x="333" y="1" height="14" width="82" html.valueishtml="0"  name=cm_accid_pay_real_emp_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지급거래처" border="0" color="33554432" x="1038" y="1" height="14" width="142" html.valueishtml="0"  name=sm_code_cust_real_cust_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="카드번호" border="0" color="33554432" x="1182" y="1" height="14" width="136" html.valueishtml="0"  name=cm_accid_pay_card_no_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="131" y="1" height="14" width="114" html.valueishtml="0"  name=sm_code_cust_ori_cust_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="29" y="1" height="14" width="100" format="[general]" html.valueishtml="0"  name=biz_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=30 border="0" color="33554432" x="131" y="1" height="14" width="114" format="[general]" html.valueishtml="0"  name=ori_cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

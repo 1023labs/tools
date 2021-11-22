@@ -1,0 +1,75 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(2) updatewhereclause=yes name=large_code dbname="sm_code_material.large_code" )
+ column=(type=char(50) updatewhereclause=yes name=large_name dbname="sm_code_material_large.large_name" )
+ column=(type=char(2) updatewhereclause=yes name=middle_code dbname="sm_code_material.middle_code" )
+ column=(type=char(50) updatewhereclause=yes name=middle_name dbname="sm_code_material_middle.middle_name" )
+ column=(type=char(3) updatewhereclause=yes name=small_code dbname="sm_code_material.small_code" )
+ column=(type=char(50) updatewhereclause=yes name=small_name dbname="sm_code_material_small.small_name" )
+ column=(type=char(12) updatewhereclause=yes name=item_code dbname="sm_code_material.item_code" )
+ column=(type=char(50) updatewhereclause=yes name=item_name dbname="sm_code_material.item_name" )
+ column=(type=char(80) updatewhereclause=yes name=item_std dbname="sm_code_material.item_std" )
+ column=(type=char(5) updatewhereclause=yes name=item_unit dbname="sm_code_material.item_unit" )
+ column=(type=decimal(0) updatewhereclause=yes name=master_cost dbname="sm_code_material.master_cost" )
+ retrieve="  SELECT A.LARGE_CODE, 
+         C.LARGE_NAME, 
+         A.MIDDLE_CODE, 
+         D.MIDDLE_NAME, 
+         A.SMALL_CODE, 
+         E.SMALL_NAME, 
+         A.ITEM_CODE, 
+         A.ITEM_NAME, 
+         A.ITEM_STD, 
+         A.ITEM_UNIT,   
+         A.MASTER_COST 
+    FROM SM_CODE_MATERIAL A, 
+         SM_CODE_MATERIAL_LARGE C, 
+         SM_CODE_MATERIAL_MIDDLE D, 
+         SM_CODE_MATERIAL_SMALL E 
+   WHERE A.LARGE_CODE = C.LARGE_CODE 
+     AND A.LARGE_CODE = D.LARGE_CODE 
+     AND A.MIDDLE_CODE = D.MIDDLE_CODE 
+     AND A.LARGE_CODE = E.LARGE_CODE 
+     AND A.MIDDLE_CODE = E.MIDDLE_CODE 
+     AND A.SMALL_CODE = E.SMALL_CODE 
+     AND A.LARGE_CODE LIKE :as_large 
+     AND A.MIDDLE_CODE LIKE :as_middle 
+     AND A.SMALL_CODE LIKE :as_small 
+     AND (A.ITEM_NAME LIKE :as_find || '%' 
+           OR A.ITEM_STD LIKE :as_find || '%' 
+      OR A.ITEM_UNIT LIKE :as_find || '%' ) 
+     AND NVL(A.ITEM_STD, '%') LIKE :as_std 
+     AND NVL(A.ITEM_UNIT, '%') LIKE :as_unit 
+     AND NVL(V_ATTR0, '%') LIKE :as_attr0 
+     AND NVL(V_ATTR1, '%') LIKE :as_attr1 
+     AND NVL(V_ATTR2, '%') LIKE :as_attr2 
+     AND NVL(V_ATTR3, '%') LIKE :as_attr3 
+     AND NVL(V_ATTR4, '%') LIKE :as_attr4 
+     AND NVL(V_ATTR5, '%') LIKE :as_attr5 
+     AND NVL(V_ATTR6, '%') LIKE :as_attr6 
+     AND NVL(V_ATTR7, '%') LIKE :as_attr7 
+     AND NVL(V_ATTR8, '%') LIKE :as_attr8 
+     AND NVL(V_ATTR9, '%') LIKE :as_attr9 
+ORDER BY ITEM_CODE  " arguments=(("as_large", string),("as_middle", string),("as_small", string),("as_std", string),("as_unit", string),("as_attr0", string),("as_attr1", string),("as_attr2", string),("as_attr3", string),("as_attr4", string),("as_attr5", string),("as_attr6", string),("as_attr7", string),("as_attr8", string),("as_attr9", string),("as_find", string)) )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="578" y="4" height="14" width="109" html.valueishtml="0"  name=sm_code_material_master_cost_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재코드" border="0" color="33554432" x="36" y="4" height="14" width="91" html.valueishtml="0"  name=item_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="명칭" border="0" color="33554432" x="129" y="4" height="14" width="197" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="328" y="4" height="14" width="192" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="522" y="4" height="14" width="54" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="4" height="14" width="32" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="578" y="2" height="14" width="109" format="#,##0" html.valueishtml="0"  name=master_cost visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="36" y="2" height="14" width="91" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=12 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="129" y="2" height="14" width="197" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="328" y="2" height="14" width="192" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="522" y="2" height="14" width="54" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="32" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,138 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 0 print.margin.right = 0 print.margin.top = 0 print.margin.bottom = 0 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=148 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_esti_register.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=submit_date dbname="submit_date" )
+ column=(type=number update=yes updatewhereclause=yes name=bid_in_amount dbname="bid_in_amount" )
+ column=(type=number update=yes updatewhereclause=yes name=bid_out_amount dbname="bid_out_amount" )
+ column=(type=number update=yes updatewhereclause=yes name=exe_amount dbname="exe_amount" )
+ column=(type=number updatewhereclause=yes name=win_in_amount dbname="win_in_amount" )
+ column=(type=number updatewhereclause=yes name=win_out_amount dbname="win_out_amount" )
+ column=(type=number update=yes updatewhereclause=yes name=last_in_bid dbname="last_in_bid" )
+ column=(type=number update=yes updatewhereclause=yes name=last_out_bid dbname="last_out_bid" )
+ column=(type=number update=yes updatewhereclause=yes name=last2_in_bid dbname="last2_in_bid" )
+ column=(type=number updatewhereclause=yes name=last2_out_bid dbname="last2_out_bid" )
+ column=(type=number updatewhereclause=yes name=last_exe dbname="last_exe" )
+ column=(type=number updatewhereclause=yes name=last2_exe dbname="last2_exe" )
+ column=(type=number updatewhereclause=yes name=last_in_win dbname="last_in_win" )
+ column=(type=number updatewhereclause=yes name=last_out_win dbname="last_out_win" )
+ column=(type=number updatewhereclause=yes name=last2_in_win dbname="last2_in_win" )
+ column=(type=number updatewhereclause=yes name=last2_out_win dbname="last2_out_win" )
+ retrieve="    SELECT A.COMPANY_CODE, 
+           SUBSTR(A.SUBMIT_DATE,1,4) AS SUBMIT_DATE, 
+           NVL(SUM(CASE A.BID_DIV WHEN '1' THEN BID_AMOUNT
+                          ELSE 0   END),0) AS BID_IN_AMOUNT,
+           NVL(SUM(CASE A.BID_DIV WHEN '2' THEN BID_AMOUNT
+                          ELSE 0   END),0) AS BID_OUT_AMOUNT,
+           SUM(A.EXE_AMOUNT) AS EXE_AMOUNT,
+           NVL(SUM(CASE A.BID_DIV WHEN '1' THEN A.WIN_AMOUNT
+                        ELSE  0  END),0) AS WIN_IN_AMOUNT,                 
+           NVL(SUM(CASE A.BID_DIV WHEN '2' THEN A.WIN_AMOUNT
+                        ELSE  0  END),0) AS WIN_OUT_AMOUNT,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-1) THEN (CASE A.BID_DIV WHEN '1' THEN A.BID_AMOUNT
+                                                                                                                     ELSE  0  END)  
+                                                  ELSE 0                                          END),0) AS LAST_IN_BID,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-1) THEN (CASE A.BID_DIV WHEN '2' THEN A.BID_AMOUNT 
+                                                                                                                     ELSE  0  END)  
+                                                  ELSE 0                                          END),0) AS LAST_OUT_BID,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-2) THEN (CASE A.BID_DIV WHEN '1' THEN A.BID_AMOUNT 
+                                                                                                                     ELSE  0  END)
+                                                  ELSE 0                                          END),0) AS LAST2_IN_BID,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-2) THEN (CASE A.BID_DIV WHEN '2' THEN A.BID_AMOUNT 
+                                                                                                                     ELSE  0  END)
+                                                  ELSE 0                                          END),0) AS LAST2_OUT_BID,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-1) THEN EXE_AMOUNT
+                                                  ELSE 0                                          END),0) AS LAST_EXE,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-2) THEN EXE_AMOUNT
+                                                  ELSE 0                                          END),0) AS LAST2_EXE,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-1) THEN (CASE BID_DIV WHEN '1' THEN WIN_AMOUNT
+                                                                                                                     ELSE  0  END) 
+                                                  ELSE 0                                          END),0) AS LAST_IN_WIN,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-1) THEN (CASE BID_DIV WHEN '2' THEN WIN_AMOUNT 
+                                                                                                                     ELSE  0  END)  
+                                                  ELSE 0                                          END),0) AS LAST_OUT_WIN,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-2) THEN (CASE BID_DIV WHEN '1' THEN A.WIN_AMOUNT 
+                                                                                                                     ELSE  0  END)
+                                                  ELSE 0                                          END),0) AS LAST2_IN_WIN,
+           NVL(SUM(CASE SUBSTR(A.SUBMIT_DATE,1,4) WHEN TO_CHAR(TO_NUMBER(SUBSTR(:as_year,1,4))-2) THEN (CASE BID_DIV WHEN '2' THEN A.WIN_AMOUNT 
+                                                                                                                     ELSE  0  END)
+                                                  ELSE 0                                          END),0) AS LAST2_OUT_WIN
+      FROM CM_ESTI_REGISTER A
+     WHERE A.COMPANY_CODE = :as_comp
+       AND SUBSTR(A.SUBMIT_DATE, 1, 4) = :as_year
+  GROUP BY A.COMPANY_CODE, 
+           SUBSTR(A.SUBMIT_DATE,1,4)" arguments=(("as_comp", string),("as_year", string)) )
+text(band=detail alignment="0" text="* 년도별/월별 견적현황" border="0" color="33554432" x="29" y="4" height="14" width="132" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="현설참여" border="0" color="33554432" x="100" y="51" height="14" width="104" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="right(string(number( as_year )-2),2)+~"년~""border="0" color="33554432" x="29" y="79" height="14" width="60" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="104" y="79" height="17" width="99" format="#,##0" html.valueishtml="0"  name=last2_in_bid visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="222" y="79" height="14" width="93" format="#,##0" html.valueishtml="0"  name=last2_out_bid visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="right(string(number( as_year )-1),2) +~"년~""border="0" color="33554432" x="29" y="104" height="14" width="60" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="104" y="104" height="17" width="99" format="#,##0" html.valueishtml="0"  name=last_in_bid visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="222" y="104" height="17" width="93" format="#,##0" html.valueishtml="0"  name=last_out_bid visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="right( as_year ,2)+~"년~""border="0" color="33554432" x="29" y="128" height="14" width="60" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="104" y="128" height="17" width="99" format="#,##0" html.valueishtml="0"  name=bid_in_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="222" y="128" height="17" width="93" format="#,##0" html.valueishtml="0"  name=bid_out_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="323" y1="24" x2="323" y2="144"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="211" y1="46" x2="211" y2="144"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="94" y1="23" x2="94" y2="144"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="422" y1="24" x2="422" y2="144"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="22" y1="23" x2="422" y2="23"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="95" y1="45" x2="323" y2="45"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="23" y1="70" x2="423" y2="70"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="22" y1="95" x2="422" y2="95"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="22" y1="119" x2="422" y2="119"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="22" y1="144" x2="422" y2="144"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="22" y1="24" x2="22" y2="144"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="422" y1="23" x2="1054" y2="23"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="529" y1="23" x2="529" y2="144"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="731" y1="23" x2="731" y2="144"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="834" y1="24" x2="834" y2="144"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="957" y1="24" x2="957" y2="144"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1053" y1="24" x2="1053" y2="144"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="530" y1="45" x2="731" y2="45"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="624" y1="46" x2="624" y2="144"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="423" y1="70" x2="1054" y2="70"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="422" y1="95" x2="1053" y2="95"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="422" y1="119" x2="1053" y2="119"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="422" y1="144" x2="1054" y2="144"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="견적현황" border="0" color="33554432" x="101" y="29" height="14" width="217" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="신규낙찰금액" border="0" color="33554432" x="533" y="29" height="14" width="194" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="현셜미참여" border="0" color="33554432" x="217" y="51" height="14" width="102" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="현설참여" border="0" color="33554432" x="533" y="51" height="14" width="88" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="현설미참여" border="0" color="33554432" x="629" y="51" height="14" width="99" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="구분" border="0" color="33554432" x="28" y="41" height="14" width="60" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="합계" border="0" color="33554432" x="329" y="41" height="14" width="97" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="입찰금액" border="0" color="33554432" x="427" y="41" height="14" width="97" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="합계" border="0" color="33554432" x="736" y="41" height="14" width="97" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="낙찰율" border="0" color="33554432" x="839" y="41" height="14" width="116" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="입찰실행율" border="0" color="33554432" x="962" y="41" height="14" width="89" html.valueishtml="0"  name=t_13 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" last2_in_bid + last2_out_bid "border="0" color="33554432" x="333" y="79" height="14" width="77" format="#,##0" html.valueishtml="0"  name=last2_bid_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" last_in_bid + last_out_bid "border="0" color="33554432" x="333" y="104" height="14" width="77" format="#,##0" html.valueishtml="0"  name=last_bid_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" bid_in_amount + bid_out_amount "border="0" color="33554432" x="333" y="128" height="14" width="77" format="#,##0" html.valueishtml="0"  name=bid_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="430" y="79" height="14" width="90" format="#,##0" html.valueishtml="0"  name=last2_exe visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="430" y="104" height="14" width="90" format="#,##0" html.valueishtml="0"  name=last_exe visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="430" y="128" height="14" width="90" format="#,##0" html.valueishtml="0"  name=exe_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="537" y="79" height="14" width="82" format="#,##0" html.valueishtml="0"  name=last2_in_win visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="537" y="104" height="14" width="82" format="#,##0" html.valueishtml="0"  name=last_in_win visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="537" y="128" height="14" width="82" format="#,##0" html.valueishtml="0"  name=win_in_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="633" y="79" height="14" width="92" format="#,##0" html.valueishtml="0"  name=last2_out_win visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="633" y="104" height="14" width="92" format="#,##0" html.valueishtml="0"  name=last_out_win visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="633" y="128" height="14" width="92" format="#,##0" html.valueishtml="0"  name=win_out_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round(exe_amount /  bid_sum * 100,2)+~"%~""border="0" color="33554432" x="964" y="127" height="14" width="82" format="[GENERAL]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( last_exe / last_bid_sum * 100,2)+~"%~""border="0" color="33554432" x="964" y="105" height="14" width="82" format="[GENERAL]" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( last2_exe / last_bid_sum * 100,2)+~"%~""border="0" color="33554432" x="964" y="78" height="14" width="82" format="[GENERAL]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="win_in_amount +  win_out_amount"border="0" color="33554432" x="740" y="128" height="14" width="88" format="#,##0" html.valueishtml="0"  name=win_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" last_in_win +  last_out_win"border="0" color="33554432" x="740" y="104" height="14" width="88" format="#,##0" html.valueishtml="0"  name=last_win_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" last2_in_win +  last2_out_win"border="0" color="33554432" x="740" y="79" height="14" width="88" format="#,##0" html.valueishtml="0"  name=last2_win_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( last2_win_sum / last2_bid_sum * 100,2)+~"%~""border="0" color="33554432" x="840" y="79" height="14" width="113" format="[GENERAL]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round( last_win_sum / last_bid_sum * 100,2)+~"%~""border="0" color="33554432" x="840" y="106" height="14" width="113" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round(win_sum /  bid_sum * 100,2)+~"%~""border="0" color="33554432" x="840" y="128" height="14" width="113" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,110 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_esti_master.company_code" dbalias="A.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="cm_esti_master.est_code" dbalias="A.est_code" )
+ column=(type=char(60) update=yes updatewhereclause=yes name=est_name dbname="cm_esti_master.est_name" dbalias="A.est_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=ent_dept dbname="cm_esti_master.ent_dept" dbalias="A.ent_dept" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=est_div dbname="cm_esti_master.est_div" dbalias="A.est_div" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=cnst_code dbname="cm_esti_master.cnst_code" dbalias="A.cnst_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phone_no dbname="cm_esti_master.phone_no" dbalias="A.phone_no" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=est_position dbname="cm_esti_master.est_position" dbalias="A.est_position" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=f_type dbname="cm_esti_master.f_type" dbalias="A.f_type" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_esti_master.start_date" dbalias="A.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_esti_master.end_date" dbalias="A.end_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=rec_date dbname="cm_esti_master.rec_date" dbalias="A.rec_date" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=rec_time dbname="cm_esti_master.rec_time" dbalias="A.rec_time" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=curr_user dbname="cm_esti_master.curr_user" dbalias="A.curr_user" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=con_lab_amt dbname="cm_esti_master.con_lab_amt" dbalias="A.con_lab_amt" values="단가	1/공수	2/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=est_lab_amt dbname="cm_esti_master.est_lab_amt" dbalias="A.est_lab_amt" values="단가	1/공수	2/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=exe_lab_amt dbname="cm_esti_master.exe_lab_amt" dbalias="A.exe_lab_amt" values="단가	1/공수	2/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=chg_lab_amt dbname="cm_esti_master.chg_lab_amt" dbalias="A.chg_lab_amt" values="단가	1/공수	2/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=std_lab_amt dbname="cm_esti_master.std_lab_amt" dbalias="A.std_lab_amt" values="단가1	1/조달	2/H//S	3/" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=std_mat_amt dbname="cm_esti_master.std_mat_amt" dbalias="A.std_mat_amt" values="단가1	1/조달	2/H//S	3/" )
+ column=(type=char(40) updatewhereclause=yes name=curr_name dbname="sm_auth_user.curr_name" dbalias="B.curr_name" )
+ column=(type=char(20) updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" dbalias="D.cnst_name" )
+ column=(type=char(250) updatewhereclause=yes name=f_type_name dbname="vw_cm_comcode_consttype.f_type_name" dbalias="E.f_type_name" )
+ column=(type=char(250) updatewhereclause=yes name=dept_name dbname="vw_sm_comcode_deptgroup.dept_name" dbalias="F.dept_name" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.EST_CODE,
+         A.EST_NAME,
+         A.ENT_DEPT,
+         A.EST_DIV,
+         A.CNST_CODE,
+         A.PHONE_NO,
+         A.EST_POSITION,
+         A.F_TYPE,
+         A.START_DATE,
+         A.END_DATE,
+         A.REC_DATE,
+         A.REC_TIME,
+         A.CURR_USER,
+         A.CON_LAB_AMT,
+         A.EST_LAB_AMT,
+         A.EXE_LAB_AMT,
+         A.CHG_LAB_AMT,
+         A.STD_LAB_AMT,
+         A.STD_MAT_AMT,
+         B.USER_NAME CURR_NAME,
+         D.CNST_NAME,
+         E.DNAME F_TYPE_NAME,
+         F.DNAME DEPT_NAME
+    FROM CM_ESTI_MASTER A JOIN CM_ESTI_REQUEST G
+                            ON A.COMPANY_CODE = G.COMPANY_CODE AND A.EST_CODE = G.EST_CODE
+                          LEFT JOIN SM_AUTH_USER B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE AND A.CURR_USER = B.USER_ID
+                          LEFT JOIN CM_CUST_CONSTRUCT D
+                                 ON A.CNST_CODE = D.CNST_CODE
+                          LEFT JOIN VW_CM_COMCODE_CONSTTYPE E
+                                ON A.F_TYPE = E.DCODE
+                          LEFT JOIN VW_SM_COMCODE_DEPTGROUP F
+                                 ON A.ENT_DEPT = F.DCODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.REC_DATE BETWEEN :as_from AND :as_to
+     AND A.ENT_DEPT LIKE :as_entdept
+     AND A.F_TYPE LIKE :as_type
+     AND A.RCV_YN LIKE :as_rcv_yn
+     AND ((:as_part = '00' AND A.MQC_USE = SUBSTR(:as_part,1,1) AND A.EST_USE = SUBSTR(:as_part,2,1))
+      OR (:as_part <> '00' AND (A.MQC_USE = SUBSTR(:as_part,1,1) OR A.EST_USE = SUBSTR(:as_part,2,1)))
+      OR (:as_part = '%' AND A.MQC_USE LIKE '%'))
+ORDER BY A.EST_NAME" update="CM_ESTI_MASTER" updatewhere=0 updatekeyinplace=no arguments=(("as_compcode", string),("as_from", string),("as_to", string),("as_entdept", string),("as_type", string),("as_part", string),("as_rcv_yn", string)) )
+text(band=header alignment="2" text="현설코드" border="0" color="33554432" x="34" y="0" height="15" width="63" html.valueishtml="0"  name=est_code_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="99" y="0" height="15" width="290" html.valueishtml="0"  name=est_name_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업부" border="0" color="33554432" x="391" y="0" height="15" width="83" html.valueishtml="0"  name=dept_name_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현재사용자" border="0" color="33554432" x="665" y="0" height="15" width="68" html.valueishtml="0"  name=curr_name_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건설사" border="0" color="33554432" x="476" y="0" height="15" width="115" html.valueishtml="0"  name=cnst_name_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비(견적)" border="0" color="18110176" x="812" y="0" height="15" width="75" html.valueishtml="0"  name=est_lab_amt_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비(실행)" border="0" color="18110176" x="889" y="0" height="15" width="75" html.valueishtml="0"  name=exe_lab_amt_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비(변경)" border="0" color="18110176" x="966" y="0" height="15" width="75" html.valueishtml="0"  name=chg_lab_amt_t visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="기준자재비" border="0" color="18110176" x="1043" y="0" height="15" width="65" html.valueishtml="0"  name=std_mat_amt_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="접수일자" border="0" color="33554432" x="593" y="0" height="15" width="70" html.valueishtml="0"  name=rec_date_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="기준노무비" border="0" color="18110176" x="1110" y="0" height="15" width="65" html.valueishtml="0"  name=std_lab_amt_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비(도급)" border="0" color="18110176" x="735" y="0" height="15" width="75" html.valueishtml="0"  name=con_lab_amt_t visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="2" y="0" height="20" width="30"  name=c_row_bg visible="1" brush.hatch="6" brush.color="15780518" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="15780518" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="30" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="34" y="2" height="17" width="63" format="[general]" html.valueishtml="0"  name=est_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="99" y="2" height="17" width="290" format="[general]" html.valueishtml="0"  name=est_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="0" tabsequence=32766 border="0" color="33554432" x="476" y="2" height="17" width="115" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="0" tabsequence=32766 border="0" color="33554432" x="665" y="2" height="17" width="68" format="[general]" html.valueishtml="0"  name=curr_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=24 alignment="0" tabsequence=32766 border="0" color="33554432" x="391" y="2" height="17" width="83" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="0" tabsequence=20 border="0" color="33554432" x="812" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=est_lab_amt  tag="" visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="0" tabsequence=30 border="0" color="33554432" x="889" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=exe_lab_amt  tag="" visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="0" tabsequence=50 border="0" color="33554432" x="1043" y="2" height="17" width="65" format="[general]" html.valueishtml="0"  name=std_mat_amt  tag="" visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="593" y="2" height="17" width="70" format="@@@@-@@-@@" html.valueishtml="0"  name=rec_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="0" tabsequence=60 border="0" color="33554432" x="1110" y="2" height="17" width="65" format="[general]" html.valueishtml="0"  name=std_lab_amt  tag="" visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=10 border="0" color="33554432" x="735" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=con_lab_amt  tag="" visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="0" tabsequence=40 border="0" color="33554432" x="966" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=chg_lab_amt  tag="" visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="맑은 고딕" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

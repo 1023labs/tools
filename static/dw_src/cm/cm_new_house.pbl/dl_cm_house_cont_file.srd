@@ -1,0 +1,72 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=24 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cost_house_cont_file.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cost_house_cont_file.proj_code" )
+ column=(type=char(13) update=yes updatewhereclause=yes key=yes name=cust_code dbname="cm_cost_house_cont_file.cust_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=rent_date dbname="cm_cost_house_cont_file.rent_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=rent_seq dbname="cm_cost_house_cont_file.rent_seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq_no dbname="cm_cost_house_cont_file.seq_no" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=file_div dbname="cm_cost_house_cont_file.file_div" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name dbname="cm_cost_house_cont_file.file_name" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type dbname="cm_cost_house_cont_file.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_cost_house_cont_file.file_path" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=row_input_date dbname="cm_cost_house_cont_file.row_input_date" )
+ retrieve="SELECT   COMPANY_CODE   
+			,PROJ_CODE      
+			,CUST_CODE      
+			,RENT_DATE      
+			,RENT_SEQ       
+			,SEQ_NO         
+			,FILE_DIV       
+			,FILE_NAME      
+			,FILE_TYPE      
+			,FILE_PATH
+              ,ROW_INPUT_DATE
+ FROM CM_COST_HOUSE_CONT_FILE
+WHERE COMPANY_CODE = :as_comp
+  AND PROJ_CODE =    :as_proj_code
+  AND CUST_CODE =    :as_cust_code
+  AND RENT_DATE =    :as_rent_date
+  AND RENT_SEQ   =   :as_rent_seq
+  AND FILE_DIV = :as_file_div" update="CM_COST_HOUSE_CONT_FILE" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_proj_code", string),("as_cust_code", string),("as_rent_date", string),("as_rent_seq", number),("as_file_div", string)) )
+text(band=header alignment="0" text="회사코드" border="0" color="33554432" x="1063" y="1" height="19" width="19" html.valueishtml="0"  name=company_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="현장코드" border="0" color="33554432" x="1084" y="1" height="19" width="54" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="거래처코드" border="0" color="33554432" x="1140" y="1" height="19" width="89" html.valueishtml="0"  name=cust_code_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="계약일자" border="0" color="33554432" x="1231" y="1" height="19" width="54" html.valueishtml="0"  name=rent_date_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="계약순번" border="0" color="33554432" x="1287" y="1" height="19" width="90" html.valueishtml="0"  name=rent_seq_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="파일순번" border="0" color="33554432" x="1379" y="1" height="19" width="80" html.valueishtml="0"  name=seq_no_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="파일구분" border="0" color="33554432" x="1461" y="1" height="19" width="68" html.valueishtml="0"  name=file_div_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="파일타입" border="0" color="33554432" x="328" y="1" height="19" width="33" html.valueishtml="0"  name=file_type_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="파일경로" border="0" color="33554432" x="363" y="1" height="19" width="698" html.valueishtml="0"  name=file_path_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="No" border="0" color="134217741" x="2" y="7" height="14" width="34" html.valueishtml="0"  name=c_row_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="업로드일자" border="0" color="134217741" x="38" y="7" height="14" width="75" html.valueishtml="0"  name=row_input_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="파일명" border="0" color="134217741" x="115" y="7" height="14" width="176" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1063" y="1" height="19" width="19" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="1084" y="1" height="19" width="54" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="1140" y="1" height="19" width="89" format="[general]" html.valueishtml="0"  name=cust_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="1231" y="1" height="19" width="54" format="[general]" html.valueishtml="0"  name=rent_date visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="1287" y="1" height="19" width="90" format="[general]" html.valueishtml="0"  name=rent_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="1379" y="1" height="19" width="80" format="[general]" html.valueishtml="0"  name=seq_no visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1461" y="1" height="19" width="68" format="[general]" html.valueishtml="0"  name=file_div visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="328" y="1" height="19" width="33" format="[general]" html.valueishtml="0"  name=file_type visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="363" y="1" height="19" width="698" format="[general]" html.valueishtml="0"  name=file_path visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="2" y="2" height="14" width="34" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="134217856" x="38" y="2" height="14" width="75" format="@@@@-@@-@@" html.valueishtml="0"  name=row_input_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="now()"border="0" color="1073741824" x="293" y="3" height="14" width="34" format="" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="115" y="2" height="14" width="176" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+button(band=detail text="DW" enabled=yes action="0" border="0" color="134217741" x="292" y="2" height="14" width="33" vtextalign="0" htextalign="0"  name=p_download visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="67108864" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

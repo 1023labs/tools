@@ -1,0 +1,68 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_month_r_detail2.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_month_r_detail2.proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=contract_code dbname="cm_month_r_detail2.contract_code" )
+ column=(type=char(50) updatewhereclause=yes name=contract_name dbname="cm_cont_contract.contract_name" )
+ column=(type=char(8) updatewhereclause=yes name=ins_yymm dbname="cm_month_r_detail2.ins_yymm" )
+ column=(type=decimal(0) updatewhereclause=yes name=contract_amt dbname="cm_month_r_detail2.contract_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=sale_amt dbname="cm_month_r_detail2.sale_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=tot_sale_amt dbname="cm_month_r_detail2.tot_sale_amt" )
+ column=(type=char(2) updatewhereclause=yes name=slip_chk dbname="cm_month_r_detail2.slip_chk" values="	Y/	N" )
+ column=(type=char(2) updatewhereclause=yes name=expect_chk dbname="cm_month_r_detail2.expect_chk" values="	Y/	N" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.CONTRACT_CODE,
+       B.CONTRACT_NAME,
+       A.INS_YYMM,
+       A.CONTRACT_AMT,
+       A.SALE_AMT,
+       A.TOT_SALE_AMT,
+       A.SLIP_CHK,
+       A.EXPECT_CHK
+  FROM CM_MONTH_R_DETAIL2 A LEFT JOIN CM_CONT_CONTRACT B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                                  AND A.CONTRACT_CODE = B.CONTRACT_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.INS_YYMM     = :AS_INS_YYMM
+ORDER BY A.SALE_AMT, A.CONTRACT_CODE" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_INS_YYMM", string)) )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="2" y="7" height="14" width="59" html.valueishtml="0"  name=cm_month_r_detail2_contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="63" y="7" height="14" width="171" html.valueishtml="0"  name=cm_cont_contract_contract_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="236" y="7" height="14" width="93" html.valueishtml="0"  name=cm_month_r_detail2_contract_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="금월기성" border="0" color="33554432" x="331" y="7" height="14" width="86" html.valueishtml="0"  name=cm_month_r_detail2_sale_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계금액" border="0" color="33554432" x="419" y="7" height="14" width="99" html.valueishtml="0"  name=cm_month_r_detail2_tot_sale_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="확정" border="0" color="33554432" x="520" y="7" height="14" width="32" html.valueishtml="0"  name=cm_month_r_detail2_slip_chk_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회사코드" border="0" color="33554432" x="587" y="7" height="14" width="51" html.valueishtml="0"  name=cm_month_r_detail2_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="640" y="7" height="14" width="43" html.valueishtml="0"  name=cm_month_r_detail2_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="등록년월" border="0" color="33554432" x="685" y="7" height="14" width="41" html.valueishtml="0"  name=cm_month_r_detail2_ins_yymm_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예정" border="0" color="33554432" x="554" y="7" height="14" width="31" html.valueishtml="0"  name=cm_month_r_detail2_expect_chk_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="6" height="14" width="59" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="63" y="6" height="14" width="171" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="236" y="6" height="14" width="93" format="#,##0" html.valueishtml="0"  name=contract_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="331" y="6" height="14" width="86" format="#,##0" html.valueishtml="0"  name=sale_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="419" y="6" height="14" width="99" format="#,##0" html.valueishtml="0"  name=tot_sale_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="520" y="6" height="14" width="32" format="[general]" html.valueishtml="0"  name=slip_chk visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="587" y="6" height="14" width="51" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="640" y="6" height="14" width="43" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="685" y="6" height="14" width="41" format="[general]" html.valueishtml="0"  name=ins_yymm visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="555" y="6" height="14" width="30" format="[general]" html.valueishtml="0"  name=expect_chk visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(contract_amt for all)"border="0" color="33554432" x="236" y="7" height="14" width="93" format="#,##0" html.valueishtml="0"  name=sum_cont_amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(sale_amt for all)"border="0" color="33554432" x="331" y="7" height="14" width="86" format="#,##0" html.valueishtml="0"  name=sum_sale_amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(tot_sale_amt for all)"border="0" color="33554432" x="419" y="7" height="14" width="99" format="#,##0" html.valueishtml="0"  name=sum_tot_sale_amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

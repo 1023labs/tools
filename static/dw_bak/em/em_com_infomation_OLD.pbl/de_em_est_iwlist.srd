@@ -1,0 +1,47 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=user_id dbname="em_est_iwlist.user_id" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=break_div dbname="em_est_iwlist.break_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_est_iwlist.est_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=iw_code dbname="em_est_iwlist.iw_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=iw_name dbname="em_est_iwlist.iw_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=iw_size dbname="em_est_iwlist.iw_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=iw_unit dbname="em_est_iwlist.iw_unit" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=iw_chk dbname="em_est_iwlist.iw_chk" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=remarks dbname="em_est_iwlist.remarks" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=iw_div dbname="em_est_iwlist.iw_div" )
+ retrieve="  SELECT USER_ID,
+         BREAK_DIV,
+         EST_CODE,
+         IW_CODE,   
+         IW_NAME,   
+         IW_SIZE,   
+         IW_UNIT,   
+         IW_CHK,   
+         REMARKS,
+         IW_DIV
+    FROM EM_EST_IWLIST
+   WHERE USER_ID   = :as_user_id
+     AND BREAK_DIV = :as_break_div
+     AND EST_CODE  = :as_estcode
+ORDER BY IW_NAME, LENGTH(IW_SIZE), IW_SIZE" update="EM_EST_IWLIST" updatewhere=1 updatekeyinplace=no arguments=(("as_user_id", string),("as_break_div", string),("as_estcode", string)) )
+text(band=header alignment="2" text="적용기준" border="0" color="8388608" x="316" y="2" height="13" width="75" html.valueishtml="0"  name=remarks_t  tag="remarks" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="품명" border="0" color="8388608" x="2" y="2" height="13" width="118" html.valueishtml="0"  name=iw_name_t  tag="iw_name" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="8388608" x="122" y="2" height="13" width="76" html.valueishtml="0"  name=iw_size_t  tag="iw_size" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단위" border="0" color="8388608" x="200" y="2" height="13" width="29" html.valueishtml="0"  name=iw_unit_t  tag="iw_unit" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="분류" border="0" color="8388608" x="231" y="2" height="13" width="83" html.valueishtml="0"  name=iw_div_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=50 border="0" color="33554432" x="316" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=remarks visible="1" dddw.name=dw_sm_comcode_applymethod dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=10 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=10 border="0" color="33554432" x="2" y="2" height="17" width="118" format="[general]" html.valueishtml="0"  name=iw_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=20 border="0" color="33554432" x="122" y="2" height="17" width="76" format="[general]" html.valueishtml="0"  name=iw_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=30 border="0" color="33554432" x="200" y="2" height="17" width="29" format="[general]" html.valueishtml="0"  name=iw_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=40 border="0" color="33554432" x="231" y="2" height="17" width="83" format="[general]" html.valueishtml="0"  name=iw_div visible="1" dddw.name=dw_sm_comcode_iwdivision dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=10 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

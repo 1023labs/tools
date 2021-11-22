@@ -1,0 +1,47 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=22 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=30 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_cont_change_info.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_cont_change_info.proj_code" dbalias="A.proj_code" )
+ column=(type=number updatewhereclause=yes name=first_amt dbname="first_amt" )
+ column=(type=number updatewhereclause=yes name=change_amt dbname="change_amt" )
+ column=(type=number updatewhereclause=yes name=fur_amt dbname="fur_amt" )
+ column=(type=number updatewhereclause=yes name=total_amt dbname="total_amt" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       TRUNC(SUM(CASE WHEN RCV_DIV = '1' THEN NVL(A.MATERIAL_AMT,0) + NVL(LABOR_AMT,0) + NVL(COST_AMT,0) ELSE 0 END)/1000 ,0) AS FIRST_AMT,
+       TRUNC(SUM(CASE WHEN (RCV_DIV = '2' AND EXPECT_TAG = 'N') THEN NVL(A.MATERIAL_AMT,0) + NVL(LABOR_AMT,0) + NVL(COST_AMT,0) ELSE 0 END)/1000 ,0) AS CHANGE_AMT,
+       TRUNC(SUM(CASE WHEN EXPECT_TAG = 'Y' THEN NVL(A.MATERIAL_AMT,0) + NVL(LABOR_AMT,0) + NVL(COST_AMT,0) ELSE 0 END)/1000 ,0) AS FUR_AMT,
+       TRUNC(SUM(NVL(A.MATERIAL_AMT,0) + NVL(LABOR_AMT,0) + NVL(COST_AMT,0))/1000 ,0) AS TOTAL_AMT
+  FROM CM_CONT_CHANGE_INFO A
+ WHERE A.PROJ_CODE = :as_proj
+    AND SUBSTR(A.REG_DATE,1,6) <= :as_yymm
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE" arguments=(("as_proj", string),("as_yymm", string)) )
+column(band=background id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="39" height="17" width="152" format="#,###" html.valueishtml="0"  name=first_amt  tag="" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=background id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="710" y="39" height="17" width="15" format="[general]" html.valueishtml="0"  name=company_code  tag="" visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=background id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="644" y="39" height="17" width="64" format="[general]" html.valueishtml="0"  name=proj_code  tag="" visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=background id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="156" y="39" height="17" width="159" format="#,###" html.valueishtml="0"  name=change_amt  tag="" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=background id=5 alignment="2" tabsequence=32766 border="0" color="134217856" x="317" y="39" height="17" width="164" format="#,###" html.valueishtml="0"  name=fur_amt  tag="" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=background id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="483" y="39" height="17" width="159" format="#,###" html.valueishtml="0"  name=total_amt  tag="" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=header x="0" y="1" height="19" width="696"  name=r_2  tag="" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="5" pen.color="33224175"  background.mode="2" background.color="33224175" )
+text(band=header alignment="2" text="최초 계약" border="0" color="134217741" x="2" y="5" height="15" width="152" html.valueishtml="0"  name=first_amt_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회사코드" border="0" color="134217741" x="710" y="5" height="15" width="15" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경 계약" border="0" color="134217741" x="156" y="5" height="15" width="159" html.valueishtml="0"  name=change_amt_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예상 계약" border="0" color="134217741" x="317" y="5" height="15" width="164" html.valueishtml="0"  name=fur_amt_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="총 계" border="0" color="134217741" x="483" y="5" height="15" width="159" html.valueishtml="0"  name=total_amt_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="134217741" x="644" y="5" height="15" width="64" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

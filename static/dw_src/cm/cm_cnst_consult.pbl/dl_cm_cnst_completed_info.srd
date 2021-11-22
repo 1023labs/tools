@@ -1,0 +1,154 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=35 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=16 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_osct_consult.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_osct_consult.proj_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="cm_osct_consult.osct_div" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="cm_osct_consult.consult_code" )
+ column=(type=char(50) updatewhereclause=yes name=consult_name dbname="cm_osct_consult.consult_name" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cm_osct_consult.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=number updatewhereclause=yes name=consult_amt dbname="cm_osct_consult.consult_amt" )
+ column=(type=char(3) updatewhereclause=yes name=pay_div dbname="cm_osct_consult.pay_div" )
+ column=(type=number updatewhereclause=yes name=construct_pay dbname="construct_pay" )
+ column=(type=number updatewhereclause=yes name=construct_pay1 dbname="construct_pay1" )
+ column=(type=number updatewhereclause=yes name=complaeted_pay dbname="complaeted_pay" )
+ column=(type=number updatewhereclause=yes name=complaeted_pay1 dbname="complaeted_pay1" )
+ column=(type=number updatewhereclause=yes name=d_rate dbname="cm_osct_consult.rate" )
+ column=(type=decimal(2) updatewhereclause=yes name=e_rate1 dbname="cm_osct_consult.rate1" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,   
+         A.CONSULT_NAME,   
+         A.CUST_CODE,
+         B.CUST_NAME,    
+         C.CONSULT_AMT,  
+         A.PAY_DIV,
+         (D.LABOR_AMT+D.FOOD_AMT+D.EQUIP_AMT+D.TOOL_AMT+D.HOUSE_AMT+D.ETC_AMT) CONSTRUCT_PAY,
+         (E.LABOR_AMT+E.FOOD_AMT+E.EQUIP_AMT+E.TOOL_AMT+E.HOUSE_AMT+E.ETC_AMT) CONSTRUCT_PAY1,
+         (D.GEN_AMT+D.CONSULT_AMT+D.HEAD_AMT) COMPLAETED_PAY,
+         (E.GEN_AMT+E.CONSULT_AMT+E.HEAD_AMT) COMPLAETED_PAY1,
+         D.COMPLETED_RATE RATE,
+         E.COMPLETED_RATE RATE1
+    FROM CM_OSCT_CONSULT A LEFT JOIN SM_CODE_CUST B
+                                  ON A.CUST_CODE = B.CUST_CODE
+                           INNER JOIN (
+                                       SELECT COMPANY_CODE,
+                                              PROJ_CODE,
+                                              OSCT_DIV,
+                                              CONSULT_CODE,
+                                              SUM(OEXE_AMT) CONSULT_AMT
+                                         FROM CM_OSCT_CONSULT_DETAIL
+                                        WHERE COMPANY_CODE = :as_comp_code 
+                                          AND PROJ_CODE    = :as_proj_code
+                                          AND OSCT_DIV     = :as_osct_div
+                                          AND STATUS_DIV   =  '3'
+                                     GROUP BY COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE ) C
+                                   ON A.COMPANY_CODE = C.COMPANY_CODE
+                                  AND A.PROJ_CODE    = C.PROJ_CODE
+                                  AND A.OSCT_DIV     = C.OSCT_DIV
+                                  AND A.CONSULT_CODE = C.CONSULT_CODE
+                           LEFT JOIN (       
+                                      SELECT A.COMPANY_CODE,   
+                                             A.PROJ_CODE,   
+                                             A.OSCT_DIV,
+                                             A.CONSULT_CODE,   
+                                             SUM(NVL(A.LABOR_AMT,0))   LABOR_AMT,
+                                             SUM(NVL(FOOD_AMT,0))      FOOD_AMT,
+                                             SUM(NVL(EQUIP_AMT,0))     EQUIP_AMT,
+                                             SUM(NVL(TOOL_AMT,0))      TOOL_AMT,
+                                             SUM(NVL(HOUSE_AMT,0))     HOUSE_AMT,
+                                             SUM(NVL(ETC_AMT,0))       ETC_AMT,   
+                                             SUM(NVL(A.HEAD_AMT,0))    HEAD_AMT,
+                                             SUM(NVL(A.CONSULT_AMT,0)) CONSULT_AMT,
+                                             SUM(NVL(A.GEN_AMT,0))     GEN_AMT,
+                                             SUM(NVL(A.COMPLETED_RATE,0)) COMPLETED_RATE
+                                        FROM CM_OSCT_COMPLETED A  
+                                       WHERE A.COMPANY_CODE  = :as_comp_code
+                                         AND A.PROJ_CODE     = :as_proj_code
+                                         AND A.OSCT_DIV      = :as_osct_div
+                                         AND SUBSTR(A.DEM_DATE,1,6) <= :as_dem_month
+                                    GROUP BY A.COMPANY_CODE,A.PROJ_CODE,A.OSCT_DIV,A.CONSULT_CODE ) D
+                                   ON A.COMPANY_CODE = D.COMPANY_CODE
+                                  AND A.PROJ_CODE    = D.PROJ_CODE
+                                  AND A.OSCT_DIV     = D.OSCT_DIV
+                                  AND A.CONSULT_CODE = D.CONSULT_CODE
+                           LEFT JOIN (
+                                      SELECT A.COMPANY_CODE,   
+                                             A.PROJ_CODE,   
+                                             A.OSCT_DIV,
+                                             A.CONSULT_CODE,   
+                                             NVL(A.LABOR_AMT,0)   LABOR_AMT,
+                                             NVL(FOOD_AMT,0)      FOOD_AMT,
+                                             NVL(EQUIP_AMT,0)     EQUIP_AMT,
+                                             NVL(TOOL_AMT,0)      TOOL_AMT,
+                                             NVL(HOUSE_AMT,0)     HOUSE_AMT,
+                                             NVL(ETC_AMT,0)       ETC_AMT,   
+                                             NVL(A.HEAD_AMT,0)    HEAD_AMT,
+                                             NVL(A.CONSULT_AMT,0) CONSULT_AMT,
+                                             NVL(A.GEN_AMT,0)     GEN_AMT,
+                                             A.COMPLETED_RATE 
+                                        FROM CM_OSCT_COMPLETED A  
+                                       WHERE A.COMPANY_CODE  = :as_comp_code
+                                         AND A.PROJ_CODE     = :as_proj_code
+                                         AND A.OSCT_DIV      = :as_osct_div
+                                         AND SUBSTR(A.DEM_DATE,1,6) = :as_dem_month) E
+                                   ON A.COMPANY_CODE = E.COMPANY_CODE
+                                  AND A.PROJ_CODE    = E.PROJ_CODE
+                                  AND A.OSCT_DIV     = E.OSCT_DIV
+                                  AND A.CONSULT_CODE = E.CONSULT_CODE                                  
+   WHERE A.COMPANY_CODE = :as_comp_code 
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.OSCT_DIV     = :as_osct_div
+ORDER BY A.CONSULT_CODE " arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_dem_month", string)) )
+text(band=header alignment="2" text="누계" border="0" color="33554432" x="554" y="20" height="14" width="75" html.valueishtml="0"  name=construct_pay_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="477" y="20" height="14" width="75" html.valueishtml="0"  name=construct_pay1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="공사" border="0" color="33554432" x="477" y="2" height="14" width="75" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="비용" border="0" color="33554432" x="554" y="2" height="14" width="75" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="631" y="20" height="14" width="75" html.valueishtml="0"  name=complaeted_pay1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="기성" border="0" color="33554432" x="631" y="2" height="14" width="75" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업체명" border="0" color="33554432" x="215" y="9" height="14" width="123" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="40" y="9" height="14" width="173" html.valueishtml="0"  name=cm_osct_consult_consult_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="9" height="14" width="36" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="340" y="9" height="14" width="75" html.valueishtml="0"  name=cm_osct_consult_consult_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+line(band=header x1="474" y1="17" x2="962" y2="17"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="134217750"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="결재조건" border="0" color="33554432" x="417" y="9" height="14" width="58" html.valueishtml="0"  name=pay_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="지급액" border="0" color="33554432" x="708" y="2" height="14" width="75" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="기성" border="0" color="33554432" x="785" y="2" height="14" width="43" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="공정" border="0" color="33554432" x="875" y="2" height="14" width="43" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="율(%)" border="0" color="33554432" x="830" y="2" height="14" width="43" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="율(%)" border="0" color="33554432" x="920" y="2" height="14" width="43" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계" border="0" color="33554432" x="708" y="20" height="14" width="75" html.valueishtml="0"  name=complaeted_pay_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="785" y="20" height="14" width="43" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="875" y="20" height="14" width="43" html.valueishtml="0"  name=e_rate1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계" border="0" color="33554432" x="830" y="20" height="14" width="43" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="누계" border="0" color="33554432" x="920" y="20" height="14" width="43" html.valueishtml="0"  name=d_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="215" y="2" height="17" width="123" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="40" y="2" height="17" width="173" format="[general]" html.valueishtml="0"  name=consult_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="36" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="417" y="2" height="17" width="58" format="[general]" html.valueishtml="0"  name=pay_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="340" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=consult_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="477" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=construct_pay1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="554" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=construct_pay visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="631" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=complaeted_pay1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="708" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=complaeted_pay visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="( construct_pay1  +  complaeted_pay1 ) /  consult_amt  * 100"border="0" color="33554432" x="785" y="2" height="17" width="43" format="#,##0.00" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="875" y="2" height="17" width="43" format="#,##0.00" html.valueishtml="0"  name=e_rate1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="( construct_pay  +  complaeted_pay ) /  consult_amt  * 100"border="0" color="33554432" x="830" y="2" height="17" width="43" format="#,##0.00" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="920" y="2" height="17" width="43" format="#,##0.00" html.valueishtml="0"  name=d_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(construct_pay for all)"border="0" color="33554432" x="554" y="1" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(construct_pay1 for all)"border="0" color="33554432" x="477" y="1" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(consult_amt for all)"border="0" color="33554432" x="340" y="1" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="215" y="1" height="14" width="123" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(complaeted_pay for all)"border="0" color="33554432" x="708" y="1" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(complaeted_pay1 for all)"border="0" color="33554432" x="631" y="1" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

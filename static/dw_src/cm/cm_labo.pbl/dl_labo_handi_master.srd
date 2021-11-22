@@ -1,0 +1,180 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=23 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(100) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=number updatewhereclause=yes name=labor_cnt dbname="labor_cnt" )
+ column=(type=number updatewhereclause=yes name=emp_cnt dbname="emp_cnt" )
+ column=(type=number updatewhereclause=yes name=sum_emp dbname="sum_emp" )
+ column=(type=number updatewhereclause=yes name=total_emp dbname="total_emp" )
+ column=(type=number updatewhereclause=yes name=handi_cnt dbname="handi_cnt" )
+ column=(type=number updatewhereclause=yes name=dup_cnt dbname="dup_cnt" )
+ column=(type=number updatewhereclause=yes name=send_amt dbname="send_amt" )
+ retrieve="SELECT HANDI.COMPANY_CODE                                                                            AS COMPANY_CODE,
+       HANDI.PROJ_CODE                                                                               AS PROJ_CODE,
+       HANDI.PROJ_NAME                                                                               AS PROJ_NAME,
+       SUM(HANDI.LABOR_CNT)                                                                               AS LABOR_CNT, --일용직 인원
+       SUM(HANDI.EMP_CNT)                                                                                 AS EMP_CNT,   --상용직 인원
+       SUM(HANDI.SUM_EMP)                                                                                 AS SUM_EMP,   --일용, 상용 합계
+       SUM(HANDI.TOTAL_EMP)                                                                               AS TOTAL_EMP, --최소고용인원
+       SUM(HANDI.HANDI_CNT)                                                                               AS HANDI_CNT, --현재고용인원
+       SUM(HANDI.DUP_CNT)                                                                                 AS DUP_CNT,   --고용미달인원
+       --인사팀 김병국대리 가산금 제외 요청 (2015_02_04)
+       /*SUM(NVL((((CASE WHEN HANDI.DUP_CNT > -1000000000     THEN  HANDI.DUP_CNT                                        ELSE 0 END) * HANDI.HANDI_AMT) +
+                  CASE WHEN HANDI.DUP_CNT > HANDI.HANDI_CNT THEN (TRUNC(TOTAL_EMP/2,0)-HANDI.HANDI_CNT)*HANDI.ADD_AMT  ELSE 0 END +
+                  CASE WHEN HANDI.DUP_CNT > TOTAL_EMP * 1/4 THEN (TRUNC(TOTAL_EMP * 0.75, 0) - CASE WHEN TRUNC(TOTAL_EMP/2,0) > HANDI_CNT THEN TRUNC(TOTAL_EMP/2,0) ELSE HANDI_CNT END) * HANDI.ADD_AMT2  ELSE 0 END),0)) AS SEND_AMT*/
+       SUM(NVL(((CASE WHEN HANDI.DUP_CNT > -1000000000 THEN HANDI.DUP_CNT ELSE 0 END) * HANDI.HANDI_AMT),0)) AS SEND_AMT
+  FROM (SELECT D.COMPANY_CODE                                                            AS COMPANY_CODE,
+               D.DEPT_CODE                                                               AS PROJ_CODE,
+               D.DEPT_NAME                                                               AS PROJ_NAME,
+               NVL(A.LABOR_CNT,0)                                                        AS LABOR_CNT,
+               NVL(F.EMP_CNT,0)                                                          AS EMP_CNT,
+               NVL(A.LABOR_CNT,0) + NVL(F.EMP_CNT,0)                                     AS SUM_EMP,
+               TRUNC((NVL(A.LABOR_CNT,0) + NVL(F.EMP_CNT,0)) * TO_NUMBER(G.REF_NAME),1)  AS TOTAL_EMP,
+               NVL(A.HANDI_CNT,0) + NVL(T.HANDI_CNT,0)                                   AS HANDI_CNT,               
+               (TRUNC((NVL(A.LABOR_CNT,0) + NVL(F.EMP_CNT,0)) * G.REF_NAME,1)) - 
+                              NVL(A.HANDI_CNT,0) - NVL(T.HANDI_CNT,0)                    AS DUP_CNT,
+               TO_NUMBER(L.REF_NAME)                                                     AS HANDI_AMT,
+               TO_NUMBER(N.REF_NAME)                                                     AS ADD_AMT,
+               TO_NUMBER(R.REF_NAME)                                                     AS ADD_AMT2
+          FROM SM_CODE_DEPT D LEFT JOIN (SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+                                                A.PROJ_CODE                    AS PROJ_CODE,
+                                                NVL(J.HANDI_CNT,0)             AS HANDI_CNT,
+                                                COUNT(DISTINCT A.LABOR_CODE)   AS LABOR_CNT
+                                           FROM CM_SALY_LABOR_ACCOUNT A INNER JOIN (SELECT B.COMPANY_CODE  AS COMPANY_CODE,
+                                                                                           B.PAY_YYMM      AS PAY_YYMM,
+                                                                                           B.LABOR_CODE    AS LABOR_CODE,
+                                                                                           MAX(B.WORK_QTY) AS WORK_QTY
+                                                                                      FROM CM_SALY_LABOR_ACCOUNT B
+                                                                                     WHERE B.COMPANY_CODE = :as_comp
+                                                                                       AND B.PAY_YYMM = TO_CHAR(ADD_MONTHS(:as_yymm||'01',-1),'YYYYMM')
+                                                                                       AND B.LABOR_CODE NOT IN (SELECT DISTINCT P.LABOR_CODE
+                                                                                                                   FROM (SELECT PAY_YYMM      AS PAY_YYMM,
+                                                                                                                                LABOR_CODE    AS LABOR_CODE,
+                                                                                                                                SUM(WORK_DAY) AS WORK_DAY
+                                                                                                                           FROM CM_SALY_LABOR_ACCOUNT
+                                                                                                                          WHERE COMPANY_CODE = :as_comp
+                                                                                                                            AND PAY_YYMM = TO_CHAR(ADD_MONTHS(:as_yymm||'01',-1),'YYYYMM')
+                                                                                                                      GROUP BY LABOR_CODE,
+                                                                                                                               PAY_YYMM) P
+                                                                                                                  WHERE P.WORK_DAY <= 15)
+                                                                                  GROUP BY B.COMPANY_CODE,
+                                                                                           B.PAY_YYMM,
+                                                                                           B.LABOR_CODE) C
+                                                                               ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                                              AND A.PAY_YYMM     = C.PAY_YYMM
+                                                                              AND A.LABOR_CODE   = C.LABOR_CODE
+                                                                              AND A.WORK_QTY     = C.WORK_QTY
+                                                                        LEFT JOIN (SELECT H.COMPANY_CODE      AS COMPANY_CODE,
+                                                                                          H.PROJ_CODE         AS PROJ_CODE,
+                                                                                          H.PAY_YYMM          AS PAY_YYMM,
+                                                                                          COUNT(H.LABOR_CODE) AS HANDI_CNT
+                                                                                     FROM CM_SALY_LABOR_ACCOUNT H INNER JOIN CM_LABO_MASTER I
+                                                                                                                          ON H.COMPANY_CODE = I.COMPANY_CODE
+                                                                                                                         AND H.LABOR_CODE   = I.LABOR_CODE
+                                                                                                                         AND I.DISABLED = 'Y'
+                                                                                    WHERE H.COMPANY_CODE = :as_comp
+                                                                                      AND H.PAY_YYMM = TO_CHAR(ADD_MONTHS(:as_yymm||'01',-1),'YYYYMM')
+                                                                                 GROUP BY H.COMPANY_CODE,
+                                                                                          H.PROJ_CODE,
+                                                                                          H.PAY_YYMM) J
+                                                                                ON A.COMPANY_CODE = J.COMPANY_CODE
+                                                                               AND A.PROJ_CODE    = J.PROJ_CODE
+                                                                               AND A.PAY_YYMM     = J.PAY_YYMM
+                                         GROUP BY A.COMPANY_CODE,
+                                                  A.PROJ_CODE,
+                                                  J.HANDI_CNT) A
+                                     ON D.COMPANY_CODE = A.COMPANY_CODE
+                                    AND D.DEPT_CODE    = A.PROJ_CODE
+                             LEFT JOIN (SELECT O.COMPANY_CODE            AS COMPANY_CODE,
+                                               O.REAL_DEPT_CODE          AS PROJ_CODE,
+                                               COUNT(NVL(P.HANDI_CHK,0)) AS HANDI_CNT
+                                          FROM HR_PAYX_RESULT_MST O INNER JOIN HR_PAYX_MASTER P
+                                                                            ON O.COMPANY_CODE = P.COMPANY_CODE
+                                                                           AND O.EMP_NO       = P.EMP_NO
+                                                                           AND O.WORK_YYMM = :as_yymm
+                                                                           AND P.HANDI_CHK = 'Y'
+                                        WHERE PAY_KIND = 'P'
+                                        GROUP BY O.COMPANY_CODE,
+                                                 O.REAL_DEPT_CODE) T
+                                    ON D.COMPANY_CODE = T.COMPANY_CODE
+                                   AND D.DEPT_CODE    = T.PROJ_CODE 
+                             LEFT JOIN (SELECT E.COMPANY_CODE   AS COMPANY_CODE,
+                                               E.REAL_DEPT_CODE AS DEPT_CODE,
+                                               COUNT(E.EMP_NO)  AS EMP_CNT
+                                          FROM HR_PAYX_RESULT_MST E
+                                         WHERE PAY_KIND = 'P'
+                                           AND E.EMPLOYEE_DIV = '1'
+                                           AND E.WORK_YYMM = :as_yymm
+                                        GROUP BY E.COMPANY_CODE,
+                                               E.REAL_DEPT_CODE) F
+                                    ON D.COMPANY_CODE = F.COMPANY_CODE
+                                   AND D.DEPT_CODE    = F.DEPT_CODE
+                             LEFT JOIN (SELECT :as_comp     AS COMPANY_CODE,
+                                               O.REF_NAME/100 AS REF_NAME
+                                          FROM HR_CODE_REF O
+                                         WHERE O.REF_GBN_CODE = 'PC' 
+                                           AND O.REF_CODE = '01') G
+                                    ON D.COMPANY_CODE = G.COMPANY_CODE
+                             LEFT JOIN (SELECT :as_comp  AS COMPANY_CODE,
+                                                 K.REF_NAME AS REF_NAME
+                                            FROM HR_CODE_REF K
+                                           WHERE K.REF_GBN_CODE = 'PC' 
+                                             AND K.REF_CODE = '02') L
+                                      ON D.COMPANY_CODE = L.COMPANY_CODE
+                             LEFT JOIN (SELECT :as_comp  AS COMPANY_CODE,
+                                               M.REF_NAME AS REF_NAME
+                                          FROM HR_CODE_REF M
+                                         WHERE M.REF_GBN_CODE = 'PC' 
+                                           AND M.REF_CODE = '03') N
+                                    ON D.COMPANY_CODE = N.COMPANY_CODE 
+                             LEFT JOIN (SELECT :as_comp  AS COMPANY_CODE,
+                                               Q.REF_NAME AS REF_NAME
+                                          FROM HR_CODE_REF Q
+                                         WHERE Q.REF_GBN_CODE = 'PC' 
+                                           AND Q.REF_CODE = '04') R
+                                    ON D.COMPANY_CODE = R.COMPANY_CODE
+         WHERE D.COMPANY_CODE = :as_comp
+           AND D.LEVELS <> '1'
+           AND D.USING_TAG = 'Y') HANDI
+   WHERE HANDI.PROJ_NAME NOT LIKE '%납품%' 
+GROUP BY HANDI.COMPANY_CODE,
+         HANDI.PROJ_CODE,
+         HANDI.PROJ_NAME    
+ORDER BY HANDI.PROJ_NAME" arguments=(("as_comp", string),("as_yymm", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="9" height="14" width="47" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="50" y="9" height="14" width="68" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="120" y="9" height="14" width="256" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="작업자수" border="0" color="33554432" x="378" y="9" height="14" width="72" html.valueishtml="0"  name=labor_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상용직수" border="0" color="33554432" x="452" y="9" height="14" width="72" html.valueishtml="0"  name=emp_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="인원계" border="0" color="33554432" x="526" y="9" height="14" width="72" html.valueishtml="0"  name=sum_emp_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="의무고용인원" border="0" color="33554432" x="600" y="9" height="14" width="78" html.valueishtml="0"  name=total_emp_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="고용장애인" border="0" color="33554432" x="680" y="9" height="14" width="72" html.valueishtml="0"  name=handi_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="미달고용인원" border="0" color="33554432" x="754" y="9" height="14" width="85" html.valueishtml="0"  name=dup_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부담금" border="0" color="33554432" x="841" y="9" height="14" width="71" html.valueishtml="0"  name=send_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="4" height="16" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="50" y="4" height="17" width="68" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="120" y="4" height="17" width="256" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="378" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=labor_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="452" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=emp_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="526" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=sum_emp visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="600" y="4" height="17" width="78" format="[general]" html.valueishtml="0"  name=total_emp visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="680" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=handi_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="754" y="4" height="17" width="85" format="[general]" html.valueishtml="0"  name=dup_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="841" y="4" height="17" width="71" format="#,###" html.valueishtml="0"  name=send_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(send_amt for all)"border="0" color="33554432" x="841" y="5" height="14" width="71" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

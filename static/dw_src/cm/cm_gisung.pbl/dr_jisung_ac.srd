@@ -1,0 +1,81 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=71 color="536870912" )
+summary(height=21 color="536870912" )
+footer(height=21 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="emp_name" )
+ column=(type=number updatewhereclause=yes name=contract_amt dbname="contract_amt" )
+ column=(type=char(17) updatewhereclause=yes name=contract_date dbname="contract_date" )
+ column=(type=number updatewhereclause=yes name=kisung_amt dbname="kisung_amt" )
+ column=(type=number updatewhereclause=yes name=youl dbname="youl" )
+ column=(type=number updatewhereclause=yes name=mikisung_amt dbname="mikisung_amt" )
+ retrieve="  SELECT A.PROJ_CODE AS PROJ_CODE,
+         B.PROJ_NAME AS PROJ_NAME,
+         A.PM_EMPNO  AS PM_EMPNO,
+         D.EMP_NAME  AS EMP_NAME,
+         (A.NUM01 * 1000) AS CONTRACT_AMT,
+         (C.START_DATE || '-' || C.END_DATE) AS CONTRACT_DATE,
+         (A.NUM07 * 1000) AS KISUNG_AMT,
+         (A.NUM09 * 100)  AS YOUL,
+         (A.NUM12 * 1000) AS MIKISUNG_AMT
+    FROM CM_CONT_CONTRACT_COST_P A INNER JOIN SM_CODE_PROJECT B 
+                                           ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                          AND A.PROJ_CODE = B.PROJ_CODE
+                                   INNER JOIN (SELECT A.COMPANY_CODE AS COMPANY_CODE,
+                                                      A.PROJ_CODE AS PROJ_CODE,
+                                                      MIN(A.START_DATE) AS START_DATE,
+                                                      MAX(A.END_DATE) AS END_DATE 
+                                                 FROM CM_CONT_CHANGE_INFO A
+                                             GROUP BY A.COMPANY_CODE,A.PROJ_CODE  
+                                             ORDER BY A.PROJ_CODE) C
+                                           ON A.COMPANY_CODE = C.COMPANY_CODE
+                                          AND A.PROJ_CODE    = C.PROJ_CODE
+                                    LEFT JOIN HR_PERS_MASTER D 
+                                           ON A.COMPANY_CODE = D.COMPANY_CODE 
+                                          AND A.PM_EMPNO = D.EMP_NO 
+   WHERE (A.COMPANY_CODE, A.PROJ_CODE, A.CC_YM) IN (  SELECT COMPANY_CODE,
+                                                             PROJ_CODE,
+                                                             MAX(CC_YM)
+                                                        FROM CM_CONT_CONTRACT_COST_P
+                                                       WHERE COMPANY_CODE = :AS_COMPANY 
+                                                         AND CC_YM BETWEEN :AS_CC_YM_FR AND :AS_CC_YM_TO
+                                                    GROUP BY COMPANY_CODE, PROJ_CODE)
+     AND A.PM_EMPNO LIKE :AS_EMP
+ORDER BY A.PM_EMPNO, A.PROJ_CODE" arguments=(("AS_COMPANY", string),("AS_CC_YM_FR", string),("AS_CC_YM_TO", string),("AS_EMP", string))  sort="pm_empno A emp_name A " )
+group(level=1 header.height=22 trailer.height=21 by=("pm_empno" , "emp_name" ) header.color="536870912" trailer.color="536870912" )
+rectangle(band=header x="0" y="29" height="4" width="996"  name=r_1 visible="1" brush.hatch="6" brush.color="0" pen.style="5" pen.width="2" pen.color="553648127"  background.mode="1" background.color="553648127" )
+rectangle(band=header x="0" y="66" height="4" width="996"  name=r_2 visible="1" brush.hatch="6" brush.color="0" pen.style="5" pen.width="2" pen.color="553648127"  background.mode="1" background.color="553648127" )
+column(band=header.1 id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="0" y="2" height="17" width="66" format="[general]" html.valueishtml="0"  name=pm_empno visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header.1 id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="69" y="3" height="17" width="126" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="111" y="4" height="17" width="54" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="0" expression="'Page ' + page() + ' of ' + pagecount()"border="0" color="33554432" x="108" y="1" height="14" width="111" format="[general]" html.valueishtml="0"  name=compute_10 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="171" y="4" height="17" width="306" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Proj Name" border="0" color="33554432" x="64" y="43" height="14" width="306" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Contract Amt" border="0" color="33554432" x="375" y="44" height="14" width="73" html.valueishtml="0"  name=contract_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Contract Date" border="0" color="33554432" x="452" y="44" height="14" width="108" html.valueishtml="0"  name=contract_date_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Kisung Amt" border="0" color="33554432" x="564" y="44" height="14" width="72" html.valueishtml="0"  name=kisung_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Youl" border="0" color="33554432" x="640" y="44" height="14" width="72" html.valueishtml="0"  name=youl_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Mikisung Amt" border="0" color="33554432" x="716" y="44" height="14" width="77" html.valueishtml="0"  name=mikisung_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="480" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=contract_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="sum(contract_amt for group 1)"border="0" color="33554432" x="480" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(contract_amt for all)"border="0" color="33554432" x="480" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="557" y="4" height="17" width="108" format="[general]" html.valueishtml="0"  name=contract_date visible="1" edit.limit=17 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="669" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=kisung_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="745" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=youl visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="821" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=mikisung_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="sum(kisung_amt for group 1)"border="0" color="33554432" x="669" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="sum(youl for group 1)"border="0" color="33554432" x="745" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=trailer.1 alignment="1" expression="sum(mikisung_amt for group 1)"border="0" color="33554432" x="821" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(kisung_amt for all)"border="0" color="33554432" x="669" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(youl for all)"border="0" color="33554432" x="745" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_8 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=summary alignment="1" expression="sum(mikisung_amt for all)"border="0" color="33554432" x="821" y="4" height="17" width="72" format="[general]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="援대┝" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,48 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=21 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osor_recog_rate.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osor_recog_rate.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_osor_recog_rate.contract_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=rate_seq dbname="cm_osor_recog_rate.rate_seq" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=rate dbname="cm_osor_recog_rate.rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=gong_rate dbname="cm_osor_recog_rate.gong_rate" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=rate_cont dbname="cm_osor_recog_rate.rate_cont" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=remarks dbname="cm_osor_recog_rate.remarks" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         A.CONTRACT_CODE, 
+         A.RATE_SEQ, 
+         A.RATE, 
+         A.GONG_RATE, 
+         A.RATE_CONT, 
+         A.REMARKS
+    FROM CM_OSOR_RECOG_RATE A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE = :as_proj
+     AND A.CONTRACT_CODE = :as_contract" update="CM_OSOR_RECOG_RATE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_proj", string),("as_contract", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=10 border="0" color="33554432" x="32" y="2" height="14" width="165" format="[general]" html.valueishtml="0"  name=rate_cont visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=40 border="0" color="33554432" x="421" y="2" height="14" width="133" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" rate *  gong_rate  * 0.01 "border="0" color="33554432" x="341" y="2" height="14" width="78" format="[GENERAL]" html.valueishtml="0"  name=revision_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=30 border="0" color="33554432" x="267" y="2" height="14" width="72" format="[general]" html.valueishtml="0"  name=gong_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="199" y="2" height="14" width="66" format="[general]" html.valueishtml="0"  name=rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합계" border="0" color="33554432" x="32" y="2" height="14" width="165" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(rate for all)"border="0" color="33554432" x="199" y="2" height="14" width="66" format="[GENERAL]" html.valueishtml="0"  name=rate_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(gong_rate for all)"border="0" color="33554432" x="267" y="2" height="14" width="72" format="[GENERAL]" html.valueishtml="0"  name=gong_rate_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(revision_rate for all)"border="0" color="33554432" x="341" y="2" height="14" width="78" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="항목" border="0" color="33554432" x="32" y="2" height="14" width="165" html.valueishtml="0"  name=rate_cont_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="보할(%)" border="0" color="33554432" x="199" y="2" height="14" width="66" html.valueishtml="0"  name=rate_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공정율(%)" border="0" color="33554432" x="267" y="2" height="14" width="72" html.valueishtml="0"  name=gong_rate_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="보할 공정율" border="0" color="33554432" x="341" y="2" height="14" width="78" html.valueishtml="0"  name=t_2 pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="421" y="2" height="14" width="133" html.valueishtml="0"  name=remarks_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

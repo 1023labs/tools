@@ -1,0 +1,89 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=36 color="536870912" )
+summary(height=1 color="536870912" )
+footer(height=15 color="536870912" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osct_completed.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osct_completed.proj_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=osct_div dbname="cm_osct_completed.osct_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=consult_code dbname="cm_osct_completed.consult_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=dem_date dbname="cm_osct_completed.dem_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=gen_amt dbname="cm_osct_completed.gen_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=vat_amt dbname="cm_osct_completed.vat_amt" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=completed_rate dbname="cm_osct_completed.completed_rate" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=paid_rate dbname="cm_osct_completed.paid_rate" )
+ column=(type=char(1) updatewhereclause=yes name=trans_tag dbname="cm_osct_completed.trans_tag" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remarks dbname="cm_osct_completed.remarks" )
+ column=(type=number updatewhereclause=yes name=total_amt dbname="cm_osct_completed.total_amt" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=payreq_ymd dbname="cm_osct_completed.payreq_ymd" )
+ column=(type=char(3) updatewhereclause=yes name=com_consult_no dbname="cm_osct_completed.com_consult_no" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,   
+         A.DEM_DATE,   
+         A.GEN_AMT,   
+         A.VAT_AMT,   
+         A.COMPLETED_RATE,   
+         A.PAID_RATE,   
+         A.TRANS_TAG,
+         A.REMARKS,
+         B.TOTAL_AMT,
+         A.PAYREQ_YMD,
+         A.COM_CONSULT_NO
+    FROM CM_OSCT_COMPLETED A INNER JOIN (SELECT COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE, SUM(NVL(OEXE_AMT,0)) TOTAL_AMT
+                                         FROM CM_OSCT_CONSULT_DETAIL
+                                        WHERE COMPANY_CODE = :as_comp_code 
+                                          AND PROJ_CODE    = :as_proj_code
+                                          AND OSCT_DIV     = :as_osct_div
+                                          AND CONSULT_CODE = :as_cons_code
+                                          AND STATUS_DIV   = '4'                                          
+                                     GROUP BY COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE ) B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.PROJ_CODE    = B.PROJ_CODE
+                                    AND A.OSCT_DIV     = B.OSCT_DIV
+                                    AND A.CONSULT_CODE = B.CONSULT_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.OSCT_DIV     = :as_osct_div
+     AND A.CONSULT_CODE = :as_cons_code
+ORDER BY A.DEM_DATE
+" update="CM_OSCT_COMPLETED" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_cons_code", string)) )
+text(band=header alignment="2" text="지급현황" border="0" color="33554432" x="309" y="2" height="14" width="89" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="214" y="20" height="14" width="93" html.valueishtml="0"  name=gen_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+line(band=header x1="212" y1="17" x2="484" y2="17"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="134217728"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="부가세" border="0" color="33554432" x="309" y="20" height="14" width="89" html.valueishtml="0"  name=vat_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="400" y="20" height="14" width="84" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공정율(%)" border="0" color="33554432" x="567" y="11" height="14" width="66" html.valueishtml="0"  name=completed_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기성율(%)" border="0" color="33554432" x="486" y="11" height="14" width="79" html.valueishtml="0"  name=paid_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회수" border="0" color="33554432" x="2" y="9" height="14" width="46" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="청구일자" border="0" color="255" x="80" y="9" height="14" width="66" html.valueishtml="0"  name=dem_date_t  tag="청구일자" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="요청일자" border="0" color="33554432" x="148" y="9" height="14" width="64" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Total Amt" border="0" color="33554432" x="635" y="11" height="14" width="85" html.valueishtml="0"  name=total_amt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="차수" border="0" color="33554432" x="50" y="11" height="14" width="28" html.valueishtml="0"  name=com_consult_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="17" width="46" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="if(isNull(gen_amt),0,gen_amt) + if(isNull(vat_amt),0,vat_amt)"border="0" color="33554432" x="400" y="1" height="17" width="84" format="#,###" html.valueishtml="0"  name=total_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=50 border="0" color="33554432" x="567" y="1" height="17" width="66" format="#,##0.00" html.valueishtml="0"  name=completed_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.displayonly=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="486" y="1" height="17" width="79" format="#,##0.00" html.valueishtml="0"  name=paid_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=40 border="0" color="33554432" x="309" y="1" height="17" width="89" format="#,###" html.valueishtml="0" protect="0~tif(trans_tag='Y', 1, 0)"  name=vat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=60 border="0" color="33554432" x="635" y="1" height="17" width="85" format="[general]" html.valueishtml="0" protect="0~tif(trans_tag='Y', 1, 0)"  name=total_amt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=30 border="0" color="33554432" x="214" y="1" height="17" width="93" format="#,###" html.valueishtml="0" protect="0~tif(trans_tag='Y', 1, 0)"  name=gen_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="80" y="1" height="17" width="66" format="####-##-##" html.valueishtml="0" protect="0~tif(trans_tag='Y', 1, 0)"  name=dem_date  tag="[R]" visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="148" y="1" height="17" width="64" format="####-##-##" html.valueishtml="0" protect="0~tif(  trans_tag = 'Y', 1,0)"  name=payreq_ymd  tag="[R]" visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=10 border="0" color="33554432" x="50" y="1" height="17" width="28" format="[general]" html.valueishtml="0"  name=com_consult_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(vat_amt for all)"border="0" color="33554432" x="309" y="1" height="14" width="89" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(gen_amt for all)"border="0" color="33554432" x="214" y="1" height="14" width="93" format="#,###" html.valueishtml="0"  name=tot_gen visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(gen_amt  +  vat_amt for all)"border="0" color="33554432" x="400" y="1" height="14" width="84" format="#,###" html.valueishtml="0"  name=sum_amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합  계" border="0" color="33554432" x="80" y="1" height="14" width="66" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

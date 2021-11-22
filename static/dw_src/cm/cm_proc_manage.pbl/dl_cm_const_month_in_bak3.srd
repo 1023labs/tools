@@ -1,0 +1,430 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=40 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=23 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_exec_const.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_exec_const.proj_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="cm_exec_const.const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="cm_exec_const.const_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=const_yymm dbname="const_yymm" )
+ column=(type=number update=yes updatewhereclause=yes name=exec_amt1 dbname="exec_amt1" )
+ column=(type=number update=yes updatewhereclause=yes name=exec_amt2 dbname="exec_amt2" )
+ column=(type=number update=yes updatewhereclause=yes name=exec_amt3 dbname="exec_amt3" )
+ column=(type=number update=yes updatewhereclause=yes name=rate1 dbname="rate1" )
+ column=(type=number update=yes updatewhereclause=yes name=rate2 dbname="rate2" )
+ column=(type=number updatewhereclause=yes name=rate100 dbname="rate100" )
+ column=(type=number updatewhereclause=yes name=rate101 dbname="rate101" )
+ column=(type=number updatewhereclause=yes name=rate102 dbname="rate102" )
+ column=(type=number updatewhereclause=yes name=rate103 dbname="rate103" )
+ column=(type=number updatewhereclause=yes name=rate104 dbname="rate104" )
+ column=(type=number updatewhereclause=yes name=rate105 dbname="rate105" )
+ column=(type=number updatewhereclause=yes name=rate106 dbname="rate106" )
+ column=(type=number updatewhereclause=yes name=rate107 dbname="rate107" )
+ column=(type=number updatewhereclause=yes name=rate108 dbname="rate108" )
+ column=(type=number updatewhereclause=yes name=rate109 dbname="rate109" )
+ column=(type=number updatewhereclause=yes name=rate110 dbname="rate110" )
+ column=(type=number updatewhereclause=yes name=rate111 dbname="rate111" )
+ column=(type=number updatewhereclause=yes name=rate112 dbname="rate112" )
+ column=(type=number updatewhereclause=yes name=rate200 dbname="rate200" )
+ column=(type=number updatewhereclause=yes name=rate201 dbname="rate201" )
+ column=(type=number updatewhereclause=yes name=rate202 dbname="rate202" )
+ column=(type=number updatewhereclause=yes name=rate203 dbname="rate203" )
+ column=(type=number updatewhereclause=yes name=rate204 dbname="rate204" )
+ column=(type=number updatewhereclause=yes name=rate205 dbname="rate205" )
+ column=(type=number updatewhereclause=yes name=rate206 dbname="rate206" )
+ column=(type=number updatewhereclause=yes name=rate207 dbname="rate207" )
+ column=(type=number updatewhereclause=yes name=rate208 dbname="rate208" )
+ column=(type=number updatewhereclause=yes name=rate209 dbname="rate209" )
+ column=(type=number updatewhereclause=yes name=rate210 dbname="rate210" )
+ column=(type=number updatewhereclause=yes name=rate211 dbname="rate211" )
+ column=(type=number updatewhereclause=yes name=rate212 dbname="rate212" )
+ column=(type=number updatewhereclause=yes name=cost_rate1_bf dbname="cost_rate1_bf" )
+ column=(type=number updatewhereclause=yes name=cost_rate2_bf dbname="cost_rate2_bf" )
+ column=(type=number update=yes updatewhereclause=yes name=cost_rate1 dbname="cost_rate1" )
+ column=(type=number update=yes updatewhereclause=yes name=cost_rate2 dbname="cost_rate2" )
+ column=(type=char(1) updatewhereclause=yes name=insert_yn dbname="insert_yn" )
+ retrieve="  SELECT A.COMPANY_CODE
+       , A.PROJ_CODE
+       , A.CONST_CODE
+       , A.CONST_NAME
+       , NVL(B.CONST_YYMM, :AS_CC_YM)                                             CONST_YYMM
+       , DECODE(NVL(B.EXEC_AMT1, 0), 0, NVL(D.EXEC_AMT1, 0), NVL(B.EXEC_AMT1, 0)) EXEC_AMT1
+       , DECODE(NVL(B.EXEC_AMT2, 0), 0, NVL(D.EXEC_AMT2, 0), NVL(B.EXEC_AMT2, 0)) EXEC_AMT2
+       , DECODE(NVL(B.EXEC_AMT3, 0), 0, NVL(D.EXEC_AMT3, 0), NVL(B.EXEC_AMT3, 0)) EXEC_AMT3
+       , CASE WHEN NVL(B.RATE1, 0) <> 0
+              THEN B.RATE1
+              WHEN NVL(C.RATE1_BF, 0) <> 0
+              THEN C.RATE1_BF
+              WHEN DECODE(NVL(B.EXEC_AMT1, 0), 0, NVL(D.EXEC_AMT1, 0), NVL(B.EXEC_AMT1, 0))
+                 + DECODE(NVL(B.EXEC_AMT2, 0), 0, NVL(D.EXEC_AMT2, 0), NVL(B.EXEC_AMT2, 0)) = 0
+              THEN 0
+              ELSE ROUND(DECODE(NVL(B.EXEC_AMT1, 0), 0, NVL(D.EXEC_AMT1, 0), NVL(B.EXEC_AMT1, 0))
+                 / (DECODE(NVL(B.EXEC_AMT1, 0), 0, NVL(D.EXEC_AMT1, 0), NVL(B.EXEC_AMT1, 0))
+                 + DECODE(NVL(B.EXEC_AMT2, 0), 0, NVL(D.EXEC_AMT2, 0), NVL(B.EXEC_AMT2, 0))), 4)
+                 * 100
+         END RATE1
+       , CASE WHEN NVL(B.RATE2, 0) <> 0
+              THEN B.RATE2
+              WHEN NVL(C.RATE2_BF, 0) <> 0
+              THEN C.RATE2_BF
+              WHEN DECODE(NVL(B.EXEC_AMT1, 0), 0, NVL(D.EXEC_AMT1, 0), NVL(B.EXEC_AMT1, 0))
+                 + DECODE(NVL(B.EXEC_AMT2, 0), 0, NVL(D.EXEC_AMT2, 0), NVL(B.EXEC_AMT2, 0)) = 0
+              THEN 0
+              ELSE ROUND(DECODE(NVL(B.EXEC_AMT2, 0), 0, NVL(D.EXEC_AMT2, 0), NVL(B.EXEC_AMT2, 0))
+                 / (DECODE(NVL(B.EXEC_AMT1, 0), 0, NVL(D.EXEC_AMT1, 0), NVL(B.EXEC_AMT1, 0))
+                 + DECODE(NVL(B.EXEC_AMT2, 0), 0, NVL(D.EXEC_AMT2, 0), NVL(B.EXEC_AMT2, 0))), 4)
+                 * 100
+         END RATE2
+       , NVL(C.RATE100, 0)            RATE100
+       , NVL(C.RATE101, 0)            RATE101
+       , NVL(C.RATE102, 0)            RATE102
+       , NVL(C.RATE103, 0)            RATE103
+       , NVL(C.RATE104, 0)            RATE104
+       , NVL(C.RATE105, 0)            RATE105
+       , NVL(C.RATE106, 0)            RATE106
+       , NVL(C.RATE107, 0)            RATE107
+       , NVL(C.RATE108, 0)            RATE108
+       , NVL(C.RATE109, 0)            RATE109
+       , NVL(C.RATE110, 0)            RATE110
+       , NVL(C.RATE111, 0)            RATE111
+       , NVL(C.RATE112, 0)            RATE112
+       , NVL(C.RATE200, 0)            RATE200
+       , NVL(C.RATE201, 0)            RATE201
+       , NVL(C.RATE202, 0)            RATE202
+       , NVL(C.RATE203, 0)            RATE203
+       , NVL(C.RATE204, 0)            RATE204
+       , NVL(C.RATE205, 0)            RATE205
+       , NVL(C.RATE206, 0)            RATE206
+       , NVL(C.RATE207, 0)            RATE207
+       , NVL(C.RATE208, 0)            RATE208
+       , NVL(C.RATE209, 0)            RATE209
+       , NVL(C.RATE210, 0)            RATE210
+       , NVL(C.RATE211, 0)            RATE211
+       , NVL(C.RATE212, 0)            RATE212
+       , NVL(C.COST_RATE1_BF, 0)      COST_RATE1_BF
+       , NVL(C.COST_RATE2_BF, 0)      COST_RATE2_BF
+       , NVL(B.COST_RATE1, 0)         COST_RATE1
+       , NVL(B.COST_RATE2, 0)         COST_RATE2
+       , NVL2(B.CONST_YYMM, 'N', 'Y') INSERT_YN
+    FROM CM_EXEC_CONST A LEFT  JOIN CM_EXEC_SET_CONST B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.PROJ_CODE    = B.PROJ_CODE
+                                AND A.CONST_CODE   = B.CONST_CODE
+                                AND B.CONST_YYMM   = :AS_CC_YM
+                         LEFT  JOIN (  SELECT COMPANY_CODE
+                                            , PROJ_CODE
+                                            , CONST_CODE
+                                            , SUM(CASE WHEN CONST_YYMM < SUBSTR(:AS_CC_YM, 1, 4)         THEN COST_RATE1 ELSE 0 END) RATE100
+                                            , SUM(CASE WHEN CONST_YYMM < SUBSTR(:AS_CC_YM, 1, 4)         THEN COST_RATE2 ELSE 0 END) RATE200
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '01' THEN COST_RATE1 ELSE 0 END) RATE101
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '01' THEN COST_RATE2 ELSE 0 END) RATE201
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '02' THEN COST_RATE1 ELSE 0 END) RATE102
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '02' THEN COST_RATE2 ELSE 0 END) RATE202
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '03' THEN COST_RATE1 ELSE 0 END) RATE103
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '03' THEN COST_RATE2 ELSE 0 END) RATE203
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '04' THEN COST_RATE1 ELSE 0 END) RATE104
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '04' THEN COST_RATE2 ELSE 0 END) RATE204
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '05' THEN COST_RATE1 ELSE 0 END) RATE105
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '05' THEN COST_RATE2 ELSE 0 END) RATE205
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '06' THEN COST_RATE1 ELSE 0 END) RATE106
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '06' THEN COST_RATE2 ELSE 0 END) RATE206
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '07' THEN COST_RATE1 ELSE 0 END) RATE107
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '07' THEN COST_RATE2 ELSE 0 END) RATE207
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '08' THEN COST_RATE1 ELSE 0 END) RATE108
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '08' THEN COST_RATE2 ELSE 0 END) RATE208
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '09' THEN COST_RATE1 ELSE 0 END) RATE109
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '09' THEN COST_RATE2 ELSE 0 END) RATE209
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '10' THEN COST_RATE1 ELSE 0 END) RATE110
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '10' THEN COST_RATE2 ELSE 0 END) RATE210
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '11' THEN COST_RATE1 ELSE 0 END) RATE111
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '11' THEN COST_RATE2 ELSE 0 END) RATE211
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '12' THEN COST_RATE1 ELSE 0 END) RATE112
+                                            , SUM(CASE WHEN CONST_YYMM = SUBSTR(:AS_CC_YM, 1, 4) || '12' THEN COST_RATE2 ELSE 0 END) RATE212
+                                            , SUM(CASE WHEN CONST_YYMM < :AS_CC_YM                       THEN COST_RATE1 ELSE 0 END) COST_RATE1_BF
+                                            , SUM(CASE WHEN CONST_YYMM < :AS_CC_YM                       THEN COST_RATE2 ELSE 0 END) COST_RATE2_BF
+                                            , MAX(CASE WHEN CONST_YYMM = TO_CHAR(ADD_MONTHS(TO_DATE(:AS_CC_YM, 'YYYYMM'), -1), 'YYYYMM') THEN RATE1 ELSE NULL END) RATE1_BF
+                                            , MAX(CASE WHEN CONST_YYMM = TO_CHAR(ADD_MONTHS(TO_DATE(:AS_CC_YM, 'YYYYMM'), -1), 'YYYYMM') THEN RATE2 ELSE NULL END) RATE2_BF
+                                         FROM CM_EXEC_SET_CONST
+                                        WHERE COMPANY_CODE = :AS_COMP_CODE
+                                          AND PROJ_CODE    = :AS_PROJ_CODE
+                                          AND CONST_YYMM  <= :AS_CC_YM
+                                     GROUP BY COMPANY_CODE, PROJ_CODE, CONST_CODE) C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.PROJ_CODE    = C.PROJ_CODE
+                                AND A.CONST_CODE   = C.CONST_CODE
+                         LEFT  JOIN (  SELECT COMPANY_CODE
+                                            , PROJ_CODE
+                                            , CONST_CODE
+                                            , SUM(CASE WHEN ITEM_CODE NOT LIKE '82%' THEN DESN_MAT_AMT ELSE 0 END) EXEC_AMT1
+                                            , SUM(CASE WHEN ITEM_CODE NOT LIKE '82%' THEN DESN_LAB_AMT ELSE 0 END) EXEC_AMT2
+                                            , SUM(CASE WHEN ITEM_CODE     LIKE '82%' THEN NVL(DESN_MAT_AMT,0)
+                                                                                        + NVL(DESN_LAB_AMT,0)
+                                                                                        + NVL(DESN_EXP_AMT,0)
+                                                                                     ELSE 0 END)                   EXEC_AMT3
+                                         FROM CM_EXEC_DETAIL
+                                        WHERE COMPANY_CODE = :AS_COMP_CODE
+                                          AND PROJ_CODE    = :AS_PROJ_CODE
+                                          AND PGM_DIV = '1'
+                                     GROUP BY COMPANY_CODE, PROJ_CODE, CONST_CODE) D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE
+                                AND A.PROJ_CODE    = D.PROJ_CODE
+                                AND A.CONST_CODE   = D.CONST_CODE
+   WHERE A.COMPANY_CODE = :AS_COMP_CODE
+     AND A.PROJ_CODE    = :AS_PROJ_CODE
+     AND ((A.CONST_CODE BETWEEN '0190' AND '0199'
+     AND A.CONST_CODE IN ('0192', '0196'))
+      OR (A.CONST_CODE NOT LIKE '019%'))
+     AND A.LEVEL_NUM = 2
+ORDER BY A.QUERY_SEQ" update="CM_EXEC_SET_CONST" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CC_YM", string)) )
+rectangle(band=header x="1" y="1" height="59" width="1784"  name=r_1 visible="1" brush.hatch="6" brush.color="32896501" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="33554432" )
+rectangle(band=header x="367" y="1" height="59" width="95"  name=r_4 visible="1" brush.hatch="6" brush.color="33481150" pen.style="0" pen.width="1" pen.color="33481150"  background.mode="2" background.color="27583231" )
+rectangle(band=header x="461" y="1" height="59" width="50"  name=r_5 visible="1" brush.hatch="6" brush.color="27583231" pen.style="0" pen.width="1" pen.color="27583231"  background.mode="2" background.color="27583231" )
+text(band=header alignment="2" text="12월" border="0" color="33554432" x="1689" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate12_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="36" y1="1" x2="36" y2="61"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="1" x2="1" y2="61"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="1" x2="1784" y2="1"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="58" x2="928" y2="58"  name=l_53 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="4" y="15" height="14" width="30" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="225" y1="1" x2="225" y2="61"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공 종" border="0" color="33554432" x="39" y="15" height="14" width="184" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="273" y1="1" x2="273" y2="61"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="320" y1="1" x2="320" y2="61"  name=l_72 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="보할" border="0" color="33554432" x="229" y="15" height="14" width="42" html.valueishtml="0"  name=c_exec_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="367" y1="1" x2="367" y2="61"  name=l_75 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="414" y1="1" x2="414" y2="61"  name=l_76 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="510" y1="20" x2="1784" y2="20"  name=l_54 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="전년도누계" border="0" color="33554432" x="513" y="5" height="14" width="93" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="1월" border="0" color="33554432" x="611" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate01_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="2월" border="0" color="33554432" x="709" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate02_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="3월" border="0" color="33554432" x="807" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate03_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="4월" border="0" color="33554432" x="905" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate04_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="5월" border="0" color="33554432" x="1003" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate05_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="6월" border="0" color="33554432" x="1101" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate06_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="7월" border="0" color="33554432" x="1199" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate07_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="8월" border="0" color="33554432" x="1297" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate08_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="9월" border="0" color="33554432" x="1395" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate09_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="10월" border="0" color="33554432" x="1493" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate10_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="11월" border="0" color="33554432" x="1591" y="5" height="14" width="93" html.valueishtml="0"  name=c_cost_rate11_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="559" y1="21" x2="559" y2="61"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="608" y1="1" x2="608" y2="61"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="657" y1="21" x2="657" y2="61"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="706" y1="1" x2="706" y2="61"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="755" y1="21" x2="755" y2="61"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="804" y1="1" x2="804" y2="61"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="853" y1="21" x2="853" y2="61"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="902" y1="1" x2="902" y2="61"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="951" y1="21" x2="951" y2="61"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1000" y1="1" x2="1000" y2="61"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1049" y1="21" x2="1049" y2="61"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1098" y1="1" x2="1098" y2="61"  name=l_32 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1147" y1="21" x2="1147" y2="61"  name=l_36 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1196" y1="1" x2="1196" y2="61"  name=l_37 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1245" y1="21" x2="1245" y2="61"  name=l_29 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1294" y1="1" x2="1294" y2="61"  name=l_35 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1343" y1="21" x2="1343" y2="61"  name=l_41 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1392" y1="1" x2="1392" y2="61"  name=l_55 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1441" y1="21" x2="1441" y2="61"  name=l_77 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1539" y1="21" x2="1539" y2="61"  name=l_79 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1637" y1="21" x2="1637" y2="61"  name=l_81 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1735" y1="21" x2="1735" y2="61"  name=l_83 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1490" y1="1" x2="1490" y2="61"  name=l_78 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1588" y1="1" x2="1588" y2="61"  name=l_80 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1686" y1="1" x2="1686" y2="61"  name=l_82 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1784" y1="1" x2="1784" y2="61"  name=l_84 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="513" y="24" height="14" width="43" html.valueishtml="0"  name=rate100_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="562" y="24" height="14" width="43" html.valueishtml="0"  name=rate200_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="611" y="24" height="14" width="43" html.valueishtml="0"  name=rate101_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="660" y="24" height="14" width="43" html.valueishtml="0"  name=rate201_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="709" y="24" height="14" width="43" html.valueishtml="0"  name=rate102_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="758" y="24" height="14" width="43" html.valueishtml="0"  name=rate202_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="807" y="24" height="14" width="43" html.valueishtml="0"  name=rate103_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="856" y="24" height="14" width="43" html.valueishtml="0"  name=rate203_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="905" y="24" height="14" width="43" html.valueishtml="0"  name=rate104_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="954" y="24" height="14" width="43" html.valueishtml="0"  name=rate204_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1003" y="24" height="14" width="43" html.valueishtml="0"  name=rate105_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1052" y="24" height="14" width="43" html.valueishtml="0"  name=rate205_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1101" y="24" height="14" width="43" html.valueishtml="0"  name=rate106_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1150" y="24" height="14" width="43" html.valueishtml="0"  name=rate206_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1199" y="24" height="14" width="43" html.valueishtml="0"  name=rate107_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1248" y="24" height="14" width="43" html.valueishtml="0"  name=rate207_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1297" y="24" height="14" width="43" html.valueishtml="0"  name=rate108_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1346" y="24" height="14" width="43" html.valueishtml="0"  name=rate208_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1395" y="24" height="14" width="43" html.valueishtml="0"  name=rate109_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1444" y="24" height="14" width="43" html.valueishtml="0"  name=rate209_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1493" y="24" height="14" width="43" html.valueishtml="0"  name=rate110_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1542" y="24" height="14" width="43" html.valueishtml="0"  name=rate210_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1591" y="24" height="14" width="43" html.valueishtml="0"  name=rate111_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1640" y="24" height="14" width="43" html.valueishtml="0"  name=rate211_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재" border="0" color="33554432" x="1689" y="24" height="14" width="43" html.valueishtml="0"  name=rate112_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무" border="0" color="33554432" x="1738" y="24" height="14" width="43" html.valueishtml="0"  name=rate212_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="461" y1="1" x2="461" y2="61"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="510" y1="1" x2="510" y2="61"  name=l_110 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="당월
+공정율" border="0" color="33554432" x="464" y="9" height="28" width="44" html.valueishtml="0"  name=c_tot_cost_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단  위
+공정율" border="0" color="33554432" x="417" y="9" height="28" width="42" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공정율" border="0" color="33554432" x="370" y="15" height="14" width="42" html.valueishtml="0"  name=c_proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무
+비율" border="0" color="33554432" x="323" y="9" height="28" width="42" html.valueishtml="0"  name=c_rate2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재
+비율" border="0" color="33554432" x="276" y="9" height="28" width="42" html.valueishtml="0"  name=c_rate1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="exec_amt2 / ( exec_amt1 + exec_amt2 )"border="0" color="33554432" x="323" y="4" height="17" width="42" format="~tif( c_exec_rate = 0, ~"#~", ~"0.00%~" )" html.valueishtml="0"  name=c_rate2 visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="exec_amt1 / ( exec_amt1 + exec_amt2 )"border="0" color="33554432" x="276" y="4" height="17" width="42" format="~tif( c_exec_rate = 0, ~"#~", ~"0.00%~" )" html.valueishtml="0"  name=c_rate1 visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="1" y="0" height="45" width="1784"  name=r_2 visible="1~tif ( getrow() = currentrow(), 1 , 0 )" brush.hatch="6" brush.color="67108864~tRGB(232, 236, 226)" pen.style="0" pen.width="1" pen.color="1073741824~tRGB(232, 236, 226)"  background.mode="0" background.color="32896501~tRGB(232, 236, 226)" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="4" y="4" height="17" width="30" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="39" y="4" height="17" width="184" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1" y1="43" x2="928" y2="43"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1" y1="0" x2="1" y2="46"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="36" y1="0" x2="36" y2="46"  name=l_30 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="225" y1="0" x2="225" y2="46"  name=l_33 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="273" y1="0" x2="273" y2="46"  name=l_40 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="320" y1="0" x2="320" y2="46"  name=l_73 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="414" y1="0" x2="414" y2="46"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="367" y1="0" x2="367" y2="46"  name=l_34 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="657" y1="0" x2="657" y2="46"  name=l_47 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="706" y1="0" x2="706" y2="46"  name=l_51 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="755" y1="0" x2="755" y2="46"  name=l_58 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="804" y1="0" x2="804" y2="46"  name=l_59 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="853" y1="0" x2="853" y2="46"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="902" y1="0" x2="902" y2="46"  name=l_60 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="951" y1="0" x2="951" y2="46"  name=l_61 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1000" y1="0" x2="1000" y2="46"  name=l_62 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1049" y1="0" x2="1049" y2="46"  name=l_63 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1098" y1="0" x2="1098" y2="46"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1147" y1="0" x2="1147" y2="46"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1196" y1="0" x2="1196" y2="46"  name=l_85 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1245" y1="0" x2="1245" y2="46"  name=l_86 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1294" y1="0" x2="1294" y2="46"  name=l_87 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1343" y1="0" x2="1343" y2="46"  name=l_88 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1392" y1="0" x2="1392" y2="46"  name=l_89 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1441" y1="0" x2="1441" y2="46"  name=l_90 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1490" y1="0" x2="1490" y2="46"  name=l_91 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1539" y1="0" x2="1539" y2="46"  name=l_92 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1588" y1="0" x2="1588" y2="46"  name=l_93 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1637" y1="0" x2="1637" y2="46"  name=l_94 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1686" y1="0" x2="1686" y2="46"  name=l_95 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1735" y1="0" x2="1735" y2="46"  name=l_96 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="559" y1="0" x2="559" y2="46"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="608" y1="0" x2="608" y2="46"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="461" y1="0" x2="461" y2="46"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="510" y1="0" x2="510" y2="46"  name=l_111 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1784" y1="0" x2="1784" y2="46"  name=l_97 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=24 alignment="1" tabsequence=32766 border="0" color="33554432" x="562" y="4" height="14" width="33" format="[general]~tif( rate200 = 0 or rate200 - ceiling( rate200 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0"  name=rate200 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=30 border="0" color="33554432" x="611" y="4" height="14" width="33" format="[general]~tif( rate101 = 0 or rate101 - ceiling( rate101 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"01~", 0, 1 )"  name=rate101 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="1" tabsequence=40 border="0" color="33554432" x="660" y="4" height="14" width="33" format="[general]~tif( rate201 = 0 or rate201 - ceiling( rate201 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"01~", 0, 1 )"  name=rate201 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=50 border="0" color="33554432" x="709" y="4" height="14" width="33" format="[general]~tif( rate102 = 0 or rate102 - ceiling( rate102 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"02~", 0, 1 )"  name=rate102 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=26 alignment="1" tabsequence=60 border="0" color="33554432" x="758" y="4" height="14" width="33" format="[general]~tif( rate202 = 0 or rate202 - ceiling( rate202 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"02~", 0, 1 )"  name=rate202 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=70 border="0" color="33554432" x="807" y="4" height="14" width="33" format="[general]~tif( rate103 = 0 or rate103 - ceiling( rate103 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"03~", 0, 1 )"  name=rate103 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=27 alignment="1" tabsequence=80 border="0" color="33554432" x="856" y="4" height="14" width="33" format="[general]~tif( rate203 = 0 or rate203 - ceiling( rate203) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"03~", 0, 1 )"  name=rate203 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=90 border="0" color="33554432" x="905" y="4" height="14" width="33" format="[general]~tif( rate104 = 0 or rate104 - ceiling( rate104 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"04~", 0, 1 )"  name=rate104 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=28 alignment="1" tabsequence=100 border="0" color="33554432" x="954" y="4" height="14" width="33" format="[general]~tif( rate204 = 0 or rate204 - ceiling( rate204 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"04~", 0, 1 )"  name=rate204 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=110 border="0" color="33554432" x="1003" y="4" height="14" width="33" format="[general]~tif( rate105 = 0 or rate105 - ceiling( rate105 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"05~", 0, 1 )"  name=rate105 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=29 alignment="1" tabsequence=120 border="0" color="33554432" x="1052" y="4" height="14" width="33" format="[general]~tif( rate205 = 0 or rate205 - ceiling( rate205 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"05~", 0, 1 )"  name=rate205 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=130 border="0" color="33554432" x="1101" y="4" height="14" width="33" format="[general]~tif( rate106 = 0 or rate106 - ceiling( rate106 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"06~", 0, 1 )"  name=rate106 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=30 alignment="1" tabsequence=140 border="0" color="33554432" x="1150" y="4" height="14" width="33" format="[general]~tif( rate206 = 0 or rate206 - ceiling( rate206 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"06~", 0, 1 )"  name=rate206 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=150 border="0" color="33554432" x="1199" y="4" height="14" width="33" format="[general]~tif( rate107 = 0 or rate107 - ceiling( rate107 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"07~", 0, 1 )"  name=rate107 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=31 alignment="1" tabsequence=160 border="0" color="33554432" x="1248" y="4" height="14" width="33" format="[general]~tif( rate207 = 0 or rate207 - ceiling( rate207 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"07~", 0, 1 )"  name=rate207 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="1" tabsequence=170 border="0" color="33554432" x="1297" y="4" height="14" width="33" format="[general]~tif( rate108 = 0 or rate108 - ceiling( rate108 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"08~", 0, 1 )"  name=rate108 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=32 alignment="1" tabsequence=180 border="0" color="33554432" x="1346" y="4" height="14" width="33" format="[general]~tif( rate208 = 0 or rate208 - ceiling( rate208 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"08~", 0, 1 )"  name=rate208 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="1" tabsequence=190 border="0" color="33554432" x="1395" y="4" height="14" width="33" format="[general]~tif( rate109 = 0 or rate109 - ceiling( rate109 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"09~", 0, 1 )"  name=rate109 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=33 alignment="1" tabsequence=200 border="0" color="33554432" x="1444" y="4" height="14" width="33" format="[general]~tif( rate209 = 0 or rate209 - ceiling( rate209 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"09~", 0, 1 )"  name=rate209 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="1" tabsequence=210 border="0" color="33554432" x="1493" y="4" height="14" width="33" format="[general]~tif( rate110 = 0 or rate110 - ceiling( rate110 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"10~", 0, 1 )"  name=rate110 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=34 alignment="1" tabsequence=220 border="0" color="33554432" x="1542" y="4" height="14" width="33" format="[general]~tif( rate210 = 0 or rate210 - ceiling( rate210 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"10~", 0, 1 )"  name=rate210 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="1" tabsequence=230 border="0" color="33554432" x="1591" y="4" height="14" width="33" format="[general]~tif( rate111 = 0 or rate111 - ceiling( rate111 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"11~", 0, 1 )"  name=rate111 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=35 alignment="1" tabsequence=240 border="0" color="33554432" x="1640" y="4" height="14" width="33" format="[general]~tif( rate211 = 0 or rate211 - ceiling( rate211 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"11~", 0, 1 )"  name=rate211 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="1" tabsequence=250 border="0" color="33554432" x="1689" y="4" height="14" width="33" format="[general]~tif( rate112 = 0 or rate112 - ceiling( rate112 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"12~", 0, 1 )"  name=rate112 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=36 alignment="1" tabsequence=260 border="0" color="33554432" x="1738" y="4" height="14" width="33" format="[general]~tif( rate212 = 0 or rate212 - ceiling( rate212 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0" protect="0~tif( right( const_yymm, 2) = ~"12~", 0, 1 )"  name=rate212 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="513" y="4" height="14" width="33" format="[general]~tif( rate100 = 0 or rate100 - ceiling( rate100 ) = 0, ~"#~", ~"#.00~" )" html.valueishtml="0"  name=rate100 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="451" y="5" height="10" width="8" html.valueishtml="0"  name=t_32 visible="1~tif( c_rate = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="( c_proc_rate / 100 ) / ( c_exec_rate / 100 ) * 100"border="0" color="33554432" x="417" y="4" height="17" width="33" format="~tif( c_rate = 0 or c_rate - ceiling( c_rate ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0"  name=c_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=20 border="0" color="33554432" x="323" y="4" height="14" width="33" format="~tif( rate2 = 0 or rate2 - ceiling( rate2 ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0" protect="0~tif( exec_amt3 <> 0, 0, 1 )"  name=rate2 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="357" y="5" height="10" width="8" html.valueishtml="0"  name=t_34 visible="1~tif( rate2 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="310" y="5" height="10" width="8" html.valueishtml="0"  name=t_35 visible="1~tif( rate1 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=10 border="0" color="33554432" x="276" y="4" height="14" width="33" format="~tif( rate1 = 0 or rate1 - ceiling( rate1 ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0" protect="0~tif( exec_amt3 <> 0, 0, 1 )"  name=rate1 visible="1" edit.limit=5 edit.case=any edit.format="#.##" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="549" y="5" height="10" width="8" html.valueishtml="0"  name=t_3 visible="0~tif( rate100 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="598" y="5" height="10" width="8" html.valueishtml="0"  name=t_6 visible="0~tif( rate200 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="647" y="5" height="10" width="8" html.valueishtml="0"  name=t_7 visible="0~tif( rate101 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="696" y="5" height="10" width="8" html.valueishtml="0"  name=t_4 visible="0~tif( rate201 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="745" y="5" height="10" width="8" html.valueishtml="0"  name=t_8 visible="0~tif( rate102 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="794" y="5" height="10" width="8" html.valueishtml="0"  name=t_9 visible="0~tif( rate202 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="843" y="5" height="10" width="8" html.valueishtml="0"  name=t_10 visible="0~tif( rate103 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="892" y="5" height="10" width="8" html.valueishtml="0"  name=t_11 visible="0~tif( rate203 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="941" y="5" height="10" width="8" html.valueishtml="0"  name=t_12 visible="0~tif( rate104 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="990" y="5" height="10" width="8" html.valueishtml="0"  name=t_13 visible="0~tif( rate204 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1039" y="5" height="10" width="8" html.valueishtml="0"  name=t_14 visible="0~tif( rate105 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1088" y="5" height="10" width="8" html.valueishtml="0"  name=t_16 visible="0~tif( rate205 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1137" y="5" height="10" width="8" html.valueishtml="0"  name=t_17 visible="0~tif( rate106 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1186" y="5" height="10" width="8" html.valueishtml="0"  name=t_18 visible="0~tif( rate206 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1235" y="5" height="10" width="8" html.valueishtml="0"  name=t_19 visible="0~tif( rate107 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1284" y="5" height="10" width="8" html.valueishtml="0"  name=t_20 visible="0~tif( rate207 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1333" y="5" height="10" width="8" html.valueishtml="0"  name=t_21 visible="0~tif( rate108 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1382" y="5" height="10" width="8" html.valueishtml="0"  name=t_22 visible="0~tif( rate208 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1431" y="5" height="10" width="8" html.valueishtml="0"  name=t_23 visible="0~tif( rate109 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1480" y="5" height="10" width="8" html.valueishtml="0"  name=t_24 visible="0~tif( rate209 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1529" y="5" height="10" width="8" html.valueishtml="0"  name=t_25 visible="0~tif( rate110 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1578" y="5" height="10" width="8" html.valueishtml="0"  name=t_26 visible="0~tif( rate210 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1627" y="5" height="10" width="8" html.valueishtml="0"  name=t_27 visible="0~tif( rate111 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1676" y="5" height="10" width="8" html.valueishtml="0"  name=t_28 visible="0~tif( rate211 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1725" y="5" height="10" width="8" html.valueishtml="0"  name=t_29 visible="0~tif( rate112 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="1774" y="5" height="10" width="8" html.valueishtml="0"  name=t_30 visible="0~tif( rate212 = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="( exec_amt1 + exec_amt2 + exec_amt3 ) / sum( exec_amt1 + exec_amt2 + exec_amt3 for all ) * 100"border="0" color="33554432" x="229" y="4" height="17" width="33" format="~tif( c_exec_rate = 0 or c_exec_rate - ceiling( c_exec_rate ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0"  name=c_exec_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="263" y="5" height="10" width="8" html.valueishtml="0"  name=t_36 visible="1~tif( c_exec_rate = 0 or c_exec_rate - ceiling( c_exec_rate ) = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="c_exec_rate * ( ( ( cost_rate1_bf + cost_rate1 ) / 100 * rate1 / 100 ) + ( ( cost_rate2_bf + cost_rate2 ) / 100 * rate2 / 100 ) )"border="0" color="33554432" x="370" y="4" height="17" width="33" format="~tif( c_proc_rate = 0 or c_proc_rate - ceiling( c_proc_rate ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0"  name=c_proc_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="404" y="5" height="10" width="8" html.valueishtml="0"  name=t_33 visible="1~tif( c_proc_rate = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1" y1="21" x2="1784" y2="21"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="( ( rate1 / 100 * cost_rate1 / 100 ) + ( rate2 / 100 * cost_rate2 / 100 ) ) * 100"border="0" color="33554432" x="464" y="4" height="14" width="33" format="[GENERAL]~tif( c_cost_rate = 0 or c_cost_rate - ceiling( c_cost_rate ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0"  name=c_cost_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="%" border="0" color="33554432" x="500" y="5" height="10" width="8" html.valueishtml="0"  name=t_31 visible="1~tif( c_cost_rate = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=footer x="1" y="1" height="23" width="1784"  name=r_3 visible="1" brush.hatch="6" brush.color="31449312~tRGB(224, 224, 223)" pen.style="0" pen.width="1" pen.color="1073741824~tRGB(224, 224, 223)"  background.mode="0" background.color="32896501~tRGB(224, 224, 223)" )
+line(band=footer x1="1" y1="0" x2="1784" y2="0"  name=l_38 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1" y1="22" x2="1784" y2="22"  name=l_52 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1" y1="0" x2="1" y2="23"  name=l_50 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=footer alignment="2" text="계" border="0" color="33554432" x="4" y="5" height="15" width="219" html.valueishtml="0"  name=t_15 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="225" y1="0" x2="225" y2="23"  name=l_39 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="273" y1="0" x2="273" y2="23"  name=l_56 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="320" y1="0" x2="320" y2="23"  name=l_74 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="367" y1="0" x2="367" y2="23"  name=l_57 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="414" y1="0" x2="414" y2="23"  name=l_70 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="461" y1="0" x2="461" y2="23"  name=l_71 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="559" y1="0" x2="559" y2="23"  name=l_69 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="608" y1="0" x2="608" y2="23"  name=l_42 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="657" y1="0" x2="657" y2="23"  name=l_43 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="706" y1="0" x2="706" y2="23"  name=l_44 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="755" y1="0" x2="755" y2="23"  name=l_45 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="804" y1="0" x2="804" y2="23"  name=l_46 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="853" y1="0" x2="853" y2="23"  name=l_48 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="902" y1="0" x2="902" y2="23"  name=l_49 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="951" y1="0" x2="951" y2="23"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1000" y1="0" x2="1000" y2="23"  name=l_64 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1049" y1="0" x2="1049" y2="23"  name=l_65 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1098" y1="0" x2="1098" y2="23"  name=l_66 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1147" y1="0" x2="1147" y2="23"  name=l_67 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1196" y1="0" x2="1196" y2="23"  name=l_98 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1245" y1="0" x2="1245" y2="23"  name=l_99 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1294" y1="0" x2="1294" y2="23"  name=l_100 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1343" y1="0" x2="1343" y2="23"  name=l_101 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1392" y1="0" x2="1392" y2="23"  name=l_102 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1441" y1="0" x2="1441" y2="23"  name=l_103 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1490" y1="0" x2="1490" y2="23"  name=l_104 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1539" y1="0" x2="1539" y2="23"  name=l_105 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1588" y1="0" x2="1588" y2="23"  name=l_106 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1637" y1="0" x2="1637" y2="23"  name=l_107 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1686" y1="0" x2="1686" y2="23"  name=l_108 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1735" y1="0" x2="1735" y2="23"  name=l_109 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="510" y1="0" x2="510" y2="23"  name=l_68 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1784" y1="0" x2="1784" y2="23"  name=l_112 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=footer alignment="1" text="%" border="0" color="33554432" x="263" y="6" height="10" width="8" html.valueishtml="0"  name=t_37 visible="1~tif( c_exec_rate = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( exec_amt1 + exec_amt2 + exec_amt3 for all ) / sum( exec_amt1 + exec_amt2 + exec_amt3 for all ) * 100"border="0" color="33554432" x="229" y="5" height="15" width="33" format="" html.valueishtml="0"  name=c_tot_exec_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( c_proc_rate for all )"border="0" color="33554432" x="370" y="5" height="14" width="33" format="[GENERAL]~tif( c_tot_proc_rate = 0 or c_tot_proc_rate - ceiling( c_tot_proc_rate ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0"  name=c_tot_proc_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( ( c_cost_rate / 100 ) * ( c_exec_rate / 100 ) * 100 for all )"border="0" color="33554432" x="464" y="5" height="14" width="33" format="[GENERAL]~tif( c_tot_cost_rate = 0 or c_tot_cost_rate - ceiling( c_tot_cost_rate ) = 0, ~"#~", ~"0.00~" )" html.valueishtml="0"  name=c_tot_cost_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="1" text="%" border="0" color="33554432" x="404" y="6" height="10" width="8" html.valueishtml="0"  name=t_38 visible="1~tif(c_tot_proc_rate = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="1" text="%" border="0" color="33554432" x="500" y="6" height="10" width="8" html.valueishtml="0"  name=t_39 visible="1~tif( c_tot_cost_rate = 0, 0, 1 )"  font.face="굴림" font.height="-7" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="1" y1="39" x2="1784" y2="39"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=foreground x1="1" y1="40" x2="1784" y2="40"  name=l_113 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

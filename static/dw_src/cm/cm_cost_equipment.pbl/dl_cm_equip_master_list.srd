@@ -1,0 +1,148 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes name=equip_code dbname="cm_equip_daily_work.equip_code" dbalias="A.equip_code" )
+ column=(type=char(50) updatewhereclause=yes name=std_name dbname="cm_equip_daily_work.std_name" dbalias=".std_name" )
+ column=(type=char(20) updatewhereclause=yes name=car_no dbname="cm_equip_daily_work.car_no" dbalias=".car_no" )
+ column=(type=char(2) updatewhereclause=yes name=use_div dbname="cm_equip_daily_work.use_div" dbalias=".use_div" )
+ column=(type=number updatewhereclause=yes name=work_day dbname="work_day" )
+ column=(type=number updatewhereclause=yes name=work_cnt dbname="work_cnt" )
+ column=(type=number update=yes updatewhereclause=yes name=work_amt dbname="cm_equip_daily_work.work_amt" dbalias=".work_amt" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="cm_equip_daily_work.cust_name" dbalias=".cust_name" )
+ column=(type=char(8) updatewhereclause=yes name=ins_date dbname="cm_equip_daily_work.ins_date" dbalias=".ins_date" )
+ retrieve="SELECT A.EQUIP_CODE                                                 AS EQUIP_CODE,
+       B.STD_NAME                                                   AS STD_NAME,
+       B.CAR_NO                                                     AS CAR_NO,
+       B.USE_DIV                                                    AS USE_DIV,
+       CASE WHEN WORK_TIME01 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME02 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME03 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME04 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME05 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME06 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME07 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME08 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME09 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME10 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME11 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME12 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME13 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME14 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME15 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME16 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME17 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME18 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME19 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME20 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME21 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME22 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME23 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME24 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME25 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME26 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME27 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME28 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME29 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME30 > 0 THEN 1 ELSE 0 END +
+       CASE WHEN WORK_TIME31 > 0 THEN 1 ELSE 0 END                 AS WORK_DAY,
+       CASE WHEN A.WORK_TIME01 > 0 THEN A.WORK_TIME01 ELSE 0 END +
+       CASE WHEN A.WORK_TIME02 > 0 THEN A.WORK_TIME02 ELSE 0 END +
+       CASE WHEN A.WORK_TIME03 > 0 THEN A.WORK_TIME03 ELSE 0 END +
+       CASE WHEN A.WORK_TIME04 > 0 THEN A.WORK_TIME04 ELSE 0 END +
+       CASE WHEN A.WORK_TIME05 > 0 THEN A.WORK_TIME05 ELSE 0 END +
+       CASE WHEN A.WORK_TIME06 > 0 THEN A.WORK_TIME06 ELSE 0 END +
+       CASE WHEN A.WORK_TIME07 > 0 THEN A.WORK_TIME07 ELSE 0 END +
+       CASE WHEN A.WORK_TIME08 > 0 THEN A.WORK_TIME08 ELSE 0 END +
+       CASE WHEN A.WORK_TIME09 > 0 THEN A.WORK_TIME09 ELSE 0 END +
+       CASE WHEN A.WORK_TIME10 > 0 THEN A.WORK_TIME10 ELSE 0 END +
+       CASE WHEN A.WORK_TIME11 > 0 THEN A.WORK_TIME11 ELSE 0 END +
+       CASE WHEN A.WORK_TIME12 > 0 THEN A.WORK_TIME12 ELSE 0 END +
+       CASE WHEN A.WORK_TIME13 > 0 THEN A.WORK_TIME13 ELSE 0 END +
+       CASE WHEN A.WORK_TIME14 > 0 THEN A.WORK_TIME14 ELSE 0 END +
+       CASE WHEN A.WORK_TIME15 > 0 THEN A.WORK_TIME15 ELSE 0 END +
+       CASE WHEN A.WORK_TIME16 > 0 THEN A.WORK_TIME16 ELSE 0 END +
+       CASE WHEN A.WORK_TIME17 > 0 THEN A.WORK_TIME17 ELSE 0 END +
+       CASE WHEN A.WORK_TIME18 > 0 THEN A.WORK_TIME18 ELSE 0 END +
+       CASE WHEN A.WORK_TIME19 > 0 THEN A.WORK_TIME19 ELSE 0 END +
+       CASE WHEN A.WORK_TIME20 > 0 THEN A.WORK_TIME20 ELSE 0 END +
+       CASE WHEN A.WORK_TIME21 > 0 THEN A.WORK_TIME21 ELSE 0 END +
+       CASE WHEN A.WORK_TIME22 > 0 THEN A.WORK_TIME22 ELSE 0 END +
+       CASE WHEN A.WORK_TIME23 > 0 THEN A.WORK_TIME23 ELSE 0 END +
+       CASE WHEN A.WORK_TIME24 > 0 THEN A.WORK_TIME24 ELSE 0 END +
+       CASE WHEN A.WORK_TIME25 > 0 THEN A.WORK_TIME25 ELSE 0 END +
+       CASE WHEN A.WORK_TIME26 > 0 THEN A.WORK_TIME26 ELSE 0 END +
+       CASE WHEN A.WORK_TIME27 > 0 THEN A.WORK_TIME27 ELSE 0 END +
+       CASE WHEN A.WORK_TIME28 > 0 THEN A.WORK_TIME28 ELSE 0 END +
+       CASE WHEN A.WORK_TIME29 > 0 THEN A.WORK_TIME29 ELSE 0 END +
+       CASE WHEN A.WORK_TIME30 > 0 THEN A.WORK_TIME30 ELSE 0 END +
+       CASE WHEN A.WORK_TIME31 > 0 THEN A.WORK_TIME31 ELSE 0 END    AS WORK_CNT,
+       B.WORK_AMT                                                   AS WORK_AMT,
+       B.CUST_NAME                                                  AS CUST_NAME,
+       B.INS_DATE                                                   AS INS_DATE
+  FROM CM_EQUIP_DAILY_WORK A LEFT JOIN (SELECT C.COMPANY_CODE  AS COMPANY_CODE,
+                                               C.EQUIP_CODE    AS EQUIP_CODE,
+                                               F.STD_NAME1     AS STD_NAME,
+                                               F.USE_DIV       AS USE_DIV,
+                                               C.CAR_NO        AS CAR_NO,
+                                               C.INS_DATE      AS INS_DATE,
+                                               D.CUST_NAME     AS CUST_NAME,
+                                               G.WORK_AMT      AS WORK_AMT
+                                          FROM CM_EQUIP_CODE_MASTER C INNER JOIN CM_EQUIP_CODE_DETAIL G
+                                                                             ON C.COMPANY_CODE = G.COMPANY_CODE
+                                                                            AND C.EQUIP_CODE   = G.EQUIP_CODE
+                                                                            AND C.EQUIP_M_CODE = G.EQUIP_M_CODE
+                                                                            AND C.EQUIP_D_CODE = G.EQUIP_D_CODE
+                                                                            AND C.CAR_NO       = G.CAR_NO
+                                                                            AND C.CAR_REAL_NO  = G.CAR_REAL_NO
+                                                                      LEFT JOIN CM_COST_EQUIP_CODE E
+                                                                             ON C.COMPANY_CODE = E.COMPANY_CODE
+                                                                            AND C.EQUIP_M_CODE = E.EQUIP_CODE
+                                                                      LEFT JOIN CM_COST_EQUIP_STD F
+                                                                             ON C.COMPANY_CODE = F.COMPANY_CODE
+                                                                            AND C.EQUIP_M_CODE = F.EQUIP_CODE
+                                                                            AND C.EQUIP_D_CODE = F.STD_CODE
+                                                                      LEFT JOIN SM_CODE_CUST D
+                                                                             ON C.CUST_CODE = D.CUST_CODE
+                                         WHERE C.COMPANY_CODE = :AS_COMP_CODE) B
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.EQUIP_CODE   = B.EQUIP_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.WORK_YYMM    = :AS_WORK_YYMM
+  ORDER BY A.EQUIP_CODE" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_WORK_YYMM", number)) )
+text(band=header alignment="2" text="장비코드" border="0" color="33554432" x="45" y="7" height="14" width="60" html.valueishtml="0"  name=equip_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="차량번호" border="0" color="33554432" x="357" y="7" height="14" width="126" html.valueishtml="0"  name=car_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사용일수" border="0" color="33554432" x="583" y="7" height="14" width="85" html.valueishtml="0"  name=work_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="시간/횟수" border="0" color="33554432" x="670" y="7" height="14" width="89" html.valueishtml="0"  name=work_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="761" y="7" height="14" width="89" html.valueishtml="0"  name=work_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="925" y="7" height="14" width="216" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="증빙일자" border="0" color="33554432" x="1143" y="7" height="14" width="87" html.valueishtml="0"  name=ins_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="장비명" border="0" color="33554432" x="107" y="7" height="14" width="248" html.valueishtml="0"  name=std_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="7" height="14" width="41" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="852" y="7" height="14" width="71" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일대/월대" border="0" color="33554432" x="485" y="7" height="14" width="96" html.valueishtml="0"  name=use_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="357" y="6" height="17" width="126" format="[general]" html.valueishtml="0"  name=car_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="583" y="6" height="17" width="85" format="[general]" html.valueishtml="0"  name=work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="670" y="6" height="17" width="89" format="[general]" html.valueishtml="0"  name=work_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="761" y="6" height="17" width="89" format="#,###" html.valueishtml="0"  name=work_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="925" y="6" height="17" width="216" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="1143" y="6" height="17" width="87" format="[general]" html.valueishtml="0"  name=ins_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="107" y="6" height="17" width="248" format="[general]" html.valueishtml="0"  name=std_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="45" y="6" height="17" width="60" format="[general]" html.valueishtml="0"  name=equip_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="6" height="17" width="41" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="work_amt  *  work_cnt"border="0" color="33554432" x="852" y="6" height="17" width="71" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="485" y="6" height="14" width="96" format="[general]" html.valueishtml="0"  name=use_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

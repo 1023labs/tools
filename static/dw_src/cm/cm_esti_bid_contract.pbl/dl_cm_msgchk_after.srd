@@ -1,0 +1,82 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(10) updatewhereclause=yes name=head_empno dbname="head_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="emp_name" )
+ column=(type=char(50) updatewhereclause=yes name=e_mail dbname="e_mail" )
+ column=(type=char(31) updatewhereclause=yes name=phone_no dbname="phone_no" )
+ column=(type=char(1) updatewhereclause=yes name=chk_tag dbname="chk_tag" values="	Y/	N" )
+ column=(type=datetime updatewhereclause=yes name=chk_date dbname="chk_date" )
+ column=(type=char(10) updatewhereclause=yes name=gong_empno dbname="gong_empno" )
+ column=(type=char(20) updatewhereclause=yes name=gong_empname dbname="gong_empname" )
+ column=(type=char(50) updatewhereclause=yes name=gong_email dbname="gong_email" )
+ column=(type=char(31) updatewhereclause=yes name=gong_phoneno dbname="gong_phoneno" )
+ column=(type=char(1) updatewhereclause=yes name=gong_chktag dbname="gong_chktag" values="	Y/	N" )
+ column=(type=datetime updatewhereclause=yes name=gong_chkdate dbname="gong_chkdate" )
+ retrieve="SELECT A.PROJ_CODE,
+       A.PROJ_NAME,
+       A.HEAD_EMPNO,
+       B.EMP_NAME,
+       B.E_MAIL, 
+       B.CELL_PRE||'-'||B.CELL_POST PHONE_NO,
+       NVL(C.CHK_TAG,'N') CHK_TAG,
+       C.CHK_DATE,
+       A.GONG_EMPNO,
+       F.EMP_NAME GONG_EMPNAME,
+       F.E_MAIL   GONG_EMAIL, 
+       F.CELL_PRE||'-'||F.CELL_POST GONG_PHONENO,
+       NVL(D.CHK_TAG,'N')           GONG_CHKTAG,
+       D.CHK_DATE                   GONG_CHKDATE 
+  FROM SM_CODE_PROJECT A,
+       HR_PERS_MASTER  B,
+       (SELECT *
+          FROM CM_MSG_CHKLIST
+         WHERE NBBSNO     = :al_bbs)  C,
+       (SELECT *
+          FROM CM_MSG_CHKLIST
+         WHERE NBBSNO     = :al_bbs)  D ,
+       HR_PERS_MASTER  F 
+ WHERE NVL(A.ISGOTAG,'N') = 'Y'
+   AND A.HEAD_EMPNO = B.EMP_NO(+)
+   AND A.PROJ_CODE  = C.PROJ_CODE
+   AND A.HEAD_EMPNO = C.EMP_NO 
+   AND A.PROJ_CODE  = D.PROJ_CODE
+   AND A.GONG_EMPNO = D.EMP_NO
+   AND A.GONG_EMPNO = F.EMP_NO(+)" arguments=(("al_bbs", number)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="123" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="68" width="123" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="142" y="8" height="68" width="594" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="745" y="8" height="68" width="215" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="969" y="8" height="68" width="411" format="[general]" html.valueishtml="0"  name=e_mail visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="1390" y="8" height="68" width="407" format="[general]" html.valueishtml="0"  name=phone_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="1806" y="8" height="68" width="110" format="[general]" html.valueishtml="0"  name=chk_tag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="1925" y="8" height="68" width="489" format="[shortdate] [time]" html.valueishtml="0"  name=chk_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="4082" y="8" height="68" width="311" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="2423" y="8" height="68" width="201" format="[general]" html.valueishtml="0"  name=gong_empname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="2633" y="8" height="68" width="507" format="[general]" html.valueishtml="0"  name=gong_email visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="3150" y="8" height="68" width="361" format="[general]" html.valueishtml="0"  name=gong_phoneno visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="3520" y="8" height="68" width="137" format="[general]" html.valueishtml="0"  name=gong_chktag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432" x="3666" y="8" height="68" width="407" format="[shortdate] [time]" html.valueishtml="0"  name=gong_chkdate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="142" y="8" height="56" width="594" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소장명" border="0" color="33554432" x="745" y="8" height="56" width="215" html.valueishtml="0"  name=emp_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="메일주소" border="0" color="33554432" x="969" y="8" height="56" width="411" html.valueishtml="0"  name=e_mail_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="핸드폰번호" border="0" color="33554432" x="1390" y="8" height="56" width="407" html.valueishtml="0"  name=phone_no_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확인" border="0" color="33554432" x="1806" y="8" height="56" width="110" html.valueishtml="0"  name=chk_tag_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확인시간" border="0" color="33554432" x="1925" y="8" height="56" width="489" html.valueishtml="0"  name=chk_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="4082" y="8" height="56" width="311" html.valueishtml="0"  name=proj_code_t pointer="HyperLink!" visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공무명" border="0" color="33554432" x="2423" y="8" height="56" width="201" html.valueishtml="0"  name=gong_empname_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="메일주소" border="0" color="33554432" x="2633" y="8" height="56" width="507" html.valueishtml="0"  name=gong_email_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="핸드폰번호" border="0" color="33554432" x="3150" y="8" height="56" width="361" html.valueishtml="0"  name=gong_phoneno_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확인" border="0" color="33554432" x="3520" y="8" height="56" width="137" html.valueishtml="0"  name=gong_chktag_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확인시간" border="0" color="33554432" x="3666" y="8" height="56" width="407" html.valueishtml="0"  name=gong_chkdate_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

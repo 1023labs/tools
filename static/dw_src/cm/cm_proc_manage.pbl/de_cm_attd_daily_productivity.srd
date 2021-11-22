@@ -1,0 +1,158 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_exec_const.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_exec_const.proj_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="cm_exec_const.const_code" )
+ column=(type=char(4000) updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=level_num dbname="cm_exec_const.level_num" )
+ column=(type=decimal(0) updatewhereclause=yes name=query_seq dbname="cm_exec_const.query_seq" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=work_ym dbname="cm_exec_const.work_ym" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_exec_const.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_exec_const.end_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=act_start_date dbname="cm_exec_const.act_start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=act_end_date dbname="cm_exec_const.act_end_date" )
+ column=(type=number update=yes updatewhereclause=yes name=const_term dbname="const_term" )
+ column=(type=number update=yes updatewhereclause=yes name=day_person dbname="day_person" )
+ column=(type=number update=yes updatewhereclause=yes name=night_person dbname="night_person" )
+ column=(type=number update=yes updatewhereclause=yes name=night_rate dbname="night_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=total_person dbname="total_person" )
+ column=(type=number update=yes updatewhereclause=yes name=item_qty dbname="item_qty" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=item_unit dbname="cm_exec_const.item_unit" )
+ column=(type=number update=yes updatewhereclause=yes name=day_avg dbname="day_avg" )
+ column=(type=number update=yes updatewhereclause=yes name=person_pro dbname="person_pro" )
+ column=(type=number update=yes updatewhereclause=yes name=day_pro dbname="day_pro" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONST_CODE,
+         LPAD('  ', A.LEVEL_NUM*4)||A.CONST_NAME CONST_NAME,
+         A.LEVEL_NUM,
+         A.QUERY_SEQ,
+         B.WORK_YM,
+         B.START_DATE,
+         B.END_DATE,
+         B.ACT_START_DATE,
+         B.ACT_END_DATE,
+         NVL(B.CONST_TERM, 0) CONST_TERM,
+         NVL(B.DAY_PERSON, 0) DAY_PERSON,
+         NVL(B.NIGHT_PERSON, 0) NIGHT_PERSON,
+         NVL(B.NIGHT_RATE, 0) NIGHT_RATE,
+         NVL(B.TOTAL_PERSON, 0) TOTAL_PERSON,
+         NVL(B.ITEM_QTY, 0) ITEM_QTY,
+         B.ITEM_UNIT,
+         NVL(CM_ATTD_DAILY_PRODUCTIVITY.DAY_AVG, 0) DAY_AVG,
+         NVL(CM_ATTD_DAILY_PRODUCTIVITY.PERSON_PRO, 0) PERSON_PRO,
+         NVL(CM_ATTD_DAILY_PRODUCTIVITY.DAY_PRO, 0) DAY_PRO
+    FROM CM_EXEC_CONST A LEFT JOIN (SELECT X.COMPANY_CODE,
+                                           X.PROJ_CODE,
+                                           X.WORK_YM,
+                                           X.CONST_CODE,
+                                           MIN(X.START_DATE) START_DATE,
+                                           MAX(X.END_DATE) END_DATE,
+                                           MIN(X.ACT_START_DATE) ACT_START_DATE,
+                                           MAX(X.ACT_END_DATE) ACT_END_DATE,
+                                           SUM(X.CONST_TERM) CONST_TERM,
+                                           SUM(X.DAY_PERSON) DAY_PERSON,
+                                           SUM(X.NIGHT_PERSON) NIGHT_PERSON,
+                                           SUM(X.NIGHT_RATE) NIGHT_RATE,
+                                           SUM(X.TOTAL_PERSON) TOTAL_PERSON,
+                                           SUM(X.ITEM_QTY) ITEM_QTY,
+                                           MAX(X.ITEM_UNIT) ITEM_UNIT
+                                      FROM (SELECT Z.COMPANY_CODE,
+                                                   Z.PROJ_CODE,
+                                                   Z.CONST_CODE,
+                                                   Y.WORK_YM,
+                                                   Y.START_DATE,
+                                                   Y.END_DATE,
+                                                   Y.ACT_START_DATE,
+                                                   Y.ACT_END_DATE,
+                                                   Y.CONST_TERM,
+                                                   Y.DAY_PERSON,
+                                                   Y.NIGHT_PERSON,
+                                                   Y.NIGHT_RATE,
+                                                   Y.TOTAL_PERSON,
+                                                   Y.ITEM_QTY,
+                                                   Y.ITEM_UNIT, 
+                                                   Y.DAY_AVG,
+                                                   Y.PERSON_PRO,
+                                                   Y.DAY_PRO
+                                              FROM CM_EXEC_CONST Z LEFT JOIN (SELECT COMPANY_CODE,
+                                                                                     PROJ_CODE,
+                                                                                     WORK_YM,
+                                                                                     CONST_CODE,
+                                                                                     START_DATE,
+                                                                                     END_DATE,
+                                                                                     ACT_START_DATE,
+                                                                                     ACT_END_DATE,
+                                                                                     CONST_TERM,
+                                                                                     DAY_PERSON,
+                                                                                     NIGHT_PERSON,
+                                                                                     NIGHT_RATE,
+                                                                                     TOTAL_PERSON,
+                                                                                     ITEM_QTY,
+                                                                                     ITEM_UNIT, 
+                                                                                     DAY_AVG,
+                                                                                     PERSON_PRO,
+                                                                                     DAY_PRO
+                                                                                FROM CM_ATTD_DAILY_PRODUCTIVITY
+                                                                               WHERE WORK_YM = :as_workym ) Y
+                                                                           ON Z.COMPANY_CODE = Y.COMPANY_CODE
+                                                                          AND Z.PROJ_CODE = Y.PROJ_CODE
+                                                                          AND Y.CONST_CODE LIKE Z.CONST_CODE||'%' ) X
+                                  GROUP BY X.COMPANY_CODE, X.PROJ_CODE, X.WORK_YM, X.CONST_CODE ) B
+                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                               AND A.PROJ_CODE = B.PROJ_CODE
+                               AND A.CONST_CODE = B.CONST_CODE
+                         LEFT JOIN (SELECT COMPANY_CODE,
+                                           PROJ_CODE,
+                                           CONST_CODE,
+                                           DAY_AVG,
+                                           PERSON_PRO,
+                                           DAY_PRO
+                                      FROM CM_ATTD_DAILY_PRODUCTIVITY
+                                     WHERE WORK_YM = :as_workym ) CM_ATTD_DAILY_PRODUCTIVITY
+                                ON A.COMPANY_CODE = CM_ATTD_DAILY_PRODUCTIVITY.COMPANY_CODE
+                               AND A.PROJ_CODE = CM_ATTD_DAILY_PRODUCTIVITY.PROJ_CODE
+                               AND A.CONST_CODE = CM_ATTD_DAILY_PRODUCTIVITY.CONST_CODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.PROJ_CODE = :as_projcode
+ORDER BY A.QUERY_SEQ" update="CM_ATTD_DAILY_PRODUCTIVITY" updatewhere=0 updatekeyinplace=no arguments=(("as_compcode", string),("as_projcode", string),("as_workym", string)) )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="2" y="2" height="14" width="278" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공기_착수" border="0" color="33554432" x="282" y="2" height="14" width="68" html.valueishtml="0"  name=start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공기_완료" border="0" color="33554432" x="352" y="2" height="14" width="70" html.valueishtml="0"  name=end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="실적_착수" border="0" color="33554432" x="424" y="2" height="14" width="70" html.valueishtml="0"  name=act_start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="실적_완료" border="0" color="33554432" x="496" y="2" height="14" width="70" html.valueishtml="0"  name=act_end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사기간" border="0" color="33554432" x="568" y="2" height="14" width="53" html.valueishtml="0"  name=const_term_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주간합계" border="0" color="33554432" x="623" y="2" height="14" width="53" html.valueishtml="0"  name=day_person_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="야간합계" border="0" color="33554432" x="678" y="2" height="14" width="53" html.valueishtml="0"  name=night_person_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="야간비율" border="0" color="33554432" x="733" y="2" height="14" width="53" html.valueishtml="0"  name=night_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="788" y="2" height="14" width="53" html.valueishtml="0"  name=total_person_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="물량수량" border="0" color="33554432" x="843" y="2" height="14" width="60" html.valueishtml="0"  name=item_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="물량단위" border="0" color="33554432" x="905" y="2" height="14" width="53" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일평균인원" border="0" color="33554432" x="960" y="2" height="14" width="65" html.valueishtml="0"  name=day_avg_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="인당생산성" border="0" color="33554432" x="1027" y="2" height="14" width="65" html.valueishtml="0"  name=person_pro_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일당생산성" border="0" color="33554432" x="1094" y="2" height="14" width="65" html.valueishtml="0"  name=day_pro_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="2" y="2" height="17" width="278" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="960" y="2" height="17" width="65" format="[general]~tif ( day_avg - truncate ( day_avg, 0 ) = 0, '#,###', '#,###.#' )" html.valueishtml="0"  name=day_avg visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="1027" y="2" height="17" width="65" format="[general]~tif ( person_pro - truncate ( person_pro, 0 ) = 0, '#,###', '#,###.#' )" html.valueishtml="0"  name=person_pro visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="1094" y="2" height="17" width="65" format="[general]~tif ( day_pro - truncate ( day_pro, 0 ) = 0, '#,###', '#,###.#' )" html.valueishtml="0"  name=day_pro visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="568" y="2" height="17" width="53" format="[general]" html.valueishtml="0"  name=const_term visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="623" y="2" height="17" width="53" format="[general]~tif ( day_person - truncate ( day_person, 0 ) = 0, '#,###', '#,###.0' )" html.valueishtml="0"  name=day_person visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="678" y="2" height="17" width="53" format="[general]" html.valueishtml="0"  name=night_person visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="733" y="2" height="17" width="53" format="0%" html.valueishtml="0"  name=night_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="788" y="2" height="17" width="53" format="[general]" html.valueishtml="0"  name=total_person visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="424" y="2" height="17" width="70" format="@@@@-@@-@@" html.valueishtml="0"  name=act_start_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="496" y="2" height="17" width="70" format="@@@@-@@-@@" html.valueishtml="0"  name=act_end_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=10 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="282" y="2" height="17" width="68" format="[general]" html.valueishtml="0" protect="0~tif ( level_num < 3, 1, 0 )"  name=start_date visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=20 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="352" y="2" height="17" width="70" format="[general]" html.valueishtml="0" protect="0~tif ( level_num < 3, 1, 0 )"  name=end_date visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=30 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="843" y="2" height="17" width="60" format="~tif ( item_qty - truncate ( item_qty, 0 ) = 0, '#,###', '#,###.#' )" html.valueishtml="0" protect="0~tif ( level_num < 3, 1, 0 )"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="0" tabsequence=40 border="0" color="33554432~tif ( level_num < 3, rgb ( 0, 0, 255 ), rgb ( 0, 0, 0 ) )" x="905" y="2" height="17" width="53" format="[general]" html.valueishtml="0" protect="0~tif ( level_num < 3, 1, 0 )"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,99 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=524 color="536870912" )
+table(column=(type=char(6) updatewhereclause=yes name=company_code dbname="cm_daily_ins_data.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_daily_ins_data.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(8) updatewhereclause=yes name=work_date dbname="cm_daily_ins_data.work_date" )
+ column=(type=char(1501) updatewhereclause=yes name=safe_sign_file dbname="safe_sign_file" )
+ column=(type=char(1501) updatewhereclause=yes name=safe_sign_file2 dbname="safe_sign_file2" )
+ column=(type=char(2) updatewhereclause=yes name=work_gbn dbname="cm_daily_ins_data.work_gbn" )
+ column=(type=char(1) updatewhereclause=yes name=safe_sign_chk dbname="safe_sign_chk" values="	Y/	N" )
+ column=(type=char(1) updatewhereclause=yes name=safe_sign_chk2 dbname="safe_sign_chk2" values="	Y/	N" )
+ column=(type=number updatewhereclause=yes name=safe_sign_width dbname="cm_daily_ins_data.safe_sign_width" )
+ column=(type=number updatewhereclause=yes name=safe_sign_height dbname="cm_daily_ins_data.safe_sign_height" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE,
+       A.LABOR_CODE AS LABOR_CODE,
+       B.LABOR_NAME AS LABOR_NAME,
+       A.WORK_DATE AS WORK_DATE,
+       CASE WHEN (A.WORK_GBN = '1' AND A.SAFE_SIGN_FILE_NAME IS NOT NULL ) THEN A.SAFE_SIGN_FILE_PATH||A.SAFE_SIGN_FILE_NAME||'.'||A.SAFE_SIGN_FILE_EXT ELSE '' END  AS SAFE_SIGN_FILE,
+       CASE WHEN (A.WORK_GBN = '2' AND A.SAFE_SIGN_FILE_NAME IS NOT NULL ) THEN A.SAFE_SIGN_FILE_PATH||A.SAFE_SIGN_FILE_NAME||'.'||A.SAFE_SIGN_FILE_EXT ELSE '' END  AS SAFE_SIGN_FILE2,
+       A.WORK_GBN AS WORK_GBN,
+       CASE WHEN (A.WORK_GBN = '1' AND A.SAFE_SIGN_FILE_NAME IS NOT NULL ) THEN 'Y' ELSE 'N' END  AS SAFE_SIGN_CHK,
+       CASE WHEN (A.WORK_GBN = '2' AND A.SAFE_SIGN_FILE_NAME IS NOT NULL ) THEN 'Y' ELSE 'N' END  AS SAFE_SIGN_CHK2,
+       A.SAFE_SIGN_WIDTH AS SAFE_SIGN_WIDTH,
+       A.SAFE_SIGN_HEIGHT AS SAFE_SIGN_HEIGHT
+  FROM CM_DAILY_INS_DATA A LEFT JOIN CM_LABO_MASTER B INNER JOIN HR_PERS_MASTER F
+                                                              ON B.COMPANY_CODE = F.COMPANY_CODE
+                                                             AND B.LABOR_CODE   = F.EMP_NO
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                 AND A.LABOR_CODE   = B.LABOR_CODE
+                           LEFT JOIN SM_CODE_PROJECT C
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE
+                                 AND A.PROJ_CODE    = C.PROJ_CODE
+                           LEFT JOIN CM_ATTD_TEAMS D
+                                  ON A.COMPANY_CODE = D.COMPANY_CODE
+                                 AND A.PROJ_CODE    = D.PROJ_CODE
+                                 AND A.TEAM_CODE    = D.TEAM_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.TEAM_CODE LIKE :AS_TEAM_CODE
+   /*AND NOT EXISTS (SELECT 1 FROM CM_LABO_INSURANCE
+                    WHERE COMPANY_CODE = A.COMPANY_CODE
+                      AND LABOR_CODE   = A.LABOR_CODE
+                      AND CHECK2       = 'Y'
+                      AND CHECK10      = 'Y')*/
+   AND ( A.OUT_GUBUN = '0' OR A.OUT_GUBUN IS NULL )
+   AND F.EMPLOYEE_DIV = '8'
+   AND A.LABOR_CODE = :AS_LABOR_CODE
+   AND A.WORK_DATE = :AS_WORK_DATE
+   AND A.WORK_GBN = :AS_WORK_GBN" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_TEAM_CODE", string),("AS_LABOR_CODE", string),("AS_WORK_DATE", string),("AS_WORK_GBN", string)) )
+text(band=detail alignment="2" text="무사히 작업을 마쳤음을 서명합니다." border="0" color="33554432" x="19" y="312" height="18" width="715" html.valueishtml="0"  name=t_12 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="if(work_gbn='1','안전사고 지연 은폐 근절 서약서','일일 무재해 확인서')"border="0" color="33554432" x="17" y="22" height="33" width="718" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="순명조" font.height="-20" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="15" y1="65" x2="737" y2="65"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="14" y1="149" x2="736" y2="149"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="15" y1="11" x2="737" y2="11"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="15" y1="518" x2="737" y2="518"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="15" y1="11" x2="15" y2="519"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="736" y1="11" x2="736" y2="519"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="0" text="본 무재해 확인서는 (주)세보엠이씨 현장에 종사하는 근로자의 안전 및 보건에 관한" border="0" color="33554432" x="29" y="76" height="18" width="694" html.valueishtml="0"  name=t_1 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="당일의 재해발생 사실여부를 파악하고 기록하는데 목적이 있으며, 추후 사업장" border="0" color="33554432" x="29" y="97" height="18" width="692" html.valueishtml="0"  name=t_2 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="무재해 달성 확인 용도로 사용됨을 알려드립니다." border="0" color="33554432" x="29" y="120" height="18" width="537" html.valueishtml="0"  name=t_3 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="* 아래 기재된 사항에 대하여 해당여부를 확인하여 주시고 이상이 있을 경우 현장" border="0" color="33554432" x="29" y="157" height="18" width="616" html.valueishtml="0"  name=t_6 visible="1"  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="  관리자에게 내용을 전달하여 조치를 받을 수 있도록 부탁 드립니다." border="0" color="33554432" x="29" y="183" height="18" width="537" html.valueishtml="0"  name=t_5 visible="1"  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="1) 금일 작업하는데 있어 신체 상해나 부상 등이 발생하지 않았습니다." border="0" color="33554432" x="29" y="211" height="18" width="636" html.valueishtml="0"  name=t_7 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="2) 금일 작업하는데 있어 유해 가스/화학물질 등의 접촉 및 흡입이 없었습니다." border="0" color="33554432" x="29" y="239" height="18" width="672" html.valueishtml="0"  name=t_4 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="left( work_date, 4)+'년 '+mid( work_date,5,2)+'월 '+right( work_date,2)+'일'"border="0" color="33554432" x="18" y="339" height="14" width="717" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="201" y="397" height="15" width="193" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="서명" border="0" color="33554432" x="424" y="393" height="18" width="38" html.valueishtml="0"  name=t_10 visible="1"  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="420" y1="418" x2="671" y2="418"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="0" text="성 명" border="0" color="33554432" x="146" y="399" height="18" width="40" html.valueishtml="0"  name=t_9 visible="1"  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="145" y1="419" x2="396" y2="419"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="138" y="493" height="15" width="142" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="0" text="직원식별번호 : " border="0" color="33554432" x="24" y="493" height="18" width="116" html.valueishtml="0"  name=t_11 visible="1"  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="131" y="291" height="24" width="25" format="[general]" html.valueishtml="0"  name=safe_sign_chk2 visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=detail filename="" x="343" y="428" height="51" width="104" border="0"  name=p_2 visible="0" )
+bitmap(band=detail filename="" x="471" y="362" height="51" width="104" border="0"  name=p_4 visible="1" )
+text(band=detail alignment="2" text="본인은 위 사항을 충분히 인지하였으며 금일 사고 없이" border="0" color="33554432" x="19" y="291" height="18" width="715" html.valueishtml="0"  name=t_8 visible="1"  font.face="순명조" font.height="-12" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="641" y="412" height="14" width="60" format="[general]" html.valueishtml="0"  name=work_gbn visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="641" y="396" height="14" width="62" format="[general]" html.valueishtml="0"  name=work_date visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="641" y="429" height="14" width="84" format="[general]" html.valueishtml="0"  name=safe_sign_file visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="641" y="453" height="14" width="89" format="[general]" html.valueishtml="0"  name=safe_sign_file2 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=footer filename="Y:\Mighty\Net\Mighty.Net.Ns-Net\images\comp\mec_comp.jpg" x="574" y="425" height="82" width="97" border="0"  name=p_1 visible="1" )
+bitmap(band=footer filename="'http://www.sebomec.co.kr/2021TECH/20210407_21800304_안전서약서_출근.gif'" x="165" y="51" height="82" width="391" border="0"  name=p_3 visible="1" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="635" y="496" height="18" width="85" format="[general]" html.valueishtml="0"  name=safe_sign_width visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="639" y="473" height="18" width="76" format="[general]" html.valueishtml="0"  name=safe_sign_height visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="순명조" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

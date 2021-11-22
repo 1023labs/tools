@@ -1,0 +1,91 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=36 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=18 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osct_pay_rate_m.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osct_pay_rate_m.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=consult_code dbname="cm_osct_pay_rate_m.consult_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=consult_no dbname="cm_osct_pay_rate_m.consult_no" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=osct_div dbname="cm_osct_pay_rate_m.osct_div" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=rate_seq dbname="cm_osct_pay_rate_m.rate_seq" )
+ column=(type=char(50) updatewhereclause=yes name=rate_cont dbname="cm_osct_pay_rate_m.rate_cont" )
+ column=(type=decimal(2) updatewhereclause=yes name=rate dbname="cm_osct_pay_rate_m.rate" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=dem_date dbname="cm_osct_pay_rate_m.dem_date" )
+ column=(type=number update=yes updatewhereclause=yes name=gong_rate dbname="gong_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=gong_rate_pre dbname="gong_rate_pre" )
+ column=(type=number updatewhereclause=yes name=mm_rate dbname="mm_rate" )
+ column=(type=char(50) updatewhereclause=yes name=remarks dbname="cm_osct_pay_rate_m.remarks" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=chg_div dbname="cm_osct_pay_rate_m.chg_div" values="	1/	0" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONSULT_CODE,
+         A.CONSULT_NO,
+         A.OSCT_DIV,
+         A.RATE_SEQ,
+         C.RATE_CONT,
+         C.RATE,
+         A.DEM_DATE,
+         NVL(A.GONG_RATE,0) AS GONG_RATE,
+         NVL(A.GONG_RATE_PRE,0) AS GONG_RATE_PRE,
+         NVL(A.GONG_RATE,0) - NVL(A.GONG_RATE_PRE,0) AS MM_RATE,
+         C.REMARKS,
+         A.CHG_DIV 
+    FROM CM_OSCT_PAY_RATE_M A LEFT JOIN ( SELECT COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE,
+                                                 RATE_SEQ, RATE_CONT, RATE, REMARKS, CONSULT_NO 
+                                            FROM CM_OSCT_RECOG_RATE
+                                           WHERE COMPANY_CODE  = :as_comp_code
+                                             AND PROJ_CODE     = :as_proj_code
+                                             AND OSCT_DIV      = :as_osct_div
+                                             AND CONSULT_CODE  = :as_cons_code
+                                             AND CONSULT_NO    = :as_cons_no ) C
+                                      ON A.COMPANY_CODE = C.COMPANY_CODE
+                                     AND A.PROJ_CODE    = C.PROJ_CODE
+                                     AND A.OSCT_DIV     = C.OSCT_DIV
+                                     AND A.CONSULT_CODE = C.CONSULT_CODE
+                                     AND A.CONSULT_NO   = C.CONSULT_NO
+                                     AND A.RATE_SEQ     = C.RATE_SEQ                                     
+   WHERE A.COMPANY_CODE  = :as_comp_code
+     AND A.PROJ_CODE     = :as_proj_code
+     AND A.OSCT_DIV      = :as_osct_div
+     AND A.CONSULT_CODE  = :as_cons_code
+     AND A.CONSULT_NO    = :as_cons_no
+     AND A.DEM_DATE      = :as_dem_date
+ORDER BY RATE_SEQ" update="CM_OSCT_PAY_RATE_M" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_cons_code", string),("as_cons_no", string),("as_dem_date", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="12" height="14" width="40" html.valueishtml="0"  name=rate_seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보할(%)" border="0" color="33554432" x="198" y="12" height="14" width="72" html.valueishtml="0"  name=rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보할(%)" border="0" color="33554432" x="486" y="19" height="14" width="50" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="항목" border="0" color="33554432" x="44" y="12" height="14" width="152" html.valueishtml="0"  name=rate_cont_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+line(band=header x1="281" y1="15" x2="542" y2="15"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="134217750"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="변경" border="0" color="33554432" x="272" y="12" height="14" width="38" html.valueishtml="0"  name=chg_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보할(%)" border="0" color="33554432" x="371" y="19" height="14" width="54" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공정율(%)" border="0" color="33554432" x="312" y="19" height="14" width="57" html.valueishtml="0"  name=mm_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공정율(%)" border="0" color="33554432" x="427" y="19" height="14" width="57" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="누 " border="0" color="33554432" x="427" y="2" height="14" width="57" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="당 " border="0" color="33554432" x="312" y="2" height="14" width="57" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text=" 월" border="0" color="33554432" x="371" y="2" height="14" width="54" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="계" border="0" color="33554432" x="486" y="2" height="14" width="50" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="605" y="12" height="14" width="153" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이전공정율" border="0" color="33554432" x="538" y="12" height="14" width="65" html.valueishtml="0"  name=gong_rate_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="14" width="40" format="[general]" html.valueishtml="0"  name=rate_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="44" y="1" height="14" width="152" format="[general]" html.valueishtml="0"  name=rate_cont visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="198" y="1" height="14" width="72" format="#,##0.00" html.valueishtml="0"  name=rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="427" y="1" height="14" width="57" format="#,##0.00" html.valueishtml="0"  name=gong_rate visible="1" edit.limit=6 edit.case=any edit.format="" edit.focusrectangle=no edit.autoselect=yes edit.imemode=0 criteria.override_edit=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="0" tabsequence=20 border="0" color="33554432" x="605" y="1" height="14" width="153" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" rate / 100 * gong_rate"border="0" color="33554432" x="486" y="1" height="14" width="50" format="#,##0.00" html.valueishtml="0"  name=bo_rate_b visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" rate / 100 * mm_rate"border="0" color="33554432" x="371" y="1" height="14" width="54" format="#,##0.00" html.valueishtml="0"  name=bo_rate_a visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="272" y="1" height="14" width="38" format="[general]" html.valueishtml="0"  name=chg_div visible="1" checkbox.text="" checkbox.on="1" checkbox.off="0" checkbox.scale=no checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="538" y="1" height="14" width="65" format="##0.00" html.valueishtml="0"  name=gong_rate_pre visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=10 border="0" color="33554432" x="312" y="1" height="14" width="57" format="##0.00" html.valueishtml="0"  name=mm_rate visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="760" y="1" height="14" width="25" format="[general]" html.valueishtml="0"  name=consult_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="44" y="1" height="14" width="152" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( rate / 100 * mm_rate for all)"border="0" color="33554432" x="371" y="1" height="14" width="54" format="#,##0.00" html.valueishtml="0"  name=bo_rate_a_tot visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( rate / 100 *  gong_rate for all)"border="0" color="33554432" x="486" y="1" height="14" width="50" format="#,##0.00" html.valueishtml="0"  name=bo_rate_b_tot visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( rate / 100 *  gong_rate_pre for all)"border="0" color="33554432" x="538" y="1" height="14" width="65" format="#,##0.00" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

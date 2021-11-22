@@ -1,0 +1,109 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_saly_labor_account.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_saly_labor_account.proj_code" dbalias="A.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="I.proj_name" )
+ column=(type=number updatewhereclause=yes name=work_cnt dbname="work_cnt" )
+ column=(type=number updatewhereclause=yes name=out_cnt dbname="out_cnt" )
+ retrieve="SELECT A.COMPANY_CODE           AS COMPANY_CODE,
+       A.PROJ_CODE              AS PROJ_CODE,
+       I.PROJ_NAME              AS PROJ_NAME,
+       COUNT(LABOR.LABOR_CODE)  AS WORK_CNT,
+       COUNT(LABOR2.LABOR_CODE) AS OUT_CNT
+  FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN (SELECT A.COMPANY_CODE                                 AS COMPANY_CODE,
+                                                 A.LABOR_CODE                                   AS LABOR_CODE,
+                                                 A.LABOR_NAME                                   AS LABOR_NAME,
+                                                 A.RRN_PRE||'-'||A.RRN_POST                     AS JUMIN_NO,
+                                                 A.HP                                           AS HP,
+                                                 A.ADDR1                                        AS ADDR1,
+                                                 A.JOB_CODE                                     AS JOB_CODE,
+                                                 G.DNAME                                        AS JOB_NAME,
+                                                 CASE WHEN E.WORK_CNT > 0 THEN 'Y' ELSE 'N' END AS WORK_YN
+                                            FROM CM_LABO_MASTER A INNER JOIN CM_LABO_INSURANCE B
+                                                                          ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                         AND A.LABOR_CODE   = B.LABOR_CODE
+                                                                   LEFT JOIN (SELECT D.COMPANY_CODE  AS COMPANY_CODE,
+                                                                                     D.LABOR_CODE    AS LABOR_CODE,
+                                                                                     SUM(D.WORK_DAY) AS WORK_CNT
+                                                                                FROM CM_SALY_LABOR_ACCOUNT D
+                                                                               WHERE D.COMPANY_CODE = :as_comp
+                                                                                 AND D.PAY_YYMM = :as_pay_yymm
+                                                                            GROUP BY D.COMPANY_CODE,
+                                                                                     D.LABOR_CODE) E
+                                                                          ON A.COMPANY_CODE = E.COMPANY_CODE
+                                                                         AND A.LABOR_CODE   = E.LABOR_CODE
+                                                                     LEFT JOIN SM_COMCODE_D G
+                                                                            ON A.JOB_CODE = G.DCODE
+                                                                           AND G.SYS_ID = 'CM'
+                                                                           AND G.HCODE = 'JOBDIV'
+                                           WHERE B.CHECK1 = 'Y'
+                                        ORDER BY A.LABOR_NAME ) LABOR
+                                      ON A.COMPANY_CODE = LABOR.COMPANY_CODE
+                                     AND A.LABOR_CODE   = LABOR.LABOR_CODE
+                                     AND LABOR.WORK_YN = 'Y'
+                                   LEFT JOIN (SELECT A.COMPANY_CODE                                 AS COMPANY_CODE,
+                                                 A.LABOR_CODE                                   AS LABOR_CODE,
+                                                 A.LABOR_NAME                                   AS LABOR_NAME,
+                                                 A.RRN_PRE||'-'||A.RRN_POST                     AS JUMIN_NO,
+                                                 A.HP                                           AS HP,
+                                                 A.ADDR1                                        AS ADDR1,
+                                                 A.JOB_CODE                                     AS JOB_CODE,
+                                                 G.DNAME                                        AS JOB_NAME,
+                                                 CASE WHEN E.WORK_CNT > 0 THEN 'Y' ELSE 'N' END AS WORK_YN
+                                            FROM CM_LABO_MASTER A INNER JOIN CM_LABO_INSURANCE B
+                                                                          ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                         AND A.LABOR_CODE   = B.LABOR_CODE
+                                                                   LEFT JOIN (SELECT D.COMPANY_CODE  AS COMPANY_CODE,
+                                                                                     D.LABOR_CODE    AS LABOR_CODE,
+                                                                                     SUM(D.WORK_DAY) AS WORK_CNT
+                                                                                FROM CM_SALY_LABOR_ACCOUNT D
+                                                                               WHERE D.COMPANY_CODE = :as_comp
+                                                                                 AND D.PAY_YYMM = :as_pay_yymm
+                                                                            GROUP BY D.COMPANY_CODE,
+                                                                                     D.LABOR_CODE) E
+                                                                          ON A.COMPANY_CODE = E.COMPANY_CODE
+                                                                         AND A.LABOR_CODE   = E.LABOR_CODE
+                                                                     LEFT JOIN SM_COMCODE_D G
+                                                                            ON A.JOB_CODE = G.DCODE
+                                                                           AND G.SYS_ID = 'CM'
+                                                                           AND G.HCODE = 'JOBDIV'
+                                           WHERE B.CHECK1 = 'Y'
+                                        ORDER BY A.LABOR_NAME ) LABOR2
+                                      ON A.COMPANY_CODE = LABOR2.COMPANY_CODE
+                                     AND A.LABOR_CODE   = LABOR2.LABOR_CODE
+                                     AND LABOR2.WORK_YN = 'N'
+                                   LEFT JOIN SM_CODE_PROJECT I
+                                          ON A.COMPANY_CODE = I.COMPANY_CODE
+                                         AND A.PROJ_CODE    = I.PROJ_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.PAY_YYMM = :as_pay_yymm
+   AND SUBSTR(A.PROJ_CODE,1,2) <> '08'
+ GROUP BY A.COMPANY_CODE,
+          A.PROJ_CODE,
+          I.PROJ_NAME
+ORDER BY I.PROJ_NAME" arguments=(("as_comp", string),("as_pay_yymm", string)) )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="32" y="7" height="14" width="68" html.valueishtml="0"  name=cm_saly_labor_account_proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="103" y="7" height="14" width="222" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="근무인원" border="0" color="33554432" x="328" y="7" height="14" width="57" html.valueishtml="0"  name=work_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="퇴직인원" border="0" color="33554432" x="388" y="7" height="14" width="55" html.valueishtml="0"  name=out_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="7" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="5" height="13" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="32" y="4" height="14" width="68" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="103" y="4" height="14" width="222" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="328" y="4" height="14" width="57" format="[general]" html.valueishtml="0"  name=work_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="388" y="4" height="14" width="55" format="[general]" html.valueishtml="0"  name=out_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

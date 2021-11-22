@@ -1,0 +1,119 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=152 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=64 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_esti_contract.company_code" dbalias="A.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_esti_contract.proj_code" dbalias="A.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_esti_contract.contract_code" dbalias="A.contract_code" )
+ column=(type=char(60) update=yes updatewhereclause=yes name=contract_name dbname="cm_esti_contract.contract_name" dbalias="A.contract_name" )
+ column=(type=char(30) updatewhereclause=yes name=order_comp dbname="cm_esti_request.order_comp" dbalias="B.order_comp" )
+ column=(type=char(4) updatewhereclause=yes name=f_type dbname="cm_esti_master.f_type" dbalias="C.f_type" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="sm_code_project.cust_code" dbalias="CP.cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" dbalias="D.cust_name" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=prepay_tag dbname="cm_esti_contract.prepay_tag" dbalias="A.prepay_tag" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=pay_tag dbname="cm_esti_contract.pay_tag" dbalias="A.pay_tag" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=sup_pay_tag dbname="cm_esti_contract.sup_pay_tag" dbalias="A.sup_pay_tag" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=prepay_amt_per dbname="cm_esti_contract.prepay_amt_per" dbalias="A.prepay_amt_per" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=prepay_vat_per dbname="cm_esti_contract.prepay_vat_per" dbalias="A.prepay_vat_per" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=cont_exec_amt_per dbname="cm_esti_contract.cont_exec_amt_per" dbalias="A.cont_exec_amt_per" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cont_exec_vat_per dbname="cm_esti_contract.cont_exec_vat_per" dbalias="A.cont_exec_vat_per" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=miss_repair_amt_per dbname="cm_esti_contract.miss_repair_amt_per" dbalias="A.miss_repair_amt_per" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=miss_repair_vat_per dbname="cm_esti_contract.miss_repair_vat_per" dbalias="A.miss_repair_vat_per" )
+ column=(type=char(4) updatewhereclause=yes name=miss_repair_date dbname="cm_esti_contract.miss_repair_date" dbalias="A.miss_repair_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=stamp_tax dbname="cm_esti_contract.stamp_tax" dbalias="A.stamp_tax" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=comp_tax_per dbname="cm_esti_contract.comp_tax_per" dbalias="A.comp_tax_per" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=material_amt dbname="cm_esti_contract.material_amt" dbalias="A.material_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=labor_amt dbname="cm_esti_contract.labor_amt" dbalias="A.labor_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cost_amt dbname="cm_esti_contract.cost_amt" dbalias="A.cost_amt" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_esti_contract.start_date" dbalias="A.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_esti_contract.end_date" dbalias="A.end_date" )
+ column=(type=char(4) updatewhereclause=yes name=cm_esti_contract_sub_gubun dbname="cm_esti_contract.sub_gubun" dbalias="A.sub_gubun" )
+ column=(type=decimal(4) updatewhereclause=yes name=cm_esti_contract_pre_vat_avg dbname="cm_esti_contract.pre_vat_avg" dbalias="A.pre_vat_avg" )
+ column=(type=decimal(4) updatewhereclause=yes name=cm_esti_contract_cont_vat_avg dbname="cm_esti_contract.cont_vat_avg" dbalias="A.cont_vat_avg" )
+ column=(type=decimal(4) updatewhereclause=yes name=cm_esti_contract_miss_vat_avg dbname="cm_esti_contract.miss_vat_avg" dbalias="A.miss_vat_avg" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.CONTRACT_CODE,   
+         A.CONTRACT_NAME,  
+         B.ORDER_COMP,
+         C.F_TYPE,    
+         CP.CUST_CODE,  
+         D.CUST_NAME,
+         A.PREPAY_TAG,
+         A.PAY_TAG,
+         A.SUP_PAY_TAG,
+         A.PREPAY_AMT_PER,
+         A.PREPAY_VAT_PER,
+         A.CONT_EXEC_AMT_PER,
+         A.CONT_EXEC_VAT_PER,
+         A.MISS_REPAIR_AMT_PER,
+         A.MISS_REPAIR_VAT_PER,
+         A.MISS_REPAIR_DATE,
+         A.STAMP_TAX,
+         A.COMP_TAX_PER,
+         A.MATERIAL_AMT,
+         A.LABOR_AMT,
+         A.COST_AMT,
+         A.START_DATE,
+         A.END_DATE,
+         A.SUB_GUBUN,
+         A.PRE_VAT_AVG,
+         A.CONT_VAT_AVG,
+         A.MISS_VAT_AVG
+    FROM CM_ESTI_CONTRACT A  LEFT JOIN CM_ESTI_REQUEST B
+                                    ON A.COMPANY_CODE  = B.COMPANY_CODE
+                                   AND A.CONTRACT_CODE = B.EST_CODE 
+                             LEFT JOIN CM_ESTI_MASTER C
+                                    ON A.COMPANY_CODE  = C.COMPANY_CODE
+                                   AND A.CONTRACT_CODE = C.EST_CODE 
+                                  JOIN SM_CODE_PROJECT CP
+                                    ON A.PROJ_CODE = CP.PROJ_CODE
+                             LEFT JOIN SM_CODE_CUST D
+                                    ON CP.CUST_CODE = D.CUST_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.VISIBILE_YN  = :as_gubun
+ORDER BY A.START_DATE" update="CM_ESTI_CONTRACT" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_gubun", string)) )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="2025" y="80" height="56" width="443" html.valueishtml="0"  name=cm_esti_contract_material_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="2478" y="80" height="56" width="489" html.valueishtml="0"  name=cm_esti_contract_labor_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="계     약   " border="0" color="33554432" x="2478" y="8" height="56" width="489" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="   금     액" border="0" color="33554432" x="2976" y="8" height="56" width="448" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="2976" y="80" height="56" width="448" html.valueishtml="0"  name=cm_esti_contract_cost_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="3433" y="80" height="56" width="494" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="52" height="56" width="169" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="197" y="52" height="56" width="457" html.valueishtml="0"  name=cm_esti_contract_contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="663" y="52" height="56" width="1344" html.valueishtml="0"  name=cm_esti_contract_contract_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="시작일" border="0" color="33554432" x="3931" y="52" height="56" width="480" html.valueishtml="0"  name=cm_esti_contract_start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="종료일" border="0" color="33554432" x="4421" y="52" height="56" width="457" html.valueishtml="0"  name=cm_esti_contract_end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Cm Esti Contract Miss Repair Date" border="0" color="33554432" x="4887" y="4" height="76" width="105" html.valueishtml="0"  name=cm_esti_contract_miss_repair_date_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Cm Esti Contract Sub Gubun" border="0" color="33554432" x="5001" y="4" height="76" width="105" html.valueishtml="0"  name=cm_esti_contract_sub_gubun_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Cm Esti Contract Pre Vat Avg" border="0" color="33554432" x="5115" y="4" height="76" width="2130" html.valueishtml="0"  name=cm_esti_contract_pre_vat_avg_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Cm Esti Contract Cont Vat Avg" border="0" color="33554432" x="7255" y="4" height="76" width="2130" html.valueishtml="0"  name=cm_esti_contract_cont_vat_avg_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Cm Esti Contract Miss Vat Avg" border="0" color="33554432" x="9394" y="4" height="76" width="2130" html.valueishtml="0"  name=cm_esti_contract_miss_vat_avg_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="16" height="56" width="169" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="201" y="16" height="56" width="453" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="667" y="16" height="56" width="1339" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="2030" y="16" height="56" width="439" format="#,###" html.valueishtml="0"  name=material_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432" x="2482" y="16" height="56" width="485" format="#,###" html.valueishtml="0"  name=labor_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="1" tabsequence=32766 border="0" color="33554432" x="2981" y="16" height="56" width="443" format="#,###" html.valueishtml="0"  name=cost_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="33554432" x="3936" y="16" height="56" width="475" format="[general]" html.valueishtml="0"  name=start_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=25 alignment="2" tabsequence=32766 border="0" color="33554432" x="4425" y="16" height="56" width="453" format="[general]" html.valueishtml="0"  name=end_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" material_amt + labor_amt + cost_amt "border="0" color="33554432" x="3433" y="16" height="56" width="494" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="0" tabsequence=32766 border="0" color="33554432" x="4891" y="0" height="56" width="101" format="[general]" html.valueishtml="0"  name=miss_repair_date visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=26 alignment="0" tabsequence=32766 border="0" color="33554432" x="5006" y="0" height="56" width="101" format="[general]" html.valueishtml="0"  name=cm_esti_contract_sub_gubun visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=27 alignment="0" tabsequence=32766 border="0" color="33554432" x="5120" y="0" height="56" width="2126" format="[general]" html.valueishtml="0"  name=cm_esti_contract_pre_vat_avg visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=28 alignment="0" tabsequence=32766 border="0" color="33554432" x="7259" y="0" height="56" width="2126" format="[general]" html.valueishtml="0"  name=cm_esti_contract_cont_vat_avg visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=29 alignment="0" tabsequence=32766 border="0" color="33554432" x="9399" y="0" height="56" width="2126" format="[general]" html.valueishtml="0"  name=cm_esti_contract_miss_vat_avg visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

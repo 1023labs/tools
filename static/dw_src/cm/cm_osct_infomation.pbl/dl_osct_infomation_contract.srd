@@ -1,0 +1,156 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=35 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=16 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_exec_const.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_exec_const.proj_code" )
+ column=(type=decimal(0) updatewhereclause=yes name=level_num dbname="cm_exec_const.level_num" )
+ column=(type=char(4000) update=yes updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="cm_exec_const.const_code" )
+ column=(type=decimal(0) updatewhereclause=yes name=query_seq dbname="cm_exec_const.query_seq" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=item_std dbname="cm_exec_const.item_std" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=item_unit dbname="cm_exec_const.item_unit" )
+ column=(type=number updatewhereclause=yes name=item_qty_first dbname="item_qty_first" )
+ column=(type=number updatewhereclause=yes name=item_cost_first dbname="item_cost_first" )
+ column=(type=number update=yes updatewhereclause=yes name=item_qty dbname="item_qty" )
+ column=(type=number update=yes updatewhereclause=yes name=item_cost dbname="item_cost" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.LEVEL_NUM,
+         LPAD('  ', (A.LEVEL_NUM-1)*4)||A.CONST_NAME CONST_NAME,
+         A.CONST_CODE, 
+         A.QUERY_SEQ,
+         C.ITEM_STD, 
+         C.ITEM_UNIT, 
+         SUM(C.ITEM_QTY)  ITEM_QTY_FIRST,
+         SUM(C.ITEM_COST) ITEM_COST_FIRST,
+         SUM(D.ITEM_QTY)  ITEM_QTY,
+         SUM(D.ITEM_COST) ITEM_COST
+    FROM CM_EXEC_CONST A  LEFT JOIN (
+                                      SELECT A.COMPANY_CODE,  
+                                             A.PROJ_CODE,   
+                                             A.OSCT_DIV,
+                                             A.CONSULT_CODE,
+                                             B.TEAM_CODE,   
+                                             A.CONSULT_NO,   
+                                             A.CONST_CODE,
+                                             A.CONST_NAME,
+                                             A.ITEM_STD, 
+                                             A.ITEM_UNIT, 
+                                             A.ITEM_COST,
+                                             A.ITEM_QTY,   
+                                             A.REMARKS   
+                                        FROM CM_OSCT_EST_DETAIL A INNER JOIN CM_ATTD_TEAMS B
+                                                                          ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                         AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                         AND A.OSCT_DIV     = B.TEAM_DIV
+                                                                         AND A.CONSULT_CODE = B.CONSULT_CODE  
+                                       WHERE A.COMPANY_CODE = :as_comp_code
+                                         AND A.PROJ_CODE    = :as_proj_code
+                                         AND A.OSCT_DIV     = :as_osct_div
+                                         AND B.TEAM_CODE LIKE :as_team_code  
+                                         AND A.CONSULT_NO   = '1' ) C  
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.PROJ_CODE    = C.PROJ_CODE
+                                AND A.CONST_CODE   = C.CONST_CODE
+                          LEFT JOIN (
+                                      SELECT A.COMPANY_CODE,  
+                                             A.PROJ_CODE,   
+                                             A.OSCT_DIV,
+                                             A.CONSULT_CODE,  
+                                             B.TEAM_CODE, 
+                                             A.CONSULT_NO,   
+                                             A.CONST_CODE,
+                                             A.CONST_NAME,
+                                             A.ITEM_STD, 
+                                             A.ITEM_UNIT, 
+                                             A.ITEM_COST,
+                                             A.ITEM_QTY,   
+                                             A.REMARKS   
+                                        FROM CM_OSCT_EST_DETAIL A INNER JOIN CM_ATTD_TEAMS B
+                                                                          ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                         AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                         AND A.OSCT_DIV     = B.TEAM_DIV
+                                                                         AND A.CONSULT_CODE = B.CONSULT_CODE
+                                                                  INNER JOIN (  
+                                                                          SELECT A.COMPANY_CODE,
+                                                                                 A.PROJ_CODE,
+                                                                                 A.OSCT_DIV,
+                                                                                 A.CONSULT_CODE, 
+                                                                                 MAX(A.CONSULT_NO) CONSULT_NO
+                                                                            FROM CM_OSCT_CONSULT_DETAIL A
+                                                                           WHERE A.CONSULT_NO <> '1'
+                                                                             AND A.STATUS_DIV = '3'
+                                                                        GROUP BY A.COMPANY_CODE,  
+                                                                                 A.PROJ_CODE,   
+                                                                                 A.OSCT_DIV,
+                                                                                 A.CONSULT_CODE ) C
+                                                                         ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                                        AND A.PROJ_CODE    = C.PROJ_CODE
+                                                                        AND A.OSCT_DIV     = C.OSCT_DIV
+                                                                        AND A.CONSULT_CODE = C.CONSULT_CODE
+                                                                        AND A.CONSULT_NO   = C.CONSULT_NO 
+                                       WHERE A.COMPANY_CODE = :as_comp_code
+                                         AND A.PROJ_CODE    = :as_proj_code
+                                         AND A.OSCT_DIV     = :as_osct_div
+                                         AND B.TEAM_CODE LIKE :as_team_code ) D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE
+                                AND A.PROJ_CODE    = D.PROJ_CODE
+                                AND A.CONST_CODE   = D.CONST_CODE
+                                AND C.OSCT_DIV     = D.OSCT_DIV
+                                AND C.CONSULT_CODE = D.CONSULT_CODE
+                                AND C.ITEM_STD     = D.ITEM_STD                                  
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.LEVEL_NUM,
+         A.CONST_NAME,
+         A.CONST_CODE, 
+         A.QUERY_SEQ,
+         C.ITEM_STD, 
+         C.ITEM_UNIT     
+ORDER BY A.QUERY_SEQ    " update="CM_EXEC_CONST" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_team_code", string)) )
+text(band=header alignment="2" text="원계약내역" border="0" color="33554432" x="394" y="2" height="14" width="68" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="12" height="14" width="38" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="42" y="12" height="14" width="148" html.valueishtml="0"  name=const_name_t  tag="const_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="192" y="12" height="14" width="93" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="287" y="12" height="14" width="46" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="464" y="19" height="14" width="73" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="394" y="19" height="14" width="68" html.valueishtml="0"  name=item_cost_first_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="33554432" x="335" y="19" height="14" width="57" html.valueishtml="0"  name=item_qty_first_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="600" y="19" height="14" width="66" html.valueishtml="0"  name=item_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="33554432" x="539" y="19" height="14" width="59" html.valueishtml="0"  name=item_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=header alignment="0" expression="1"border="0" color="33554432" x="2" y="72" height="14" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="668" y="19" height="14" width="72" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="물량" border="0" color="33554432" x="742" y="19" height="14" width="58" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="802" y="19" height="14" width="68" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="872" y="19" height="14" width="76" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="변경내역" border="0" color="33554432" x="600" y="2" height="14" width="66" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증감" border="0" color="33554432" x="802" y="2" height="14" width="68" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=header x1="335" y1="16" x2="947" y2="16"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="134217738"  background.mode="2" background.color="134217750" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="38" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="42" y="2" height="17" width="148" format="[general]" html.valueishtml="0" protect="0~tif(isRowNew(), 0, 1)"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="192" y="2" height="17" width="93" format="[general]" html.valueishtml="0" protect="0~tif(isRowNew(), 0, 1)"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="287" y="2" height="17" width="46" format="[general]" html.valueishtml="0" protect="0~tif(isRowNew(), 0, 1)"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="539" y="2" height="17" width="59" format="#,###" html.valueishtml="0"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="600" y="2" height="17" width="66" format="#,###" html.valueishtml="0"  name=item_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="335" y="2" height="17" width="57" format="#,##0" html.valueishtml="0" protect="0~tif(isRowNew(), 0, 1)"  name=item_qty_first visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="394" y="2" height="17" width="68" format="#,##0" html.valueishtml="0" protect="0~tif(isRowNew(), 0, 1)"  name=item_cost_first visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(isNull(item_qty_first),0,item_qty_first)  *  if(isNull(item_cost_first),0,item_cost_first) "border="0" color="33554432" x="464" y="2" height="17" width="73" format="#,###" html.valueishtml="0"  name=first_cost visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(isNull(ITEM_QTY),0,ITEM_QTY)  *  if(isNull(ITEM_COST),0,ITEM_COST) "border="0" color="33554432" x="668" y="2" height="17" width="72" format="#,###" html.valueishtml="0"  name=last_cost visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if( last_cost=0, 0, last_cost - first_cost )"border="0" color="33554432" x="872" y="2" height="17" width="76" format="#,###" html.valueishtml="0"  name=calc_result visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(  item_qty =0, 0,  item_qty -  item_qty_first )"border="0" color="33554432" x="742" y="2" height="17" width="58" format="#,###" html.valueishtml="0"  name=change_qty visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression="if(   item_cost =0, 0,   item_cost -   item_cost_first )"border="0" color="33554432" x="802" y="2" height="17" width="68" format="#,###" html.valueishtml="0"  name=change_cost visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="192" y="1" height="14" width="93" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isNull(item_qty_first),0,item_qty_first)  *  if(isNull(item_cost_first),0,item_cost_first)  for all)"border="0" color="33554432" x="464" y="1" height="14" width="73" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isNull(ITEM_QTY),0,ITEM_QTY)  *  if(isNull(ITEM_COST),0,ITEM_COST)  for all)"border="0" color="33554432" x="668" y="1" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( if( last_cost=0, 0, last_cost - first_cost )  for all)"border="0" color="33554432" x="872" y="1" height="14" width="76" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

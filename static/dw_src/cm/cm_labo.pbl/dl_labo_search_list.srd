@@ -1,0 +1,51 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn_pre2 dbname="rrn_pre2" )
+ retrieve="SELECT K.LABOR_CODE   AS LABOR_CODE,
+       K.LABOR_NAME   AS LABOR_NAME,
+       K.JUMIN_NO     AS JUMIN_NO,
+       K.RRN_PRE2     AS RRN_PRE2
+  FROM (SELECT DISTINCT A.LABOR_CODE                     AS LABOR_CODE,
+               A.LABOR_NAME                              AS LABOR_NAME,
+                      X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]') || '-' || X_DECRYPT(A.RRN_POST, '[Mighty-X.2012.]') AS JUMIN_NO,
+               CASE WHEN SUBSTR(X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]'),1,2) < 40 
+                    THEN '20'||X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]') 
+                    ELSE '19'||X_DECRYPT(A.RRN_PRE, '[Mighty-X.2012.]') END AS RRN_PRE2
+          FROM CM_LABO_MASTER A LEFT JOIN CM_SALY_LABOR_ACCOUNT B
+                                       ON A.COMPANY_CODE = B.COMPANY_CODE
+                                      AND A.LABOR_CODE   = B.LABOR_CODE
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.JOB_CODE LIKE :AS_JOB_CODE
+           AND X_DECRYPT(A.ADDR1, '[Mighty-X.2012.]') LIKE '%'||:AS_ADDR||'%'
+           AND B.PAY_YYMM BETWEEN :AS_FROM AND :AS_TO
+           AND B.PROJ_CODE LIKE :AS_PROJ_CODE) K
+ WHERE K.RRN_PRE2 BETWEEN :AS_PRE_JUMIN AND :AS_POST_JUMIN
+ORDER BY K.LABOR_NAME" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_JOB_CODE", string),("AS_FROM", string),("AS_TO", string),("AS_PRE_JUMIN", string),("AS_POST_JUMIN", string),("AS_ADDR", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="9" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="33" y="9" height="14" width="64" html.valueishtml="0"  name=cm_labo_master_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="100" y="9" height="14" width="64" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="167" y="9" height="14" width="106" html.valueishtml="0"  name=jumin_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="7" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="7" height="14" width="64" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="100" y="7" height="14" width="64" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="167" y="7" height="14" width="106" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=0 border="0" color="33554432" x="276" y="6" height="14" width="25" html.valueishtml="0"  name=rrn_pre2 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Rrn Pre2" border="0" color="33554432" x="275" y="1" height="19" width="26" html.valueishtml="0"  name=rrn_pre2_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

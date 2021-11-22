@@ -1,0 +1,95 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=1 color="536870912" )
+footer(height=20 color="536870912" )
+detail(height=23 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_labo_attach_detail.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=emp_no dbname="cm_labo_attach_detail.emp_no" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=yyyymm dbname="cm_labo_attach_detail.yyyymm" )
+ column=(type=number updatewhereclause=yes name=work_qty dbname="cm_labo_attach_detail.work_qty" )
+ column=(type=number updatewhereclause=yes name=pay_amt dbname="pay_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=attach_amt dbname="attach_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=balance_amt dbname="balance_amt" )
+ column=(type=number updatewhereclause=yes name=child_amt dbname="child_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=master_seq dbname="master_seq" )
+ column=(type=char(2) updatewhereclause=yes name=attach_gbn dbname="cm_labo_attach_detail.attach_gbn" values="노임	1/퇴직금	2/" )
+ retrieve="SELECT A.COMPANY_CODE                      AS COMPANY_CODE,
+       A.EMP_NO                            AS EMP_NO,
+       A.YYYYMM                            AS YYYYMM,
+       C.WORK_QTY                          AS WORK_QTY,       
+       (C.PAY_AMT - NVL(E.SEIZURE_AMT,0))  AS PAY_AMT,
+       NVL(A.ATTACH_AMT,0)                 AS ATTACH_AMT,
+       NVL(A.BALANCE_AMT,0)                AS BALANCE_AMT,
+       NVL(A.CHILD_AMT,0)                  AS CHILD_AMT,
+       NVL(A.MASTER_SEQ,0)                 AS MASTER_SEQ,
+       A.ATTACH_GBN                        AS ATTACH_GBN
+  FROM CM_LABO_ATTACH_DETAIL A LEFT JOIN (SELECT B.COMPANY_CODE    AS COMPANY_CODE,
+                                                  B.LABOR_CODE      AS LABOR_CODE,
+                                                  B.PAY_YYMM        AS PAY_YYMM,
+                                                  SUM(B.WORK_QTY)   AS WORK_QTY,
+                                                  SUM(B.PAY_AMT)    AS PAY_AMT
+                                             FROM CM_SALY_LABOR_ACCOUNT B
+                                            WHERE B.COMPANY_CODE = :as_company
+                                              AND B.LABOR_CODE = :as_empno
+                                         GROUP BY B.COMPANY_CODE,
+                                                  B.LABOR_CODE,
+                                                  B.PAY_YYMM) C
+                                      ON A.COMPANY_CODE = C.COMPANY_CODE
+                                     AND A.EMP_NO   = C.LABOR_CODE
+                                     AND A.YYYYMM       = C.PAY_YYMM 
+                              LEFT JOIN (SELECT D.COMPANY_CODE      AS COMPANY_CODE,
+                                                               D.EMP_NO            AS EMP_NO,
+                                                               D.WORK_YYMM         AS WORK_YYMM,
+                                                               SUM(D.SEIZURE_AMT)  AS SEIZURE_AMT
+                                                          FROM HR_PAYX_SEIZURER D
+                                                         WHERE D.COMPANY_CODE = :as_company
+                                                           AND D.EMP_NO = :as_empno
+                                                           AND DEDUCT_DIV <> '1'
+                                                           AND EMPLOYEE_DIV = '8' 
+                                                      GROUP BY D.COMPANY_CODE,
+                                                               D.EMP_NO,
+                                                               D.WORK_YYMM) E
+                                      ON C.COMPANY_CODE = E.COMPANY_CODE
+                                     AND C.LABOR_CODE   = E.EMP_NO
+                                     AND C.PAY_YYMM     = E.WORK_YYMM
+ WHERE A.COMPANY_CODE = :as_company
+   AND A.EMP_NO = :as_empno
+   AND A.MASTER_SEQ = :as_seq
+ORDER BY A.YYYYMM " arguments=(("as_company", string),("as_empno", string),("as_seq", string)) )
+text(band=header alignment="2" text="압류년월" border="0" color="33554432" x="31" y="2" height="14" width="57" html.valueishtml="0"  name=yyyymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="2" height="14" width="27" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지급금액" border="0" color="33554432" x="90" y="2" height="14" width="85" html.valueishtml="0"  name=pay_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="177" y="2" height="14" width="65" html.valueishtml="0"  name=work_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="잔여금액" border="0" color="33554432" x="487" y="2" height="14" width="91" html.valueishtml="0"  name=balance_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Emp No" border="0" color="33554432" x="664" y="2" height="14" width="16" html.valueishtml="0"  name=emp_no_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="638" y="2" height="14" width="24" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Master Seq" border="0" color="33554432" x="682" y="2" height="14" width="8" html.valueishtml="0"  name=master_seq_t visible="0"  font.face="Arial" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="대상구분" border="0" color="33554432" x="580" y="2" height="14" width="56" html.valueishtml="0"  name=attach_gbn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="압류금액" border="0" color="33554432" x="244" y="2" height="14" width="85" html.valueishtml="0"  name=attach_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="양육비금액" border="0" color="33554432" x="331" y="2" height="14" width="154" html.valueishtml="0"  name=child_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="31" y="2" height="16" width="57" format="[General]" html.valueishtml="0"  name=yyyymm visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="16" width="27" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="177" y="2" height="16" width="65" format="[general]" html.valueishtml="0"  name=work_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="90" y="2" height="16" width="85" format="#,##0" html.valueishtml="0"  name=pay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="487" y="2" height="16" width="91" format="#,##0" html.valueishtml="0"  name=balance_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="638" y="2" height="16" width="24" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="664" y="2" height="16" width="16" format="[general]" html.valueishtml="0"  name=emp_no visible="0" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="682" y="2" height="16" width="8" format="[General]" html.valueishtml="0"  name=master_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="580" y="2" height="16" width="56" format="[general]" html.valueishtml="0"  name=attach_gbn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="244" y="2" height="16" width="85" format="#,##0" html.valueishtml="0"  name=attach_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="331" y="2" height="14" width="154" format="#,##0" html.valueishtml="0"  name=child_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합  계" border="0" color="33554432" x="31" y="4" height="14" width="57" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(attach_amt for all)"border="0" color="33554432" x="244" y="4" height="14" width="85" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(child_amt for all)"border="0" color="33554432" x="331" y="4" height="14" width="154" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

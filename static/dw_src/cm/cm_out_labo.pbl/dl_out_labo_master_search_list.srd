@@ -1,0 +1,56 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=29 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=cm_attd_daily_work_company_code dbname="cm_out_attd_daily_work.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=cm_attd_daily_work_proj_code dbname="cm_out_attd_daily_work.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_project_proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=cm_attd_daily_work_work_date dbname="cm_out_attd_daily_work.work_date" )
+ column=(type=char(2) updatewhereclause=yes name=gubun dbname="gubun" )
+ column=(type=char(4000) updatewhereclause=yes name=term dbname="term" )
+ retrieve="SELECT A.COMPANY_CODE                                 AS COMPANY_CODE,
+       A.PROJ_CODE                                    AS PROJ_CODE,
+       B.PROJ_NAME                                    AS PROJ_NAME,
+       A.WORK_DATE                                    AS WORK_DATE,
+       DECODE(C.CHECK4,'N','일용','Y','상용')         AS GUBUN,
+       FN_CM_LARBOR_TERM(A.LABOR_CODE,TO_CHAR(SYSDATE,'YYYYMM'),'1') AS TERM
+  FROM CM_OUT_ATTD_DAILY_WORK A LEFT JOIN SM_CODE_PROJECT B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                            LEFT JOIN CM_OUT_SALY_LABOR_ACCOUNT C
+                                   ON A.COMPANY_CODE          = C.COMPANY_CODE
+                                  AND A.PROJ_CODE             = C.PROJ_CODE
+                                  AND A.LABOR_CODE            = C.LABOR_CODE
+                                  AND SUBSTR(A.WORK_DATE,1,6) = C.PAY_YYMM
+                                  AND A.TEAM_CODE             = C.TEAM_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.LABOR_CODE   = :AS_LABOR_CODE
+   AND A.WORK_DATE = (SELECT MAX(A.WORK_DATE)
+                        FROM CM_OUT_ATTD_DAILY_WORK A
+                       WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                         AND A.LABOR_CODE   = :AS_LABOR_CODE)" arguments=(("AS_COMP_CODE", string),("AS_LABOR_CODE", string)) )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="2" y="7" height="14" width="212" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="마지막 출역일자" border="0" color="33554432" x="216" y="7" height="14" width="98" html.valueishtml="0"  name=cm_attd_daily_work_work_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="316" y="7" height="14" width="41" html.valueishtml="0"  name=gubun_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="연속근무" border="0" color="33554432" x="359" y="7" height="14" width="58" html.valueishtml="0"  name=term_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회사코드" border="0" color="33554432" x="420" y="7" height="14" width="33" html.valueishtml="0"  name=cm_attd_daily_work_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="455" y="7" height="14" width="28" html.valueishtml="0"  name=cm_attd_daily_work_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="6" height="17" width="212" format="[general]" html.valueishtml="0"  name=sm_code_project_proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="217" y="6" height="17" width="97" format="[general]" html.valueishtml="0"  name=cm_attd_daily_work_work_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="316" y="6" height="17" width="41" format="[general]" html.valueishtml="0"  name=gubun visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="359" y="6" height="17" width="58" format="[general]" html.valueishtml="0"  name=term visible="1" edit.limit=4000 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="420" y="6" height="17" width="33" format="[general]" html.valueishtml="0"  name=cm_attd_daily_work_company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="455" y="6" height="17" width="28" format="[general]" html.valueishtml="0"  name=cm_attd_daily_work_proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

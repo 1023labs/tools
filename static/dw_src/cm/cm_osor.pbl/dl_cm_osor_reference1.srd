@@ -1,0 +1,97 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_osor_consult.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_osor_consult.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=contract_code dbname="cm_osor_consult.contract_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=contract_name dbname="cm_osor_consult.contract_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=cust_code dbname="cm_osor_consult.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=const_code dbname="cm_osor_consult.const_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=reg_date dbname="cm_osor_consult.reg_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=status_div dbname="cm_osor_consult.status_div" )
+ column=(type=number update=yes updatewhereclause=yes name=cons_amount dbname="cons_amount" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=pay_div dbname="cm_osor_consult.pay_div" )
+ column=(type=char(8) updatewhereclause=yes name=start_date dbname="start_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="end_date" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=bid_div dbname="cm_osor_consult.bid_div" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=bid_contents dbname="cm_osor_consult.bid_contents" )
+ column=(type=char(0) updatewhereclause=yes name=complete_yn dbname="complete_yn" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="cm_exec_const.const_name" )
+ retrieve="  SELECT A.COMPANY_CODE,  
+         A.PROJ_CODE, 
+         A.CONTRACT_CODE,
+         A.CONTRACT_NAME,  
+         A.CUST_CODE, 
+         B.CUST_NAME, 
+         A.CONST_CODE, 
+         A.REG_DATE, 
+         A.STATUS_DIV, 
+         SUM(A.CONS_AMOUNT) AS CONS_AMOUNT, 
+         A.PAY_DIV, 
+         CASE C.CONTRACT_NO WHEN '1' THEN C.START_DATE
+                            ELSE NULL  END AS START_DATE, 
+         CASE C.CONTRACT_NO WHEN MAX(C.CONTRACT_NO) THEN C.END_DATE 
+                            ELSE NULL                END END_DATE, 
+         A.BID_DIV, 
+         A.BID_CONTENTS,
+         '' AS COMPLETE_YN,
+         D.CONST_NAME
+    FROM CM_OSOR_CONSULT A LEFT JOIN SM_CODE_CUST B
+                                  ON A.CUST_CODE = B.CUST_CODE  
+                           LEFT JOIN CM_OSOR_CONSULT_DETAIL C
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE
+                                 AND A.PROJ_CODE = C.PROJ_CODE
+                                 AND A.CONTRACT_CODE = C.CONTRACT_CODE
+                           LEFT JOIN CM_EXEC_CONST D
+                                  ON A.COMPANY_CODE = D.COMPANY_CODE 
+                                 AND A.PROJ_CODE = D.PROJ_CODE 
+                                 AND A.CONST_CODE = D.CONST_CODE
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE = :as_proj
+GROUP BY A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         A.CONTRACT_CODE, 
+         A.CONTRACT_NAME, 
+         A.CUST_CODE, 
+         B.CUST_NAME,
+         A.CONST_CODE, 
+         A.REG_DATE, 
+         A.STATUS_DIV,
+         A.PAY_DIV,
+         A.BID_DIV, 
+         A.BID_CONTENTS,
+         C.CONTRACT_NO,
+         C.START_DATE,
+         C.END_DATE,
+         D.CONST_NAME
+ORDER BY A.CONTRACT_CODE ASC" arguments=(("as_comp", string),("as_proj", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="90" y="2" height="14" width="205" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="576" y="2" height="14" width="77" format="#,##0" html.valueishtml="0"  name=cons_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="784" y="2" height="14" width="72" format="[general]" html.valueishtml="0"  name=pay_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="14" width="55" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="0" tabsequence=32766 border="0" color="33554432" x="858" y="2" height="14" width="66" format="[general]" html.valueishtml="0"  name=complete_yn visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="655" y="2" height="14" width="63" format="@@@@-@@-@@" html.valueishtml="0"  name=start_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="720" y="2" height="14" width="62" format="@@@@-@@-@@" html.valueishtml="0"  name=end_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="297" y="2" height="14" width="152" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="0" tabsequence=32766 border="0" color="33554432" x="451" y="2" height="14" width="123" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="33" y="2" height="14" width="55" html.valueishtml="0"  name=contract_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="90" y="2" height="14" width="205" html.valueishtml="0"  name=contract_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="업체명" border="0" color="33554432" x="297" y="2" height="14" width="152" html.valueishtml="0"  name=cust_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총 계약 금액" border="0" color="33554432" x="576" y="2" height="14" width="77" html.valueishtml="0"  name=cons_amount_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결재조건" border="0" color="33554432" x="784" y="2" height="14" width="72" html.valueishtml="0"  name=pay_div_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="공사" border="0" color="33554432" x="655" y="2" height="14" width="63" html.valueishtml="0"  name=start_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="720" y="2" height="14" width="62" html.valueishtml="0"  name=end_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="완료여부" border="0" color="33554432" x="858" y="2" height="14" width="66" html.valueishtml="0"  name=complete_yn_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="연결공종" border="0" color="33554432" x="451" y="2" height="14" width="123" html.valueishtml="0"  name=const_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

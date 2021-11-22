@@ -1,0 +1,128 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=33 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_proj_hire_payx.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_proj_hire_payx.proj_code" dbalias="A.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="B.proj_name" )
+ column=(type=char(250) updatewhereclause=yes name=duty_name dbname="sm_comcode_d.duty_name" dbalias="C.duty_name" )
+ column=(type=char(20) updatewhereclause=yes name=grade_name dbname="hr_code_grade.grade_name" dbalias="D.grade_name" )
+ column=(type=char(250) updatewhereclause=yes name=job_name dbname="sm_comcode_d.job_name" dbalias="E.job_name" )
+ column=(type=char(8) updatewhereclause=yes name=apply_pay_date_h dbname="cm_proj_hire_payx.apply_pay_date_h" dbalias="A.apply_pay_date_h" )
+ column=(type=char(1) updatewhereclause=yes name=pay_apply_yn dbname="pay_apply_yn" values="	Y/	N" )
+ column=(type=number updatewhereclause=yes name=pay_amt dbname="cm_proj_hire_payx.pay_amt" dbalias="A.pay_amt" )
+ column=(type=number updatewhereclause=yes name=add_amt dbname="cm_proj_hire_payx.add_amt" dbalias="A.add_amt" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="cm_proj_hire_payx.pay_tot" dbalias="A.pay_tot" )
+ column=(type=number updatewhereclause=yes name=career dbname="cm_proj_hire_payx.career" dbalias="A.career" )
+ column=(type=number updatewhereclause=yes name=add_career dbname="cm_proj_hire_payx.add_career" dbalias="A.add_career" )
+ column=(type=char(3) updatewhereclause=yes name=school_car_code dbname="cm_proj_hire_payx.school_car_code" dbalias="A.school_car_code" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE
+      ,A.PROJ_CODE AS PROJ_CODE
+      ,B.PROJ_NAME AS PROJ_NAME
+      ,C.DNAME     AS DUTY_NAME
+      ,D.GRADE_NAME     AS GRADE_NAME
+      ,E.DNAME     AS JOB_NAME
+      ,A.APPLY_PAY_DATE_H AS APPLY_PAY_DATE_H
+      ,MAX(NVL(A.PAY_APPLY_YN,'N')) AS PAY_APPLY_YN
+      ,A.PAY_AMT AS PAY_AMT
+      ,A.ADD_AMT AS ADD_AMT
+      ,A.PAY_TOT AS PAY_TOT
+      ,A.CAREER AS CAREER
+      ,A.ADD_CAREER AS ADD_CAREER
+      ,A.SCHOOL_CAR_CODE AS SCHOOL_CAR_CODE
+  FROM CM_PROJ_HIRE_PAYX A LEFT JOIN SM_CODE_PROJECT B
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                 AND A.PROJ_CODE   = B.PROJ_CODE
+                           LEFT JOIN SM_COMCODE_D C
+                                  ON A.DUTY_CODE_H   = C.DCODE
+                                 AND C.HCODE = 'DUTY_CODE_H'
+                           LEFT JOIN HR_CODE_GRADE D
+                                  ON A.GRADE_CODE_H   = D.GRADE_CODE
+                           LEFT JOIN SM_COMCODE_D E
+                                  ON A.JOB_CODE   = E.DCODE
+                                 AND E.HCODE = 'JOBDIV'
+ WHERE A.COMPANY_CODE    = :as_comp
+   AND A.LABOR_CODE      = :as_labor_code
+ GROUP BY A.COMPANY_CODE
+      ,A.PROJ_CODE
+      ,B.PROJ_NAME
+      ,C.DNAME
+      ,D.GRADE_NAME
+      ,E.DNAME
+      ,A.APPLY_PAY_DATE_H
+      ,A.PAY_AMT
+      ,A.ADD_AMT
+      ,A.PAY_TOT
+      ,A.CAREER
+      ,A.ADD_CAREER
+      ,A.SCHOOL_CAR_CODE
+UNION ALL
+SELECT A.COMPANY_CODE
+      ,A.PROJ_CODE
+      ,B.PROJ_NAME 
+      ,'' AS DUTY_NAME
+      ,'' GRADE_NAME
+      ,E.DNAME JOB_NAME
+      ,A.APPLY_DATE AS APPLY_PAY_DATE_H
+      ,'N' AS PAY_APPLY_YN
+      ,A.COST AS PAY_AMT
+      ,0 AS ADD_AMT
+      ,A.COST AS PAY_TOT
+      ,0 AS CAREER
+      ,0 AS ADD_CAREER
+      ,'' AS SCHOOL_CAR_CODE
+  FROM CM_LABO_SALARY A INNER JOIN SM_CODE_PROJECT B 
+                                ON A.PROJ_CODE = B.PROJ_CODE 
+                         LEFT JOIN CM_LABO_MASTER C LEFT JOIN SM_COMCODE_D E
+                                                           ON C.JOB_CODE   = E.DCODE
+                                                          AND E.HCODE = 'JOBDIV'
+                                ON A.LABOR_CODE = C.LABOR_CODE
+ WHERE A.COMPANY_CODE = :as_comp 
+   AND A.LABOR_CODE   = :as_labor_code
+   AND A.APPLY_DATE NOT IN (SELECT APPLY_PAY_DATE_H
+                              FROM CM_PROJ_HIRE_PAYX
+                             WHERE COMPANY_CODE = :as_comp
+                               AND LABOR_CODE   = :as_labor_code)
+ ORDER BY APPLY_PAY_DATE_H" arguments=(("as_comp", string),("as_labor_code", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="9" height="14" width="19" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="기본급여" border="0" color="33554432" x="480" y="9" height="14" width="63" html.valueishtml="0"  name=cm_proj_hire_payx_pay_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="추가수당" border="0" color="33554432" x="545" y="9" height="14" width="52" html.valueishtml="0"  name=cm_proj_hire_payx_add_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="급여총액" border="0" color="33554432" x="599" y="9" height="14" width="65" html.valueishtml="0"  name=cm_proj_hire_payx_pay_tot_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="급여적용일" border="0" color="33554432" x="666" y="9" height="14" width="67" html.valueishtml="0"  name=cm_proj_hire_payx_apply_pay_date_h_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="직무" border="0" color="33554432" x="221" y="9" height="14" width="40" html.valueishtml="0"  name=sm_comcode_d_duty_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="직위" border="0" color="33554432" x="317" y="9" height="14" width="30" html.valueishtml="0"  name=hr_code_grade_grade_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="263" y="9" height="14" width="52" html.valueishtml="0"  name=sm_comcode_d_job_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="적용" border="0" color="33554432" x="735" y="9" height="14" width="24" html.valueishtml="0"  name=pay_apply_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="경력" border="0" color="33554432" x="349" y="9" height="14" width="27" html.valueishtml="0"  name=cm_proj_hire_payx_career_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="학력" border="0" color="33554432" x="410" y="9" height="14" width="68" html.valueishtml="0"  name=cm_proj_hire_payx_school_car_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="23" y="9" height="14" width="56" html.valueishtml="0"  name=cm_proj_hire_payx_proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="81" y="9" height="14" width="138" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="인정
+경력" border="0" color="33554432" x="378" y="3" height="28" width="30" html.valueishtml="0"  name=cm_proj_hire_payx_add_career_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="14" width="19" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="666" y="1" height="14" width="67" format="[general]" html.valueishtml="0"  name=apply_pay_date_h visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="221" y="1" height="14" width="40" format="[general]" html.valueishtml="0"  name=duty_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="317" y="1" height="14" width="30" format="[general]" html.valueishtml="0"  name=grade_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="263" y="1" height="14" width="52" format="[general]" html.valueishtml="0"  name=job_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="735" y="1" height="14" width="24" format="[general]" html.valueishtml="0"  name=pay_apply_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="410" y="1" height="14" width="68" format="[general]" html.valueishtml="0"  name=school_car_code visible="1" dddw.name=dddw_hr_school_car_code dddw.displaycolumn=school_car_name dddw.datacolumn=school_car_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="349" y="1" height="14" width="27" format="#,##0" html.valueishtml="0"  name=career visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="480" y="1" height="14" width="63" format="#,##0" html.valueishtml="0"  name=pay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="545" y="1" height="14" width="52" format="#,##0" html.valueishtml="0"  name=add_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="599" y="1" height="14" width="65" format="#,##0" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="23" y="1" height="14" width="56" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="81" y="1" height="14" width="138" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="378" y="1" height="14" width="30" format="#,##0" html.valueishtml="0"  name=add_career visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

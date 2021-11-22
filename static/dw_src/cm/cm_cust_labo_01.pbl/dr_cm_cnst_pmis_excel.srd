@@ -1,0 +1,96 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=60 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(30) updatewhereclause=yes name=협력업체 dbname="협력업체" )
+ column=(type=char(30) updatewhereclause=yes name=이름 dbname="cm_cnst_labor_checklist.이름" )
+ column=(type=char(8) updatewhereclause=yes name=생년월일 dbname="생년월일" )
+ column=(type=char(10) updatewhereclause=yes name=출역일자 dbname="출역일자" )
+ column=(type=char(21) updatewhereclause=yes name=출근시각 dbname="출근시각" )
+ column=(type=char(21) updatewhereclause=yes name=퇴근시각 dbname="퇴근시각" )
+ column=(type=number updatewhereclause=yes name=근무시간 dbname="근무시간" )
+ column=(type=char(21) updatewhereclause=yes name=nsnet출근시각 dbname="compute_0008" )
+ column=(type=char(21) updatewhereclause=yes name=nsnet퇴근시각 dbname="compute_0009" )
+ column=(type=number updatewhereclause=yes name=주간 dbname="주간" )
+ column=(type=number updatewhereclause=yes name=야간 dbname="야간" )
+ column=(type=char(250) updatewhereclause=yes name=비고 dbname="cm_cnst_labor_checklist.비고" )
+ retrieve="SELECT DECODE(:as_comp_code,'100','(주)세보엠이씨','200','(주)에스비테크','오류') AS ~"협력업체~"
+      ,A.LABOR_NAME AS ~"이름~"
+      ,CASE WHEN A.RRN_PRE IS NOT NULL THEN SUBSTR(A.RRN_PRE,1,2)||'.'||SUBSTR(A.RRN_PRE,3,2)||'.'||SUBSTR(A.RRN_PRE,5,2) 
+           ELSE ''
+           END AS ~"생년월일~"
+     ,TO_CHAR(TO_DATE(A.STD_YMD,'YYYY-MM-DD'),'YYYY-MM-DD') AS ~"출역일자~"
+      ,CASE WHEN CNST_IN_TIME IS NOT NULL THEN TO_CHAR(TO_DATE(A.STD_YMD,'YYYY-MM-DD'),'YYYY-MM-DD')||' '||CNST_IN_TIME 
+            ELSE ''
+            END AS ~"출근시각~"
+      ,CASE WHEN CNST_OUT_TIME IS NOT NULL THEN TO_CHAR(TO_DATE(A.STD_YMD,'YYYY-MM-DD'),'YYYY-MM-DD')||' '||CNST_OUT_TIME 
+            ELSE ''
+            END AS ~"퇴근시각~"
+      ,CASE WHEN CNST_OUT_TIME >= CNST_IN_TIME THEN TRUNC((TO_DATE(REPLACE(CNST_OUT_TIME,':',''),'HH24MI')-TO_DATE(REPLACE(CNST_IN_TIME,':',''),'HH24MI'))*24)
+            ELSE TRUNC(( (TO_DATE(REPLACE(CNST_OUT_TIME,':',''),'HH24MI')+1)-TO_DATE(REPLACE(CNST_IN_TIME,':',''),'HH24MI'))*24)
+       END ~"근무시간~"
+      ,CASE WHEN A.REAL_IN_TIME IS NOT NULL THEN TO_CHAR(TO_DATE(A.STD_YMD,'YYYY-MM-DD'),'YYYY-MM-DD')||' '||SUBSTR(A.REAL_IN_TIME,1,2)||':'||SUBSTR(A.REAL_IN_TIME,3,2)  
+            ELSE ''
+            END AS ~"NS-NET 출근시각~"
+      ,CASE WHEN A.REAL_OUT_TIME IS NOT NULL THEN TO_CHAR(TO_DATE(A.STD_YMD,'YYYY-MM-DD'),'YYYY-MM-DD')||' '||SUBSTR(A.REAL_OUT_TIME,1,2)||':'||SUBSTR(A.REAL_OUT_TIME,3,2) 
+            ELSE ''
+            END AS ~"NS-NET 퇴근시각~"
+      ,NVL(C.DAY_QTY1,0)+NVL(C.DAY_QTY2,0) AS ~"주간~"
+      ,NVL(C.NIGHT_QTY,0) AS ~"야간~"
+      ,D.DNAME AS ~"비고~"
+  FROM CM_CNST_LABOR_CHECKLIST A LEFT JOIN SM_AUTH_USER B
+                                        ON A.REASON_ID = B.USER_ID
+                                 LEFT JOIN CM_ATTD_DAILY_WORK C
+                                        ON A.WORK_EMPLOY = '8'
+                                       AND A.LABOR_CODE = C.LABOR_CODE
+                                       AND A.STD_YMD    = C.WORK_DATE
+                                 LEFT JOIN ( SELECT DCODE,DNAME
+                                               FROM SM_COMCODE_D 
+                                              WHERE HCODE = 'PMIS_REASON'
+                                                AND USE_YN = 'Y' ) D
+                                        ON A.REASON_TAG = D.DCODE
+ WHERE A.CHECK_CODE IN ('A9','A1','A2','A3')                                       
+   AND A.PROJ_CODE LIKE :as_proj
+   AND A.STD_YMD BETWEEN :as_f_date AND :as_t_date
+ ORDER BY A.LABOR_NAME, A.STD_YMD" arguments=(("as_comp_code", string),("as_proj", string),("as_f_date", string),("as_t_date", string)) )
+group(level=1 header.height=0 trailer.height=80 by=("이름" , "생년월일" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="0" text="협력업체" border="0" color="33554432" x="9" y="4" height="76" width="293" html.valueishtml="0"  name=협력업체_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="이름" border="0" color="33554432" x="311" y="4" height="76" width="951" html.valueishtml="0"  name=이름_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="생년월일" border="0" color="33554432" x="1271" y="4" height="76" width="247" html.valueishtml="0"  name=생년월일_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="출역일자" border="0" color="33554432" x="1527" y="4" height="76" width="530" html.valueishtml="0"  name=출역일자_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="출근시각" border="0" color="33554432" x="2066" y="4" height="76" width="311" html.valueishtml="0"  name=출근시각_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="퇴근시각" border="0" color="33554432" x="2386" y="4" height="76" width="311" html.valueishtml="0"  name=퇴근시각_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="주간" border="0" color="33554432" x="4137" y="4" height="76" width="311" html.valueishtml="0"  name=주간_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="야간" border="0" color="33554432" x="4457" y="4" height="76" width="347" html.valueishtml="0"  name=야간_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="비고" border="0" color="33554432" x="4814" y="4" height="76" width="558" html.valueishtml="0"  name=비고_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="근무시간" border="0" color="33554432" x="2706" y="4" height="76" width="398" html.valueishtml="0"  name=근무시간_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="NS-NET 출근시각" border="0" color="33554432" x="3113" y="4" height="76" width="503" html.valueishtml="0"  name=nsnet출근시각_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="NS-NET 퇴근시각" border="0" color="33554432" x="3625" y="8" height="76" width="503" html.valueishtml="0"  name=nsnet퇴근시각_t visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="9" y="0" height="76" width="293" format="[general]" html.valueishtml="0"  name=협력업체 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="311" y="0" height="76" width="951" format="[general]" html.valueishtml="0"  name=이름 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="1271" y="0" height="76" width="247" format="[general]" html.valueishtml="0"  name=생년월일 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="1527" y="0" height="76" width="530" format="[general]" html.valueishtml="0"  name=출역일자 visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="2066" y="0" height="76" width="311" format="[general]" html.valueishtml="0"  name=출근시각 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="2386" y="0" height="76" width="311" format="[general]" html.valueishtml="0"  name=퇴근시각 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="4137" y="0" height="76" width="311" format="[general]" html.valueishtml="0"  name=주간 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="4457" y="0" height="76" width="347" format="[general]" html.valueishtml="0"  name=야간 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="4814" y="0" height="76" width="558" format="[general]" html.valueishtml="0"  name=비고 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="2706" y="0" height="76" width="398" format="[general]" html.valueishtml="0"  name=근무시간 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="3113" y="0" height="76" width="503" format="[general]" html.valueishtml="0"  name=nsnet출근시각 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="3625" y="0" height="76" width="503" format="[general]" html.valueishtml="0"  name=nsnet퇴근시각 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=trailer.1 alignment="0" expression="sum(주간 for group 1)"border="0" color="33554432" x="4137" y="4" height="76" width="311" format="[general]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=trailer.1 alignment="0" expression="sum(야간 for group 1)"border="0" color="33554432" x="4457" y="4" height="76" width="347" format="[general]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=trailer.1 alignment="0" expression="compute_1+compute_2"border="0" color="33554432" x="2066" y="8" height="76" width="311" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

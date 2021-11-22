@@ -1,0 +1,93 @@
+release 7;
+datawindow(units=0 timer_interval=0 color=79741120 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+header(height=76 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="12639424" )
+detail(height=84 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes key=yes name=project_code dbname="project_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=contract_code dbname="contract_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=contract_name dbname="contract_name" )
+ column=(type=datetime update=yes updatewhereclause=yes name=contract_date dbname="contract_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=start_date dbname="start_date" )
+ column=(type=datetime update=yes updatewhereclause=yes name=end_date dbname="end_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=month_cnt dbname="month_cnt" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=contract_type dbname="contract_type" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=lessor_name dbname="lessor_name" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=address1 dbname="address1" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=address2 dbname="address2" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=contract_end dbname="contract_end" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=remarks dbname="remarks" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=amt_1 dbname="amt_1" initial="0" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=amt_2 dbname="amt_2" initial="0" )
+ column=(type=char(100) updatewhereclause=yes name=chk_contract_code dbname="chk_contract_code" )
+ column=(type=number updatewhereclause=yes name=cnt dbname="cnt" )
+ retrieve="SELECT A.PROJECT_CODE,   
+		 A.CONTRACT_CODE,
+		 A.CONTRACT_NAME,
+		 A.CONTRACT_DATE,
+		 A.START_DATE,     
+		 A.END_DATE,       
+		 A.MONTH_CNT,      
+		 A.CONTRACT_TYPE,
+		 A.LESSOR_NAME,    
+		 A.ADDRESS1,       
+		 A.ADDRESS2,       
+		 A.CONTRACT_END,   
+		 A.REMARKS,        
+		 A.AMT_1,          
+		 A.AMT_2,
+		 B.CHK_CONTRACT_CODE,
+		 NVL(B.CNT ,0 ) CNT          
+  FROM G_HOUSE_CONTRACT A,  
+		 (SELECT DEPTCODE,
+				   SUBSTR(REMARK1,INSTR(REMARK1,'{')+1,INSTR(REMARK1,'}')-(INSTR(REMARK1,'{')+1))  CHK_CONTRACT_CODE,
+					COUNT(*) CNT
+		    FROM SBAMIS.A_SLIP_MAIN_WORK
+		   WHERE SLIPDATE BETWEEN '2008-11-01' AND ADD_MONTHS(SYSDATE,1)
+		     AND SLIPDEPT = '03110'
+		     AND ACNTCODE IN ('111012','740601','740602')
+			  AND INSTR(REMARK1,'{') > 0
+   	GROUP BY DEPTCODE,
+				   SUBSTR(REMARK1,INSTR(REMARK1,'{')+1,INSTR(REMARK1,'}')-(INSTR(REMARK1,'{')+1))) B        
+ WHERE A.PROJECT_CODE  = :as_project_code
+   /*월세*/
+   AND A.CONTRACT_TYPE = '02'
+   AND TO_CHAR(A.CONTRACT_DATE,'YYYYMM') = :as_yymm
+   AND A.PROJECT_CODE  = B.DEPTCODE(+)
+   AND A.CONTRACT_CODE = B.CHK_CONTRACT_CODE(+)
+ORDER BY A.CONTRACT_CODE DESC" update="G_HOUSE_CONTRACT" updatewhere=0 updatekeyinplace=no arguments=(("as_project_code", string),("as_yymm", string)) )
+button(band=header text="NO"filename=""action="0" border="0" color="0" x="0" y="0" height="76" width="119" vtextalign="0" htextalign="0"  name=b_2  tag="compute_1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="숙소계약명"filename=""action="0" border="0" color="0" x="384" y="0" height="76" width="471" vtextalign="0" htextalign="0"  name=b_1  tag="project_code"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="작성일자"filename=""action="0" border="0" color="0" x="855" y="0" height="76" width="293" vtextalign="0" htextalign="0"  name=b_8  tag="pc_divide_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="보증금"filename=""action="0" border="0" color="0" x="1152" y="0" height="76" width="357" vtextalign="0" htextalign="0"  name=b_3  tag="pc_divide_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="기간"filename=""action="0" border="0" color="0" x="1847" y="0" height="76" width="654" vtextalign="0" htextalign="0"  name=b_4  tag="pc_code"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="임대인"filename=""action="0" border="0" color="0" x="2505" y="0" height="76" width="247" vtextalign="0" htextalign="0"  name=b_5  tag="pc_spec"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="특기사항"filename=""action="0" border="0" color="0" x="4146" y="0" height="76" width="1083" vtextalign="0" htextalign="0"  name=b_7  tag="owner_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="주소"filename=""action="0" border="0" color="0" x="2757" y="0" height="76" width="1385" vtextalign="0" htextalign="0"  name=b_6  tag="user_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="월세금액"filename=""action="0" border="0" color="0" x="1509" y="0" height="76" width="338" vtextalign="0" htextalign="0"  name=b_10  tag="pc_divide_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="재무번호"filename=""action="0" border="0" color="0" x="123" y="0" height="76" width="256" vtextalign="0" htextalign="0"  name=b_9  tag="project_code"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="등록여부"filename=""action="0" border="0" color="0" x="5230" y="0" height="76" width="251" vtextalign="0" htextalign="0"  name=b_11  tag="owner_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+button(band=header text="건"filename=""action="0" border="0" color="0" x="5486" y="0" height="76" width="105" vtextalign="0" htextalign="0"  name=b_12  tag="owner_name"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="67108864" )
+line(band=detail x1="0" y1="0" x2="5243" y2="0"  name=l_1 visible="1~tif( currentRow() = getrow() , 1 , 0 )" pen.style="0" pen.width="5" pen.color="255"  background.mode="2" background.color="0" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="0" x="5778" y="4" height="56" width="55" format="[general]"  name=contract_type visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="0" x="5733" y="8" height="56" width="27" format="[general]"  name=contract_end visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="0" x="5847" y="12" height="76" width="50" format="[general]"  name=project_code visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=16 alignment="0" tabsequence=32766 border="0" color="0" x="5627" y="0" height="56" width="46" format="[general]"  name=chk_contract_code visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+compute(band=detail alignment="2" expression="GETROW()"border="6" color="0" x="5" y="16" height="60" width="110" format="[GENERAL]"  name=compute_1  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="5239" y1="8" x2="5239" y2="80"  name=l_2 visible="1~tif( currentRow() = getrow() , 1 , 0 )" pen.style="0" pen.width="5" pen.color="255"  background.mode="2" background.color="0" )
+line(band=detail x1="0" y1="80" x2="5243" y2="80"  name=l_3 visible="1~tif( currentRow() = getrow() , 1 , 0 )" pen.style="0" pen.width="5" pen.color="255"  background.mode="2" background.color="0" )
+column(band=detail id=13 alignment="0" tabsequence=90 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="4146" y="12" height="60" width="1083" format="[general]"  name=remarks edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=10 alignment="0" tabsequence=80 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="2757" y="12" height="60" width="1371" format="[general]"  name=address1 edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=9 alignment="2" tabsequence=70 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="2505" y="12" height="60" width="238" format="[general]"  name=lessor_name edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=6 alignment="2" tabsequence=60 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="2199" y="12" height="60" width="293" format="[shortdate] [time]"  name=end_date editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=detail alignment="0" text="~~" border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="2153" y="12" height="60" width="32"  name=t_1  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=5 alignment="0" tabsequence=50 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="1856" y="12" height="60" width="283" format="[shortdate] [time]"  name=start_date editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=15 alignment="1" tabsequence=40 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="1518" y="12" height="60" width="320" format="#,##0"  name=amt_2 edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=14 alignment="1" tabsequence=30 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="1152" y="12" height="60" width="347" format="#,##0"  name=amt_1 edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=4 alignment="0" tabsequence=20 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="855" y="12" height="60" width="279" format="[shortdate] [time]"  name=contract_date editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="384" y="12" height="60" width="457" format="[general]"  name=contract_name edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="123" y="12" height="60" width="242" format="[general]"  name=contract_code edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="if( isNull( chk_contract_code ),'미등록','등록')"border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="5253" y="12" height="60" width="210" format="[GENERAL]"  name=compute_2  font.face="돋움체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="5" color="0~tif( isNull( chk_contract_code ),rgb(0,0,255),rgb(0,0,0))" x="5481" y="12" height="60" width="105" format="[general]"  name=cnt edit.limit=0 edit.case=any edit.autoselect=yes  font.face="돋움체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )

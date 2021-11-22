@@ -1,0 +1,63 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_labo_master.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_labo_master.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=char(4) updatewhereclause=yes name=handi_type dbname="cm_labo_handicap.handi_type" )
+ column=(type=char(40) updatewhereclause=yes name=ref_name dbname="hr_code_ref.ref_name" )
+ column=(type=char(8) updatewhereclause=yes name=ins_date dbname="cm_labo_handicap.ins_date" )
+ column=(type=char(6) updatewhereclause=yes name=cur_year dbname="cm_labo_master.cur_year" )
+ retrieve="SELECT A.COMPANY_CODE             AS COMPANY_CODE,
+       A.LABOR_CODE               AS LABOR_CODE,
+       A.LABOR_NAME               AS LABOR_NAME,
+       X_DECRYPT(a.rrn_pre,'(enckey)') ||'-'|| X_DECRYPT(a.rrn_post,'(enckey)') as jumin_no,
+       B.HANDI_TYPE,
+       C.REF_NAME,
+       B.INS_DATE,
+       :as_year AS CUR_YEAR
+  FROM CM_LABO_MASTER A LEFT JOIN CM_LABO_HANDICAP B LEFT JOIN HR_CODE_REF C
+                                                            ON B.HANDI_TYPE = C.REF_CODE
+                                                           AND C.REF_CODE <> '00'
+                                                           AND C.REF_GBN_CODE = 'PA'
+                               ON A.COMPANY_CODE = B.COMPANY_CODE
+                              AND A.LABOR_CODE   = B.LABOR_CODE
+ WHERE A.DISABLED = 'Y'
+   AND A.LABOR_CODE IN(SELECT DISTINCT LABOR_CODE
+                         FROM CM_SALY_LABOR_ACCOUNT
+                        WHERE COMPANY_CODE = :as_comp
+                          AND SUBSTR(PAY_YYMM,1,4) = :as_year)" arguments=(("as_comp", string),("as_year", string)) )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="35" y="10" height="14" width="73" html.valueishtml="0"  name=cm_labo_master_labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="110" y="10" height="14" width="60" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="172" y="10" height="14" width="96" html.valueishtml="0"  name=jumin_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회사코드" border="0" color="33554432" x="356" y="10" height="14" width="15" html.valueishtml="0"  name=cm_labo_master_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Handicap
+Handi Type" border="0" color="33554432" x="373" y="10" height="14" width="14" html.valueishtml="0"  name=cm_labo_handicap_handi_type_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="10" height="14" width="32" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="참조코드명" border="0" color="33554432" x="270" y="10" height="14" width="84" html.valueishtml="0"  name=hr_code_ref_ref_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Cm Labo Handicap Ins Date" border="0" color="33554432" x="389" y="9" height="14" width="47" html.valueishtml="0"  name=cm_labo_handicap_ins_date_t visible="0"  font.face="Tahoma" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+text(band=header alignment="0" text="Cur Year" border="0" color="33554432" x="438" y="9" height="14" width="47" html.valueishtml="0"  name=cur_year_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="356" y="2" height="17" width="15" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="373" y="2" height="17" width="14" format="[general]" html.valueishtml="0"  name=handi_type visible="0" edit.limit=4 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="390" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=ins_date visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="439" y="1" height="14" width="46" format="[general]" html.valueishtml="0"  name=cur_year visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432~tif(left(ins_date,4) >=  cur_year , RGB(0,0,255),RGB(0,0,0))" x="35" y="2" height="17" width="73" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432~tif(left(ins_date,4) >=  cur_year , RGB(0,0,255),RGB(0,0,0))" x="110" y="2" height="17" width="60" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432~tif(left(ins_date,4) >=  cur_year , RGB(0,0,255),RGB(0,0,0))" x="173" y="2" height="17" width="95" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432~tif(left(ins_date,4) >=  cur_year , RGB(0,0,255),RGB(0,0,0))" x="270" y="2" height="17" width="84" format="[general]" html.valueishtml="0"  name=ref_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432~tif(left(ins_date,4) >=  cur_year , RGB(0,0,255),RGB(0,0,0))" x="1" y="2" height="16" width="32" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

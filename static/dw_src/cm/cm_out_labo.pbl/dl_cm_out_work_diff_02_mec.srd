@@ -1,0 +1,58 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=24 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=31 color="536870912" )
+detail(height=25 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(250) updatewhereclause=yes name=job_name dbname="job_name" )
+ retrieve="SELECT N.COMPANY_CODE,
+       N.LABOR_CODE,
+       N.LABOR_NAME,
+       N.JOB_NAME
+  FROM (SELECT DISTINCT A.LABOR_CODE AS LABOR_CODE,
+               B.LABOR_NAME          AS LABOR_NAME,
+               A.COMPANY_CODE        AS COMPANY_CODE,
+               A.WORK_DATE           AS WORK_DATE,
+               X_DECRYPT(B.RRN_PRE, '[Mighty-X.2012.]') AS RRN_PRE,
+               B.JOB_CODE            AS JOB_CODE,
+               D.DNAME               AS JOB_NAME
+          FROM CM_ATTD_DAILY_WORK A LEFT JOIN CM_LABO_MASTER B LEFT JOIN SM_COMCODE_D D
+                                                                      ON B.JOB_CODE = D.DCODE
+                                                                     AND D.HCODE = 'JOBDIV'
+                                                                     AND D.SYS_ID = 'CM'
+                                           ON A.COMPANY_CODE = B.COMPANY_CODE
+                                          AND A.LABOR_CODE   = B.LABOR_CODE
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.PROJ_CODE = :AS_PROJ_CODE
+           AND A.WORK_DATE = :AS_WORK_DATE) N
+ WHERE (N.LABOR_NAME, N.RRN_PRE) NOT IN(SELECT T.LABOR_NAME, T.RRN_PRE
+                                          FROM CM_PMIS_WORK_FINAL T
+                                         WHERE COMPANY_CODE = :AS_COMP_CODE
+                                           AND T.PROJ_CODE = :AS_PROJ_CODE
+                                           AND T.WORK_DATE = :AS_WORK_DATE) " arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_WORK_DATE", string)) )
+text(band=header alignment="2" text="사  번" border="0" color="33554432" x="46" y="5" height="15" width="91" html.valueishtml="0"  name=labor_code_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="5" height="15" width="42" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="이  름" border="0" color="33554432" x="139" y="5" height="15" width="126" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="358" y="5" height="15" width="23" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="직 종" border="0" color="33554432" x="267" y="5" height="15" width="89" html.valueishtml="0"  name=job_name_t visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="46" y="3" height="17" width="91" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="3" height="15" width="42" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="139" y="3" height="17" width="126" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="358" y="3" height="17" width="23" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="267" y="3" height="17" width="89" format="[general]" html.valueishtml="0"  name=job_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="총 인원" border="0" color="33554432" x="46" y="9" height="15" width="91" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="2" expression="rowcount() + '  명'"border="0" color="33554432" x="139" y="8" height="15" width="126" format="[General]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-10" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

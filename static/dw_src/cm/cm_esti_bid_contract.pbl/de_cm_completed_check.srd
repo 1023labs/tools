@@ -1,0 +1,42 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=152 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=64 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(10) updatewhereclause=yes name=strpersonno dbname="person_doc.strpersonno" dbalias="A.strpersonno" )
+ column=(type=char(41) updatewhereclause=yes name=emp_info dbname="emp_info" )
+ column=(type=char(1) updatewhereclause=yes name=isread dbname="person_doc.isread" dbalias="A.isread" values="	Y/	N" )
+ retrieve="SELECT A.STRPERSONNO,
+       B.EMP_NAME || ' ' || C.GRADE_NAME AS EMP_INFO,
+       A.ISREAD
+FROM SEBOGW.PERSON_DOC A LEFT JOIN HR_PERS_MASTER B LEFT JOIN HR_CODE_GRADE C
+                                                           ON B.COMPANY_CODE = C.COMPANY_CODE
+                                                          AND B.GRADE_CODE   = C.GRADE_CODE
+                                ON A.STRPERSONNO   = B.EMP_NO
+WHERE NFILEID = (SELECT NFILEID FROM SEBOGW.APPRO_FILE WHERE NAPPRONO = :as_napprono)
+    AND STRPERSONNO IN (
+                        SELECT STRSHARENO FROM SEBOGW.APPRO_SEND_S
+                        WHERE NSENDNO IN (
+                                         SELECT NSENDNO FROM SEBOGW.APPRO_SEND
+                                         WHERE NAPPRONO = :as_napprono
+                                         )
+                        )    
+ORDER BY A.STRPERSONNO, C.ORDER_SEQ" arguments=(("as_napprono", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="52" height="56" width="146" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="회람여부" border="0" color="33554432" x="763" y="52" height="56" width="320" html.valueishtml="0"  name=person_doc_isread_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성함" border="0" color="33554432" x="165" y="52" height="56" width="590" html.valueishtml="0"  name=emp_info_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="16" height="56" width="146" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="763" y="16" height="56" width="320" format="[general]" html.valueishtml="0"  name=isread visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="165" y="16" height="56" width="590" format="[general]" html.valueishtml="0"  name=emp_info visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

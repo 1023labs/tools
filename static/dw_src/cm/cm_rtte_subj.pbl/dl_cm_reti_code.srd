@@ -1,0 +1,39 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=23 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=24 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_code_retire.company_code" dbalias="A.company_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=reti_code dbname="cm_code_retire.reti_code" dbalias="A.reti_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=reti_det_code dbname="cm_code_retire.reti_det_code" dbalias="A.reti_det_code" )
+ column=(type=char(500) update=yes updatewhereclause=yes name=reti_det_name dbname="cm_code_retire.reti_det_name" dbalias="A.reti_det_name" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+        A.RETI_CODE     AS RETI_CODE,
+        A.RETI_DET_CODE AS RETI_DET_CODE,
+        A.RETI_DET_NAME AS RETI_DET_NAME 
+  FROM CM_CODE_RETIRE A 
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+ORDER BY A.RETI_CODE, A.RETI_DET_CODE" update="CM_CODE_RETIRE" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMP_CODE", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="5" height="14" width="40" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="44" y="5" height="14" width="101" html.valueishtml="0"  name=reti_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="상세코드" border="0" color="33554432" x="147" y="5" height="14" width="74" html.valueishtml="0"  name=reti_det_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="상세내용" border="0" color="33554432" x="223" y="5" height="14" width="353" html.valueishtml="0"  name=reti_det_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="578" y="5" height="14" width="27" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="5" height="14" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=10 border="0" color="33554432" x="44" y="5" height="14" width="101" format="[general]" html.valueishtml="0"  name=reti_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=20 border="0" color="33554432" x="147" y="5" height="14" width="74" format="[general]" html.valueishtml="0"  name=reti_det_code visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=30 border="0" color="33554432" x="223" y="5" height="14" width="353" format="[general]" html.valueishtml="0"  name=reti_det_name visible="1" edit.limit=500 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=40 border="0" color="33554432" x="578" y="5" height="14" width="27" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+
+sparse(names="reti_code")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

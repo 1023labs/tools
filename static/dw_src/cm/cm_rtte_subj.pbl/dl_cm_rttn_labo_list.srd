@@ -1,0 +1,77 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_master.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_master.labor_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(30) updatewhereclause=yes name=labor_name_e dbname="cm_labo_master.labor_name_e" )
+ column=(type=char(14) updatewhereclause=yes name=jumin dbname="jumin" )
+ column=(type=char(1) updatewhereclause=yes name=sex_div dbname="cm_labo_master.sex_div" )
+ column=(type=char(100) updatewhereclause=yes name=picture dbname="cm_labo_master.picture" )
+ column=(type=char(3) updatewhereclause=yes name=nation_code dbname="cm_labo_master.nation_code" )
+ column=(type=char(1) updatewhereclause=yes name=foregn_div dbname="cm_labo_master.foregn_div" )
+ column=(type=char(10) updatewhereclause=yes name=cell_pre dbname="cm_labo_master.cell_pre" )
+ column=(type=char(16) updatewhereclause=yes name=cell_post dbname="cm_labo_master.cell_post" )
+ column=(type=char(10) updatewhereclause=yes name=phone_pre dbname="cm_labo_master.phone_pre" )
+ column=(type=char(16) updatewhereclause=yes name=phone_post dbname="cm_labo_master.phone_post" )
+ column=(type=char(3) updatewhereclause=yes name=job_code dbname="cm_labo_master.job_code" )
+ column=(type=char(8) updatewhereclause=yes name=join_date dbname="cm_labo_master.join_date" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_labo_master.proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=gjoin_date dbname="cm_labo_master.gjoin_date" )
+ column=(type=char(8) updatewhereclause=yes name=rpay_date dbname="cm_labo_master.rpay_date" )
+ column=(type=char(8) updatewhereclause=yes name=retire_date dbname="cm_labo_master.retire_date" )
+ column=(type=char(1) updatewhereclause=yes name=continue_div dbname="cm_labo_master.continue_div" )
+ column=(type=char(1) updatewhereclause=yes name=pay_div dbname="cm_labo_master.pay_div" )
+ column=(type=char(100) updatewhereclause=yes name=id_card dbname="cm_labo_master.id_card" )
+ column=(type=char(7) updatewhereclause=yes name=zip_code dbname="cm_labo_master.zip_code" )
+ column=(type=char(100) updatewhereclause=yes name=addr1 dbname="cm_labo_master.addr1" )
+ column=(type=char(100) updatewhereclause=yes name=addr2 dbname="cm_labo_master.addr2" )
+ column=(type=char(1) updatewhereclause=yes name=office_div dbname="cm_labo_master.office_div" )
+ column=(type=char(1) updatewhereclause=yes name=disabled dbname="cm_labo_master.disabled" )
+ column=(type=char(1) updatewhereclause=yes name=rpay_div dbname="cm_labo_master.rpay_div" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.LABOR_NAME, 
+         A.LABOR_NAME_E, 
+         A.RRN_PRE||'-'||A.RRN_POST AS JUMIN, 
+         A.SEX_DIV, 
+         A.PICTURE, 
+         A.NATION_CODE, 
+         A.FOREGN_DIV, 
+         A.CELL_PRE, 
+         A.CELL_POST, 
+         A.PHONE_PRE, 
+         A.PHONE_POST, 
+         A.JOB_CODE, 
+         A.JOIN_DATE, 
+         A.PROJ_CODE, 
+         A.GJOIN_DATE, 
+         A.RPAY_DATE, 
+         A.RETIRE_DATE, 
+         A.CONTINUE_DIV, 
+         A.PAY_DIV, 
+         A.ID_CARD, 
+         A.ZIP_CODE, 
+         A.ADDR1, 
+         A.ADDR2, 
+         A.OFFICE_DIV, 
+         A.DISABLED, 
+         A.RPAY_DIV
+    FROM CM_LABO_MASTER A
+   WHERE A.COMPANY_CODE = :as_comp
+ORDER BY A.LABOR_CODE ASC" update="CM_LABO_MASTER" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string)) )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="33" y="2" height="14" width="73" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주 민 번 호" border="0" color="33554432" x="108" y="2" height="14" width="105" html.valueishtml="0"  name=jumin_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="14" width="73" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="108" y="2" height="14" width="105" format="[general]" html.valueishtml="0"  name=jumin visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1  tag="c_row" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

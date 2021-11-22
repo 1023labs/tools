@@ -1,0 +1,98 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_rtte_rpay_apply_list.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_rtte_rpay_apply_list.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(13) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=char(6) updatewhereclause=yes name=start_yymm dbname="cm_rtte_rpay_apply_list.start_yymm" )
+ column=(type=char(6) updatewhereclause=yes name=end_yymm dbname="cm_rtte_rpay_apply_list.end_yymm" )
+ column=(type=number updatewhereclause=yes name=work_day dbname="cm_rtte_rpay_apply_list.work_day" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_rtte_rpay_apply_list.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=rpay_date dbname="rpay_date" )
+ column=(type=number updatewhereclause=yes name=rpay_month dbname="cm_rtte_rpay_apply_list.rpay_month" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.LABOR_CODE,
+         C.LABOR_NAME,
+         C.RRN_PRE||C.RRN_POST AS LABOR_ID,
+         A.START_YYMM,
+         A.END_YYMM,
+         A.WORK_DAY,
+         A.PROJ_CODE,
+         D.PROJ_NAME,
+         MAX(B.WORK_DATE2) RPAY_DATE,
+         A.DUR_MONTH AS RPAY_MONTH
+    FROM (                                                      
+          SELECT A.COMPANY_CODE,
+                 A.LABOR_CODE,
+                 A.START_YYMM,
+                 A.END_YYMM,
+                 A.WORK_DAY,
+                 A.DUR_MONTH,
+                 MAX(B.PROJ_CODE) PROJ_CODE
+            FROM (       
+                  SELECT A.COMPANY_CODE,
+                         A.LABOR_CODE,
+                         MIN(A.PAY_YYMM) AS START_YYMM,
+                         MAX(A.PAY_YYMM) AS END_YYMM,
+                         SUM(A.WORK_DAY) AS WORK_DAY,
+                         MONTHS_BETWEEN(TO_DATE(MAX(A.PAY_YYMM), 'YYYYMM'), TO_DATE(MIN(A.PAY_YYMM), 'YYYYMM')) DUR_MONTH
+                    FROM CM_SALY_LABOR_ACCOUNT A INNER JOIN  ( SELECT COMPANY_CODE,
+                                                                      LABOR_CODE,
+                                                                      MAX(TO_NUMBER(CONTINUE_DIV)) CONTINUE_DIV
+                                                                 FROM CM_SALY_LABOR_ACCOUNT 
+                                                                WHERE PAY_YYMM = :as_cur_yymm
+                                                             GROUP BY COMPANY_CODE, LABOR_CODE ) B
+                                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                        AND A.LABOR_CODE   = B.LABOR_CODE
+                                                        AND A.CONTINUE_DIV = B.CONTINUE_DIV                      
+                GROUP BY A.COMPANY_CODE, A.LABOR_CODE, A.CONTINUE_DIV
+                  HAVING MONTHS_BETWEEN(TO_DATE(MAX(PAY_YYMM), 'YYYYMM'), TO_DATE(MIN(PAY_YYMM), 'YYYYMM')) >= 10 
+                    ) A LEFT JOIN CM_SALY_LABOR_ACCOUNT B
+                               ON A.COMPANY_CODE = B.COMPANY_CODE
+                              AND A.LABOR_CODE   = B.LABOR_CODE
+                              AND A.END_YYMM     = B.PAY_YYMM  
+        GROUP BY A.COMPANY_CODE,A.LABOR_CODE,A.START_YYMM,A.END_YYMM,A.WORK_DAY,A.DUR_MONTH ) A
+        LEFT JOIN CM_RTTE_RPAY_APPLY_LIST B
+               ON A.COMPANY_CODE = B.COMPANY_CODE
+              AND A.LABOR_CODE   = B.LABOR_CODE
+              AND A.START_YYMM  <= SUBSTR(B.WORK_DATE2,1,6)  
+              AND A.END_YYMM    >= SUBSTR(B.WORK_DATE2,1,6)
+        LEFT JOIN CM_LABO_MASTER C
+               ON A.COMPANY_CODE = C.COMPANY_CODE
+              AND A.LABOR_CODE   = C.LABOR_CODE
+        LEFT JOIN SM_CODE_PROJECT D
+               ON A.COMPANY_CODE = D.COMPANY_CODE
+              AND A.PROJ_CODE    = D.PROJ_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE LIKE :as_proj_code
+     AND A.DUR_MONTH >=   :as_rpay_num
+GROUP BY A.COMPANY_CODE,A.LABOR_CODE,C.LABOR_NAME, C.RRN_PRE||C.RRN_POST, A.START_YYMM,A.END_YYMM,A.WORK_DAY,A.DUR_MONTH,A.PROJ_CODE,D.PROJ_NAME
+  HAVING MAX(B.WORK_DATE2) IS NULL
+ORDER BY C.LABOR_NAME" arguments=(("as_comp_code", string),("as_proj_code", string),("as_cur_yymm", string),("as_rpay_num", number)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="37" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="41" y="2" height="14" width="49" html.valueishtml="0"  name=labor_name_t  tag="labor_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="92" y="2" height="14" width="91" html.valueishtml="0"  name=labor_id_t  tag="labor_id" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="근무" border="0" color="33554432" x="185" y="2" height="14" width="54" html.valueishtml="0"  name=start_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="241" y="2" height="14" width="51" html.valueishtml="0"  name=end_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="최종근무현장" border="0" color="33554432" x="336" y="2" height="14" width="222" html.valueishtml="0"  name=proj_name_t  tag="proj_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="41" y="2" height="17" width="49" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="92" y="2" height="17" width="91" format="######-#######" html.valueishtml="0"  name=labor_id visible="1" editmask.mask="######-#######" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="336" y="2" height="17" width="222" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="185" y="2" height="17" width="54" format="####-##" html.valueishtml="0"  name=start_yymm visible="1" editmask.mask="####-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="241" y="2" height="17" width="51" format="####-##" html.valueishtml="0"  name=end_yymm visible="1" editmask.mask="####-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="출역일" border="0" color="33554432" x="560" y="2" height="14" width="39" html.valueishtml="0"  name=work_day_t  tag="work_day" visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="560" y="2" height="17" width="39" format="#,###" html.valueishtml="0"  name=work_day visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="개월" border="0" color="33554432" x="294" y="2" height="14" width="40" html.valueishtml="0"  name=rpay_month_t  tag="rpay_month" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="294" y="2" height="17" width="40" format="#,###" html.valueishtml="0"  name=rpay_month visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

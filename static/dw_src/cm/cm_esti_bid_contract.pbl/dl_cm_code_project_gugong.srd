@@ -1,0 +1,135 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="sm_code_project.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="sm_code_project.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(6) updatewhereclause=yes name=ent_dept dbname="sm_code_project.ent_dept" )
+ column=(type=char(8) updatewhereclause=yes name=open_date dbname="sm_code_project.open_date" )
+ column=(type=char(8) updatewhereclause=yes name=close_date dbname="sm_code_project.close_date" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="sm_code_project.cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="sm_code_project.pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=pm_name dbname="hr_pers_master.pm_name" )
+ column=(type=char(10) updatewhereclause=yes name=head_empno dbname="sm_code_project.head_empno" )
+ column=(type=char(20) updatewhereclause=yes name=head_name dbname="hr_pers_master.head_name" )
+ column=(type=char(1) updatewhereclause=yes name=continue_yn dbname="sm_code_project.continue_yn" )
+ column=(type=char(1) updatewhereclause=yes name=manage_tag dbname="sm_code_project.manage_tag" )
+ column=(type=char(12) updatewhereclause=yes name=dept_code dbname="sm_code_project.dept_code" )
+ column=(type=char(100) updatewhereclause=yes name=sm_code_dept_dept_name dbname="sm_code_dept.dept_name" )
+ column=(type=char(6) updatewhereclause=yes name=zip_code dbname="sm_code_project.zip_code" )
+ column=(type=char(200) updatewhereclause=yes name=addr1 dbname="sm_code_project.addr1" )
+ column=(type=char(100) updatewhereclause=yes name=addr2 dbname="sm_code_project.addr2" )
+ column=(type=char(20) updatewhereclause=yes name=phone_no1 dbname="sm_code_project.phone_no1" )
+ column=(type=char(20) updatewhereclause=yes name=phone_no2 dbname="sm_code_project.phone_no2" )
+ column=(type=char(20) updatewhereclause=yes name=fax_no dbname="sm_code_project.fax_no" )
+ column=(type=char(3) updatewhereclause=yes name=manage_type dbname="sm_code_project.manage_type" )
+ column=(type=char(3) updatewhereclause=yes name=grouping_code dbname="sm_code_project.grouping_code" )
+ column=(type=char(250) updatewhereclause=yes name=dname dbname="sm_comcode_d.dname" )
+ column=(type=char(3) updatewhereclause=yes name=project_tag dbname="sm_code_project.project_tag" )
+ column=(type=char(20) updatewhereclause=yes name=card_no dbname="sm_code_project.card_no" )
+ column=(type=decimal(0) updatewhereclause=yes name=card_qty dbname="sm_code_project.card_qty" )
+ column=(type=char(10) updatewhereclause=yes name=reg_empno dbname="sm_code_project.reg_empno" )
+ column=(type=char(20) updatewhereclause=yes name=hr_pers_master_reg_namme dbname="hr_pers_master.reg_namme" )
+ column=(type=char(6) updatewhereclause=yes name=bank_code dbname="sm_code_project.bank_code" )
+ column=(type=char(20) updatewhereclause=yes name=bank_account dbname="sm_code_project.bank_account" )
+ column=(type=char(3) updatewhereclause=yes name=gongje_div dbname="sm_code_project.gongje_div" )
+ column=(type=char(3) updatewhereclause=yes name=ticket_div dbname="sm_code_project.ticket_div" )
+ column=(type=char(1) updatewhereclause=yes name=reg_yn1 dbname="sm_code_project.reg_yn1" )
+ column=(type=char(1) updatewhereclause=yes name=reg_yn2 dbname="sm_code_project.reg_yn2" )
+ column=(type=char(1) updatewhereclause=yes name=reg_yn3 dbname="sm_code_project.reg_yn3" )
+ column=(type=char(1) updatewhereclause=yes name=reg_yn4 dbname="sm_code_project.reg_yn4" )
+ column=(type=char(200) updatewhereclause=yes name=specials dbname="sm_code_project.specials" )
+ column=(type=char(10) updatewhereclause=yes name=gong_empno dbname="sm_code_project.gong_empno" )
+ column=(type=char(20) updatewhereclause=yes name=gong_empname dbname="hr_pers_master.gong_empname" )
+ column=(type=char(1) updatewhereclause=yes name=foreign_chk dbname="sm_code_project.foreign_chk" )
+ column=(type=char(6) updatewhereclause=yes name=ent_dept_detail dbname="sm_code_project.ent_dept_detail" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.PROJ_NAME,   
+         A.ENT_DEPT,   
+         A.OPEN_DATE,   
+         A.CLOSE_DATE,   
+         A.CUST_CODE,
+         D.CUST_NAME,  
+         A.PM_EMPNO,   
+         B.EMP_NAME PM_NAME,
+         A.HEAD_EMPNO, 
+         C.EMP_NAME HEAD_NAME,  
+         A.CONTINUE_YN,   
+         A.MANAGE_TAG,   
+         A.DEPT_CODE, 
+         F.DEPT_NAME,
+         A.ZIP_CODE,   
+         A.ADDR1,   
+         A.ADDR2,   
+         A.PHONE_NO1,   
+         A.PHONE_NO2,   
+         A.FAX_NO,   
+         A.MANAGE_TYPE,   
+         A.GROUPING_CODE,
+         G.DNAME,   
+         A.PROJECT_TAG,   
+         A.CARD_NO,   
+         A.CARD_QTY,   
+         A.REG_EMPNO,
+         E.EMP_NAME REG_NAMME,
+         A.BANK_CODE,   
+         A.BANK_ACCOUNT,   
+         A.GONGJE_DIV,   
+         A.TICKET_DIV,   
+         A.REG_YN1,   
+         A.REG_YN2,   
+         A.REG_YN3,   
+         A.REG_YN4,
+         A.SPECIALS,
+         A.GONG_EMPNO,
+         H.EMP_NAME AS GONG_EMPNAME,
+         A.FOREIGN_CHK AS FOREIGN_CHK,
+         A.ENT_DEPT_DETAIL        
+    FROM SM_CODE_PROJECT A LEFT JOIN HR_PERS_MASTER B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PM_EMPNO = B.EMP_NO
+                          LEFT JOIN HR_PERS_MASTER C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE AND A.HEAD_EMPNO = C.EMP_NO
+                          LEFT JOIN SM_CODE_CUST D
+                                 ON A.CUST_CODE = D.CUST_CODE
+                          LEFT JOIN HR_PERS_MASTER E
+                                 ON A.COMPANY_CODE = E.COMPANY_CODE AND A.REG_EMPNO = E.EMP_NO   
+                          LEFT JOIN SM_CODE_DEPT F
+                                 ON A.COMPANY_CODE = F.COMPANY_CODE AND A.DEPT_CODE = F.DEPT_CODE
+                          LEFT JOIN SM_COMCODE_D G  
+                                 ON A.GROUPING_CODE = G.DCODE AND G.SYS_ID = 'CM' AND G.HCODE = 'CONSTTYPE'
+                          LEFT JOIN HR_PERS_MASTER H 
+                                 ON A.COMPANY_CODE = H.COMPANY_CODE AND A.GONG_EMPNO = H.EMP_NO
+   WHERE A.COMPANY_CODE = :as_comp_code 
+     AND A.PM_EMPNO     LIKE :as_pm_no
+     AND A.PROJECT_TAG  LIKE :as_status
+     AND A.MANAGE_TYPE  LIKE :as_const
+     AND A.MANAGE_TAG      = :as_manage
+ORDER BY A.PROJ_NAME, A.PROJ_CODE
+" arguments=(("as_comp_code", string),("as_pm_no", string),("as_status", string),("as_const", string),("as_manage", string)) )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="96" y="2" height="14" width="61" html.valueishtml="0"  name=proj_code_t  tag="proj_code" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="159" y="2" height="14" width="205" html.valueishtml="0"  name=proj_name_t  tag="proj_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM명" border="0" color="33554432" x="33" y="2" height="14" width="61" html.valueishtml="0"  name=pm_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="96" y="2" height="17" width="61" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="159" y="2" height="17" width="205" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="17" width="61" format="[general]" html.valueishtml="0"  name=pm_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="발주처" border="0" color="33554432" x="366" y="2" height="14" width="116" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="366" y="2" height="17" width="116" format="[general]" html.valueishtml="0"  name=cust_name visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+
+sparse(names="pm_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

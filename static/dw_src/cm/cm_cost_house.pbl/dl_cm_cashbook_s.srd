@@ -1,0 +1,69 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 )
+header(height=16 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cashbook_day.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cashbook_day.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=day_ymd dbname="cm_cashbook_day.ymd" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_cashbook_day.seq" )
+ column=(type=char(80) update=yes updatewhereclause=yes name=day_discription dbname="cm_cashbook_day.discription" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=in_amt dbname="cm_cashbook_day.in_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=out_amt dbname="cm_cashbook_day.out_amt" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_project_proj_name dbname="sm_code_project.proj_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_cashbook_month_m_amt dbname="cm_cashbook_month.m_amt" )
+ column=(type=char(1) updatewhereclause=yes name=close_yn dbname="close_yn" )
+ column=(type=number updatewhereclause=yes name=remain_amt dbname="remain_amt" )
+ column=(type=number updatewhereclause=yes name=num_seq dbname="num_seq" )
+ retrieve="SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.YMD,
+         A.SEQ,
+         A.DISCRIPTION,
+         A.IN_AMT,
+         A.OUT_AMT,
+         B.PROJ_NAME,
+         C.M_AMT,
+         NVL(C.CLOSE_YN,'N') CLOSE_YN,
+         (SELECT SUM(IN_AMT) - SUM(OUT_AMT)
+            FROM CM_CASHBOOK_DAY
+           WHERE PROJ_CODE = :as_proj_code 
+             AND SUBSTR(YMD,1,6) = :as_yyyymm
+             AND TO_NUMBER(SEQ) <= TO_NUMBER(A.SEQ)) + nvl(C.M_AMT,0) AS REMAIN_AMT,
+         TO_NUMBER(A.SEQ) NUM_SEQ  
+    FROM CM_CASHBOOK_DAY A INNER JOIN SM_CODE_PROJECT B
+                                   ON A.PROJ_CODE     = B.PROJ_CODE 
+                      LEFT OUTER JOIN CM_CASHBOOK_MONTH C
+                                   ON TO_CHAR(ADD_MONTHS(substr(a.ymd,1,6)||'01',-1), 'YYYYMM') = C.YYYYMM
+                                 AND A.PROJ_CODE = C.PROJ_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code  
+     AND SUBSTR(A.YMD,1,6) = :as_yyyymm
+     ORDER BY A.YMD, TO_NUMBER(A.SEQ) " update="CM_CASHBOOK_DAY" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_yyyymm", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="1" y="2" height="14" width="39" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="날 짜" border="0" color="33554432" x="42" y="1" height="19" width="78" html.valueishtml="0"  name=ymd_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text=" 적   요" border="0" color="33554432" x="123" y="1" height="19" width="394" html.valueishtml="0"  name=discription_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입  금" border="0" color="33554432" x="519" y="1" height="19" width="112" html.valueishtml="0"  name=in_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="출  금" border="0" color="33554432" x="633" y="1" height="19" width="111" html.valueishtml="0"  name=out_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="잔   액" border="0" color="8388608" x="747" y="2" height="14" width="121" html.valueishtml="0"  name=remain_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="8388608" x="1" y="1" height="19" width="39" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=footer alignment="0" text="합 계 내 역" border="0" color="33554432" x="280" y="6" height="14" width="77" html.valueishtml="0"  name=t_2 visible="1"  font.face="Tahoma" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="134217731" )
+compute(band=footer alignment="1" expression="sum(  in_amt  for all )"border="0" color="33554432" x="520" y="7" height="16" width="112" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(  out_amt  for all )"border="0" color="33554432" x="634" y="7" height="16" width="112" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="8388608" x="748" y="1" height="19" width="120" format="#,##0" html.valueishtml="0"  name=remain_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=10 border="0" color="33554432" x="43" y="1" height="19" width="77" format="[general]" html.valueishtml="0" protect="0~tif(close_yn ='Y',1,0)"  name=day_ymd visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=40 border="0" color="33554432" x="633" y="1" height="19" width="111" format="#,##0" html.valueishtml="0" protect="0~tif(close_yn ='Y',1,0)"  name=out_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=30 border="0" color="33554432" x="519" y="1" height="19" width="112" format="#,##0" html.valueishtml="0" protect="0~tif(close_yn ='Y',1,0)"  name=in_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=20 border="0" color="33554432" x="123" y="1" height="19" width="394" format="[general]" html.valueishtml="0" protect="0~tif(close_yn ='Y',1,0)"  name=day_discription visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

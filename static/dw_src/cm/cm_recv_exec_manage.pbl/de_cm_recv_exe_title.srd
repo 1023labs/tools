@@ -1,0 +1,23 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=cm_esti_master_est_name dbname="cm_esti_master.est_name" )
+ column=(type=char(20) updatewhereclause=yes name=cm_cust_construct_cnst_name dbname="cm_cust_construct.cnst_name" )
+ retrieve="  SELECT A.EST_NAME,   
+         B.CNST_NAME
+    FROM CM_ESTI_MASTER A LEFT JOIN CM_CUST_CONSTRUCT B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE AND A.CNST_CODE = B.CNST_CODE            
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.EST_CODE     = :as_cont_code" arguments=(("as_comp_code", string),("as_cont_code", string)) )
+text(band=background alignment="0" text="공사명 : " border="0" color="33554432" x="3" y="3" height="14" width="43" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=background alignment="0" text="업체명 : " border="0" color="33554432" x="402" y="3" height="14" width="48" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="53" y="3" height="14" width="293" format="[general]" html.valueishtml="0"  name=cm_esti_master_est_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="453" y="3" height="14" width="140" format="[general]" html.valueishtml="0"  name=cm_cust_construct_cnst_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

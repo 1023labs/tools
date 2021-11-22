@@ -1,0 +1,121 @@
+release 7;
+datawindow(units=0 timer_interval=0 color=31909606 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+header(height=76 color="536870912" )
+summary(height=4 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=64 color="536870912" )
+table(column=(type=char(8) updatewhereclause=yes key=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(13) updatewhereclause=yes name=resident_no dbname="resident_no" )
+ column=(type=char(11) update=yes updatewhereclause=yes name=med_lic_no dbname="med_lic_no" )
+ column=(type=char(12) updatewhereclause=yes name=project_code dbname="project_code" )
+ column=(type=char(50) updatewhereclause=yes name=project_name dbname="project_name" )
+ column=(type=char(1) updatewhereclause=yes name=basic_life_chk dbname="basic_life_chk" )
+ column=(type=char(1) updatewhereclause=yes name=regular_tax dbname="regular_tax" )
+ column=(type=char(1) updatewhereclause=yes name=unreliable_chk dbname="unreliable_chk" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=total_chk dbname="total_chk" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=kukmin_chk dbname="kukmin_chk" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=medical_chk dbname="medical_chk" values="	Y/	N" )
+ column=(type=char(12) updatewhereclause=yes name=resi_chk dbname="resi_chk" )
+ column=(type=number updatewhereclause=yes name=pre_check dbname="pre_check" )
+ retrieve="SELECT ACC.LABOR_CODE AS LABOR_CODE,
+       INSA.LABOR_NAME AS LABOR_NAME,
+       INSA.RESIDENT_NO AS RESIDENT_NO,
+       INSA.MED_LIC_NO AS MED_LIC_NO,
+       ACC.PROJECT_CODE AS PROJECT_CODE,
+       PROJECT.PROJECT_NAME AS PROJECT_NAME,
+       INSA.BASIC_LIFE_CHK AS BASIC_LIFE_CHK,
+       INSA.REGULAR_TAX AS REGULAR_TAX,
+       INSA.UNRELIABLE_CHK AS UNRELIABLE_CHK,
+       INSA.TOTAL_CHK As TOTAL_CHK,
+       INSA.KUKMIN_CHK AS KUKMIN_CHK,
+       INSA.MEDICAL_CHK AS MEDICAL_CHK,
+       SUBSTR(INSA.RESIDENT_NO, 1, 6) AS RESI_CHK,
+       PRE_TOT.TOTQTY AS PRE_CHECK
+  FROM (SELECT LABOR_CODE AS LABOR_CODE,
+               PAY_YYMM AS PAY_YYMM,
+               PROJECT_CODE AS PROJECT_CODE,
+               SUM(WORK_DAY) AS WORK_DAY
+          FROM L_LABOR_ACCOUNT
+         WHERE PROJECT_CODE = :as_project
+      GROUP BY LABOR_CODE,
+               PAY_YYMM,
+               PROJECT_CODE) ACC,
+       L_CODE_LABOR INSA,
+       CODE_PROJECT PROJECT,
+       (SELECT LABOR_ACC.LABOR_CODE AS LABOR_CODE
+          FROM L_LABOR_ACCOUNT LABOR_ACC,
+               (SELECT LABOR_CODE AS LABOR_CODE, 
+                       PAY_YYMM AS PAY_YYMM,
+                       PROJECT_CODE AS PROJECT_CODE,
+                       SUM(WORK_DAY) AS WORK_DAY
+                  FROM L_LABOR_ACCOUNT
+                 WHERE PROJECT_CODE = :as_project
+                   AND PAY_YYMM = :as_date2
+              GROUP BY LABOR_CODE,
+                       PAY_YYMM,
+                       PROJECT_CODE) WORK_CNT
+         WHERE LABOR_ACC.LABOR_CODE = WORK_CNT.LABOR_CODE
+           AND LABOR_ACC.PROJECT_CODE = WORK_CNT.PROJECT_CODE
+           AND LABOR_ACC.PAY_YYMM = WORK_CNT.PAY_YYMM
+           AND LABOR_ACC.PAY_YYMM = :as_date2
+           AND WORK_CNT.WORK_DAY >= 20
+           AND LABOR_ACC.PROJECT_CODE LIKE :as_project
+        MINUS
+       (SELECT LABOR_CODE
+          FROM L_LABOR_ACCOUNT
+         WHERE PAY_YYMM = :as_date2
+           AND PROJECT_CODE LIKE :as_project
+    INTERSECT
+        SELECT LABOR_CODE
+          FROM L_LABOR_ACCOUNT
+         WHERE PAY_YYMM = :as_date
+           AND PROJECT_CODE LIKE :as_project
+        UNION
+        SELECT LABOR_CODE
+          FROM L_LABOR_ACCOUNT
+         WHERE PAY_YYMM = :as_date
+           AND PROJECT_CODE LIKE :as_project)) LABOR,
+       (SELECT LABOR_CODE AS LABOR_CODE,
+                    PROJECT_CODE AS PROJECT_CODE,
+                    SUM(WORK_DAY) AS TOTQTY
+               FROM L_LABOR_ACCOUNT
+              WHERE PAY_YYMM = :as_date2
+                AND PROJECT_CODE LIKE :as_project
+           GROUP BY LABOR_CODE,
+                    PROJECT_CODE) PRE_TOT
+WHERE ACC.LABOR_CODE = LABOR.LABOR_CODE
+  AND ACC.LABOR_CODE = INSA.LABOR_CODE
+  AND ACC.PROJECT_CODE = PROJECT.PROJECT_CODE
+  AND ACC.LABOR_CODE = PRE_TOT.LABOR_CODE(+)
+  AND ACC.PROJECT_CODE = PRE_TOT.PROJECT_CODE(+)
+  AND ACC.PAY_YYMM = :as_date2
+  AND ACC.PROJECT_CODE LIKE :as_project
+  AND ACC.PROJECT_CODE NOT IN('81032','05900','08810')
+ORDER BY INSA.LABOR_NAME" update="L_CODE_LABOR" updatewhere=0 updatekeyinplace=no arguments=(("as_project", string),("as_date", string),("as_date2", string)) )
+button(band=header text="순번"filename=""action="0" border="0" color="0" x="9" y="0" height="76" width="146" vtextalign="0" htextalign="0"  name=b_1  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="사번"filename=""action="0" border="0" color="0" x="151" y="0" height="76" width="325" vtextalign="0" htextalign="0"  name=b_4  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="성명"filename=""action="0" border="0" color="0" x="471" y="0" height="76" width="357" vtextalign="0" htextalign="0"  name=b_2  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="주민번호"filename=""action="0" border="0" color="0" x="823" y="0" height="76" width="489" vtextalign="0" htextalign="0"  name=b_3  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="건강증번호"filename=""action="0" border="0" color="0" x="1307" y="0" height="76" width="334" vtextalign="0" htextalign="0"  name=b_11  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="현장코드"filename=""action="0" border="0" color="0" x="1637" y="0" height="76" width="306" vtextalign="0" htextalign="0"  name=b_5  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+button(band=header text="현장코드"filename=""action="0" border="0" color="0" x="1938" y="0" height="76" width="1239" vtextalign="0" htextalign="0"  name=b_6  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="67108864" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="151" y="4" height="60" width="315" format="[general]"  name=labor_code edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(unreliable_chk = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="0" x="3186" y="0" height="56" width="5" format="[general]"  name=basic_life_chk visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="0" x="3209" y="0" height="56" width="5" format="[general]"  name=regular_tax visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="0" x="3191" y="0" height="56" width="5" format="[general]"  name=unreliable_chk visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=4 alignment="0" tabsequence=40 border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="1307" y="4" height="60" width="329" format="[general]"  name=med_lic_no edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(  number(resi_chk) <  ( number(string(today(), 'yyyymmdd'))  - 19600000 ) , rgb( 123, 123, 123), rgb( 255, 255, 255) )" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="1641" y="4" height="60" width="297" format="[general]"  name=project_code edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(unreliable_chk = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="1943" y="4" height="60" width="1234" format="[general]"  name=project_name edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(unreliable_chk = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="0" x="3214" y="0" height="56" width="23" format="[general]"  name=total_chk visible="1~t0" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="0" x="3237" y="0" height="56" width="23" format="[general]"  name=kukmin_chk visible="1~t0" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="0" x="3259" y="0" height="56" width="23" format="[general]"  name=medical_chk visible="1~t0" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="0" x="3282" y="12" height="56" width="5" format="[general]"  name=resi_chk visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(  number(resi_chk) <  ( number(string(today(), 'yyyymmdd'))  - 19600000 ) , rgb( 123, 123, 123), rgb( 255, 255, 255) )" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="9" y="4" height="60" width="137" format="[GENERAL]"  name=compute_1  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(unreliable_chk = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="0" x="3296" y="4" height="56" width="9" format="[general]"  name=pre_check visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="471" y="4" height="60" width="347" format="[general]"  name=labor_name edit.limit=0 edit.case=any edit.autoselect=yes  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif(unreliable_chk = 'Y', rgb( 250, 190, 250), rgb( 255, 255, 255) )" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="0~tif(   regular_tax   = 'Y', rgb( 0, 54, 250), if(  basic_life_chk   = 'Y', rgb( 255, 0, 0), rgb( 0, 0, 0) ) )" x="823" y="4" height="60" width="480" format="[general]"  name=resident_no editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="Arial" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="0" background.color="16777215~tif (pre_check >= 20, rgb( 230, 230, 230), rgb( 255, 255, 255) )" )
+rectangle(band=detail x="5" y="0" height="64" width="3182"  name=r_1 visible="1~tif( getrow() = currentrow(), 1, 0)" brush.hatch="7" brush.color="553648127" pen.style="0" pen.width="5" pen.color="255"  background.mode="2" background.color="0" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )
+ 

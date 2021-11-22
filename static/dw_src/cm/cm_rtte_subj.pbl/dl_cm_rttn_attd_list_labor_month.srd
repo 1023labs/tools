@@ -1,0 +1,198 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_labo_master.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=a_proj_code dbname="cm_labo_master.proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="cm_labo_master.labor_code" )
+ column=(type=char(12) updatewhereclause=yes name=a_work_date dbname="cm_labo_master.work_date" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=number updatewhereclause=yes name=d01 dbname="d01" )
+ column=(type=number updatewhereclause=yes name=d02 dbname="d02" )
+ column=(type=number updatewhereclause=yes name=d03 dbname="d03" )
+ column=(type=number updatewhereclause=yes name=d04 dbname="d04" )
+ column=(type=number updatewhereclause=yes name=d05 dbname="d05" )
+ column=(type=number updatewhereclause=yes name=d06 dbname="d06" )
+ column=(type=number updatewhereclause=yes name=d07 dbname="d07" )
+ column=(type=number updatewhereclause=yes name=d08 dbname="d08" )
+ column=(type=number updatewhereclause=yes name=d09 dbname="d09" )
+ column=(type=number updatewhereclause=yes name=d10 dbname="d10" )
+ column=(type=number updatewhereclause=yes name=d11 dbname="d11" )
+ column=(type=number updatewhereclause=yes name=d12 dbname="d12" )
+ column=(type=number updatewhereclause=yes name=d13 dbname="d13" )
+ column=(type=number updatewhereclause=yes name=d14 dbname="d14" )
+ column=(type=number updatewhereclause=yes name=d15 dbname="d15" )
+ column=(type=number updatewhereclause=yes name=d16 dbname="d16" )
+ column=(type=number updatewhereclause=yes name=d17 dbname="d17" )
+ column=(type=number updatewhereclause=yes name=d18 dbname="d18" )
+ column=(type=number updatewhereclause=yes name=d19 dbname="d19" )
+ column=(type=number updatewhereclause=yes name=d20 dbname="d20" )
+ column=(type=number updatewhereclause=yes name=d21 dbname="d21" )
+ column=(type=number updatewhereclause=yes name=d22 dbname="d22" )
+ column=(type=number updatewhereclause=yes name=d23 dbname="d23" )
+ column=(type=number updatewhereclause=yes name=d24 dbname="d24" )
+ column=(type=number updatewhereclause=yes name=d25 dbname="d25" )
+ column=(type=number updatewhereclause=yes name=d26 dbname="d26" )
+ column=(type=number updatewhereclause=yes name=d27 dbname="d27" )
+ column=(type=number updatewhereclause=yes name=d28 dbname="d28" )
+ column=(type=number updatewhereclause=yes name=d29 dbname="d29" )
+ column=(type=number updatewhereclause=yes name=d30 dbname="d30" )
+ column=(type=number updatewhereclause=yes name=d31 dbname="d31" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.LABOR_CODE,
+         A.WORK_DATE,
+         B.LABOR_NAME,
+         SUM(A.D01) D01, 
+         SUM(A.D02) D02, 
+         SUM(A.D03) D03, 
+         SUM(A.D04) D04, 
+         SUM(A.D05) D05, 
+         SUM(A.D06) D06, 
+         SUM(A.D07) D07, 
+         SUM(A.D08) D08, 
+         SUM(A.D09) D09, 
+         SUM(A.D10) D10, 
+         SUM(A.D11) D11, 
+         SUM(A.D12) D12, 
+         SUM(A.D13) D13, 
+         SUM(A.D14) D14, 
+         SUM(A.D15) D15, 
+         SUM(A.D16) D16, 
+         SUM(A.D17) D17, 
+         SUM(A.D18) D18, 
+         SUM(A.D19) D19, 
+         SUM(A.D20) D20, 
+         SUM(A.D21) D21, 
+         SUM(A.D22) D22, 
+         SUM(A.D23) D23, 
+         SUM(A.D24) D24, 
+         SUM(A.D25) D25, 
+         SUM(A.D26) D26, 
+         SUM(A.D27) D27, 
+         SUM(A.D28) D28, 
+         SUM(A.D29) D29, 
+         SUM(A.D30) D30, 
+         SUM(A.D31) D31
+    FROM (              
+          SELECT A.COMPANY_CODE, 
+                 A.PROJ_CODE,
+                 A.TEAM_CODE,
+                 A.LABOR_CODE,
+                 SUBSTR(A.WORK_DATE,1,6) WORK_DATE,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'01',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D01,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'02',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D02,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'03',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D03,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'04',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D04,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'05',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D05,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'06',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D06,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'07',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D07,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'08',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D08,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'09',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D09,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'10',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D10,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'11',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D11,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'12',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D12,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'13',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D13,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'14',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D14,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'15',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D15,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'16',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D16,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'17',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D17,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'18',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D18,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'19',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D19,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'20',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D20,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'21',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D21,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'22',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D22,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'23',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D23,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'24',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D24,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'25',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D25,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'26',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D26,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'27',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D27,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'28',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D28,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'29',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D29,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'30',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D30,
+                 DECODE(SUBSTR(A.WORK_DATE,7,2),'31',NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0),0) D31,
+                 FN_CM_DAILY_WORK_UNIT_AMT(A.COMPANY_CODE, A.PROJ_CODE, A.TEAM_CODE, A.LABOR_CODE, A.WORK_DATE, 'DAILY') * (NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0)) PAY_DAYAMT
+             FROM CM_ATTD_DAILY_WORK  A
+           WHERE A.COMPANY_CODE = :as_comp_code 
+             AND A.LABOR_CODE    = :as_labor_code
+             AND SUBSTR(A.WORK_DATE,1,6) = :as_work_yymm ) A LEFT JOIN CM_LABO_MASTER B
+                                                                    ON A.COMPANY_CODE = B.COMPANY_CODE AND A.LABOR_CODE = B.LABOR_CODE
+                                                             LEFT JOIN CM_SALY_LABOR_ACCOUNT C
+                                                                    ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                                   AND A.PROJ_CODE    = C.PROJ_CODE
+                                                                   AND A.TEAM_CODE    = C.TEAM_CODE
+                                                                   AND A.WORK_DATE    = C.PAY_YYMM 
+                                                                   AND A.LABOR_CODE   = C.LABOR_CODE    
+GROUP BY A.COMPANY_CODE, A.PROJ_CODE, A.LABOR_CODE,B.LABOR_NAME, A.WORK_DATE" arguments=(("as_comp_code", string),("as_labor_code", string),("as_work_yymm", string)) )
+text(band=header alignment="2" text="2" border="0" color="33554432" x="72" y="2" height="14" width="23" html.valueishtml="0"  name=d02_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="3" border="0" color="33554432" x="97" y="2" height="14" width="23" html.valueishtml="0"  name=d03_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="4" border="0" color="33554432" x="122" y="2" height="14" width="23" html.valueishtml="0"  name=d04_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="5" border="0" color="33554432" x="147" y="2" height="14" width="23" html.valueishtml="0"  name=d05_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="6" border="0" color="33554432" x="172" y="2" height="14" width="23" html.valueishtml="0"  name=d06_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="7" border="0" color="33554432" x="197" y="2" height="14" width="23" html.valueishtml="0"  name=d07_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="8" border="0" color="33554432" x="222" y="2" height="14" width="23" html.valueishtml="0"  name=d08_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="9" border="0" color="33554432" x="247" y="2" height="14" width="23" html.valueishtml="0"  name=d09_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="10" border="0" color="33554432" x="272" y="2" height="14" width="23" html.valueishtml="0"  name=d10_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="11" border="0" color="33554432" x="297" y="2" height="14" width="23" html.valueishtml="0"  name=d11_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="12" border="0" color="33554432" x="322" y="2" height="14" width="23" html.valueishtml="0"  name=d12_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="13" border="0" color="33554432" x="347" y="2" height="14" width="23" html.valueishtml="0"  name=d13_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="14" border="0" color="33554432" x="372" y="2" height="14" width="23" html.valueishtml="0"  name=d14_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="15" border="0" color="33554432" x="397" y="2" height="14" width="23" html.valueishtml="0"  name=d15_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="16" border="0" color="33554432" x="422" y="2" height="14" width="23" html.valueishtml="0"  name=d16_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="17" border="0" color="33554432" x="447" y="2" height="14" width="23" html.valueishtml="0"  name=d17_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="18" border="0" color="33554432" x="472" y="2" height="14" width="23" html.valueishtml="0"  name=d18_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="19" border="0" color="33554432" x="497" y="2" height="14" width="23" html.valueishtml="0"  name=d19_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="20" border="0" color="33554432" x="522" y="2" height="14" width="23" html.valueishtml="0"  name=d20_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="21" border="0" color="33554432" x="547" y="2" height="14" width="23" html.valueishtml="0"  name=d21_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="22" border="0" color="33554432" x="572" y="2" height="14" width="23" html.valueishtml="0"  name=d22_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="23" border="0" color="33554432" x="597" y="2" height="14" width="23" html.valueishtml="0"  name=d23_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="24" border="0" color="33554432" x="622" y="2" height="14" width="23" html.valueishtml="0"  name=d24_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="25" border="0" color="33554432" x="647" y="2" height="14" width="23" html.valueishtml="0"  name=d25_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="26" border="0" color="33554432" x="672" y="2" height="14" width="23" html.valueishtml="0"  name=d26_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="27" border="0" color="33554432" x="697" y="2" height="14" width="23" html.valueishtml="0"  name=d27_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="28" border="0" color="33554432" x="722" y="2" height="14" width="23" html.valueishtml="0"  name=d28_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="29" border="0" color="33554432" x="747" y="2" height="14" width="23" html.valueishtml="0"  name=d29_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="30" border="0" color="33554432" x="772" y="2" height="14" width="23" html.valueishtml="0"  name=d30_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="31" border="0" color="33554432" x="797" y="2" height="14" width="23" html.valueishtml="0"  name=d31_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="1" border="0" color="33554432" x="47" y="2" height="14" width="23" html.valueishtml="0"  name=d01_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="2" y="2" height="14" width="43" html.valueishtml="0"  name=a_work_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="72" y="2" height="17" width="23" format="[general]~tif( d02 = ceiling(  d02 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d02 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="97" y="2" height="17" width="23" format="[general]~tif( d03 = ceiling(  d03 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d03 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="122" y="2" height="17" width="23" format="[general]~tif( d04 = ceiling(  d04 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d04 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="147" y="2" height="17" width="23" format="[general]~tif( d05 = ceiling(  d05 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d05 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="172" y="2" height="17" width="23" format="[general]~tif( d06 = ceiling(  d06 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d06 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="197" y="2" height="17" width="23" format="[general]~tif( d07 = ceiling(  d07 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d07 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="222" y="2" height="17" width="23" format="[general]~tif( d08 = ceiling(  d08 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d08 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="247" y="2" height="17" width="23" format="[general]~tif( d09 = ceiling(  d09 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d09 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="272" y="2" height="17" width="23" format="[general]~tif( d10 = ceiling(  d10 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d10 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="297" y="2" height="17" width="23" format="[general]~tif( d11 = ceiling(  d11 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="322" y="2" height="17" width="23" format="[general]~tif( d12 = ceiling(  d12 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d12 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="33554432" x="347" y="2" height="17" width="23" format="[general]~tif( d13 = ceiling(  d13 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d13 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="33554432" x="372" y="2" height="17" width="23" format="[general]~tif( d14 = ceiling(  d14 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d14 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=20 alignment="2" tabsequence=32766 border="0" color="33554432" x="397" y="2" height="17" width="23" format="[general]~tif( d15 = ceiling(  d15 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d15 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="2" tabsequence=32766 border="0" color="33554432" x="422" y="2" height="17" width="23" format="[general]~tif( d16 = ceiling(  d16 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d16 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="2" tabsequence=32766 border="0" color="33554432" x="447" y="2" height="17" width="23" format="[general]~tif( d17 = ceiling(  d17 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d17 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=23 alignment="2" tabsequence=32766 border="0" color="33554432" x="472" y="2" height="17" width="23" format="[general]~tif( d18 = ceiling(  d18 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d18 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="33554432" x="497" y="2" height="17" width="23" format="[general]~tif( d19 = ceiling(  d19 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d19 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="2" tabsequence=32766 border="0" color="33554432" x="522" y="2" height="17" width="23" format="[general]~tif( d20 = ceiling(  d20 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d20 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=26 alignment="2" tabsequence=32766 border="0" color="33554432" x="547" y="2" height="17" width="23" format="[general]~tif( d21 = ceiling(  d21 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d21 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=27 alignment="2" tabsequence=32766 border="0" color="33554432" x="572" y="2" height="17" width="23" format="[general]~tif( d22 = ceiling(  d22 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d22 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=28 alignment="2" tabsequence=32766 border="0" color="33554432" x="597" y="2" height="17" width="23" format="[general]~tif( d23 = ceiling(  d23 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d23 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=29 alignment="2" tabsequence=32766 border="0" color="33554432" x="622" y="2" height="17" width="23" format="[general]~tif( d24 = ceiling(  d24 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d24 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=30 alignment="2" tabsequence=32766 border="0" color="33554432" x="647" y="2" height="17" width="23" format="[general]~tif( d25 = ceiling(  d25 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d25 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=31 alignment="2" tabsequence=32766 border="0" color="33554432" x="672" y="2" height="17" width="23" format="[general]~tif( d26 = ceiling(  d26 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d26 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=32 alignment="2" tabsequence=32766 border="0" color="33554432" x="697" y="2" height="17" width="23" format="[general]~tif( d27 = ceiling(  d27 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d27 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=33 alignment="2" tabsequence=32766 border="0" color="33554432" x="722" y="2" height="17" width="23" format="[general]~tif( d28 = ceiling(  d28 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d28 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=34 alignment="2" tabsequence=32766 border="0" color="33554432" x="747" y="2" height="17" width="23" format="[general]~tif( d29 = ceiling(  d29 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d29 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=35 alignment="2" tabsequence=32766 border="0" color="33554432" x="772" y="2" height="17" width="23" format="[general]~tif( d30 = ceiling(  d30 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d30 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=36 alignment="2" tabsequence=32766 border="0" color="33554432" x="797" y="2" height="17" width="23" format="[general]~tif( d31 = ceiling(  d31 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d31 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="47" y="2" height="17" width="23" format="[general]~tif( d01= ceiling(  d01 ), ~"#,###~", ~"#,##0.#~" )" html.valueishtml="0"  name=d01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="43" format="@@@@-@@" html.valueishtml="0"  name=a_work_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

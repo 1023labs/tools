@@ -1,0 +1,72 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_cont_contract.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_cont_contract.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=contract_code dbname="cm_cont_contract.contract_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=contract_name dbname="cm_cont_contract.contract_name" )
+ column=(type=char(8) updatewhereclause=yes name=apply_year dbname="cm_cont_contract.apply_year" )
+ column=(type=char(30) updatewhereclause=yes name=order_comp dbname="cm_esti_request.order_comp" )
+ column=(type=char(60) updatewhereclause=yes name=tot_scale dbname="cm_esti_request.tot_scale" )
+ column=(type=char(400) updatewhereclause=yes name=outline dbname="cm_esti_request.outline" )
+ column=(type=char(4) updatewhereclause=yes name=f_type dbname="cm_esti_master.f_type" )
+ column=(type=char(8) updatewhereclause=yes name=insu_date1 dbname="cm_cont_contract.insu_date1" )
+ column=(type=char(8) updatewhereclause=yes name=insu_date2 dbname="cm_cont_contract.insu_date2" )
+ column=(type=char(20) updatewhereclause=yes name=head_name dbname="cm_cont_contract.head_name" )
+ column=(type=char(20) updatewhereclause=yes name=head_hp dbname="cm_cont_contract.head_hp" )
+ column=(type=char(20) updatewhereclause=yes name=equip_name1 dbname="cm_cont_contract.equip_name1" )
+ column=(type=char(20) updatewhereclause=yes name=equip_hp1 dbname="cm_cont_contract.equip_hp1" )
+ column=(type=char(20) updatewhereclause=yes name=equip_name2 dbname="cm_cont_contract.equip_name2" )
+ column=(type=char(20) updatewhereclause=yes name=equip_hp2 dbname="cm_cont_contract.equip_hp2" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=cust_code dbname="cm_cont_contract.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=prepay_rate dbname="cm_cont_contract.prepay_rate" )
+ column=(type=char(400) update=yes updatewhereclause=yes name=const_range dbname="cm_cont_contract.const_range" )
+ column=(type=char(1) updatewhereclause=yes name=pay_div3 dbname="cm_cont_contract.pay_div3" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.CONTRACT_CODE,   
+         A.CONTRACT_NAME,  
+         A.APPLY_YEAR,
+         B.ORDER_COMP,
+         B.TOT_SCALE,
+         B.OUTLINE,
+         C.F_TYPE, 
+         A.INSU_DATE1,
+         A.INSU_DATE2,
+         A.HEAD_NAME,
+         A.HEAD_HP,
+         A.EQUIP_NAME1,
+         A.EQUIP_HP1,
+         A.EQUIP_NAME2,
+         A.EQUIP_HP2,
+         A.CUST_CODE,  
+         D.CUST_NAME, 
+         A.PREPAY_RATE,   
+         A.CONST_RANGE, 
+         A.PAY_DIV3
+    FROM CM_CONT_CONTRACT A INNER JOIN CM_ESTI_REQUEST B
+                                    ON A.COMPANY_CODE  = B.COMPANY_CODE
+                                   AND A.CONTRACT_CODE = B.EST_CODE 
+                            INNER JOIN CM_ESTI_MASTER C
+                                    ON A.COMPANY_CODE  = C.COMPANY_CODE
+                                   AND A.CONTRACT_CODE = C.EST_CODE 
+                             LEFT JOIN SM_CODE_CUST D
+                                    ON A.CUST_CODE = D.CUST_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code" arguments=(("as_comp_code", string),("as_proj_code", string)) )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="206" y="8" height="56" width="325" html.valueishtml="0"  name=contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="539" y="8" height="56" width="923" html.valueishtml="0"  name=contract_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="187" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="206" y="8" height="68" width="325" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="539" y="8" height="68" width="923" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="68" width="187" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

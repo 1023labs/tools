@@ -1,0 +1,101 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="제 증명서" print.orientation = 2 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 9 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=1029 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=1 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=hr_pers_certificate_certificate_div dbname="hr_pers_certificate.certificate_div" )
+ column=(type=char(8) updatewhereclause=yes name=hr_pers_certificate_work_year dbname="hr_pers_certificate.work_year" )
+ column=(type=decimal(0) updatewhereclause=yes name=hr_pers_certificate_seq dbname="hr_pers_certificate.seq" )
+ column=(type=char(60) updatewhereclause=yes name=hr_pers_certificate_cer_grade dbname="hr_pers_certificate.cer_grade" )
+ column=(type=char(200) updatewhereclause=yes name=hr_pers_certificate_address dbname="hr_pers_certificate.address" )
+ column=(type=char(100) updatewhereclause=yes name=hr_pers_certificate_dept_name dbname="hr_pers_certificate.dept_name" )
+ column=(type=char(60) updatewhereclause=yes name=hr_pers_certificate_cer_grade dbname="hr_pers_certificate.cer_grade" )
+ column=(type=char(8) updatewhereclause=yes name=hr_pers_certificate_s_date dbname="hr_pers_certificate.s_date" )
+ column=(type=char(8) updatewhereclause=yes name=hr_pers_certificate_e_date dbname="hr_pers_certificate.e_date" )
+ column=(type=char(40) updatewhereclause=yes name=hr_pers_certificate_duty_name dbname="hr_pers_certificate.duty_name" )
+ column=(type=char(100) updatewhereclause=yes name=hr_pers_certificate_purpose dbname="hr_pers_certificate.purpose" )
+ column=(type=char(8) updatewhereclause=yes name=hr_pers_certificate_submit_date dbname="hr_pers_certificate.submit_date" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(13) updatewhereclause=yes name=rrn dbname="rrn" )
+ column=(type=char(8) updatewhereclause=yes name=join_date dbname="hr_pers_master.join_date" )
+ column=(type=char(30) updatewhereclause=yes name=sm_code_company_company_name dbname="sm_code_company.company_name" )
+ column=(type=char(20) updatewhereclause=yes name=represent_name dbname="sm_code_company.represent_name" )
+ column=(type=char(100) updatewhereclause=yes name=sm_code_company_addr1 dbname="sm_code_company.addr1" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_company_addr2 dbname="sm_code_company.addr2" )
+ retrieve="  SELECT A1.CERTIFICATE_DIV,
+         A1.WORK_YEAR,
+         A1.SEQ,
+         A1.CER_GRADE,
+         A1.ADDRESS, 
+         A1.DEPT_NAME,
+         A1.CER_GRADE,
+         A1.S_DATE,
+         A1.E_DATE,
+         A1.DUTY_NAME,
+         A1.PURPOSE,
+         A1.SUBMIT_DATE,
+         A.EMP_NAME,
+         A.RRN_PRE || A.RRN_POST RRN,
+         A.JOIN_DATE,
+         B.COMPANY_NAME,
+         B.REPRESENT_NAME,
+         B.ADDR1,
+         B.ADDR2
+    FROM HR_PERS_CERTIFICATE A1 LEFT JOIN HR_PERS_MASTER A
+                                       ON A1.COMPANY_CODE = A.COMPANY_CODE
+                                      AND A1.EMP_NO = A.EMP_NO
+                                LEFT JOIN SM_CODE_COMPANY B
+                                       ON A1.COMPANY_CODE = B.COMPANY_CODE
+   WHERE A1.COMPANY_CODE = :as_comp
+     AND A1.CERTIFICATE_NO = :as_no" arguments=(("as_comp", string),("as_no", string)) )
+line(band=background x1="30" y1="1019" x2="712" y2="1019"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="25" y1="49" x2="719" y2="49"  name=l_1 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="54" x2="713" y2="54"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="139" y1="907" x2="139" y2="1019"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="139" y1="274" x2="139" y2="539"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="403" y1="274" x2="403" y2="365"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="526" y1="274" x2="526" y2="365"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="기   록   자" border="0" color="0" x="37" y="911" height="18" width="96" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="기      간" border="0" color="0" x="38" y="445" height="18" width="97" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=background x1="25" y1="1025" x2="718" y2="1025"  name=l_7 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="25" y1="49" x2="25" y2="1024"  name=l_9 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="55" x2="30" y2="1019"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="719" y1="49" x2="719" y2="1024"  name=l_8 visible="1" pen.style="0" pen.width="2" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="712" y1="55" x2="712" y2="1020"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="274" x2="712" y2="274"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="320" x2="712" y2="320"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="414" x2="712" y2="414"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="494" x2="712" y2="494"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="539" x2="712" y2="539"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="31" y1="907" x2="139" y2="907"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="932" x2="139" y2="932"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="상기인은 현재 위의 사실대로 당사에서  재직하고  있음을   증명함~tcase(   hr_pers_certificate_certificate_div  when '1'  then  '상기인은  현재 위의 사실대로 당사에서  재직하고  있음을   증명함'  when '2' then  '상기인은 현재 위의 사실대로 당사에서  경력이  있음을   증명함' when '3' then  '상기인은 현재 위의 사실대로 당사에서  퇴직하였음을   증명함')" border="0" color="0" x="34" y="610" height="22" width="674" html.valueishtml="0"  name=t_35 visible="1"  font.face="굴림" font.height="-14" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=background x1="30" y1="365" x2="712" y2="365"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="0"  background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="용       도" border="0" color="0" x="38" y="510" height="18" width="97" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="소       속" border="0" color="0" x="38" y="333" height="18" width="97" html.valueishtml="0"  name=t_19 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="직           위" border="0" color="0" x="414" y="333" height="18" width="106" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="성       명" border="0" color="0" x="38" y="291" height="18" width="97" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="주민등록번호" border="0" color="0" x="414" y="291" height="18" width="106" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="2" text="주       소" border="0" color="0" x="38" y="382" height="18" width="97" html.valueishtml="0"  name=t_40 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression="case(  hr_pers_certificate_certificate_div  when '1' then '재 직 증 명 서' when '2' then '경 력 증 명 서' else '퇴 직 증 명 서')"border="0" color="0" x="34" y="120" height="39" width="673" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-28" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="0" expression="'발급번호: ' +   hr_pers_certificate_work_year  + '-' +  string(hr_pers_certificate_seq ,'0000') + ' 호'
+"border="0" color="33554432" x="512" y="246" height="18" width="188" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=header alignment="0" expression="'대표이사' + '  ' +  represent_name"border="0" color="0" x="384" y="869" height="24" width="306" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-13" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="0" expression="trim( sm_code_company_addr1 )  + sm_code_company_addr2 "border="0" color="0" x="384" y="801" height="24" width="306" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-13" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=12 alignment="2" tabsequence=32766 border="0" color="0" x="200" y="733" height="20" width="297" format="@@@@년 @@월 @@일" html.valueishtml="0"  name=hr_pers_certificate_submit_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-13" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=7 alignment="2" tabsequence=32766 border="0" color="0" x="531" y="333" height="18" width="177" format="[general]" html.valueishtml="0"  name=hr_pers_certificate_cer_grade visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=13 alignment="2" tabsequence=32766 border="0" color="0" x="147" y="291" height="18" width="253" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=14 alignment="2" tabsequence=32766 border="0" color="0" x="531" y="290" height="18" width="177" format="@@@@@@-@@@@@@@" html.valueishtml="0"  name=rrn visible="1" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=6 alignment="2" tabsequence=32766 border="0" color="0" x="146" y="333" height="18" width="252" format="[general]" html.valueishtml="0"  name=hr_pers_certificate_dept_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=8 alignment="0" tabsequence=32766 border="0" color="0" x="153" y="428" height="20" width="248" format="@@@@년 @@월 @@일 부터" html.valueishtml="0"  name=hr_pers_certificate_s_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=5 alignment="0" tabsequence=32766 border="0" color="0" x="146" y="382" height="18" width="567" format="[general]" html.valueishtml="0"  name=hr_pers_certificate_address visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=header id=16 alignment="0" tabsequence=32766 border="0" color="0" x="384" y="837" height="20" width="306" format="[general]" html.valueishtml="0"  name=sm_code_company_company_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-13" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="0" expression="if( hr_pers_certificate_certificate_div ='1','현  재  까  지', left( hr_pers_certificate_e_date, 4 )+'년 '+mid( hr_pers_certificate_e_date, 5, 2)+'월 '+mid( hr_pers_certificate_e_date, 7, 2)+'일' )"border="0" color="33554432" x="153" y="460" height="18" width="248" format="~tif(  hr_pers_certificate_certificate_div ='1', 0,1 )" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=header id=11 alignment="0" tabsequence=32766 border="0" color="0" x="153" y="511" height="20" width="533" format="[general]" html.valueishtml="0"  name=hr_pers_certificate_purpose visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-12" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

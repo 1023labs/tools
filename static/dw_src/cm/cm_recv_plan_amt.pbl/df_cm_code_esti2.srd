@@ -1,0 +1,71 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_esti_master.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=est_code dbname="cm_esti_master.est_code" )
+ column=(type=char(60) update=yes updatewhereclause=yes name=est_name dbname="cm_esti_master.est_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=ent_dept dbname="cm_esti_master.ent_dept" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=est_div dbname="cm_esti_master.est_div" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=cnst_code dbname="cm_esti_master.cnst_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phone_no dbname="cm_esti_master.phone_no" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=est_position dbname="cm_esti_master.est_position" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=f_type dbname="cm_esti_master.f_type" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_esti_master.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_esti_master.end_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=rec_date dbname="cm_esti_master.rec_date" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=rec_time dbname="cm_esti_master.rec_time" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=head dbname="cm_esti_master.head" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=manager dbname="cm_esti_master.manager" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=receiver dbname="cm_esti_master.receiver" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=remarks dbname="cm_esti_master.remarks" )
+ column=(type=char(1) updatewhereclause=yes name=rcv_yn dbname="cm_esti_master.rcv_yn" values="수주	Y/미수주	N/" )
+ column=(type=char(30) updatewhereclause=yes name=order_comp dbname="cm_esti_request.order_comp" )
+ column=(type=char(30) updatewhereclause=yes name=equip_man dbname="cm_esti_request.equip_man" )
+ column=(type=decimal(4) updatewhereclause=yes name=tot_area dbname="cm_esti_request.tot_area" )
+ column=(type=char(60) updatewhereclause=yes name=tot_scale dbname="cm_esti_request.tot_scale" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.EST_CODE,   
+         A.EST_NAME,   
+         A.ENT_DEPT,   
+         A.EST_DIV,   
+         A.CNST_CODE,  
+         A.PHONE_NO,   
+         A.EST_POSITION,   
+         A.F_TYPE,   
+         A.START_DATE,   
+         A.END_DATE,   
+         A.REC_DATE,   
+         A.REC_TIME,   
+         A.HEAD,
+         A.MANAGER,
+         A.RECEIVER,
+         A.REMARKS,
+         A.RCV_YN,
+         B.ORDER_COMP,
+         B.EQUIP_MAN,
+         B.TOT_AREA, 
+         B.TOT_SCALE
+    FROM CM_ESTI_MASTER A LEFT JOIN CM_ESTI_REQUEST B 
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.EST_CODE     = B.EST_CODE 
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.ENT_DEPT  LIKE :as_ent_dept
+     AND ( A.EST_CODE LIKE :as_est_name||'%' OR A.EST_NAME LIKE '%'||:as_est_name||'%' )   
+ORDER BY RCV_YN, EST_CODE DESC
+
+ " arguments=(("as_comp_code", string),("as_ent_dept", string),("as_est_name", string)) )
+text(band=header alignment="2" text="공사코드" border="0" color="33554432" x="46" y="3" height="14" width="75" html.valueishtml="0"  name=est_code_t  tag="est_code" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="3" height="14" width="42" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공사명" border="0" color="33554432" x="123" y="3" height="14" width="245" html.valueishtml="0"  name=est_name_t  tag="est_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="46" y="2" height="14" width="75" format="[general]" html.valueishtml="0"  name=est_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="42" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="123" y="2" height="14" width="245" format="[general]" html.valueishtml="0"  name=est_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

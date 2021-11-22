@@ -1,0 +1,82 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=20 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osor_consult_detail.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osor_consult_detail.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_osor_consult_detail.contract_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=contract_no dbname="cm_osor_consult_detail.contract_no" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=reg_date dbname="cm_osor_consult_detail.reg_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=contract_date dbname="cm_osor_consult_detail.contract_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=status_div dbname="cm_osor_consult_detail.status_div" values="작성중	1/품의	2/완료	3/" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_osor_consult_detail.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_osor_consult_detail.end_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=contract_yn dbname="cm_osor_consult_detail.contract_yn" values="작성	1/미작성	2/" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=certain_div dbname="cm_osor_consult_detail.certain_div" values="	Y/	N" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=recv_amount dbname="cm_osor_consult_detail.recv_amount" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=mexe_amount dbname="cm_osor_consult_detail.mexe_amount" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=oexe_amount dbname="cm_osor_consult_detail.oexe_amount" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=oexe_file dbname="cm_osor_consult_detail.oexe_file" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=recv_contens dbname="cm_osor_consult_detail.recv_contens" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=change_contents dbname="cm_osor_consult_detail.change_contents" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=specials dbname="cm_osor_consult_detail.specials" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.PROJ_CODE, 
+         A.CONTRACT_CODE, 
+         A.CONTRACT_NO, 
+         A.REG_DATE, 
+         A.CONTRACT_DATE,
+         A.STATUS_DIV, 
+         A.START_DATE, 
+         A.END_DATE, 
+         A.CONTRACT_YN, 
+         A.CERTAIN_DIV,
+         A.RECV_AMOUNT, 
+         A.MEXE_AMOUNT, 
+         A.OEXE_AMOUNT, 
+         A.OEXE_FILE, 
+         A.RECV_CONTENS, 
+         A.CHANGE_CONTENTS, 
+         A.SPECIALS 
+    FROM CM_OSOR_CONSULT_DETAIL A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE = :as_proj
+     AND A.CONTRACT_CODE = :as_contract" update="CM_OSOR_CONSULT_DETAIL" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_proj", string),("as_contract", string)) )
+text(band=header alignment="2" text="계약일자" border="0" color="33554432" x="49" y="2" height="14" width="67" html.valueishtml="0"  name=contract_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상태" border="0" color="33554432" x="775" y="2" height="14" width="51" html.valueishtml="0"  name=status_div_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약서" border="0" color="33554432" x="828" y="2" height="14" width="55" html.valueishtml="0"  name=contract_yn_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확정" border="0" color="33554432" x="727" y="2" height="14" width="46" html.valueishtml="0"  name=certain_div_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="440" y="2" height="14" width="111" html.valueishtml="0"  name=oexe_amount_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행금액" border="0" color="33554432" x="256" y="2" height="14" width="103" html.valueishtml="0"  name=mexe_amount_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행율(%)" border="0" color="33554432" x="361" y="2" height="14" width="77" html.valueishtml="0"  name=mexe_percent_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세" border="0" color="33554432" x="553" y="2" height="14" width="91" html.valueishtml="0"  name=oexe_vat_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="646" y="2" height="14" width="79" html.valueishtml="0"  name=total_oexe_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="공사" border="0" color="33554432" x="118" y="2" height="14" width="66" html.valueishtml="0"  name=start_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="186" y="2" height="14" width="68" html.valueishtml="0"  name=end_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="차수" border="0" color="33554432" x="2" y="2" height="14" width="45" html.valueishtml="0"  name=contract_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="45" format="[general]" html.valueishtml="0"  name=contract_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=30 border="0" color="33554432" x="775" y="2" height="14" width="51" format="[general]" html.valueishtml="0"  name=status_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=40 border="0" color="33554432" x="828" y="2" height="14" width="55" format="[general]" html.valueishtml="0"  name=contract_yn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=20 border="0" color="33554432" x="727" y="2" height="14" width="46" format="[general]" html.valueishtml="0"  name=certain_div visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="118" y="2" height="14" width="66" format="@@@@-@@-@@" html.valueishtml="0"  name=start_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="186" y="2" height="14" width="68" format="@@@@-@@-@@" html.valueishtml="0"  name=end_date visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="256" y="2" height="14" width="103" format="#,##0" html.valueishtml="0"  name=mexe_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="440" y="2" height="14" width="111" format="#,##0" html.valueishtml="0"  name=oexe_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" mexe_amount / oexe_amount * 100"border="0" color="33554432" x="361" y="2" height="14" width="77" format="[GENERAL]" html.valueishtml="0"  name=mexe_percent visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" oexe_amount / 10"border="0" color="33554432" x="553" y="2" height="14" width="91" format="#,##0" html.valueishtml="0"  name=oexe_vat visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" oexe_vat + oexe_amount "border="0" color="33554432" x="646" y="2" height="14" width="79" format="#,##0" html.valueishtml="0"  name=total_oexe visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=10 border="0" color="33554432" x="49" y="2" height="14" width="67" format="@@@@-@@-@@" html.valueishtml="0"  name=contract_date visible="1" editmask.mask="XXXX-XX-XX" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합계" border="0" color="33554432" x="118" y="2" height="14" width="66" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(mexe_amount for all)"border="0" color="33554432" x="256" y="2" height="14" width="103" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(oexe_amount for all)"border="0" color="33554432" x="440" y="2" height="14" width="111" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(oexe_vat for all)"border="0" color="33554432" x="553" y="2" height="14" width="91" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(total_oexe for all)"border="0" color="33554432" x="646" y="2" height="14" width="79" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(mexe_percent for all)"border="0" color="33554432" x="361" y="2" height="14" width="77" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

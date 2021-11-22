@@ -1,0 +1,46 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_out_labo_license.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_out_labo_license.labor_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=licence_code dbname="cm_out_labo_license.licence_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=licence_level dbname="cm_out_labo_license.licence_level" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=get_date dbname="cm_out_labo_license.get_date" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=licence_no dbname="cm_out_labo_license.licence_no" )
+ column=(type=char(60) update=yes updatewhereclause=yes name=office dbname="cm_out_labo_license.office" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.LICENCE_CODE, 
+         A.LICENCE_LEVEL, 
+         A.GET_DATE, 
+         A.LICENCE_NO, 
+         A.OFFICE
+    FROM CM_OUT_LABO_LICENSE A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.LABOR_CODE   = :as_labor" update="CM_OUT_LABO_LICENSE" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_labor", string)) )
+text(band=header alignment="2" text="자격증" border="0" color="16711680" x="34" y="2" height="14" width="113" html.valueishtml="0"  name=licence_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기술등급" border="0" color="33554432" x="149" y="2" height="14" width="72" html.valueishtml="0"  name=licence_level_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="취득일" border="0" color="33554432" x="223" y="2" height="14" width="81" html.valueishtml="0"  name=get_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자격증번호" border="0" color="33554432" x="306" y="2" height="14" width="158" html.valueishtml="0"  name=licence_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="발행기관" border="0" color="33554432" x="466" y="2" height="14" width="178" html.valueishtml="0"  name=office_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="30" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="34" y="2" height="14" width="113" format="[general]" html.valueishtml="0"  name=licence_code pointer="HyperLink!" visible="1" dddw.name=dddw_license dddw.displaycolumn=license_name dddw.datacolumn=license_code dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=10 border="0" color="33554432" x="149" y="2" height="14" width="72" format="[general]" html.valueishtml="0"  name=licence_level visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="223" y="2" height="14" width="81" format="@@@@-@@-@@" html.valueishtml="0"  name=get_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=30 border="0" color="33554432" x="306" y="2" height="14" width="158" format="[general]" html.valueishtml="0"  name=licence_no visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=40 border="0" color="33554432" x="466" y="2" height="14" width="178" format="[general]" html.valueishtml="0"  name=office visible="1" edit.limit=60 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="30" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

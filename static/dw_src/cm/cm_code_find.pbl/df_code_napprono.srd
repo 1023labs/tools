@@ -1,0 +1,86 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=128 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_cont_create.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_cont_create.proj_code" dbalias="A.proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=cont_code dbname="cm_cont_create.cont_code" dbalias="A.cont_code" )
+ column=(type=char(50) updatewhereclause=yes name=cont_name dbname="cm_cont_create.cont_name" dbalias="A.cont_name" )
+ column=(type=char(8) updatewhereclause=yes name=cont_date dbname="cm_cont_create.cont_date" dbalias="A.cont_date" )
+ column=(type=char(2) updatewhereclause=yes name=cont_gbn dbname="cm_cont_create.cont_gbn" dbalias="A.cont_gbn" values="신규	N/변경	R/" )
+ column=(type=decimal(0) updatewhereclause=yes name=cont_cnt dbname="cm_cont_create.cont_cnt" dbalias="A.cont_cnt" )
+ column=(type=char(20) updatewhereclause=yes name=cust_code dbname="cm_cont_create.cust_code" dbalias="A.cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" dbalias="B.cust_name" )
+ column=(type=char(8) updatewhereclause=yes name=start_date dbname="cm_cont_create.start_date" dbalias="A.start_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="cm_cont_create.end_date" dbalias="A.end_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=tot_amt dbname="cm_cont_create.tot_amt" dbalias="A.tot_amt" )
+ column=(type=char(10) updatewhereclause=yes name=cont_napprono dbname="cm_cont_create.cont_napprono" dbalias="A.cont_napprono" )
+ column=(type=char(100) updatewhereclause=yes name=strtitle dbname="approval.strtitle" dbalias="C.strtitle" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.CONT_CODE,
+       A.CONT_NAME,
+       A.CONT_DATE,
+       A.CONT_GBN,
+       A.CONT_CNT,
+       A.CUST_CODE,
+       B.CUST_NAME,
+       A.START_DATE,
+       A.END_DATE,
+       A.TOT_AMT,
+       A.CONT_NAPPRONO,
+       C.STRTITLE
+  FROM CM_CONT_CREATE A LEFT JOIN SM_CODE_CUST B
+                               ON A.CUST_CODE = B.CUST_CODE
+                        LEFT JOIN SEBOGW.APPROVAL C
+                               ON A.CONT_NAPPRONO = C.NAPPRONO
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.CONT_GBN     = :AS_CONT_GBN      
+   AND A.CONT_NAME LIKE '%' ||:AS_FIND ||'%'" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CONT_GBN", string),("AS_FIND", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="9" y="40" height="56" width="133" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="151" y="40" height="56" width="265" html.valueishtml="0"  name=cm_cont_create_cont_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Cont Create
+Company Code" border="0" color="33554432" x="4219" y="40" height="56" width="123" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Cont Create
+Proj Code" border="0" color="33554432" x="4078" y="40" height="56" width="133" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="425" y="40" height="56" width="837" html.valueishtml="0"  name=cm_cont_create_cont_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약일자" border="0" color="33554432" x="1271" y="40" height="56" width="315" html.valueishtml="0"  name=cm_cont_create_cont_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="1595" y="40" height="56" width="165" html.valueishtml="0"  name=cm_cont_create_cont_gbn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="차수" border="0" color="33554432" x="1769" y="40" height="56" width="151" html.valueishtml="0"  name=cm_cont_create_cont_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="1929" y="40" height="56" width="713" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="1" text="공사" border="0" color="33554432" x="2651" y="40" height="56" width="302" html.valueishtml="0"  name=cm_cont_create_start_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="2962" y="40" height="56" width="311" html.valueishtml="0"  name=cm_cont_create_end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="3282" y="40" height="56" width="462" html.valueishtml="0"  name=cm_cont_create_tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Cont Create
+Cont Napprono" border="0" color="33554432" x="3954" y="40" height="56" width="114" html.valueishtml="0"  name=cont_napprono_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="16" height="56" width="133" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="4219" y="16" height="56" width="123" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="4078" y="16" height="56" width="133" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="151" y="16" height="56" width="265" format="[general]" html.valueishtml="0"  name=cont_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="425" y="16" height="56" width="837" format="[general]" html.valueishtml="0"  name=cont_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="1271" y="16" height="56" width="315" format="[general]" html.valueishtml="0"  name=cont_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="1595" y="16" height="56" width="165" format="[general]" html.valueishtml="0"  name=cont_gbn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="1769" y="16" height="56" width="151" format="[general]" html.valueishtml="0"  name=cont_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="1929" y="16" height="56" width="713" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="2651" y="16" height="56" width="302" format="[general]" html.valueishtml="0"  name=start_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="2962" y="16" height="56" width="311" format="[general]" html.valueishtml="0"  name=end_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="3282" y="16" height="56" width="462" format="#,###" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="3954" y="16" height="56" width="114" format="[general]" html.valueishtml="0"  name=cont_napprono visible="0" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="3753" y="40" height="56" width="192" html.valueishtml="0"  name=cm_cont_create_cust_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="3753" y="16" height="56" width="192" format="[general]" html.valueishtml="0"  name=cust_code visible="0" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=0 border="0" color="33554432" x="4357" y="12" height="56" width="174" html.valueishtml="0"  name=strtitle visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Approval Strtitle" border="0" color="33554432" x="4352" y="4" height="56" width="178" html.valueishtml="0"  name=approval_strtitle_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

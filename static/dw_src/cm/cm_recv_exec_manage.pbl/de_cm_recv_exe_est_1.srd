@@ -1,0 +1,57 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=16777215 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_exec_work_budget_temp.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_exec_work_budget_temp.contract_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=temp_div dbname="cm_exec_work_budget_temp.temp_div" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_exec_work_budget_temp.seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=temp_sort dbname="cm_exec_work_budget_temp.temp_sort" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=const_name dbname="cm_exec_work_budget_temp.const_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=mat_cost dbname="cm_exec_work_budget_temp.mat_cost" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=lab_cost dbname="cm_exec_work_budget_temp.lab_cost" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=exp_cost dbname="cm_exec_work_budget_temp.exp_cost" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=tot_cost dbname="cm_exec_work_budget_temp.tot_cost" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=temp_rate dbname="cm_exec_work_budget_temp.temp_rate" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=temp_amount dbname="cm_exec_work_budget_temp.temp_amount" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=temp_info dbname="cm_exec_work_budget_temp.temp_info" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=remark dbname="cm_exec_work_budget_temp.remark" )
+ retrieve="SELECT A.COMPANY_CODE, 
+  A.CONTRACT_CODE,
+  A.TEMP_DIV,  
+  A.SEQ,       
+  A.TEMP_SORT,    
+  A.CONST_NAME,   
+  A.MAT_COST,      
+  A.LAB_COST,   
+  A.EXP_COST,     
+  A.TOT_COST,        
+  A.TEMP_RATE,     
+  A.TEMP_AMOUNT,      
+  A.TEMP_INFO,     
+  A.REMARK           
+FROM CM_EXEC_WORK_BUDGET_TEMP A
+ WHERE A.COMPANY_CODE = :AS_COMPANY_CODE
+   AND A.CONTRACT_CODE = :AS_CONTRACT_CODE 
+   AND A.TEMP_DIV = 'C'
+ ORDER BY A.TEMP_SORT" update="CM_EXEC_WORK_BUDGET_TEMP" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMPANY_CODE", string),("AS_CONTRACT_CODE", string)) )
+text(band=header alignment="2" text="순번" border="0" color="33554432" x="2" y="2" height="14" width="48" html.valueishtml="0"  name=temp_sort_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="52" y="2" height="14" width="188" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="242" y="2" height="14" width="84" html.valueishtml="0"  name=mat_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="328" y="2" height="14" width="84" html.valueishtml="0"  name=lab_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="414" y="2" height="14" width="84" html.valueishtml="0"  name=exp_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="500" y="2" height="14" width="84" html.valueishtml="0"  name=tot_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="2" y="2" height="14" width="48" format="[general]" html.valueishtml="0"  name=temp_sort visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=20 border="0" color="33554432" x="52" y="2" height="14" width="188" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=30 border="0" color="33554432" x="242" y="2" height="14" width="84" format="#,###" html.valueishtml="0"  name=mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=40 border="0" color="33554432" x="328" y="2" height="14" width="84" format="#,###" html.valueishtml="0"  name=lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=50 border="0" color="33554432" x="414" y="2" height="14" width="84" format="#,###" html.valueishtml="0"  name=exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="500" y="2" height="14" width="84" format="#,###" html.valueishtml="0"  name=tot_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

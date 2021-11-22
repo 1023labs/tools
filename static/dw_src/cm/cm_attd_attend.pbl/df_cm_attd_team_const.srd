@@ -1,0 +1,67 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=1 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(1) updatewhereclause=yes name=osct_div dbname="osct_div" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="consult_code" )
+ column=(type=char(8) updatewhereclause=yes name=team_code dbname="team_code" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="const_name" )
+ retrieve="  SELECT DISTINCT A.COMPANY_CODE,  
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,  
+         B.TEAM_CODE, 
+         A.CONST_CODE,
+         D.CONST_NAME
+    FROM CM_OSCT_EST_DETAIL A INNER JOIN CM_ATTD_TEAMS B
+                                      ON A.COMPANY_CODE = B.COMPANY_CODE
+                                     AND A.PROJ_CODE    = B.PROJ_CODE
+                                     AND A.OSCT_DIV     = B.TEAM_DIV
+                                     AND A.CONSULT_CODE = B.CONSULT_CODE
+                              INNER JOIN (  
+                                      SELECT A.COMPANY_CODE,
+                                             A.PROJ_CODE,
+                                             A.OSCT_DIV,
+                                             A.CONSULT_CODE, 
+                                             MAX(A.CONSULT_NO) CONSULT_NO
+                                        FROM CM_OSCT_CONSULT_DETAIL A
+                                       WHERE A.STATUS_DIV = '3'
+                                    GROUP BY A.COMPANY_CODE,  
+                                             A.PROJ_CODE,   
+                                             A.OSCT_DIV,
+                                             A.CONSULT_CODE ) C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.PROJ_CODE    = C.PROJ_CODE
+                                    AND A.OSCT_DIV     = C.OSCT_DIV
+                                    AND A.CONSULT_CODE = C.CONSULT_CODE
+                                    AND A.CONSULT_NO   = C.CONSULT_NO 
+                              INNER JOIN (
+                                      SELECT A.COMPANY_CODE,
+                                             A.PROJ_CODE,
+                                             A.CONST_CODE,
+                                             A.CONST_NAME
+                                        FROM CM_EXEC_CONST A) D
+                                      ON A.COMPANY_CODE = D.COMPANY_CODE
+                                     AND A.PROJ_CODE    = D.PROJ_CODE
+                                     AND A.CONST_CODE   = D.CONST_CODE                                                               
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code 
+     AND B.TEAM_CODE    = :as_team_code
+ORDER BY CONST_CODE     " arguments=(("as_comp_code", string),("as_proj_code", string),("as_team_code", string)) )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="36" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="40" y="2" height="17" width="106" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="148" y="2" height="17" width="203" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="36" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="40" y="2" height="14" width="106" html.valueishtml="0"  name=const_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="148" y="2" height="14" width="203" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

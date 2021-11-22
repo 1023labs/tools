@@ -1,0 +1,90 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_attach_cancel.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=emp_no dbname="cm_labo_attach_cancel.emp_no" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=yyyymm dbname="cm_labo_attach_cancel.yyyymm" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=master_seq dbname="cm_labo_attach_cancel.master_seq" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=request_date dbname="cm_labo_attach_cancel.request_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=pay_date dbname="cm_labo_attach_cancel.pay_date" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=cust_code dbname="cm_labo_attach_cancel.cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=send_amt dbname="cm_labo_attach_cancel.send_amt" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=slip_yn dbname="cm_labo_attach_cancel.slip_yn" values="	Y/	N" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=slip_no dbname="cm_labo_attach_cancel.slip_no" )
+ column=(type=char(500) update=yes updatewhereclause=yes name=remarks dbname="cm_labo_attach_cancel.remarks" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=bank_code dbname="cm_labo_attach_cancel.bank_code" )
+ column=(type=char(30) updatewhereclause=yes name=bank_name dbname="sm_code_bank.bank_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=account_no dbname="cm_labo_attach_cancel.account_no" )
+ retrieve="SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+       A.EMP_NO         AS EMP_NO,
+       A.YYYYMM         AS YYYYMM,
+       A.MASTER_SEQ     AS MASTER_SEQ,
+       A.REQUEST_DATE   AS REQUEST_DATE,
+       A.PAY_DATE       AS PAY_DATE,
+       A.CUST_CODE      AS CUST_CODE,
+       B.CUST_NAME      AS CUST_NAME,
+       A.SEND_AMT       AS SEND_AMT,
+       A.SLIP_YN        AS SLIP_YN,
+       A.SLIP_NO        AS SLIP_NO,
+       A.REMARKS        AS REMARKS,
+       A.BANK_CODE      AS BANK_CODE,
+       C.BANK_NAME      AS BANK_NAME,
+       A.ACCOUNT_NO     AS ACCOUNT_NO
+  FROM CM_LABO_ATTACH_CANCEL A LEFT JOIN SM_CODE_CUST B
+                                      ON A.CUST_CODE = B.CUST_CODE
+                               LEFT JOIN SM_CODE_BANK C
+                                      ON A.BANK_CODE = C.BANK_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.EMP_NO       = :AS_EMP_NO
+   AND A.MASTER_SEQ   = :AS_SEQ" update="CM_LABO_ATTACH_CANCEL" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_EMP_NO", string),("AS_SEQ", number)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="10" height="14" width="29" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지급년월" border="0" color="33554432" x="33" y="10" height="14" width="64" html.valueishtml="0"  name=cm_labo_attach_cancel_yyyymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="추심일자" border="0" color="33554432" x="99" y="10" height="14" width="71" html.valueishtml="0"  name=cm_labo_attach_cancel_request_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="258" y="10" height="14" width="180" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지급금액" border="0" color="33554432" x="705" y="10" height="14" width="115" html.valueishtml="0"  name=cm_labo_attach_cancel_send_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="이체" border="0" color="33554432" x="822" y="10" height="14" width="30" html.valueishtml="0"  name=cm_labo_attach_cancel_slip_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="결의서번호" border="0" color="33554432" x="854" y="10" height="14" width="184" html.valueishtml="0"  name=cm_labo_attach_cancel_slip_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="1117" y="10" height="14" width="80" html.valueishtml="0"  name=cm_labo_attach_cancel_remarks_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지급요청일자" border="0" color="255" x="172" y="10" height="14" width="84" html.valueishtml="0"  name=cm_labo_attach_cancel_pay_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Attach Cancel
+Company Code" border="0" color="33554432" x="1199" y="10" height="14" width="71" html.valueishtml="0"  name=cm_labo_attach_cancel_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Attach Cancel
+Emp No" border="0" color="33554432" x="1272" y="10" height="14" width="76" html.valueishtml="0"  name=cm_labo_attach_cancel_emp_no_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Attach Cancel
+Master Seq" border="0" color="33554432" x="1350" y="10" height="14" width="56" html.valueishtml="0"  name=cm_labo_attach_cancel_master_seq_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Labo Attach Cancel
+Cust Code" border="0" color="33554432" x="1408" y="10" height="14" width="95" html.valueishtml="0"  name=cm_labo_attach_cancel_cust_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="0" text="Cm Labo Attach Cancel Bank Code" border="0" color="33554432" x="1040" y="10" height="14" width="75" html.valueishtml="0"  name=cm_labo_attach_cancel_bank_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="계좌번호" border="0" color="33554432" x="530" y="10" height="14" width="173" html.valueishtml="0"  name=cm_labo_attach_cancel_account_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="은행명" border="0" color="33554432" x="440" y="10" height="14" width="88" html.valueishtml="0"  name=sm_code_bank_bank_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="17" width="64" format="[general]" html.valueishtml="0"  name=yyyymm visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=30 border="0" color="33554432" x="258" y="2" height="17" width="180" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=60 border="0" color="33554432" x="705" y="2" height="17" width="115" format="#,##0" html.valueishtml="0"  name=send_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=70 border="0" color="33554432" x="822" y="2" height="17" width="30" format="[general]" html.valueishtml="0"  name=slip_yn visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="854" y="2" height="17" width="184" format="[general]" html.valueishtml="0"  name=slip_no visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="1117" y="2" height="17" width="80" format="[general]" html.valueishtml="0"  name=remarks visible="0" edit.limit=500 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="29" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="99" y="2" height="17" width="71" format="[general]" html.valueishtml="0"  name=request_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=20 border="0" color="255" x="172" y="2" height="17" width="84" format="[general]" html.valueishtml="0"  name=pay_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="1272" y="2" height="17" width="76" format="[general]" html.valueishtml="0"  name=emp_no visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="1350" y="2" height="17" width="56" format="[general]" html.valueishtml="0"  name=master_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1199" y="2" height="17" width="71" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1408" y="2" height="17" width="95" format="[general]" html.valueishtml="0"  name=cust_code visible="0" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="1040" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=bank_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=50 border="0" color="33554432" x="530" y="2" height="17" width="173" format="[general]" html.valueishtml="0"  name=account_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=40 border="0" color="33554432" x="440" y="2" height="17" width="88" format="[general]" html.valueishtml="0"  name=bank_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

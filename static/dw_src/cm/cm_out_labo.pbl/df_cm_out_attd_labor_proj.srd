@@ -1,0 +1,73 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=4 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(8) updatewhereclause=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(13) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=decimal(0) updatewhereclause=yes name=cost dbname="cost" )
+ column=(type=char(3) updatewhereclause=yes name=job_code dbname="job_code" )
+ column=(type=char(250) updatewhereclause=yes name=dname dbname="dname" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=start_date dbname="start_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="end_date" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.LABOR_CODE,
+         A.LABOR_NAME,
+         (A.RRN_PRE || A.RRN_POST) LABOR_ID,      
+         B.COST,
+         A.JOB_CODE,
+         D.DNAME,
+         A.PROJ_CODE,
+         C.START_DATE,
+         C.END_DATE
+    FROM CM_OUT_LABO_MASTER A LEFT JOIN 
+                                 (SELECT COMPANY_CODE,
+                                         LABOR_CODE,
+                                         APPLY_DATE,
+                                         COST,
+                                         ROW_NUMBER() OVER(PARTITION BY COMPANY_CODE, LABOR_CODE ORDER BY COMPANY_CODE, LABOR_CODE, APPLY_DATE DESC) AS ROW_NUM
+                                    FROM CM_OUT_LABO_SALARY
+                                   WHERE COST_DIV = '1' ) B
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                 AND A.LABOR_CODE   = B.LABOR_CODE
+                                 AND B.ROW_NUM      = 1
+                         INNER JOIN CM_OUT_LABO_CONTRACT C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.LABOR_CODE   = C.LABOR_CODE
+                          LEFT JOIN SM_COMCODE_D D   
+                                 ON A.JOB_CODE = D.DCODE
+                                AND D.SYS_ID   = 'CM'
+                                AND D.HCODE    = 'JOBDIV'
+                                AND D.USE_YN = 'Y'   
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND C.PROJ_CODE    = :as_proj_code
+     AND :as_work_date BETWEEN C.START_DATE AND C.END_DATE    
+     AND ( A.LABOR_CODE LIKE :as_labo_name||'%' OR A.LABOR_NAME LIKE '%'||:as_labo_name||'%' )
+ORDER BY A.LABOR_CODE" arguments=(("as_comp_code", string),("as_proj_code", string),("as_work_date", string),("as_labo_name", string)) )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="526" y="8" height="56" width="265" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="800" y="8" height="56" width="594" html.valueishtml="0"  name=labor_id_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="183" y="8" height="56" width="334" html.valueishtml="0"  name=labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="165" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="1403" y="8" height="56" width="329" html.valueishtml="0"  name=cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="1742" y="8" height="56" width="357" html.valueishtml="0"  name=dname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="526" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="183" y="8" height="68" width="334" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="68" width="165" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="800" y="8" height="68" width="594" format="@@@@@@-@@@@@@@" html.valueishtml="0"  name=labor_id visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="1403" y="8" height="68" width="329" format="#,##0" html.valueishtml="0"  name=cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1742" y="8" height="68" width="357" format="[general]" html.valueishtml="0"  name=dname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

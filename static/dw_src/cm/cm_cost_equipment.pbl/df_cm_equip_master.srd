@@ -1,0 +1,84 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_equip_code_master.company_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=equip_code dbname="cm_equip_code_master.equip_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=equip_m_code dbname="cm_equip_code_master.equip_m_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=equip_d_code dbname="cm_equip_code_master.equip_d_code" )
+ column=(type=char(30) updatewhereclause=yes name=equip_name dbname="cm_cost_equip_code.equip_name" )
+ column=(type=char(50) updatewhereclause=yes name=std_name dbname="cm_cost_equip_std.std_name" )
+ column=(type=char(30) updatewhereclause=yes name=std_unit dbname="cm_cost_equip_std.std_unit" )
+ column=(type=char(20) update=yes updatewhereclause=yes key=yes name=car_no dbname="cm_equip_code_master.car_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes key=yes name=car_real_no dbname="cm_equip_code_master.car_real_no" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=ins_date dbname="cm_equip_code_master.ins_date" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=cust_code dbname="cm_equip_code_master.cust_code" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=cust_owner dbname="cm_equip_code_master.cust_owner" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+       A.EQUIP_CODE    AS EQUIP_CODE,
+       A.EQUIP_M_CODE  AS EQUIP_M_CODE,
+       A.EQUIP_D_CODE  AS EQUIP_D_CODE,
+       B.EQUIP_NAME    AS EQUIP_NAME,
+       C.STD_NAME1     AS STD_NAME,
+       C.STD_NAME      AS STD_UNIT,
+       A.CAR_NO        AS CAR_NO,
+       A.CAR_REAL_NO   AS CAR_REAL_NO,
+       A.INS_DATE      AS INS_DATE,
+       A.CUST_CODE     AS CUST_CODE,
+       D.CUST_NAME     AS CUST_NAME,
+       A.CUST_OWNER    AS CUST_OWNER
+  FROM CM_EQUIP_CODE_MASTER A LEFT JOIN CM_COST_EQUIP_CODE B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.EQUIP_M_CODE = B.EQUIP_CODE
+                              LEFT JOIN CM_COST_EQUIP_STD C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.EQUIP_M_CODE = C.EQUIP_CODE
+                                    AND A.EQUIP_D_CODE = C.STD_CODE
+                              LEFT JOIN SM_CODE_CUST D
+                                     ON A.CUST_CODE = D.CUST_CODE
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE" update="CM_EQUIP_CODE_MASTER" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="1" y="9" height="14" width="35" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="장비코드" border="0" color="33554432" x="38" y="9" height="14" width="85" html.valueishtml="0"  name=cm_equip_code_master_equip_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="장비분류" border="0" color="33554432" x="125" y="9" height="14" width="117" html.valueishtml="0"  name=cm_cost_equip_code_equip_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="장비명" border="0" color="33554432" x="244" y="9" height="14" width="150" html.valueishtml="0"  name=cm_cost_equip_std_std_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="396" y="9" height="14" width="94" html.valueishtml="0"  name=cm_cost_equip_std_std_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="차량번호" border="0" color="33554432" x="492" y="9" height="14" width="98" html.valueishtml="0"  name=cm_equip_code_master_car_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="차대일련번호" border="0" color="33554432" x="592" y="9" height="14" width="96" html.valueishtml="0"  name=cm_equip_code_master_car_real_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="등록일자" border="0" color="33554432" x="690" y="9" height="14" width="87" html.valueishtml="0"  name=cm_equip_code_master_ins_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="779" y="9" height="14" width="100" html.valueishtml="0"  name=cm_equip_code_master_cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="881" y="9" height="14" width="165" html.valueishtml="0"  name=sm_code_cust_cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="소유자" border="0" color="33554432" x="1048" y="9" height="14" width="71" html.valueishtml="0"  name=cm_equip_code_master_cust_owner_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Equip Code Master
+Company Code" border="0" color="33554432" x="1121" y="9" height="14" width="24" html.valueishtml="0"  name=cm_equip_code_master_company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Equip Code Master
+Equip M Code" border="0" color="33554432" x="1147" y="9" height="14" width="24" html.valueishtml="0"  name=cm_equip_code_master_equip_m_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cm Equip Code Master
+Equip D Code" border="0" color="33554432" x="1173" y="9" height="14" width="19" html.valueishtml="0"  name=cm_equip_code_master_equip_d_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="38" y="2" height="17" width="85" format="[general]" html.valueishtml="0"  name=equip_code visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="125" y="2" height="17" width="117" format="[general]" html.valueishtml="0"  name=equip_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="244" y="2" height="17" width="150" format="[general]" html.valueishtml="0"  name=std_name  tag="" pointer="" visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="134217750" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="396" y="2" height="17" width="94" format="[general]" html.valueishtml="0"  name=std_unit visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="492" y="2" height="17" width="98" format="[general]" html.valueishtml="0"  name=car_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="592" y="2" height="17" width="96" format="[general]" html.valueishtml="0"  name=car_real_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="691" y="2" height="17" width="86" format="[general]" html.valueishtml="0"  name=ins_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="780" y="2" height="17" width="99" format="[general]" html.valueishtml="0"  name=cust_code visible="1" editmask.mask="XXX-XX-XXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="881" y="2" height="17" width="165" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="1048" y="2" height="17" width="71" format="[general]" html.valueishtml="0"  name=cust_owner visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="1121" y="2" height="17" width="24" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="1147" y="2" height="17" width="24" format="[general]" html.valueishtml="0"  name=equip_m_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="1173" y="2" height="17" width="19" format="[general]" html.valueishtml="0"  name=equip_d_code visible="0" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="1" y="2" height="17" width="35" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

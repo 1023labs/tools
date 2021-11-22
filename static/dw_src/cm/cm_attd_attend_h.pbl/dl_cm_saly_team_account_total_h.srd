@@ -1,0 +1,104 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=16 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_attd_teams.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_attd_teams.proj_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=team_code dbname="cm_attd_teams.team_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=team_name dbname="cm_attd_teams.team_name" )
+ column=(type=char(6) updatewhereclause=yes name=pay_yymm dbname="cm_attd_teams.pay_yymm" )
+ column=(type=number updatewhereclause=yes name=pay_tot dbname="cm_attd_teams.pay_tot" )
+ column=(type=number updatewhereclause=yes name=incentive_amt dbname="cm_attd_teams.incentive_amt" )
+ column=(type=number updatewhereclause=yes name=income_tax dbname="cm_attd_teams.income_tax" )
+ column=(type=number updatewhereclause=yes name=resident_tax dbname="cm_attd_teams.resident_tax" )
+ column=(type=number updatewhereclause=yes name=pay_unemployed dbname="cm_attd_teams.pay_unemployed" )
+ column=(type=number updatewhereclause=yes name=kukmin_amt dbname="cm_attd_teams.kukmin_amt" )
+ column=(type=number updatewhereclause=yes name=medical_amt dbname="cm_attd_teams.medical_amt" )
+ column=(type=number updatewhereclause=yes name=real_amt dbname="real_amt" )
+ column=(type=number updatewhereclause=yes name=advance_amt dbname="cm_attd_teams.advance_amt" )
+ column=(type=number updatewhereclause=yes name=etc_amt dbname="cm_attd_teams.etc_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.TEAM_CODE,
+         B.TEAM_NAME,
+         A.PAY_YYMM,
+         A.PAY_TOT,
+         A.INCENTIVE_AMT,
+         A.INCOME_TAX,
+         A.RESIDENT_TAX,
+         A.PAY_UNEMPLOYED,
+         A.KUKMIN_AMT,
+         A.MEDICAL_AMT,
+         (A.PAY_TOT + A.INCENTIVE_AMT - A.INCOME_TAX - A.RESIDENT_TAX - A.PAY_UNEMPLOYED
+           - A.KUKMIN_AMT - A.MEDICAL_AMT) AS REAL_AMT,
+         A.ADVANCE_AMT,
+         A.ETC_AMT
+    FROM (      
+           SELECT COMPANY_CODE,
+                  PROJ_CODE,
+                  TEAM_CODE, 
+                  PAY_YYMM,
+                  NVL(SUM(PAY_TOT),0)        PAY_TOT, 
+                  NVL(SUM(INCOME_TAX),0)     INCOME_TAX, 
+                  NVL(SUM(RESIDENT_TAX),0)   RESIDENT_TAX, 
+                  NVL(SUM(PAY_UNEMPLOYED),0) PAY_UNEMPLOYED, 
+                  NVL(SUM(KUKMIN_AMT), 0)    KUKMIN_AMT, 
+                  NVL(SUM(MEDICAL_AMT), 0)   MEDICAL_AMT,
+                  NVL(SUM(ADVANCE_AMT),0)    ADVANCE_AMT,
+                  NVL(SUM(ETC_AMT),0)        ETC_AMT,
+                  NVL(SUM(INCENTIVE_AMT),0)  INCENTIVE_AMT
+             FROM CM_SALY_LABOR_ACCOUNT_H 
+            WHERE COMPANY_CODE = :as_comp_code
+              AND PROJ_CODE    = :as_proj_code 
+              AND PAY_YYMM     = :as_pay_yymm 
+         GROUP BY COMPANY_CODE, PROJ_CODE, TEAM_CODE, PAY_YYMM ) A LEFT JOIN CM_ATTD_TEAMS B
+                                                                          ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                                                         AND A.PROJ_CODE    = B.PROJ_CODE 
+                                                                         AND A.TEAM_CODE    = B.TEAM_CODE
+ORDER BY A.COMPANY_CODE, A.PROJ_CODE, A.TEAM_CODE     " update="CM_ATTD_TEAMS" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_pay_yymm", string)) )
+text(band=header alignment="2" text="팀명" border="0" color="33554432" x="48" y="2" height="14" width="103" html.valueishtml="0"  name=team_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="44" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총액" border="0" color="33554432" x="153" y="2" height="14" width="80" html.valueishtml="0"  name=pay_tot_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소득세" border="0" color="33554432" x="235" y="2" height="14" width="80" html.valueishtml="0"  name=income_tax_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민세" border="0" color="33554432" x="399" y="2" height="14" width="80" html.valueishtml="0"  name=resident_tax_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실업급여" border="0" color="33554432" x="481" y="2" height="14" width="80" html.valueishtml="0"  name=pay_unemployed_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="국민연금" border="0" color="33554432" x="563" y="2" height="14" width="80" html.valueishtml="0"  name=kukmin_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상여금" border="0" color="33554432" x="317" y="2" height="14" width="80" html.valueishtml="0"  name=incentive_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건강보험" border="0" color="33554432" x="645" y="2" height="14" width="80" html.valueishtml="0"  name=medical_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실지급액" border="0" color="33554432" x="727" y="2" height="14" width="80" html.valueishtml="0"  name=real_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="가불금" border="0" color="33554432" x="809" y="2" height="14" width="80" html.valueishtml="0"  name=advance_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기타공제" border="0" color="33554432" x="891" y="2" height="14" width="80" html.valueishtml="0"  name=etc_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이체금액" border="0" color="33554432" x="973" y="2" height="14" width="74" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="48" y="2" height="17" width="103" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="44" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="153" y="2" height="17" width="80" format=" #,###" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="235" y="2" height="17" width="80" format=" #,###" html.valueishtml="0"  name=income_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="399" y="2" height="17" width="80" format=" #,###" html.valueishtml="0"  name=resident_tax visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="481" y="2" height="17" width="80" format=" #,###" html.valueishtml="0"  name=pay_unemployed visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="317" y="2" height="17" width="80" format="#,###" html.valueishtml="0"  name=incentive_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="563" y="2" height="17" width="80" format=" #,###" html.valueishtml="0"  name=kukmin_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="645" y="2" height="17" width="80" format=" #,###" html.valueishtml="0"  name=medical_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="727" y="2" height="17" width="80" format="#,###" html.valueishtml="0"  name=real_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="809" y="2" height="17" width="80" format="#,###" html.valueishtml="0"  name=advance_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="891" y="2" height="17" width="80" format="#,###" html.valueishtml="0"  name=etc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" real_amt  -  advance_amt  -  etc_amt "border="0" color="33554432" x="973" y="2" height="17" width="74" format="#,##0" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합계" border="0" color="33554432" x="48" y="1" height="14" width="103" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(pay_tot for all)"border="0" color="33554432" x="153" y="1" height="14" width="80" format=" #,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(income_tax for all)"border="0" color="33554432" x="235" y="1" height="14" width="80" format=" #,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(resident_tax for all)"border="0" color="33554432" x="399" y="1" height="14" width="80" format=" #,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(pay_unemployed for all)"border="0" color="33554432" x="481" y="1" height="14" width="80" format=" #,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(kukmin_amt for all)"border="0" color="33554432" x="563" y="1" height="14" width="80" format=" #,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(medical_amt for all)"border="0" color="33554432" x="645" y="1" height="14" width="80" format=" #,###" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(incentive_amt for all)"border="0" color="33554432" x="317" y="1" height="14" width="80" format="[general]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(real_amt for all)"border="0" color="33554432" x="727" y="1" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(advance_amt for all)"border="0" color="33554432" x="809" y="1" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(etc_amt for all)"border="0" color="33554432" x="891" y="1" height="14" width="80" format="#,###" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( real_amt  -  advance_amt  -  etc_amt  for all)"border="0" color="33554432" x="973" y="1" height="14" width="74" format="#,###" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

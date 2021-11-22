@@ -1,0 +1,92 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=15 color="134217750" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osct_consult_detail.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osct_consult_detail.proj_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=osct_div dbname="cm_osct_consult_detail.osct_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=consult_code dbname="cm_osct_consult_detail.consult_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=consult_no dbname="cm_osct_consult_detail.consult_no" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=contract_date dbname="cm_osct_consult_detail.contract_date" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=status_div dbname="cm_osct_consult_detail.status_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_osct_consult_detail.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_osct_consult_detail.end_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=contract_yn dbname="cm_osct_consult_detail.contract_yn" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=recv_amt dbname="cm_osct_consult_detail.recv_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=mexe_amt dbname="cm_osct_consult_detail.mexe_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=oexe_amt dbname="cm_osct_consult_detail.oexe_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=oexe_vat dbname="cm_osct_consult_detail.oexe_vat" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_name dbname="cm_osct_consult_detail.file_name" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=file_type dbname="cm_osct_consult_detail.file_type" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=file_path dbname="cm_osct_consult_detail.file_path" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=recv_contens dbname="cm_osct_consult_detail.recv_contens" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=change_contents dbname="cm_osct_consult_detail.change_contents" )
+ column=(type=char(400) update=yes updatewhereclause=yes name=specials dbname="cm_osct_consult_detail.specials" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=napprono dbname="cm_osct_consult_detail.napprono" )
+ column=(type=char(100) updatewhereclause=yes name=strtitle dbname="approval.strtitle" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,
+         A.CONSULT_NO,   
+         A.CONTRACT_DATE,   
+         A.STATUS_DIV,   
+         A.START_DATE,   
+         A.END_DATE,   
+         A.CONTRACT_YN,   
+         A.RECV_AMT,   
+         A.MEXE_AMT,     
+         A.OEXE_AMT,   
+         A.OEXE_VAT,
+         A.FILE_NAME,
+         A.FILE_TYPE,
+         A.FILE_PATH,
+         A.RECV_CONTENS,   
+         A.CHANGE_CONTENTS,   
+         A.SPECIALS,
+         A.NAPPRONO,
+         B.STRTITLE
+    FROM CM_OSCT_CONSULT_DETAIL A LEFT JOIN SEBOGW.APPROVAL B
+                                         ON A.NAPPRONO = B.NAPPRONO
+   WHERE A.COMPANY_CODE  = :as_comp_code
+     AND A.PROJ_CODE     = :as_proj_code
+     AND A.OSCT_DIV      = :as_osct_div
+     AND A.CONSULT_CODE  = :as_cons_code
+     AND A.CONSULT_NO LIKE :as_cons_no
+     AND ((:as_status_div <> 'X' AND A.STATUS_DIV <> 'X') OR
+          (:as_status_div  = 'X' AND A.STATUS_DIV =  'X'))" update="CM_OSCT_CONSULT_DETAIL" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_cons_code", string),("as_cons_no", string),("as_status_div", string)) )
+text(band=header alignment="2" text="실행율" border="0" color="33554432" x="283" y="2" height="14" width="52" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="외주하도금액" border="0" color="33554432" x="201" y="2" height="14" width="80" html.valueishtml="0"  name=oexe_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="차수" border="0" color="255" x="2" y="2" height="14" width="33" html.valueishtml="0"  name=consult_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="도급금액" border="0" color="255" x="37" y="2" height="14" width="80" html.valueishtml="0"  name=recv_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행금액" border="0" color="255" x="119" y="2" height="14" width="80" html.valueishtml="0"  name=mexe_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행외주물량" border="0" color="33554432" x="337" y="2" height="14" width="91" html.valueishtml="0"  name=file_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="문서번호" border="0" color="33554432" x="464" y="2" height="14" width="83" html.valueishtml="0"  name=napprono_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="결재제목" border="0" color="33554432" x="549" y="2" height="14" width="198" html.valueishtml="0"  name=approval_strtitle_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="33" format="[general]" html.valueishtml="0"  name=consult_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="oexe_amt  /  mexe_amt"border="0" color="33554432" x="283" y="2" height="14" width="52" format="0.00%" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name ) , ~"/images/button/btn_nodownload.gif~", ~"/images/button/btn_download.gif~"))"border="0" color="33554432" x="430" y="1" height="14" width="15" format="[General]" html.valueishtml="0"  name=p_download visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="bitmap( if (isNull( file_name ) , ~"/images/button/btn_nofiledel.gif~", ~"/images/button/btn_filedel.gif~"))"border="0" color="33554432" x="447" y="1" height="14" width="15" format="[General]" html.valueishtml="0"  name=p_filedel visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="33554432" x="337" y="2" height="14" width="91" format="[general]" html.valueishtml="0"  name=file_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=10 border="0" color="33554432" x="37" y="2" height="14" width="80" format="#,##0" html.valueishtml="0"  name=recv_amt  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.format="#,##0" edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=20 border="0" color="33554432" x="119" y="2" height="14" width="80" format="#,##0" html.valueishtml="0"  name=mexe_amt  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.format="#,##0" edit.focusrectangle=no edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="201" y="2" height="14" width="80" format="#,##0" html.valueishtml="0"  name=oexe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="2" tabsequence=30 border="0" color="33554432" x="464" y="1" height="14" width="83" format="[General]" html.valueishtml="0"  name=napprono visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="0" tabsequence=32766 border="0" color="33554432" x="550" y="1" height="14" width="197" format="[general]" html.valueishtml="0"  name=strtitle visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(oexe_amt for all)"border="0" color="33554432" x="201" y="1" height="14" width="80" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(mexe_amt for all)"border="0" color="33554432" x="119" y="1" height="14" width="80" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(recv_amt for all)"border="0" color="33554432" x="37" y="1" height="14" width="80" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합 계" border="0" color="134217856" x="2" y="1" height="14" width="33" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

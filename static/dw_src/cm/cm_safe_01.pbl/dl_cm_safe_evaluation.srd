@@ -1,0 +1,167 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(20) updatewhereclause=yes name=emp_no dbname="vw_cm_safe_pmamt.emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=number updatewhereclause=yes name=safe_amt dbname="safe_amt" )
+ column=(type=number updatewhereclause=yes name=disaster_01 dbname="vw_cm_safe_pmamt.disaster_01" )
+ column=(type=number updatewhereclause=yes name=disaster_02 dbname="vw_cm_safe_pmamt.disaster_02" )
+ column=(type=number updatewhereclause=yes name=disaster_03 dbname="vw_cm_safe_pmamt.disaster_03" )
+ column=(type=number updatewhereclause=yes name=disaster_04 dbname="vw_cm_safe_pmamt.disaster_04" )
+ column=(type=number updatewhereclause=yes name=disaster_05 dbname="vw_cm_safe_pmamt.disaster_05" )
+ column=(type=number update=yes updatewhereclause=yes name=reward_amt dbname="vw_cm_safe_pmamt.reward_amt" initial="0" )
+ column=(type=number update=yes updatewhereclause=yes name=cure_amt dbname="cure_amt" initial="0" )
+ column=(type=number update=yes updatewhereclause=yes name=close_amt dbname="close_amt" initial="0" )
+ column=(type=number updatewhereclause=yes name=etc_amt dbname="etc_amt" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=proj_code dbname="vw_cm_safe_pmamt.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="vw_cm_safe_pmamt.proj_name" )
+ column=(type=char(10) updatewhereclause=yes name=head_empno dbname="vw_cm_safe_pmamt.head_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name_1 dbname="hr_pers_master.emp_name" )
+ column=(type=datetime updatewhereclause=yes name=accid_date dbname="vw_cm_safe_pmamt.accid_date" )
+ column=(type=char(2) updatewhereclause=yes name=disaster_state dbname="vw_cm_safe_pmamt.disaster_state" values="1급	01/2급	02/3급	03/4급	04/5급	05/" )
+ column=(type=char(2) updatewhereclause=yes name=action_tag dbname="action_tag" values="진행	N/완료	Y/" )
+ column=(type=number updatewhereclause=yes name=reward_amt01 dbname="vw_cm_safe_pmamt.reward_amt01" )
+ column=(type=number updatewhereclause=yes name=cure_amt01 dbname="vw_cm_safe_pmamt.cure_amt01" )
+ column=(type=number updatewhereclause=yes name=close_amt01 dbname="vw_cm_safe_pmamt.close_amt01" )
+ column=(type=number updatewhereclause=yes name=etc_amt01 dbname="vw_cm_safe_pmamt.etc_amt01" )
+ retrieve="SELECT A.EMP_NO,    
+       D.EMP_NAME,
+       NVL(A.SAFE_AMT,0) SAFE_AMT,
+       B.DISASTER_01,
+       B.DISASTER_02,
+       B.DISASTER_03,
+       B.DISASTER_04,
+       B.DISASTER_05,
+       B.REWARD_AMT,
+       NVL(B.CURE_AMT,0) 	CURE_AMT,
+       NVL(B.CLOSE_AMT,0) 	CLOSE_AMT,
+       NVL(B.ETC_AMT,0)      ETC_AMT,
+       C.PROJ_CODE,
+       C.PROJ_NAME,
+       C.HEAD_EMPNO,
+       E.EMP_NAME,
+       C.ACCID_DATE,
+       C.DISASTER_STATE,
+       NVL(C.ACTION_TAG,'N') ACTION_TAG,
+       C.REWARD_AMT01,
+       C.CURE_AMT01,
+       C.CLOSE_AMT01,
+       C.ETC_AMT01       
+FROM 
+VW_CM_SAFE_PMAMT A,
+(SELECT B.PM_EMPNO,
+       SUM(DECODE(DISASTER_STATE,'01',1,0)) DISASTER_01,
+       SUM(DECODE(DISASTER_STATE,'02',1,0)) DISASTER_02,
+       SUM(DECODE(DISASTER_STATE,'03',1,0)) DISASTER_03,
+       SUM(DECODE(DISASTER_STATE,'04',1,0)) DISASTER_04,
+       SUM(DECODE(DISASTER_STATE,'05',1,0)) DISASTER_05,
+       SUM(A.REWARD_AMT) REWARD_AMT,
+       SUM(A.CURE_AMT)   CURE_AMT,
+       SUM(A.CLOSE_AMT)  CLOSE_AMT,
+       SUM(A.ETC_AMT)    ETC_AMT
+  FROM CM_ACCID_MASTER C,
+       CM_ACCID_DETAIL A,
+       SM_CODE_PROJECT B
+ WHERE C.COMPANY_CODE = :as_comp
+   AND C.ACCID_DATE   BETWEEN :as_fdate AND :as_tdate 
+   AND C.PROJ_CODE = B.PROJ_CODE
+   AND C.COMPANY_CODE = A.COMPANY_CODE(+)
+   AND C.ACCID_NO     = A.ACCID_NO(+)   
+GROUP BY B.PM_EMPNO ) B,
+(SELECT B.PM_EMPNO,
+       C.PROJ_CODE,
+       B.PROJ_NAME,
+       B.HEAD_EMPNO,
+       C.ACCID_DATE,
+       C.DISASTER_STATE,
+       C.ACTION_TAG,
+       SUM(A.REWARD_AMT) REWARD_AMT01,
+       SUM(A.CURE_AMT)   CURE_AMT01,
+       SUM(A.CLOSE_AMT)  CLOSE_AMT01,
+       SUM(A.ETC_AMT)    ETC_AMT01
+  FROM CM_ACCID_MASTER C,
+       CM_ACCID_DETAIL A,
+       SM_CODE_PROJECT B
+ WHERE C.COMPANY_CODE = :as_comp
+   AND C.ACCID_DATE   BETWEEN :as_fdate AND :as_tdate 
+   AND C.PROJ_CODE = B.PROJ_CODE
+   AND C.COMPANY_CODE = A.COMPANY_CODE(+)
+   AND C.ACCID_NO     = A.ACCID_NO(+)   
+GROUP BY B.PM_EMPNO,
+       C.PROJ_CODE,
+       B.PROJ_NAME,
+       B.HEAD_EMPNO,
+       C.ACCID_DATE,
+       C.DISASTER_STATE, C.ACTION_TAG)C,
+       HR_PERS_MASTER D,
+       HR_PERS_MASTER E
+WHERE A.YYYY = SUBSTR(:as_fdate,1,4)
+  AND A.EMP_NO = B.PM_EMPNO(+)
+  AND A.EMP_NO = C.PM_EMPNO(+)
+  AND A.EMP_NO = D.EMP_NO
+  AND C.HEAD_EMPNO = E.EMP_NO(+)
+ORDER BY A.EMP_NO,   C.ACCID_DATE" arguments=(("as_comp", string),("as_fdate", string),("as_tdate", string)) )
+group(level=1 header.height=0 trailer.height=25 by=("emp_name" ) header.color="536870912" trailer.color="134217752" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="429" y="11" height="14" width="174" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사고일" border="0" color="33554432" x="654" y="11" height="14" width="76" html.valueishtml="0"  name=accid_date_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM명" border="0" color="33554432" x="2" y="11" height="14" width="58" html.valueishtml="0"  name=hr_pers_master_emp_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="목표액" border="0" color="33554432" x="62" y="11" height="14" width="72" html.valueishtml="0"  name=safe_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="1급" border="0" color="33554432" x="256" y="11" height="14" width="31" html.valueishtml="0"  name=b_disaster_01_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="2급" border="0" color="33554432" x="289" y="11" height="14" width="32" html.valueishtml="0"  name=b_disaster_02_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="3급" border="0" color="33554432" x="323" y="11" height="14" width="32" html.valueishtml="0"  name=b_disaster_03_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="4급" border="0" color="33554432" x="357" y="11" height="14" width="34" html.valueishtml="0"  name=b_disaster_04_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="5급" border="0" color="33554432" x="393" y="11" height="14" width="34" html.valueishtml="0"  name=b_disaster_05_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소장명" border="0" color="33554432" x="605" y="11" height="14" width="47" html.valueishtml="0"  name=hr_pers_master_emp_name_1_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보상비" border="0" color="33554432" x="799" y="11" height="14" width="70" html.valueishtml="0"  name=c_reward_amt01_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="치료비" border="0" color="33554432" x="871" y="11" height="14" width="73" html.valueishtml="0"  name=c_cure_amt01_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="휴업급여" border="0" color="33554432" x="946" y="11" height="14" width="74" html.valueishtml="0"  name=c_close_amt01_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="등급" border="0" color="33554432" x="764" y="11" height="14" width="33" html.valueishtml="0"  name=c_disaster_state_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총사고비" border="0" color="33554432" x="136" y="11" height="14" width="73" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="달성율" border="0" color="33554432" x="211" y="11" height="14" width="43" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기타" border="0" color="33554432" x="1022" y="11" height="14" width="69" html.valueishtml="0"  name=c_etc_amt01_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상태" border="0" color="33554432" x="732" y="11" height="14" width="30" html.valueishtml="0"  name=c_action_tag_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432" x="429" y="2" height="17" width="174" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="654" y="2" height="17" width="76" format="[shortdate] [time]" html.valueishtml="0"  name=accid_date visible="1" editmask.mask="yyyy/mm/dd" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="58" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="62" y="2" height="17" width="72" format="#,##0" html.valueishtml="0"  name=safe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="605" y="2" height="17" width="47" format="[general]" html.valueishtml="0"  name=emp_name_1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="33554432" x="764" y="2" height="17" width="33" format="[general]" html.valueishtml="0"  name=disaster_state visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432" x="799" y="2" height="17" width="70" format="#,##0" html.valueishtml="0"  name=reward_amt01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="871" y="2" height="17" width="73" format="#,##0" html.valueishtml="0"  name=cure_amt01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432" x="946" y="2" height="17" width="74" format="#,##0" html.valueishtml="0"  name=close_amt01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression=" reward_amt + cure_amt + close_amt + etc_amt "border="0" color="33554432" x="136" y="2" height="17" width="73" format="#,##0" html.valueishtml="0"  name=total_amt visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="total_amt/safe_amt"border="0" color="33554432" x="211" y="2" height="17" width="43" format="#,##0.0%" html.valueishtml="0"  name=rate visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=23 alignment="1" tabsequence=32766 border="0" color="33554432" x="1022" y="2" height="17" width="69" format="#,##0" html.valueishtml="0"  name=etc_amt01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="33554432" x="732" y="2" height="17" width="30" format="[general]" html.valueishtml="0"  name=action_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="256" y="2" height="17" width="31" format="#,##0" html.valueishtml="0"  name=disaster_01 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="289" y="2" height="17" width="32" format="#,##0" html.valueishtml="0"  name=disaster_02 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="323" y="2" height="17" width="32" format="#,##0" html.valueishtml="0"  name=disaster_03 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="357" y="2" height="17" width="34" format="#,##0" html.valueishtml="0"  name=disaster_04 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="393" y="2" height="17" width="34" format="#,##0" html.valueishtml="0"  name=disaster_05 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=trailer.1 alignment="1" expression="sum( reward_amt01 for group 1 )"border="0" color="33554432" x="799" y="3" height="17" width="70" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( cure_amt01 for group 1 )"border="0" color="33554432" x="871" y="3" height="17" width="73" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( close_amt01 for group 1 )"border="0" color="33554432" x="946" y="3" height="17" width="74" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(etc_amt01 for group 1 )"border="0" color="33554432" x="1022" y="3" height="17" width="69" format="[GENERAL]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(  cure_amt01   )"border="0" color="33554432" x="871" y="6" height="14" width="73" format="#,##0" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(  close_amt01    )"border="0" color="33554432" x="946" y="6" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(   etc_amt01   )"border="0" color="33554432" x="1022" y="6" height="14" width="69" format="#,##0" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(reward_amt01   )"border="0" color="33554432" x="799" y="6" height="14" width="70" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(group_safe   )"border="0" color="33554432" x="62" y="6" height="14" width="72" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="SUM(  group_accid   )"border="0" color="33554432" x="136" y="6" height="14" width="73" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="if(first( accid_date for group 1) = accid_date or  IsNull(string(first( accid_date for group 1))) , safe_amt ,0)"border="0" color="33554432" x="1093" y="2" height="19" width="55" format="[GENERAL]" html.valueishtml="0"  name=group_safe visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="0" expression="if(first( accid_date for group 1) = accid_date or  IsNull(string(first( accid_date for group 1))) , total_amt ,0)"border="0" color="33554432" x="1150" y="2" height="19" width="55" format="[GENERAL]" html.valueishtml="0"  name=group_accid visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+
+sparse(names="emp_name	safe_amt	total_amt	rate	disaster_01	disaster_02	disaster_03	disaster_04	disaster_05")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

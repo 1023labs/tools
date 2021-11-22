@@ -1,0 +1,57 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(13) update=yes updatewhereclause=yes key=yes name=cust_code dbname="sm_code_cust_user.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=dept_code dbname="sm_code_cust_user.dept_code" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=password dbname="sm_code_cust_user.password" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=pass_hint dbname="sm_code_cust_user.pass_hint" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=manager dbname="sm_code_cust_user.manager" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=manager_tel dbname="sm_code_cust_user.manager_tel" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=admit_tag dbname="sm_code_cust_user.admit_tag" values="	Y/	N" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=manager_hp dbname="sm_code_cust_user.manager_hp" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=manager_email dbname="sm_code_cust_user.manager_email" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=req_date dbname="sm_code_cust_user.req_date" )
+ retrieve="  SELECT A.CUST_CODE,
+         B.CUST_NAME,   
+         A.DEPT_CODE,   
+         A.PASSWORD,   
+         A.PASS_HINT,   
+         A.MANAGER,   
+         A.MANAGER_TEL,   
+         A.ADMIT_TAG,   
+         A.MANAGER_HP,   
+         A.MANAGER_EMAIL,   
+         A.REQ_DATE 
+    FROM SM_CODE_CUST_USER A LEFT JOIN SM_CODE_CUST B
+                                    ON A.CUST_CODE = B.CUST_CODE  
+   WHERE A.REQ_DATE  LIKE :as_req_yymm||'%'
+     AND A.ADMIT_TAG    = :as_admit_tag
+" update="SM_CODE_CUST_USER" updatewhere=1 updatekeyinplace=no arguments=(("as_req_yymm", string),("as_admit_tag", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="43" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="요청일자" border="0" color="33554432" x="47" y="2" height="14" width="72" html.valueishtml="0"  name=req_date_t  tag="req_date" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업자번호" border="0" color="33554432" x="298" y="2" height="14" width="106" html.valueishtml="0"  name=cust_code_t  tag="cust_code" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="담당자" border="0" color="33554432" x="406" y="2" height="14" width="100" html.valueishtml="0"  name=manager_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="담당자전화번호" border="0" color="33554432" x="508" y="2" height="14" width="126" html.valueishtml="0"  name=manager_tel_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="핸드폰" border="0" color="33554432" x="636" y="2" height="14" width="126" html.valueishtml="0"  name=manager_hp_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="E-mail" border="0" color="33554432" x="764" y="2" height="14" width="151" html.valueishtml="0"  name=manager_email_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="허가" border="0" color="33554432" x="917" y="2" height="14" width="57" html.valueishtml="0"  name=admit_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="요청업체" border="0" color="33554432" x="121" y="2" height="14" width="175" html.valueishtml="0"  name=cust_name_t  tag="cust_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="43" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="47" y="2" height="17" width="72" format="####-##-##" html.valueishtml="0"  name=req_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="298" y="2" height="17" width="106" format="[general]~tif( len(cust_code) = 13, '@@@@@@-@@@@@@@', '@@@-@@-@@@@@')" html.valueishtml="0"  name=cust_code visible="1" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="406" y="2" height="17" width="100" format="[general]" html.valueishtml="0"  name=manager visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="508" y="2" height="17" width="126" format="[general]" html.valueishtml="0"  name=manager_tel visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=10 border="0" color="33554432" x="917" y="2" height="17" width="57" format="[general]" html.valueishtml="0"  name=admit_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="636" y="2" height="17" width="126" format="[general]" html.valueishtml="0"  name=manager_hp visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="764" y="2" height="17" width="151" format="[general]" html.valueishtml="0"  name=manager_email visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="121" y="2" height="17" width="175" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

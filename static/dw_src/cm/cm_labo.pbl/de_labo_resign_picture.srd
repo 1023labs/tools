@@ -1,0 +1,30 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=636 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_resign.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_labo_resign.labor_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=reg_date dbname="cm_labo_resign.reg_date" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_labo_resign.proj_code" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=resign dbname="cm_labo_resign.resign" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=submit_yn dbname="cm_labo_resign.submit_yn" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.REG_DATE, 
+         A.PROJ_CODE, 
+         A.RESIGN, 
+         A.SUBMIT_YN
+    FROM CM_LABO_RESIGN A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.LABOR_CODE   = :as_labor
+ORDER BY A.COMPANY_CODE ASC, 
+         A.LABOR_CODE   ASC, 
+         A.REG_DATE     ASC " update="CM_LABO_RESIGN" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_labor", string)) )
+bitmap(band=detail filename="" x="55" y="28" height="576" width="1253" border="6"  name=p_img visible="1" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

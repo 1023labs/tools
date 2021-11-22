@@ -1,0 +1,78 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=34 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=27 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(20) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(8) updatewhereclause=yes name=class_empno dbname="class_empno" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(14) updatewhereclause=yes name=rrn_no dbname="rrn_no" )
+ column=(type=char(1) updatewhereclause=yes name=sex_div dbname="sex_div" values="남자	1/여자	2/" )
+ column=(type=char(3) updatewhereclause=yes name=job_code dbname="job_code" )
+ column=(type=char(8) updatewhereclause=yes name=gjoin_date dbname="gjoin_date" )
+ column=(type=char(100) updatewhereclause=yes name=addr1 dbname="addr1" )
+ column=(type=char(1) updatewhereclause=yes name=pay_div dbname="pay_div" )
+ column=(type=char(20) updatewhereclause=yes name=hp dbname="hp" )
+ column=(type=number updatewhereclause=yes name=total_cnt dbname="total_cnt" )
+ column=(type=number updatewhereclause=yes name=year_cnt dbname="year_cnt" )
+ column=(type=number updatewhereclause=yes name=work_cnt dbname="work_cnt" )
+ retrieve="SELECT A.PROJ_CODE,
+       C.PROJ_NAME,
+       A.CLASS_EMPNO,
+       B.LABOR_NAME,
+       B.RRN_PRE||'-'||B.RRN_POST RRN_NO,
+       B.SEX_DIV,
+       B.JOB_CODE,
+       B.GJOIN_DATE,
+       B.ADDR1,
+       B.PAY_DIV,
+       B.HP,
+       (SELECT NVL(COUNT(*),0) FROM CM_ACCID_MASTER 
+         WHERE CLASS_EMPNO = A.CLASS_EMPNO) TOTAL_CNT,
+       (SELECT NVL(COUNT(*),0) FROM CM_ACCID_MASTER 
+         WHERE CLASS_EMPNO = A.CLASS_EMPNO AND TO_CHAR(ACCID_DATE,'YYYY')=TO_CHAR(SYSDATE,'YYYY')) YEAR_CNT,
+       TO_CHAR(SYSDATE,'YYYY') - (SELECT SUBSTR(MIN(REG_DATE),1,4) REG_DATE
+          FROM CM_LABO_CONTRACT
+         WHERE LABOR_CODE = A.CLASS_EMPNO) WORK_CNT
+  FROM (SELECT DISTINCT PROJ_CODE, CLASS_EMPNO FROM CM_ACCID_MASTER) A,
+       CM_LABO_MASTER B,
+       SM_CODE_PROJECT C        
+ WHERE A.CLASS_EMPNO = B.LABOR_CODE
+   AND A.PROJ_CODE= C.PROJ_CODE" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="278" y="11" height="14" width="155" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="반장명" border="0" color="33554432" x="66" y="11" height="14" width="48" html.valueishtml="0"  name=labor_name_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성별" border="0" color="33554432" x="966" y="11" height="14" width="28" html.valueishtml="0"  name=sex_div_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주소" border="0" color="33554432" x="611" y="11" height="14" width="169" html.valueishtml="0"  name=addr1_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="2" y="11" height="14" width="62" html.valueishtml="0"  name=class_empno_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민번호" border="0" color="33554432" x="116" y="11" height="14" width="91" html.valueishtml="0"  name=rrn_no_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="209" y="11" height="14" width="67" html.valueishtml="0"  name=job_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입사일" border="0" color="33554432" x="782" y="11" height="14" width="62" html.valueishtml="0"  name=gjoin_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="연락처" border="0" color="33554432" x="846" y="11" height="14" width="118" html.valueishtml="0"  name=hp_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="누계" border="0" color="33554432" x="435" y="11" height="14" width="67" html.valueishtml="0"  name=total_cnt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금년" border="0" color="33554432" x="504" y="11" height="14" width="67" html.valueishtml="0"  name=year_cnt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경력" border="0" color="33554432" x="573" y="11" height="14" width="36" html.valueishtml="0"  name=work_cnt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="278" y="2" height="17" width="155" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="66" y="2" height="17" width="48" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="966" y="2" height="17" width="28" format="[general]" html.valueishtml="0"  name=sex_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="611" y="2" height="17" width="169" format="[general]" html.valueishtml="0"  name=addr1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="62" format="[general]" html.valueishtml="0"  name=class_empno visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="116" y="2" height="17" width="91" format="[general]" html.valueishtml="0"  name=rrn_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="209" y="2" height="17" width="67" format="[general]" html.valueishtml="0"  name=job_code visible="1" dddw.name=dddw_com_safecode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="782" y="2" height="17" width="62" format="[general]" html.valueishtml="0"  name=gjoin_date visible="1" editmask.mask="XXXX/XX/XX" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="847" y="2" height="17" width="117" format="[general]" html.valueishtml="0"  name=hp visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="435" y="2" height="17" width="67" format="#,##0" html.valueishtml="0"  name=total_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="504" y="2" height="17" width="67" format="#,##0" html.valueishtml="0"  name=year_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="573" y="2" height="17" width="36" format="#,##0" html.valueishtml="0"  name=work_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,159 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=39 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) update=yes updatewhereclause=yes name=item_code dbname="item_code" )
+ column=(type=char(200) updatewhereclause=yes name=item_name dbname="item_name" )
+ column=(type=char(50) updatewhereclause=yes name=item_std dbname="item_std" )
+ column=(type=char(10) updatewhereclause=yes name=item_unit dbname="item_unit" )
+ column=(type=char(20) updatewhereclause=yes name=acc_gb dbname="acc_gb" )
+ column=(type=char(40) updatewhereclause=yes name=const_code dbname="const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=char(12) updatewhereclause=yes name=match_item dbname="match_item" )
+ column=(type=number update=yes updatewhereclause=yes name=a_qty dbname="a_qty" )
+ column=(type=number updatewhereclause=yes name=em_est_sum_mat_cost dbname="mat_cost" )
+ column=(type=number update=yes updatewhereclause=yes name=mat_amt dbname="mat_amt" )
+ column=(type=number updatewhereclause=yes name=em_est_sum_lab_cost dbname="lab_cost" )
+ column=(type=number update=yes updatewhereclause=yes name=lab_amt dbname="lab_amt" )
+ column=(type=number updatewhereclause=yes name=em_est_sum_exp_cost dbname="exp_cost" )
+ column=(type=number update=yes updatewhereclause=yes name=exp_amt dbname="exp_amt" )
+ column=(type=number updatewhereclause=yes name=out_cost dbname="out_cost" )
+ column=(type=number updatewhereclause=yes name=out_amt dbname="out_amt" )
+ column=(type=char(300) update=yes updatewhereclause=yes name=remarks dbname="remarks" )
+ retrieve="  SELECT A.ITEM_CODE,
+         B.ITEM_NAME,
+         A.ITEM_SIZE ITEM_STD,
+         B.ITEM_UNIT,
+         B.ACC_GB,
+         A.CONST_CODE,
+         C.CONST_NAME,
+         D.ITEM_CODE MATCH_ITEM,
+         SUM(A.A_QTY) A_QTY,
+         MAX(A.MAT_COST) MAT_COST,
+         SUM(A.MAT_AMT) MAT_AMT,
+         MAX(A.LAB_COST) LAB_COST, 
+         SUM(A.LAB_AMT) LAB_AMT,
+         MAX(A.EXP_COST) EXP_COST,
+         SUM(A.EXP_AMT) EXP_AMT,
+         MAX(A.OUT_COST) OUT_COST,
+         SUM(A.OUT_AMT) OUT_AMT,
+         MAX(A.REMARKS) REMARKS 
+    FROM EM_EST_SUM A LEFT JOIN ( SELECT ITEM_CODE,
+                                    ITEM_NAME,
+                                    ITEM_STD,
+                                    ITEM_UNIT,
+                                    ACC_GB
+                               FROM SM_CODE_MATERIAL
+                              UNION ALL
+                             SELECT IW_CODE ITEM_CODE,
+                                    IW_NAME ITEM_NAME,
+                                    IW_SIZE ITEM_STD,
+                                    IW_UNIT ITEM_UNIT,
+                                    '10' ACC_GB
+                               FROM EM_EST_IWLIST
+                              WHERE EST_CODE = :as_estcode
+                              UNION ALL
+                             SELECT DISTINCT ITEM_CODE,
+                                    ITEM_NAME,
+                                    NULL,
+                                    ITEM_UNIT,
+                                    '99'
+                               FROM EM_EST_EM
+                              WHERE ITEM_CODE LIKE 'TM%') B
+                        ON A.ITEM_CODE = B.ITEM_CODE
+                       LEFT JOIN CM_CONTRACT_CONST C
+                              ON C.PROJ_CODE    = :as_projcode
+                             AND A.CONST_CODE   = C.CONST_CODE
+                       LEFT JOIN (SELECT *
+                                    FROM EM_TMP_ITEM
+                                   WHERE ITEM_CODE IS NOT NULL) D
+                              ON A.EST_CODE = D.EST_CODE
+                             AND A.ITEM_CODE = D.TMP_ITEM_CODE                         
+   WHERE A.BREAK_DIV  = :as_breakdiv
+     AND A.EST_CODE   = :as_estcode
+     AND A.CONST_DIV  = :as_constdiv
+     AND A.CONST_CODE LIKE :as_constcd
+GROUP BY A.ITEM_CODE, B.ITEM_NAME, A.ITEM_SIZE, B.ITEM_UNIT, B.ACC_GB, A.CONST_CODE, C.CONST_NAME, D.ITEM_CODE
+ORDER BY A.CONST_CODE,C.CONST_NAME, A.ITEM_CODE, D.ITEM_CODE" arguments=(("as_breakdiv", string),("as_estcode", string),("as_constdiv", string),("as_constcd", string),("as_projcode", string)) )
+group(level=1 header.height=0 trailer.height=23 by=("const_code" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="143" y="2" height="14" width="35" html.valueishtml="0"  name=c_row_t  tag="kor=No." pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="33554432" x="486" y="2" height="14" width="57" html.valueishtml="0"  name=a_qty_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="명칭" border="0" color="33554432" x="180" y="2" height="14" width="150" html.valueishtml="0"  name=item_name_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="332" y="2" height="14" width="112" html.valueishtml="0"  name=item_std_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="446" y="2" height="14" width="38" html.valueishtml="0"  name=item_unit_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="854" y="2" height="14" width="76" html.valueishtml="0"  name=mat_amt_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비단가" border="0" color="33554432" x="545" y="2" height="14" width="74" html.valueishtml="0"  name=em_est_sum_mat_cost_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비단가" border="0" color="33554432" x="621" y="2" height="14" width="73" html.valueishtml="0"  name=em_est_sum_lab_cost_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비단가" border="0" color="33554432" x="696" y="2" height="14" width="74" html.valueishtml="0"  name=em_est_sum_exp_cost_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="932" y="2" height="14" width="74" html.valueishtml="0"  name=lab_amt_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="1008" y="2" height="14" width="75" html.valueishtml="0"  name=exp_amt_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="1168" y="2" height="14" width="147" html.valueishtml="0"  name=remarks_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="외주비단가" border="0" color="33554432" x="772" y="2" height="14" width="80" html.valueishtml="0"  name=out_cost_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="외주비" border="0" color="33554432" x="1085" y="2" height="14" width="81" html.valueishtml="0"  name=out_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="2" y="2" height="14" width="51" html.valueishtml="0"  name=const_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="55" y="2" height="14" width="86" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품목코드" border="0" color="33554432" x="1317" y="2" height="14" width="82" html.valueishtml="0"  name=item_code_t pointer="HyperLink!" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="매치코드" border="0" color="33554432" x="1401" y="2" height="14" width="92" html.valueishtml="0"  name=match_item_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="1317" y="2" height="17" width="82" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="143" y="2" height="17" width="35" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="486" y="2" height="17" width="57" format="#,##0.00" html.valueishtml="0"  name=a_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="332" y="2" height="17" width="112" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="446" y="2" height="17" width="38" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="854" y="2" height="17" width="76" format="#,##0" html.valueishtml="0"  name=mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="932" y="2" height="17" width="74" format="#,##0" html.valueishtml="0"  name=lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="1008" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="545" y="2" height="17" width="74" format="#,##0" html.valueishtml="0"  name=em_est_sum_mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="621" y="2" height="17" width="73" format="#,##0" html.valueishtml="0"  name=em_est_sum_lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="696" y="2" height="17" width="74" format="#,##0" html.valueishtml="0"  name=em_est_sum_exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="180" y="2" height="17" width="150" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="1168" y="2" height="17" width="147" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="772" y="2" height="17" width="80" format="#,##0" html.valueishtml="0"  name=out_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="1085" y="2" height="17" width="81" format="#,##0" html.valueishtml="0"  name=out_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="2" y="2" height="17" width="51" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="55" y="2" height="17" width="86" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432~tif(mid(item_code,1,2)='TM',if(isnull(match_item),rgb(255,0,0),rgb(0,0,255)),rgb(0,0,0))" x="1402" y="2" height="17" width="91" format="[general]" html.valueishtml="0"  name=match_item visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="선택 소계:" border="0" color="33554432" x="332" y="2" height="13" width="112" html.valueishtml="0"  name=t_3 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), mat_amt, 0) for all)"border="0" color="33554432" x="854" y="2" height="14" width="76" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), lab_amt, 0) for all)"border="0" color="33554432" x="932" y="2" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_9 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), em_est_sum_mat_cost, 0) for all)"border="0" color="33554432" x="545" y="2" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_11 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), em_est_sum_lab_cost, 0) for all)"border="0" color="33554432" x="621" y="2" height="14" width="73" format="#,##0" html.valueishtml="0"  name=compute_12 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="총     계:" border="0" color="33554432" x="332" y="22" height="13" width="112" html.valueishtml="0"  name=t_2 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(mat_amt for all)"border="0" color="33554432" x="854" y="22" height="14" width="76" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(lab_amt for all)"border="0" color="33554432" x="932" y="22" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(em_est_sum_mat_cost for all)"border="0" color="33554432" x="545" y="22" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(em_est_sum_lab_cost for all)"border="0" color="33554432" x="621" y="22" height="14" width="73" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), 1, 0)  for all) + '건'"border="0" color="33554432" x="446" y="2" height="14" width="38" format="[General]" html.valueishtml="0"  name=compute_14 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="count(item_unit for all)+ '건'"border="0" color="33554432" x="446" y="22" height="14" width="38" format="[General]" html.valueishtml="0"  name=compute_15 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(a_qty)"border="0" color="33554432" x="486" y="12" height="14" width="57" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), em_est_sum_exp_cost, 0) for all)"border="0" color="33554432" x="696" y="2" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_13 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), out_cost, 0) for all)"border="0" color="33554432" x="772" y="2" height="14" width="80" format="#,##0" html.valueishtml="0"  name=compute_16 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(em_est_sum_exp_cost for all)"border="0" color="33554432" x="696" y="22" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(out_cost for all)"border="0" color="33554432" x="772" y="22" height="14" width="80" format="#,##0" html.valueishtml="0"  name=compute_17 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), exp_amt, 0) for all)"border="0" color="33554432" x="1008" y="2" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_10 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(exp_amt for all)"border="0" color="33554432" x="1008" y="22" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(isSelected(), out_amt, 0) for all)"border="0" color="33554432" x="1085" y="2" height="14" width="81" format="#,##0" html.valueishtml="0"  name=compute_18 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(out_amt for all)"border="0" color="33554432" x="1085" y="22" height="14" width="81" format="#,##0" html.valueishtml="0"  name=compute_19 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="0" expression=" const_name + '별 합계 : '"border="0" color="134217856" x="332" y="5" height="14" width="112" format="[GENERAL]" html.valueishtml="0"  name=compute_29 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( em_est_sum_mat_cost  for group 1)"border="0" color="134217856" x="545" y="5" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_21 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( em_est_sum_lab_cost  for group 1)"border="0" color="134217856" x="621" y="5" height="14" width="73" format="#,##0" html.valueishtml="0"  name=compute_22 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( em_est_sum_exp_cost  for group 1)"border="0" color="134217856" x="696" y="5" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_23 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( out_cost  for group 1)"border="0" color="134217856" x="772" y="5" height="14" width="80" format="#,##0" html.valueishtml="0"  name=compute_24 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(mat_amt  for group 1)"border="0" color="134217856" x="854" y="5" height="14" width="76" format="#,##0" html.valueishtml="0"  name=compute_25 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( lab_amt  for group 1)"border="0" color="134217856" x="932" y="5" height="14" width="74" format="#,##0" html.valueishtml="0"  name=compute_26 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( exp_amt  for group 1)"border="0" color="134217856" x="1008" y="5" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_27 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum( out_amt  for group 1)"border="0" color="134217856" x="1085" y="5" height="14" width="81" format="#,##0" html.valueishtml="0"  name=compute_28 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(a_qty for group 1)"border="0" color="134217856" x="486" y="5" height="14" width="57" format="#,##0" html.valueishtml="0"  name=compute_20 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="const_code	const_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,113 @@
+release 9;
+datawindow(units=3 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 0 print.margin.right = 0 print.margin.top = 0 print.margin.bottom = 0 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=6058 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=number updatewhereclause=yes name=new_expt_sum dbname="new_expt_sum" )
+ column=(type=number updatewhereclause=yes name=new_goal_sum dbname="new_goal_sum" )
+ column=(type=number updatewhereclause=yes name=new_plan_sum dbname="new_plan_sum" )
+ column=(type=number updatewhereclause=yes name=new_achv_sum dbname="new_achv_sum" )
+ column=(type=number updatewhereclause=yes name=plan_expt_sum dbname="plan_expt_sum" )
+ column=(type=number updatewhereclause=yes name=plan_goal_sum dbname="plan_goal_sum" )
+ column=(type=number updatewhereclause=yes name=plan_plan_sum dbname="plan_plan_sum" )
+ column=(type=number updatewhereclause=yes name=plan_achv_sum dbname="plan_achv_sum" )
+ column=(type=number updatewhereclause=yes name=goal_amt dbname="goal_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         NVL(A.NEW_EXPT_SUM,  0) AS NEW_EXPT_SUM,
+         NVL(A.NEW_GOAL_SUM,  0) AS NEW_GOAL_SUM,
+         NVL(A.NEW_PLAN_SUM,  0) AS NEW_PLAN_SUM,
+         NVL(A.NEW_ACHV_SUM,  0) AS NEW_ACHV_SUM,
+         NVL(B.PLAN_EXPT_SUM, 0) AS PLAN_EXPT_SUM,
+         NVL(B.PLAN_GOAL_SUM, 0) AS PLAN_GOAL_SUM,
+         NVL(B.PLAN_PLAN_SUM, 0) AS PLAN_PLAN_SUM,
+         NVL(B.PLAN_ACHV_SUM, 0) AS PLAN_ACHV_SUM,
+         NVL(C.GOAL_AMT, 0)      AS GOAL_AMT
+    FROM (SELECT A.COMPANY_CODE,         
+                 SUM(A.EXPT_AMT) AS NEW_EXPT_SUM,
+                 SUM(A.GOAL_AMT) AS NEW_GOAL_SUM,
+                 SUM(A.PLAN_AMT) AS NEW_PLAN_SUM,
+                 SUM(A.ACHV_AMT) AS NEW_ACHV_SUM       
+            FROM CM_RECV_PLAN_AMOUNT A
+           WHERE A.COMPANY_CODE = :as_comp
+             AND A.PLAY_YEAR = :as_year
+             AND A.RECV_DIV = '1'
+        GROUP BY A.COMPANY_CODE) A  LEFT JOIN (SELECT A.COMPANY_CODE,         
+                                                      SUM(A.EXPT_AMT) AS PLAN_EXPT_SUM,
+                                                      SUM(A.GOAL_AMT) AS PLAN_GOAL_SUM,
+                                                      SUM(A.PLAN_AMT) AS PLAN_PLAN_SUM,
+                                                      SUM(A.ACHV_AMT) AS PLAN_ACHV_SUM
+                                                 FROM CM_RECV_PLAN_AMOUNT A
+                                                WHERE A.COMPANY_CODE = :as_comp
+                                                  AND A.PLAY_YEAR = :as_year
+                                                  AND A.RECV_DIV = '2'
+                                             GROUP BY A.COMPANY_CODE) B 
+                                          ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   LEFT JOIN ( SELECT A.COMPANY_CODE,
+                                                      NVL(SUM(A.GOAL_AMT), 0) AS GOAL_AMT                                             
+                                                 FROM CM_RECV_PLAN_AMOUNT A
+                                                WHERE A.COMPANY_CODE = :as_comp
+                                                  AND A.PLAY_YEAR = :as_year
+                                             GROUP BY A.COMPANY_CODE,
+                                                      A.PLAY_YEAR
+                                             ORDER BY A.COMPANY_CODE ASC
+                                                      ) C
+                                          ON A.COMPANY_CODE = C.COMPANY_CODE" arguments=(("as_comp", string),("as_year", string)) )
+line(band=detail x1="3069" y1="635" x2="3069" y2="4762"  name=l_10 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="건설사발주
+ 예상금액" border="0" color="33554432" x="3307" y="1243" height="740" width="2116" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="구분" border="0" color="33554432" x="687" y="1349" height="370" width="2328" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="설계변경분" border="0" color="33554432" x="687" y="2487" height="370" width="2328" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="수주예상분" border="0" color="33554432" x="687" y="3387" height="370" width="2328" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="3227" y="2566" height="449" width="2169" format="#,##0" html.valueishtml="0"  name=plan_expt_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="3227" y="3413" height="449" width="2169" format="#,##0" html.valueishtml="0"  name=new_expt_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" as_year +~"년 합계~""border="0" color="33554432" x="687" y="4233" height="370" width="2328" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" plan_expt_sum + new_expt_sum "border="0" color="33554432" x="3227" y="4233" height="370" width="2169" format="#,##0" html.valueishtml="0"  name=expt_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="RIGHT(as_year ,2) +~"년도 발주예상금액~""border="0" color="33554432" x="740" y="5027" height="370" width="4656" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="8572" y1="1455" x2="16377" y2="1455"  name=l_8 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="수주계획 및 수주금액" border="0" color="33554432" x="8598" y="873" height="370" width="7381" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="8731" y="2566" height="449" width="2275" format="#,##0" html.valueishtml="0"  name=plan_plan_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="8731" y="3413" height="449" width="2275" format="#,##0" html.valueishtml="0"  name=new_plan_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" plan_plan_sum + new_plan_sum "border="0" color="33554432" x="8731" y="4233" height="370" width="2275" format="#,##0" html.valueishtml="0"  name=plan_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="RIGHT(as_year ,2) +~"년도 수주및계획~""border="0" color="33554432" x="8651" y="5027" height="370" width="2487" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" plan_sum + achv_sum "border="0" color="33554432" x="11297" y="5053" height="370" width="4709" format="#,##0" html.valueishtml="0"  name=plan_achv_total_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="목표대비" border="0" color="33554432" x="16510" y="1376" height="370" width="2592" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round(( plan_achv_sum +  plan_balance ) /  goal_amt * 100, 2) +~"%~""border="0" color="33554432" x="16510" y="2566" height="370" width="2592" format="[General]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round(( new_achv_sum +  new_balance) / goal_amt * 100, 2) +~"%~""border="0" color="33554432" x="16510" y="3413" height="370" width="2592" format="[General]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round((achv_sum + total_balance) / goal_amt * 100, 2) +~"%~""border="0" color="33554432" x="16510" y="4233" height="370" width="2592" format="[General]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="round(plan_achv_total_sum / goal_amt * 100, 2) +~"%~""border="0" color="33554432" x="16510" y="5053" height="370" width="2592" format="[GENERAL]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="13864" y1="1455" x2="13864" y2="4762"  name=l_14 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression=" goal_sum - achv_sum "border="0" color="33554432" x="14022" y="4233" height="370" width="2222" format="#,##0" html.valueishtml="0"  name=total_balance visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" new_goal_sum - new_achv_sum "border="0" color="33554432" x="14022" y="3413" height="370" width="2222" format="#,##0" html.valueishtml="0"  name=new_balance visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" plan_goal_sum - plan_achv_sum "border="0" color="33554432" x="14022" y="2566" height="370" width="2222" format="#,##0" html.valueishtml="0"  name=plan_balance visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="11244" y="2566" height="449" width="2434" format="#,##0" html.valueishtml="0"  name=plan_achv_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="11244" y="3413" height="449" width="2434" format="#,##0" html.valueishtml="0"  name=new_achv_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" plan_achv_sum + new_achv_sum "border="0" color="33554432" x="11244" y="4233" height="370" width="2434" format="#,##0" html.valueishtml="0"  name=achv_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="계획" border="0" color="33554432" x="9022" y="1746" height="370" width="1666" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="수주" border="0" color="33554432" x="11721" y="1746" height="370" width="1666" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="2" text="잔여" border="0" color="33554432" x="14313" y="1746" height="370" width="1825" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="0" expression="~"* ~"+ as_year +~"년 수주계획~""border="0" color="33554432" x="846" y="106" height="502" width="2751" format="[GENERAL]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="635" x2="19261" y2="635"  name=l_1 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="2275" x2="19261" y2="2275"  name=l_7 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="3095" x2="19261" y2="3095"  name=l_6 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="3916" x2="19261" y2="3916"  name=l_5 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="4736" x2="19261" y2="4736"  name=l_4 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="5556" x2="19261" y2="5556"  name=l_2 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="582" y1="635" x2="582" y2="5556"  name=l_3 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="5556" y1="635" x2="5556" y2="5556"  name=l_11 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="8546" y1="635" x2="8546" y2="5556"  name=l_12 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="11165" y1="1455" x2="11165" y2="5556"  name=l_13 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="16377" y1="661" x2="16377" y2="5556"  name=l_15 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="19261" y1="635" x2="19261" y2="5556"  name=l_9 visible="1" pen.style="0" pen.width="26" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=detail alignment="2" text="수주목표금액" border="0" color="33554432" x="5715" y="1349" height="370" width="2751" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="5715" y="2566" height="449" width="2725" format="#,##0" html.valueishtml="0"  name=plan_goal_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="5715" y="3413" height="449" width="2725" format="#,##0" html.valueishtml="0"  name=new_goal_sum visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" plan_goal_sum + new_goal_sum "border="0" color="33554432" x="5715" y="4233" height="370" width="2725" format="[GENERAL]" html.valueishtml="0"  name=goal_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" plan_expt_sum + new_expt_sum "border="0" color="33554432" x="5715" y="5027" height="370" width="2725" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

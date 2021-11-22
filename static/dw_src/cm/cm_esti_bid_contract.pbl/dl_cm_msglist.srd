@@ -1,0 +1,49 @@
+release 9;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=decimal(0) updatewhereclause=yes name=nbbsno dbname="nbbsno" )
+ column=(type=char(255) updatewhereclause=yes name=strtitle dbname="strtitle" )
+ column=(type=datetime updatewhereclause=yes name=dateupdate dbname="dateupdate" )
+ column=(type=char(100) updatewhereclause=yes name=strpersonname dbname="strpersonname" )
+ column=(type=number updatewhereclause=yes name=total_cnt dbname="total_cnt" )
+ column=(type=number updatewhereclause=yes name=chk_cnt dbname="chk_cnt" )
+ column=(type=datetime updatewhereclause=yes name=smsmaildate dbname="smsmaildate" )
+ retrieve="SELECT A.NBBSNO,
+		 A.STRTITLE,
+       TO_DATE(A.DATEUPDATE) DATEUPDATE,
+       A.STRPERSONNAME,
+       NVL(B.TOTAL_CNT,0) TOTAL_CNT,
+       NVL(B.CHK_CNT,0)   CHK_CNT,
+		 A.SMSMAILDATE
+  FROM SEBOGW.BBS_DATA A,
+       (SELECT NBBSNO,       
+               SUM(1) TOTAL_CNT,
+               SUM(DECODE(CHK_TAG,'Y',1,0)) CHK_CNT
+          FROM CM_MSG_CHKLIST
+      GROUP BY NBBSNO ) B
+ WHERE NVL(A.ISGOTAG,'N') = 'Y'
+   AND A.NBBSNO = B.NBBSNO(+)
+ ORDER BY TO_DATE(A.DATEUPDATE) DESC" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="123" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="게시물 제목" border="0" color="33554432" x="142" y="8" height="56" width="498" html.valueishtml="0"  name=strtitle_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="게시일자" border="0" color="33554432" x="649" y="8" height="56" width="256" html.valueishtml="0"  name=dateupdate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="게시자" border="0" color="33554432" x="914" y="8" height="56" width="192" html.valueishtml="0"  name=strpersonname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총 건수" border="0" color="33554432" x="1115" y="8" height="56" width="215" html.valueishtml="0"  name=total_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="확인" border="0" color="33554432" x="1339" y="8" height="56" width="160" html.valueishtml="0"  name=chk_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="발송일시" border="0" color="33554432" x="1509" y="8" height="56" width="517" html.valueishtml="0"  name=smsmaildate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="9" y="8" height="68" width="123" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="142" y="8" height="68" width="498" format="[general]" html.valueishtml="0"  name=strtitle visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="649" y="8" height="68" width="256" format="[shortdate] [time]" html.valueishtml="0"  name=dateupdate visible="1" editmask.mask="yy/mm/dd" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="914" y="8" height="68" width="192" format="[general]" html.valueishtml="0"  name=strpersonname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="1115" y="8" height="68" width="215" format="#,##0" html.valueishtml="0"  name=total_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="1339" y="8" height="68" width="160" format="#,##0" html.valueishtml="0"  name=chk_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1509" y="8" height="68" width="517" format="[shortdate] [time]" html.valueishtml="0"  name=smsmaildate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

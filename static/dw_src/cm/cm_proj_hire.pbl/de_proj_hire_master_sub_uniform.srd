@@ -1,0 +1,55 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=33 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="hr_uniform_detail.company_code" dbalias="A.company_code" )
+ column=(type=char(8) updatewhereclause=yes name=yyyy dbname="hr_uniform_detail.yyyy" dbalias="A.yyyy" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="hr_uniform_detail.proj_code" dbalias="A.proj_code" )
+ column=(type=char(100) updatewhereclause=yes name=dept_name dbname="sm_code_dept.dept_name" dbalias="D.dept_name" )
+ column=(type=char(2) updatewhereclause=yes name=cover_div dbname="hr_uniform_detail.cover_div" dbalias="A.cover_div" )
+ column=(type=char(250) updatewhereclause=yes name=cover_div_nm dbname="sm_comcode_d.cover_div_nm" dbalias="B.cover_div_nm" )
+ column=(type=char(2) updatewhereclause=yes name=cur_size dbname="hr_uniform_detail.cur_size" dbalias="A.cur_size" )
+ column=(type=char(250) updatewhereclause=yes name=cur_size_nm dbname="sm_comcode_d.cur_size_nm" dbalias="C.cur_size_nm" )
+ retrieve="SELECT A.COMPANY_CODE
+     , A.YYYY
+     , A.PROJ_CODE
+     , D.DEPT_NAME
+     , A.COVER_DIV
+     , B.DNAME AS COVER_DIV_NM
+     , A.CUR_SIZE
+     , C.DNAME AS CUR_SIZE_NM
+  FROM HR_UNIFORM_DETAIL A LEFT JOIN SM_COMCODE_D B
+                                  ON A.COVER_DIV = B.DCODE
+                                 AND B.HCODE = 'REF_UNIFORM_DIV'
+                           LEFT JOIN SM_COMCODE_D C
+                                  ON A.CUR_SIZE = C.DCODE
+                                 AND C.HCODE = 'REF_UNIFORM_SIZE'
+                           LEFT JOIN SM_CODE_DEPT D
+                                  ON A.PROJ_CODE = D.DEPT_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+   AND A.EMP_NO = :as_labor_code" arguments=(("as_comp", string),("as_labor_code", string)) )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="14" width="19" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=0 border="0" color="33554432" x="25" y="1" height="14" width="89" html.valueishtml="0"  name=yyyy visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=0 border="0" color="33554432" x="117" y="1" height="14" width="82" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=0 border="0" color="33554432" x="202" y="1" height="14" width="197" html.valueishtml="0"  name=dept_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=0 border="0" color="33554432" x="403" y="1" height="14" width="63" html.valueishtml="0"  name=cover_div_nm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=0 border="0" color="33554432" x="470" y="1" height="14" width="47" html.valueishtml="0"  name=cur_size_nm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="9" height="14" width="19" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="24" y="9" height="14" width="90" html.valueishtml="0"  name=hr_uniform_detail_yyyy_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="116" y="9" height="14" width="83" html.valueishtml="0"  name=hr_uniform_detail_proj_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="201" y="9" height="14" width="198" html.valueishtml="0"  name=sm_code_dept_dept_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="피복구분" border="0" color="33554432" x="402" y="9" height="14" width="64" html.valueishtml="0"  name=sm_comcode_d_cover_div_nm_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사이즈" border="0" color="33554432" x="469" y="9" height="14" width="48" html.valueishtml="0"  name=sm_comcode_d_cur_size_nm_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

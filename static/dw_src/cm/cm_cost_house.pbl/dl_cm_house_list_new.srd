@@ -1,0 +1,54 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 )
+header(height=31 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cost_house_recon_list.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cost_house_recon_list.proj_code" )
+ column=(type=char(13) update=yes updatewhereclause=yes key=yes name=cust_code dbname="cm_cost_house_recon_list.cust_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=rent_date dbname="cm_cost_house_recon_list.rent_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=recont_seq dbname="cm_cost_house_recon_list.recont_seq" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=rent_div dbname="cm_cost_house_recon_list.rent_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=restart_date dbname="cm_cost_house_recon_list.restart_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=reend_date dbname="cm_cost_house_recon_list.reend_date" )
+ retrieve="SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+       A.PROJ_CODE      AS PROJ_CODE,
+       A.CUST_CODE      AS CUST_CODE,
+       A.RENT_DATE      AS RENT_DATE,
+       A.RECONT_SEQ     AS RECONT_SEQ,
+       A.RENT_DIV       AS RENT_DIV,
+       A.RESTART_DATE   AS RESTART_DATE,
+       A.REEND_DATE     AS REEND_DATE
+  FROM CM_COST_HOUSE_RECON_LIST A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE    = :AS_PROJ_CODE
+   AND A.CUST_CODE    = :AS_CUST_CODE
+   AND A.RENT_DATE    = :AS_RENT_DATE" update="CM_COST_HOUSE_RECON_LIST" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CUST_CODE", string),("AS_RENT_DATE", string)) )
+column(band=detail id=5 alignment="1" tabsequence=10 border="0" color="33554432" x="2" y="5" height="15" width="39" format="[general]" html.valueishtml="0"  name=recont_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=20 border="0" color="33554432" x="44" y="5" height="15" width="85" format="[general]" html.valueishtml="0"  name=restart_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=30 border="0" color="33554432" x="132" y="5" height="15" width="88" format="[general]" html.valueishtml="0"  name=reend_date visible="1" editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=40 border="0" color="33554432" x="222" y="5" height="15" width="108" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=50 border="0" color="33554432" x="332" y="5" height="15" width="70" format="[general]" html.valueishtml="0"  name=proj_code visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=60 border="0" color="33554432" x="404" y="5" height="15" width="98" format="[general]" html.valueishtml="0"  name=cust_code visible="0" edit.limit=13 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=70 border="0" color="33554432" x="504" y="5" height="15" width="69" format="[general]" html.valueishtml="0"  name=rent_date visible="0" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=80 border="0" color="33554432" x="575" y="5" height="15" width="60" format="[general]" html.valueishtml="0"  name=rent_div visible="0" edit.limit=1 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="9" height="15" width="39" html.valueishtml="0"  name=recont_seq_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="연장시작일" border="0" color="33554432" x="43" y="9" height="15" width="86" html.valueishtml="0"  name=restart_date_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="연장종료일" border="0" color="33554432" x="131" y="9" height="15" width="89" html.valueishtml="0"  name=reend_date_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="222" y="9" height="15" width="108" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Proj Code" border="0" color="33554432" x="332" y="9" height="15" width="70" html.valueishtml="0"  name=proj_code_t visible="0"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cust Code" border="0" color="33554432" x="404" y="9" height="15" width="98" html.valueishtml="0"  name=cust_code_t visible="0"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Rent Date" border="0" color="33554432" x="504" y="9" height="15" width="69" html.valueishtml="0"  name=rent_date_t visible="0"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Rent Div" border="0" color="33554432" x="575" y="9" height="15" width="60" html.valueishtml="0"  name=rent_div_t visible="0"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,229 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=40 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=18 color="67108864" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(9) update=yes updatewhereclause=yes name=accid_no dbname="accid_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=rrn_no dbname="rrn_no" )
+ column=(type=char(1) updatewhereclause=yes name=sex_div dbname="sex_div" values="남자	1/여자	2/" )
+ column=(type=char(3) updatewhereclause=yes name=job_code dbname="job_code" )
+ column=(type=char(8) updatewhereclause=yes name=gjoin_date dbname="gjoin_date" )
+ column=(type=number updatewhereclause=yes name=work_day dbname="work_day" )
+ column=(type=char(6) updatewhereclause=yes name=ent_dept_detail dbname="ent_dept_detail" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=pm_name dbname="pm_name" )
+ column=(type=char(20) updatewhereclause=yes name=hean_name dbname="hean_name" )
+ column=(type=datetime updatewhereclause=yes name=accid_date dbname="accid_date" )
+ column=(type=char(20) updatewhereclause=yes name=first_person dbname="first_person" )
+ column=(type=char(20) updatewhereclause=yes name=main_person dbname="main_person" )
+ column=(type=char(20) updatewhereclause=yes name=safe_person dbname="safe_person" )
+ column=(type=char(2) updatewhereclause=yes name=accid_tag dbname="accid_tag" )
+ column=(type=char(2) updatewhereclause=yes name=disaster_state dbname="disaster_state" )
+ column=(type=char(20) updatewhereclause=yes name=accid_task dbname="accid_task" )
+ column=(type=char(20) updatewhereclause=yes name=class_name dbname="class_name" )
+ column=(type=char(50) updatewhereclause=yes name=accid_place dbname="accid_place" )
+ column=(type=char(50) updatewhereclause=yes name=originalcause_material dbname="originalcause_material" )
+ column=(type=char(50) updatewhereclause=yes name=assailing_material dbname="assailing_material" )
+ column=(type=char(2) updatewhereclause=yes name=disaster_lvl dbname="disaster_lvl" )
+ column=(type=char(30) updatewhereclause=yes name=body_part dbname="body_part" )
+ column=(type=char(50) updatewhereclause=yes name=hospital_name dbname="hospital_name" )
+ column=(type=char(2) updatewhereclause=yes name=care_div dbname="care_div" )
+ column=(type=datetime updatewhereclause=yes name=care_fdate dbname="care_fdate" )
+ column=(type=datetime updatewhereclause=yes name=care_tdate dbname="care_tdate" )
+ column=(type=char(1) updatewhereclause=yes name=medital_expenses dbname="medital_expenses" values="일반	2/산재요양신청	3/기타	99/" )
+ column=(type=char(20) updatewhereclause=yes name=expenses_person dbname="expenses_person" )
+ column=(type=datetime updatewhereclause=yes name=submit_date dbname="submit_date" )
+ column=(type=char(10) updatewhereclause=yes name=pm_empno dbname="pm_empno" )
+ column=(type=char(10) updatewhereclause=yes name=head_empno dbname="head_empno" )
+ column=(type=char(2) updatewhereclause=yes name=record_tag dbname="record_tag" )
+ column=(type=number updatewhereclause=yes name=reward_amt dbname="reward_amt" )
+ column=(type=number updatewhereclause=yes name=cure_amt dbname="cure_amt" )
+ column=(type=number updatewhereclause=yes name=close_amt dbname="close_amt" )
+ column=(type=number updatewhereclause=yes name=etc_amt dbname="etc_amt" )
+ retrieve="    SELECT A.COMPANY_CODE,   
+           A.ACCID_NO,       
+           A.PROJ_CODE,      
+           DECODE(A.EMPLOYEE_DIV,'1',H.EMP_NAME,'0',E.LABOR_NAME,'2',I.LABOR_NAME) AS LABOR_NAME,
+           DECODE(A.EMPLOYEE_DIV,'1',X_DECRYPT(H.RRN_PRE, '(enckey)')||X_DECRYPT(H.RRN_POST, '(enckey)'),'0',X_DECRYPT(E.RRN_PRE, '(enckey)')||X_DECRYPT(E.RRN_POST, '(enckey)')
+                  ,'2',X_DECRYPT(I.RRN_PRE, '(enckey)')||X_DECRYPT(I.RRN_POST, '(enckey)')) AS RRN_NO,        
+           DECODE(A.EMPLOYEE_DIV,'1',CASE WHEN SUBSTR(X_DECRYPT(H.RRN_POST,  '(enckey)'),1,1) IN ('1','3') THEN '1'
+                                          WHEN SUBSTR(X_DECRYPT(H.RRN_POST,  '(enckey)'),1,1) IN ('2','4') THEN '2'
+                                     END,'0',E.SEX_DIV,'2',I.SEX_DIV) AS SEX_DIV,  
+           DECODE(A.EMPLOYEE_DIV,'0',E.JOB_CODE,'0',I.JOB_CODE) AS JOB_CODE,
+           DECODE(A.EMPLOYEE_DIV,'1',H.JOIN_DATE,'0',E.GJOIN_DATE,'2',I.GJOIN_DATE) AS GJOIN_DATE,           
+           A.WORK_DAY,           
+           B.ENT_DEPT_DETAIL,           
+           B.PROJ_NAME,           
+           C.EMP_NAME PM_NAME,           
+           D.EMP_NAME HEAN_NAME,          
+           A.ACCID_DATE,                  
+           A.FIRST_PERSON,           
+           A.MAIN_PERSON,           
+           G.EMP_NAME AS SAFE_PERSON,           
+           A.ACCID_TAG,             
+           A.DISASTER_STATE, 
+           A.ACCID_TASK,           
+           F.LABOR_NAME CLASS_NAME,
+           A.ACCID_PLACE, 
+           A.ORIGINALCAUSE_MATERIAL,
+           A.ASSAILING_MATERIAL,                                
+           A.DISASTER_LVL,              
+           A.BODY_PART,              
+           A.HOSPITAL_NAME,           
+           A.CARE_DIV,
+           A.CARE_FDATE,
+           A.CARE_TDATE,   
+           A.MEDITAL_EXPENSES,      
+           A.EXPENSES_PERSON,           
+           A.SUBMIT_DATE,
+           B.PM_EMPNO,
+           B.HEAD_EMPNO,
+           J.RECORD_TAG,
+           K.REWARD_AMT,
+           K.CURE_AMT,
+           K.CLOSE_AMT,
+           K.ETC_AMT          
+     FROM CM_ACCID_MASTER A,
+          SM_CODE_PROJECT B,
+          HR_PERS_MASTER  C,
+          HR_PERS_MASTER  D,
+          HR_PERS_MASTER  G,
+          HR_PERS_MASTER  H,
+          CM_LABO_MASTER  E,
+          CM_LABO_MASTER  F,
+          CM_OUT_LABO_MASTER I,
+          ( SELECT COMPANY_CODE,ACCID_NO, MAX(RECORD_TAG) AS RECORD_TAG FROM CM_ACCID_RECORD GROUP BY COMPANY_CODE,ACCID_NO ) J,
+          ( SELECT COMPANY_CODE, ACCID_NO, SUM(REWARD_AMT) AS REWARD_AMT, SUM(CURE_AMT) AS CURE_AMT, SUM(CLOSE_AMT) AS CLOSE_AMT, SUM(ETC_AMT) AS ETC_AMT FROM CM_ACCID_DETAIL GROUP BY COMPANY_CODE, ACCID_NO ) K,
+          ( SELECT A.DNAME, A.DVALUE2 FROM SM_COMCODE_D A WHERE HCODE = 'SAFE_IMG' ) IMG
+    WHERE A.COMPANY_CODE   = :as_compcode
+      AND A.PROJ_CODE LIKE :as_projcode
+      AND TO_CHAR(A.ACCID_DATE,'YYYYMMDD') BETWEEN :as_fdate AND :as_tdate
+      AND B.PM_EMPNO LIKE :as_pm_empno
+      AND B.HEAD_EMPNO LIKE :as_head_empno
+      AND A.DISASTER_LVL LIKE :as_disaster_lvl
+      AND A.DISASTER_STATE LIKE :as_disaster_state
+      AND ( J.RECORD_TAG LIKE CASE WHEN :as_record_div IN ('17','18') THEN :as_record_div
+                                   WHEN :as_record_div = '%'  THEN '%'
+                              END
+      OR J.RECORD_TAG < CASE WHEN :as_record_div < 17 THEN '17'
+                             ELSE ''
+                         END )
+      AND DECODE(A.EMPLOYEE_DIV,'1',H.EMP_NAME,'0',E.LABOR_NAME,'2',I.LABOR_NAME) LIKE '%'||:as_name||'%'
+      AND A.OLDNEW_DIV   = '1'
+      AND A.COMPANY_CODE = B.COMPANY_CODE(+)
+      AND A.PROJ_CODE    = B.PROJ_CODE(+)
+      AND B.COMPANY_CODE = C.COMPANY_CODE(+)
+      AND B.PM_EMPNO     = C.EMP_NO(+)
+      AND B.COMPANY_CODE = D.COMPANY_CODE(+)
+      AND B.HEAD_EMPNO   = D.EMP_NO(+)
+      AND A.COMPANY_CODE = E.COMPANY_CODE(+)
+      AND A.ACCID_EMPNO  = E.LABOR_CODE(+) 
+      AND A.COMPANY_CODE = H.COMPANY_CODE(+)
+      AND A.ACCID_EMPNO  = H.EMP_NO(+) 
+      AND A.COMPANY_CODE = I.COMPANY_CODE(+)
+      AND A.ACCID_EMPNO  = I.LABOR_CODE(+)
+      AND A.COMPANY_CODE = F.COMPANY_CODE(+) 
+      AND A.CLASS_EMPNO  = F.LABOR_CODE(+)
+      AND A.COMPANY_CODE = G.COMPANY_CODE(+)
+      AND A.SAFE_EMP_NO  = G.EMP_NO(+)
+      AND A.COMPANY_CODE = J.COMPANY_CODE(+)
+      AND A.ACCID_NO     = J.ACCID_NO(+)
+      AND A.COMPANY_CODE = K.COMPANY_CODE(+)
+      AND A.ACCID_NO     = K.ACCID_NO(+)" arguments=(("as_compcode", string),("as_projcode", string),("as_fdate", string),("as_tdate", string),("as_pm_empno", string),("as_head_empno", string),("as_disaster_lvl", string),("as_disaster_state", string),("as_record_div", string),("as_name", string)) )
+text(band=header alignment="2" text="사고자명" border="0" color="33554432" x="37" y="15" height="14" width="54" html.valueishtml="0"  name=labor_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="재" border="0" color="134217752" x="181" y="5" height="14" width="28" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="재" border="0" color="134217856" x="181" y="4" height="14" width="28" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업부" border="0" color="33554432" x="404" y="15" height="14" width="74" html.valueishtml="0"  name=ent_dept_detail_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="480" y="15" height="14" width="174" html.valueishtml="0"  name=proj_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장PM" border="0" color="33554432" x="656" y="15" height="14" width="57" html.valueishtml="0"  name=pm_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="해자 정보" border="0" color="16711680" x="211" y="4" height="14" width="66" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="최조접수자" border="0" color="8421376" x="858" y="23" height="14" width="71" html.valueishtml="0"  name=first_person_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="원청담당자" border="0" color="8421376" x="931" y="23" height="14" width="76" html.valueishtml="0"  name=main_person_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="16711680" x="93" y="23" height="14" width="86" html.valueishtml="0"  name=rrn_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성별" border="0" color="16711680" x="181" y="23" height="14" width="28" html.valueishtml="0"  name=sex_div_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직종" border="0" color="16711680" x="211" y="23" height="14" width="66" html.valueishtml="0"  name=job_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입사일" border="0" color="16711680" x="279" y="23" height="14" width="62" html.valueishtml="0"  name=gjoin_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="근무일수" border="0" color="16711680" x="343" y="23" height="14" width="59" html.valueishtml="0"  name=work_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="재해종류" border="0" color="33554432" x="1081" y="15" height="14" width="63" html.valueishtml="0"  name=accid_tag_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="본사안전팀" border="0" color="8421376" x="1009" y="23" height="14" width="70" html.valueishtml="0"  name=safe_person_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보고담당자" border="0" color="8421376" x="931" y="4" height="14" width="76" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="소속" border="0" color="8421376" x="1316" y="23" height="14" width="78" html.valueishtml="0"  name=accid_task_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="담당반장" border="0" color="8421376" x="1396" y="23" height="14" width="68" html.valueishtml="0"  name=class_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="속" border="0" color="8421376" x="1396" y="4" height="14" width="68" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="소" border="0" color="8421376" x="1316" y="4" height="14" width="78" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="재해경도" border="0" color="33554432" x="1146" y="15" height="14" width="168" html.valueishtml="0"  name=disaster_state_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="치료방법" border="0" color="33554432" x="1990" y="15" height="14" width="56" html.valueishtml="0"  name=care_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="1" text="치료" border="0" color="33554432" x="2048" y="15" height="14" width="63" html.valueishtml="0"  name=care_fdate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="기간" border="0" color="33554432" x="2113" y="15" height="14" width="63" html.valueishtml="0"  name=care_tdate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상처부위" border="0" color="33554432" x="1915" y="15" height="14" width="73" html.valueishtml="0"  name=body_part_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상해종류" border="0" color="33554432" x="1835" y="15" height="14" width="78" html.valueishtml="0"  name=disaster_lvl_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장소장" border="0" color="33554432" x="715" y="15" height="14" width="64" html.valueishtml="0"  name=hean_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사고일" border="0" color="134217857" x="781" y="15" height="14" width="75" html.valueishtml="0"  name=accid_date_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기인물" border="0" color="33554432" x="1641" y="15" height="14" width="84" html.valueishtml="0"  name=originalcause_material_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="가해물" border="0" color="33554432" x="1727" y="15" height="14" width="106" html.valueishtml="0"  name=assailing_material_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사고발생장소" border="0" color="33554432" x="1466" y="15" height="14" width="173" html.valueishtml="0"  name=accid_place_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No" border="0" color="134217741" x="2" y="15" height="14" width="33" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="치료비결재방법" border="0" color="33554432" x="2178" y="15" height="14" width="86" html.valueishtml="0"  name=medital_expenses_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="보상비" border="0" color="8421376" x="2398" y="23" height="14" width="91" html.valueishtml="0"  name=reward_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="치료비" border="0" color="8421376" x="2491" y="23" height="14" width="91" html.valueishtml="0"  name=cure_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="휴업급여" border="0" color="8421376" x="2584" y="23" height="14" width="91" html.valueishtml="0"  name=close_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기타비용" border="0" color="8421376" x="2677" y="23" height="14" width="91" html.valueishtml="0"  name=etc_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="안전사고비용" border="0" color="8421376" x="2584" y="6" height="14" width="91" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="총 비용" border="0" color="8421376" x="2770" y="23" height="14" width="92" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="향후대책방안 제출계획" border="0" color="134217857" x="2266" y="15" height="14" width="130" html.valueishtml="0"  name=submit_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="480" y="2" height="17" width="174" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="781" y="2" height="17" width="75" format="[shortdate] [time]" html.valueishtml="0"  name=accid_date visible="1" editmask.mask="yyyy-mm-dd" editmask.focusrectangle=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="2" tabsequence=32766 border="0" color="33554432" x="1081" y="2" height="17" width="63" format="[general]" html.valueishtml="0"  name=accid_tag visible="1" dddw.name=dddw_com_safecode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=26 alignment="2" tabsequence=32766 border="0" color="33554432" x="1915" y="2" height="17" width="73" format="[general]" html.valueishtml="0"  name=body_part visible="1" dddw.name=dddw_com_safecode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=25 alignment="2" tabsequence=32766 border="0" color="33554432" x="1835" y="2" height="17" width="78" format="[general]" html.valueishtml="0"  name=disaster_lvl visible="1" dddw.name=dddw_com_safecode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=19 alignment="2" tabsequence=32766 border="0" color="33554432" x="1146" y="2" height="17" width="168" format="[general]" html.valueishtml="0"  name=disaster_state visible="1" dddw.name=dddw_com_safecode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="404" y="2" height="14" width="74" format="[general]" html.valueishtml="0"  name=ent_dept_detail visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="656" y="2" height="14" width="57" format="[general]" html.valueishtml="0"  name=pm_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="715" y="2" height="14" width="64" format="[general]" html.valueishtml="0"  name=hean_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="858" y="2" height="14" width="71" format="[general]" html.valueishtml="0"  name=first_person visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="931" y="2" height="14" width="76" format="[general]" html.valueishtml="0"  name=main_person visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=17 alignment="2" tabsequence=32766 border="0" color="33554432" x="1009" y="2" height="14" width="70" format="[general]" html.valueishtml="0"  name=safe_person visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="2" tabsequence=32766 border="0" color="33554432" x="1316" y="2" height="14" width="78" format="[general]" html.valueishtml="0"  name=accid_task visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="2" tabsequence=32766 border="0" color="33554432" x="1396" y="2" height="14" width="68" format="[general]" html.valueishtml="0"  name=class_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="2" tabsequence=32766 border="0" color="33554432" x="1466" y="2" height="14" width="173" format="[general]" html.valueishtml="0"  name=accid_place visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="2" tabsequence=32766 border="0" color="33554432" x="1641" y="2" height="14" width="84" format="[general]" html.valueishtml="0"  name=originalcause_material visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="2" tabsequence=32766 border="0" color="33554432" x="1727" y="2" height="14" width="106" format="[general]" html.valueishtml="0"  name=assailing_material visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=28 alignment="2" tabsequence=32766 border="0" color="33554432" x="1990" y="2" height="14" width="56" format="[general]" html.valueishtml="0"  name=care_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=29 alignment="2" tabsequence=32766 border="0" color="33554432" x="2048" y="2" height="14" width="63" format="[shortdate] [time]" html.valueishtml="0"  name=care_fdate visible="1" editmask.mask="yyyy-mm-dd" editmask.focusrectangle=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=31 alignment="2" tabsequence=32766 border="0" color="33554432" x="2178" y="2" height="14" width="86" format="[general]" html.valueishtml="0"  name=medital_expenses visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="93" y="2" height="17" width="86" format="[general]" html.valueishtml="0"  name=rrn_no visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="181" y="2" height="17" width="28" format="[general]" html.valueishtml="0"  name=sex_div visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="211" y="2" height="17" width="66" format="[general]" html.valueishtml="0"  name=job_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="279" y="2" height="17" width="62" format="[general]" html.valueishtml="0"  name=gjoin_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="343" y="2" height="17" width="59" format="[general]" html.valueishtml="0"  name=work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="37" y="2" height="17" width="54" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="134217741" x="2" y="2" height="17" width="33" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=36 alignment="0" tabsequence=32766 border="0" color="33554432" x="2864" y="1" height="13" width="79" format="[general]" html.valueishtml="0"  name=record_tag visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=37 alignment="1" tabsequence=32766 border="0" color="33554432" x="2398" y="1" height="13" width="91" format="#,##0" html.valueishtml="0"  name=reward_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=38 alignment="1" tabsequence=32766 border="0" color="33554432" x="2491" y="1" height="13" width="91" format="#,##0" html.valueishtml="0"  name=cure_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=39 alignment="1" tabsequence=32766 border="0" color="33554432" x="2584" y="1" height="13" width="91" format="#,##0" html.valueishtml="0"  name=close_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=40 alignment="1" tabsequence=32766 border="0" color="33554432" x="2677" y="1" height="13" width="91" format="#,##0" html.valueishtml="0"  name=etc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" reward_amt + cure_amt + close_amt + etc_amt "border="0" color="33554432" x="2770" y="1" height="14" width="92" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="~"총 ~" + rowcount() + ~"건~""border="0" color="33554432" x="93" y="4" height="13" width="86" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(cure_amt for all)"border="0" color="33554432" x="2491" y="4" height="13" width="91" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(close_amt for all)"border="0" color="33554432" x="2584" y="4" height="13" width="91" format="#,##0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(etc_amt for all)"border="0" color="33554432" x="2677" y="4" height="13" width="91" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( reward_amt + cure_amt + close_amt + etc_amt  for all)"border="0" color="33554432" x="2770" y="4" height="14" width="92" format="#,##0" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(reward_amt for all)"border="0" color="33554432" x="2398" y="4" height="13" width="91" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=30 alignment="2" tabsequence=32766 border="0" color="33554432" x="2114" y="2" height="14" width="62" format="[shortdate] [time]" html.valueishtml="0"  name=care_tdate visible="1" editmask.mask="yyyy-mm-dd" editmask.focusrectangle=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+column(band=detail id=33 alignment="2" tabsequence=32766 border="0" color="134217857" x="2267" y="2" height="13" width="129" format="[shortdate] [time]" html.valueishtml="0"  name=submit_date visible="1" editmask.mask="yyyy-mm-dd" editmask.focusrectangle=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,75 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=19 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_tmp_item.est_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=item_seq dbname="em_tmp_item.item_seq" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=tmp_item_code dbname="em_tmp_item.tmp_item_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=tmp_name dbname="em_tmp_item.tmp_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=tmp_size dbname="em_tmp_item.tmp_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=tmp_unit dbname="em_tmp_item.tmp_unit" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=tmp_remarks dbname="em_tmp_item.tmp_remarks" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=status_tag dbname="em_tmp_item.status_tag" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=item_code dbname="em_tmp_item.item_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=item_name dbname="em_tmp_item.item_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=item_size dbname="em_tmp_item.item_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=item_unit dbname="em_tmp_item.item_unit" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=remarks dbname="em_tmp_item.remarks" )
+ column=(type=number updatewhereclause=yes name=tmp_cost dbname="em_tmp_item.tmp_cost" )
+ retrieve="  SELECT EST_CODE
+       , ITEM_SEQ
+       , TMP_ITEM_CODE
+       , TMP_NAME
+       , TMP_SIZE
+       , TMP_UNIT
+       , TMP_REMARKS
+       , STATUS_TAG
+       , ITEM_CODE
+       , ITEM_NAME
+       , ITEM_SIZE
+       , ITEM_UNIT
+       , REMARKS,
+	  TMP_COST
+    FROM EM_TMP_ITEM
+   WHERE EST_CODE like :as_estcode   
+     AND STATUS_TAG = :as_tag
+ORDER BY ITEM_SEQ" update="EM_TMP_ITEM" updatewhere=0 updatekeyinplace=no arguments=(("as_estcode", string),("as_tag", string)) )
+text(band=header alignment="2" text="No," border="0" color="33554432" x="2" y="3" height="13" width="35" html.valueishtml="0"  name=t_1 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="순번" border="0" color="33554432" x="39" y="3" height="13" width="36" html.valueishtml="0"  name=item_seq_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="임시코드" border="0" color="33554432" x="77" y="3" height="13" width="87" html.valueishtml="0"  name=tmp_item_code_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="임시 자재명" border="0" color="33554432" x="166" y="3" height="13" width="169" html.valueishtml="0"  name=tmp_name_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="임시규격" border="0" color="33554432" x="337" y="3" height="13" width="101" html.valueishtml="0"  name=tmp_size_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="임시비고" border="0" color="33554432" x="557" y="3" height="13" width="67" html.valueishtml="0"  name=tmp_remarks_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재코드" border="0" color="33554432" x="626" y="3" height="13" width="96" html.valueishtml="0"  name=item_code_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자 재 명" border="0" color="33554432" x="724" y="3" height="13" width="219" html.valueishtml="0"  name=item_name_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규  격" border="0" color="33554432" x="945" y="3" height="13" width="206" html.valueishtml="0"  name=item_size_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="1153" y="3" height="13" width="70" html.valueishtml="0"  name=item_unit_t pointer="HyperLink!" visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="임시단위" border="0" color="33554432" x="507" y="3" height="13" width="48" html.valueishtml="0"  name=tmp_unit_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="1225" y="3" height="13" width="246" html.valueishtml="0"  name=remarks_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="440" y="3" height="13" width="65" html.valueishtml="0"  name=tmp_cost_t visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="2" y="1" height="14" width="35" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="39" y="1" height="14" width="36" format="[general]" html.valueishtml="0"  name=item_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="77" y="1" height="14" width="87" format="[general]" html.valueishtml="0"  name=tmp_item_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="166" y="1" height="14" width="169" format="[general]" html.valueishtml="0"  name=tmp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="337" y="1" height="14" width="101" format="[general]" html.valueishtml="0"  name=tmp_size visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="557" y="1" height="14" width="67" format="[general]" html.valueishtml="0"  name=tmp_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="626" y="2" height="14" width="96" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="724" y="2" height="14" width="219" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="945" y="2" height="14" width="206" format="[general]" html.valueishtml="0"  name=item_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="1153" y="2" height="14" width="70" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="507" y="1" height="14" width="48" format="[general]" html.valueishtml="0"  name=tmp_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432~tif(  status_tag = '1', rgb(0,0,0), rgb(0,0,255))" x="1225" y="2" height="14" width="246" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="440" y="2" height="14" width="65" format="#,##0" html.valueishtml="0"  name=tmp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="맑은 고딕" font.height="-8" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

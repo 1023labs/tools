@@ -1,0 +1,142 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_saly_labor_account.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_saly_labor_account.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=team_code dbname="cm_saly_labor_account.team_code" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="cm_attd_teams.team_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=labor_code dbname="cm_saly_labor_account.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(13) updatewhereclause=yes name=labor_id dbname="labor_id" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=pay_yymm dbname="cm_saly_labor_account.pay_yymm" )
+ column=(type=decimal(0) updatewhereclause=yes name=unit_amt dbname="cm_saly_labor_account.unit_amt" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=pay_date dbname="cm_saly_labor_account.pay_date" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=work_qty dbname="cm_saly_labor_account.work_qty" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=work_day dbname="cm_saly_labor_account.work_day" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=job_code dbname="cm_saly_labor_account.job_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=pay_tot dbname="cm_saly_labor_account.pay_tot" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=income_tax dbname="cm_saly_labor_account.income_tax" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=resident_tax dbname="cm_saly_labor_account.resident_tax" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=pay_unemployed dbname="cm_saly_labor_account.pay_unemployed" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=pay_amt dbname="cm_saly_labor_account.pay_amt" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=bank_ok dbname="cm_saly_labor_account.bank_ok" values="	Y/	N" )
+ column=(type=char(6) update=yes updatewhereclause=yes name=bank_code dbname="cm_saly_labor_account.bank_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=account_no dbname="cm_saly_labor_account.account_no" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=kukmin_amt dbname="cm_saly_labor_account.kukmin_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=medical_amt dbname="cm_saly_labor_account.medical_amt" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=bank_keep dbname="cm_saly_labor_account.bank_keep" values="	Y/	N" )
+ column=(type=decimal(0) updatewhereclause=yes name=advance_amt dbname="cm_saly_labor_account.advance_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=etc_amt dbname="cm_saly_labor_account.etc_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=incentive_amt dbname="cm_saly_labor_account.incentive_amt" )
+ column=(type=char(1) updatewhereclause=yes name=app_tag dbname="app_tag" values="	Y/	N" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.TEAM_CODE, 
+         B.TEAM_NAME,  
+         A.LABOR_CODE,   
+         C.LABOR_NAME,
+         (C.RRN_PRE || C.RRN_POST) LABOR_ID,
+         A.PAY_YYMM,   
+         A.UNIT_AMT,   
+         A.PAY_DATE,   
+         A.WORK_QTY,   
+         A.WORK_DAY,   
+         A.JOB_CODE,   
+         A.PAY_TOT,   
+         A.INCOME_TAX,   
+         A.RESIDENT_TAX,   
+         A.PAY_UNEMPLOYED,   
+         A.PAY_AMT,   
+         A.BANK_OK,   
+         A.BANK_CODE,   
+         A.ACCOUNT_NO,   
+         A.KUKMIN_AMT,   
+         A.MEDICAL_AMT,   
+         A.BANK_KEEP,   
+         A.ADVANCE_AMT,
+         A.ETC_AMT,
+         A.INCENTIVE_AMT,
+         'N' APP_TAG    
+    FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN CM_ATTD_TEAMS B
+                                        ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE AND A.TEAM_CODE = B.TEAM_CODE
+                                 LEFT JOIN CM_LABO_MASTER C
+                                        ON A.COMPANY_CODE = C.COMPANY_CODE AND A.LABOR_CODE = C.LABOR_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.PAY_YYMM     = :as_pay_yymm
+     AND A.LABOR_CODE   = :as_labo_code
+UNION
+  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.TEAM_CODE, 
+         B.TEAM_NAME,  
+         A.LABOR_CODE,   
+         C.LABOR_NAME,
+         (C.RRN_PRE || C.RRN_POST) LABOR_ID,
+         A.PAY_YYMM,   
+         A.UNIT_AMT,   
+         A.PAY_DATE,   
+         A.WORK_QTY,   
+         A.WORK_DAY,   
+         A.JOB_CODE,   
+         A.PAY_TOT,   
+         A.INCOME_TAX,   
+         A.RESIDENT_TAX,   
+         A.PAY_UNEMPLOYED,   
+         A.PAY_AMT,   
+         A.BANK_OK,   
+         A.BANK_CODE,   
+         A.ACCOUNT_NO,   
+         A.KUKMIN_AMT,   
+         A.MEDICAL_AMT,   
+         A.BANK_KEEP,   
+         A.ADVANCE_AMT,
+         A.ETC_AMT,
+         A.INCENTIVE_AMT,
+         'N' APP_TAG    
+    FROM CM_SALY_LABOR_ACCOUNT_H A LEFT JOIN CM_ATTD_TEAMS B
+                                        ON A.COMPANY_CODE = B.COMPANY_CODE AND A.PROJ_CODE = B.PROJ_CODE AND A.TEAM_CODE = B.TEAM_CODE
+                                 LEFT JOIN CM_LABO_MASTER C
+                                        ON A.COMPANY_CODE = C.COMPANY_CODE AND A.LABOR_CODE = C.LABOR_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.PAY_YYMM     = :as_pay_yymm
+     AND A.LABOR_CODE   = :as_labo_code
+ " arguments=(("as_comp_code", string),("as_proj_code", string),("as_pay_yymm", string),("as_labo_code", string)) )
+text(band=header alignment="2" text="팀명" border="0" color="33554432" x="41" y="2" height="14" width="69" html.valueishtml="0"  name=cm_attd_teams_team_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="112" y="2" height="14" width="59" html.valueishtml="0"  name=labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="266" y="2" height="14" width="40" html.valueishtml="0"  name=work_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="223" y="2" height="14" width="41" html.valueishtml="0"  name=work_day_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="308" y="2" height="14" width="63" html.valueishtml="0"  name=unit_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="373" y="2" height="14" width="75" html.valueishtml="0"  name=pay_tot_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="173" y="2" height="14" width="48" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="37" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용" border="0" color="33554432" x="450" y="2" height="14" width="29" html.valueishtml="0"  name=app_tag_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="112" y="2" height="17" width="59" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="308" y="2" height="17" width="63" format="#,##0" html.valueishtml="0"  name=unit_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="41" y="2" height="17" width="69" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="173" y="2" height="17" width="48" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="373" y="2" height="17" width="75" format="#,##0" html.valueishtml="0"  name=pay_tot visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="266" y="2" height="17" width="40" format="#,##0.0" html.valueishtml="0"  name=work_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="223" y="2" height="17" width="41" format="#,##0.0" html.valueishtml="0"  name=work_day visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="37" format="[GENERAL]" html.valueishtml="0"  name=compute_32 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=28 alignment="2" tabsequence=10 border="0" color="33554432" x="450" y="2" height="17" width="29" format="[general]" html.valueishtml="0"  name=app_tag visible="0" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="'합  계 ' + '(' + string( count( team_code for all ) , '#,###' ) + '팀)'"border="0" color="33554432" x="41" y="1" height="14" width="69" format="[GENERAL]" html.valueishtml="0"  name=compute_31 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( work_day for all )"border="0" color="33554432" x="223" y="1" height="14" width="41" format="[GENERAL]" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( unit_amt for all )"border="0" color="33554432" x="308" y="1" height="14" width="63" format="#,##0" html.valueishtml="0"  name=compute_19 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( pay_tot for all )"border="0" color="33554432" x="373" y="1" height="14" width="75" format="#,##0" html.valueishtml="0"  name=compute_20 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum( work_qty for all )"border="0" color="33554432" x="266" y="1" height="14" width="40" format="[GENERAL]" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

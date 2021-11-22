@@ -1,0 +1,111 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=labor_code dbname="labor_code" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=labor_name dbname="labor_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=labor_name_e dbname="labor_name_e" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=rrn_pre dbname="rrn_pre" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=rrn_post dbname="rrn_post" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=sex_div dbname="sex_div" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=picture dbname="picture" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=nation_code dbname="nation_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=foregn_div dbname="foregn_div" )
+ column=(type=char(60) updatewhereclause=yes name=hp dbname="hp" )
+ column=(type=char(60) updatewhereclause=yes name=phone dbname="phone" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=job_code dbname="job_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=join_date dbname="join_date" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=gjoin_date dbname="gjoin_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=rpay_date dbname="rpay_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=retire_date dbname="retire_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=continue_div dbname="continue_div" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=pay_div dbname="pay_div" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=id_card dbname="id_card" )
+ column=(type=char(7) update=yes updatewhereclause=yes name=zip_code dbname="zip_code" )
+ column=(type=char(300) update=yes updatewhereclause=yes name=addr1 dbname="addr1" )
+ column=(type=char(300) update=yes updatewhereclause=yes name=addr2 dbname="addr2" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=office_div dbname="office_div" )
+ column=(type=char(1) updatewhereclause=yes name=disabled dbname="disabled" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(515) updatewhereclause=yes name=pic_path dbname="pic_path" )
+ column=(type=char(520) updatewhereclause=yes name=pic_path_card dbname="pic_path_card" )
+ column=(type=char(200) updatewhereclause=yes name=password dbname="password" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=flexible_yn dbname="flexible_yn" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=flex_start dbname="flex_start" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=flex_end dbname="flex_end" )
+ column=(type=char(30) updatewhereclause=yes name=emp_v_name dbname="emp_v_name" )
+ retrieve="  SELECT A.COMPANY_CODE, 
+         A.LABOR_CODE, 
+         A.LABOR_NAME, 
+         A.LABOR_NAME_E, 
+         A.RRN_PRE, 
+         A.RRN_POST, 
+         A.SEX_DIV, 
+         A.PICTURE, 
+         A.NATION_CODE, 
+         A.FOREGN_DIV, 
+         A.HP, 
+         A.PHONE, 
+         A.JOB_CODE, 
+         A.JOIN_DATE, 
+         A.PROJ_CODE, 
+         A.GJOIN_DATE, 
+         A.RPAY_DATE, 
+         A.RETIRE_DATE, 
+         A.CONTINUE_DIV, 
+         A.PAY_DIV, 
+         A.ID_CARD, 
+         A.ZIP_CODE, 
+         A.ADDR1, 
+         A.ADDR2,
+         A.OFFICE_DIV,
+         A.DISABLED,
+         B.PROJ_NAME,
+         trim('/'|| PIC_PATH.DNAME ||'/'||A.COMPANY_CODE||'/'||A.LABOR_CODE ||'.'|| PIC_PATH.DVALUE2) as PIC_PATH,
+         trim('/'|| PIC_PATH.DNAME ||'/'||A.COMPANY_CODE||'/'||A.LABOR_CODE||'_CARD' ||'.'|| PIC_PATH.DVALUE2) as PIC_PATH_CARD,
+         A.PASSWORD,
+         FLEXIBLE_YN,
+         FLEX_START,
+         FLEX_END,
+         CASE WHEN C.SAME_TAG = 'Y' THEN C.EMP_V_NAME
+                                    ELSE '-'
+          END EMP_V_NAME
+    FROM CM_LABO_MASTER A LEFT JOIN SM_CODE_PROJECT B
+                                  ON A.PROJ_CODE = B.PROJ_CODE
+                          LEFT JOIN CM_DAILY_SAMENAME C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.LABOR_CODE       = C.EMP_NO
+                                AND C.WORK_EMPLOY = '8',
+         (  SELECT A.DNAME,
+                   A.DVALUE2
+              FROM SM_COMCODE_D A
+             WHERE HCODE = '115') PIC_PATH
+   WHERE A.COMPANY_CODE  = :as_code
+     AND A.OFFICE_DIV like :as_div
+     AND (A.LABOR_CODE LIKE :as_emp||'%' OR A.LABOR_NAME LIKE '%'||:as_emp||'%' OR X_DECRYPT(A.rrn_pRE, '[Mighty-X.2012.]')||X_DECRYPT(A.rrn_POST, '[Mighty-X.2012.]') LIKE '%'||:AS_EMP||'%')
+ORDER BY A.LABOR_NAME" update="CM_LABO_MASTER" updatewhere=0 updatekeyinplace=no arguments=(("as_code", string),("as_div", string),("as_emp", string)) )
+text(band=header alignment="2" text="사번" border="0" color="255" x="33" y="2" height="14" width="64" html.valueishtml="0"  name=labor_code_t  tag="labor_code" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="99" y="2" height="14" width="55" html.valueishtml="0"  name=labor_name_t  tag="labor_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주민등록번호" border="0" color="33554432" x="156" y="2" height="14" width="101" html.valueishtml="0"  name=labor_id_t  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="29" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="33" y="2" height="14" width="64" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="99" y="2" height="14" width="55" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression=" rrn_pre +~"-~"+ rrn_post "border="0" color="33554432" x="156" y="2" height="14" width="101" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=34 alignment="0" tabsequence=0 border="0" color="33554432" x="260" y="1" height="14" width="178" html.valueishtml="0"  name=emp_v_name visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="Emp V Name" border="0" color="33554432" x="259" y="1" height="19" width="179" html.valueishtml="0"  name=emp_v_name_t visible="0"  font.face="Tahoma" font.height="-12" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

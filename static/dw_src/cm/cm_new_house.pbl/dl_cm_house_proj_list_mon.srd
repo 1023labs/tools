@@ -1,0 +1,166 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=yes print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=28 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="33289712" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(50) updatewhereclause=yes name=seq dbname="seq" )
+ column=(type=char(250) updatewhereclause=yes name=house_div dbname="house_div" )
+ column=(type=number updatewhereclause=yes name=mon1_amt dbname="mon1_amt" )
+ column=(type=number updatewhereclause=yes name=mon2_amt dbname="mon2_amt" )
+ column=(type=number updatewhereclause=yes name=mon3_amt dbname="mon3_amt" )
+ column=(type=number updatewhereclause=yes name=mon4_amt dbname="mon4_amt" )
+ column=(type=number updatewhereclause=yes name=mon5_amt dbname="mon5_amt" )
+ column=(type=number updatewhereclause=yes name=mon6_amt dbname="mon6_amt" )
+ column=(type=number updatewhereclause=yes name=mon7_amt dbname="mon7_amt" )
+ column=(type=number updatewhereclause=yes name=mon8_amt dbname="mon8_amt" )
+ column=(type=number updatewhereclause=yes name=mon9_amt dbname="mon9_amt" )
+ column=(type=number updatewhereclause=yes name=mon10_amt dbname="mon10_amt" )
+ column=(type=number updatewhereclause=yes name=mon11_amt dbname="mon11_amt" )
+ column=(type=number updatewhereclause=yes name=mon12_amt dbname="mon12_amt" )
+ column=(type=char(6) updatewhereclause=yes name=mon1 dbname="mon1" )
+ column=(type=char(6) updatewhereclause=yes name=mon2 dbname="mon2" )
+ column=(type=char(6) updatewhereclause=yes name=mon3 dbname="mon3" )
+ column=(type=char(6) updatewhereclause=yes name=mon4 dbname="mon4" )
+ column=(type=char(6) updatewhereclause=yes name=mon5 dbname="mon5" )
+ column=(type=char(6) updatewhereclause=yes name=mon6 dbname="mon6" )
+ column=(type=char(6) updatewhereclause=yes name=mon7 dbname="mon7" )
+ column=(type=char(6) updatewhereclause=yes name=mon8 dbname="mon8" )
+ column=(type=char(6) updatewhereclause=yes name=mon9 dbname="mon9" )
+ column=(type=char(6) updatewhereclause=yes name=mon10 dbname="mon10" )
+ column=(type=char(6) updatewhereclause=yes name=mon11 dbname="mon11" )
+ column=(type=char(6) updatewhereclause=yes name=mon12 dbname="mon12" )
+ retrieve="SELECT COMPANY_CODE  
+      ,PROJ_CODE
+      ,PROJ_NAME
+      ,SEQ
+      ,HOUSE_DIV
+      ,NVL(SUM(MON1_AMT),0) AS MON1_AMT
+      ,NVL(SUM(MON2_AMT),0) AS MON2_AMT
+      ,NVL(SUM(MON3_AMT),0) AS MON3_AMT
+      ,NVL(SUM(MON4_AMT),0) AS MON4_AMT
+      ,NVL(SUM(MON5_AMT),0) AS MON5_AMT
+      ,NVL(SUM(MON6_AMT),0) AS MON6_AMT
+      ,NVL(SUM(MON7_AMT),0) AS MON7_AMT
+      ,NVL(SUM(MON8_AMT),0) AS MON8_AMT
+      ,NVL(SUM(MON9_AMT),0) AS MON9_AMT
+      ,NVL(SUM(MON10_AMT),0) AS MON10_AMT
+      ,NVL(SUM(MON11_AMT),0) AS MON11_AMT
+      ,NVL(SUM(MON12_AMT),0) AS MON12_AMT   
+      ,MAX(MON1) AS MON1
+      ,MAX(MON2) AS MON2        
+      ,MAX(MON3) AS MON3
+      ,MAX(MON4) AS MON4
+      ,MAX(MON5) AS MON5
+      ,MAX(MON6) AS MON6
+      ,MAX(MON7) AS MON7
+      ,MAX(MON8) AS MON8
+      ,MAX(MON9) AS MON9
+      ,MAX(MON10) AS MON10
+      ,MAX(MON11) AS MON11
+      ,MAX(MON12) AS MON12
+  FROM
+( SELECT A.COMPANY_CODE AS COMPANY_CODE
+      ,A.PROJ_CODE AS PROJ_CODE
+      ,A.PROJ_NAME AS PROJ_NAME
+      ,C.DCODE AS SEQ
+      ,C.DNAME AS HOUSE_DIV
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '1' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON1_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '2' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON2_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '3' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON3_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '4' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON4_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '5' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON5_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '6' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON6_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '7' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON7_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '8' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON8_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '9' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON9_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '10' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON10_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '11' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON11_AMT
+      ,(SELECT RENT_PAY FROM CM_COST_HOUSE_ACCOUNT_NEW WHERE A.COMPANY_CODE = COMPANY_CODE AND A.PROJ_CODE = PROJ_CODE AND SUBSTR(PAY_DATE,1,6) = D.MON_CNT AND '12' = D.LV_SEQ AND C.DCODE = DECODE(SUBSTR(REMARK1,1,1),'작','001','사','002','003')) AS MON12_AMT
+      ,(SELECT MON_CNT FROM DUAL WHERE '1' = D.LV_SEQ ) AS MON1
+      ,(SELECT MON_CNT FROM DUAL WHERE '2' = D.LV_SEQ ) AS MON2
+      ,(SELECT MON_CNT FROM DUAL WHERE '3' = D.LV_SEQ ) AS MON3
+      ,(SELECT MON_CNT FROM DUAL WHERE '4' = D.LV_SEQ ) AS MON4
+      ,(SELECT MON_CNT FROM DUAL WHERE '5' = D.LV_SEQ ) AS MON5
+      ,(SELECT MON_CNT FROM DUAL WHERE '6' = D.LV_SEQ ) AS MON6
+      ,(SELECT MON_CNT FROM DUAL WHERE '7' = D.LV_SEQ ) AS MON7
+      ,(SELECT MON_CNT FROM DUAL WHERE '8' = D.LV_SEQ ) AS MON8
+      ,(SELECT MON_CNT FROM DUAL WHERE '9' = D.LV_SEQ ) AS MON9
+      ,(SELECT MON_CNT FROM DUAL WHERE '10' = D.LV_SEQ ) AS MON10
+      ,(SELECT MON_CNT FROM DUAL WHERE '11' = D.LV_SEQ ) AS MON11
+      ,(SELECT MON_CNT FROM DUAL WHERE '12' = D.LV_SEQ ) AS MON12      
+  FROM SM_CODE_PROJECT A 
+  LEFT JOIN CM_COST_HOUSE_ACCOUNT_NEW B
+         ON A.COMPANY_CODE = B.COMPANY_CODE
+        AND A.PROJ_CODE = B.PROJ_CODE
+        AND B.SEND_YN = 'Y'
+  LEFT JOIN (SELECT DCODE 
+                   ,DNAME 
+               FROM SM_COMCODE_D 
+             WHERE HCODE = 'HOUSE_DIV2' 
+              AND SYS_ID = 'CM') C
+         ON 1=1
+  LEFT JOIN ( SELECT LEVEL AS LV_SEQ,TO_CHAR(ADD_MONTHS(TO_DATE(:AS_TO_DATE,'YYYYMM'),LEVEL-12),'YYYYMM') AS MON_CNT
+              FROM DUAL
+           CONNECT BY LEVEL <= 12 ) D
+         ON 1=1
+ WHERE A.MANAGE_TYPE = '1' 
+   AND A.MANAGE_TAG = '1' 
+   AND A.PROJECT_TAG = '1' 
+   AND A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE LIKE :AS_PROJ_CODE
+ ORDER BY A.PROJ_NAME,C.DCODE)
+ GROUP BY COMPANY_CODE  
+         ,PROJ_CODE
+         ,PROJ_NAME
+         ,SEQ
+         ,HOUSE_DIV
+ ORDER BY PROJ_NAME,SEQ" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_TO_DATE", string)) )
+text(band=header alignment="2" text="No" border="0" color="33554432" x="2" y="8" height="14" width="29" html.valueishtml="0"  name=c_row_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="33" y="8" height="14" width="208" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계정명" border="0" color="33554432" x="243" y="8" height="14" width="47" html.valueishtml="0"  name=house_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="투입금액 누계" border="0" color="33554432" x="1199" y="9" height="14" width="116" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="2" y="2" height="14" width="29" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="1" text="총 합계 : " border="0" color="33554432" x="33" y="5" height="14" width="208" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" mon1_amt + mon2_amt + mon3_amt + mon4_amt + mon5_amt + mon6_amt + mon7_amt + mon8_amt + mon9_amt + mon10_amt + mon11_amt + mon12_amt "border="0" color="33554432" x="1199" y="4" height="14" width="116" format="#,###" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="33" y="4" height="14" width="208" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="243" y="4" height="14" width="47" format="[general]" html.valueishtml="0"  name=house_div visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="292" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon1_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="368" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon2_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="444" y="4" height="14" width="73" format="#,###" html.valueishtml="0"  name=mon3_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="519" y="4" height="14" width="73" format="#,###" html.valueishtml="0"  name=mon4_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="594" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon5_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="670" y="4" height="14" width="73" format="#,###" html.valueishtml="0"  name=mon6_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="745" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon7_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="821" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon8_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="897" y="4" height="14" width="73" format="#,###" html.valueishtml="0"  name=mon9_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="972" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon10_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="1048" y="4" height="14" width="73" format="#,###" html.valueishtml="0"  name=mon11_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="1123" y="4" height="14" width="74" format="#,###" html.valueishtml="0"  name=mon12_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header alignment="2" expression=" left(mon12,4) + ~"-~" + right(mon12,2)"border="0" color="134217729" x="1123" y="9" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon11,4) + ~"-~" + right(mon11,2)"border="0" color="134217729" x="1048" y="9" height="14" width="73" format="[GENERAL]" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon10,4) + ~"-~" + right(mon10,2)"border="0" color="134217729" x="972" y="9" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon9,4) + ~"-~" + right(mon9,2)"border="0" color="134217729" x="897" y="9" height="14" width="73" format="[GENERAL]" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon8,4) + ~"-~" + right(mon8,2)"border="0" color="134217729" x="821" y="8" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon7,4) + ~"-~" + right(mon7,2)"border="0" color="134217729" x="745" y="9" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon6,4) + ~"-~" + right(mon6,2)"border="0" color="134217729" x="670" y="9" height="14" width="73" format="[GENERAL]" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon5,4) + ~"-~" + right(mon5,2)"border="0" color="134217729" x="594" y="9" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon4,4) + ~"-~" + right(mon4,2)"border="0" color="134217729" x="519" y="9" height="14" width="73" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon3,4) + ~"-~" + right(mon3,2)"border="0" color="134217729" x="444" y="9" height="14" width="73" format="[GENERAL]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon2,4) + ~"-~" + right(mon2,2)"border="0" color="134217729" x="368" y="9" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="2" expression=" left(mon1,4) + ~"-~" + right(mon1,2)"border="0" color="134217729" x="292" y="9" height="14" width="74" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="proj_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

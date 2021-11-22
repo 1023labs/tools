@@ -1,0 +1,107 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=173 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_equip_code_master_temp.company_code" dbalias="A.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=equip_code dbname="cm_equip_code_master_temp.equip_code" dbalias="A.equip_code" )
+ column=(type=char(3) updatewhereclause=yes name=equip_m_code dbname="cm_equip_code_master_temp.equip_m_code" dbalias="A.equip_m_code" )
+ column=(type=char(2) updatewhereclause=yes name=equip_d_code dbname="cm_equip_code_master_temp.equip_d_code" dbalias="A.equip_d_code" )
+ column=(type=char(30) updatewhereclause=yes name=equip_name dbname="cm_cost_equip_code.equip_name" dbalias="B.equip_name" )
+ column=(type=char(50) updatewhereclause=yes name=std_name dbname="cm_cost_equip_std.std_name" dbalias="C.std_name" )
+ column=(type=char(30) updatewhereclause=yes name=std_unit dbname="cm_cost_equip_std.std_unit" dbalias="C.std_unit" )
+ column=(type=char(2) updatewhereclause=yes name=std_code dbname="cm_cost_equip_std.std_code" dbalias="C.std_code" )
+ column=(type=char(2) updatewhereclause=yes name=use_div dbname="cm_cost_equip_std.use_div" dbalias="C.use_div" )
+ column=(type=char(20) updatewhereclause=yes name=car_no dbname="cm_equip_code_master_temp.car_no" dbalias="A.car_no" )
+ column=(type=char(20) updatewhereclause=yes name=car_real_no dbname="cm_equip_code_master_temp.car_real_no" dbalias="A.car_real_no" )
+ column=(type=char(8) updatewhereclause=yes name=ins_date dbname="cm_equip_code_master_temp.ins_date" dbalias="A.ins_date" )
+ column=(type=char(20) updatewhereclause=yes name=cust_code dbname="cm_equip_code_master_temp.cust_code" dbalias="A.cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" dbalias="D.cust_name" )
+ column=(type=char(10) updatewhereclause=yes name=cust_owner dbname="cm_equip_code_master_temp.cust_owner" dbalias="A.cust_owner" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_equip_code_master_temp.proj_code" dbalias="A.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="E.proj_name" )
+ column=(type=number updatewhereclause=yes name=work_amt dbname="cm_equip_code_master_temp.work_amt" dbalias="A.work_amt" )
+ retrieve="SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+       A.EQUIP_CODE    AS EQUIP_CODE,
+       A.EQUIP_M_CODE  AS EQUIP_M_CODE,
+       A.EQUIP_D_CODE  AS EQUIP_D_CODE,
+       B.EQUIP_NAME    AS EQUIP_NAME,
+       C.STD_NAME1     AS STD_NAME,
+       C.STD_NAME      AS STD_UNIT,
+       C.STD_CODE      AS STD_CODE,
+       C.USE_DIV       AS USE_DIV,
+       A.CAR_NO        AS CAR_NO,
+       A.CAR_REAL_NO   AS CAR_REAL_NO,
+       A.INS_DATE      AS INS_DATE,
+       A.CUST_CODE     AS CUST_CODE,
+       D.CUST_NAME     AS CUST_NAME,
+       A.CUST_OWNER    AS CUST_OWNER,
+       A.PROJ_CODE     AS PROJ_CODE,
+       E.PROJ_NAME     AS PROJ_NAME,
+       A.WORK_AMT      AS WORK_AMT
+FROM CM_EQUIP_CODE_MASTER_TEMP A
+LEFT JOIN CM_COST_EQUIP_CODE B
+     ON A.COMPANY_CODE = B.COMPANY_CODE
+    AND A.EQUIP_M_CODE = B.EQUIP_CODE
+LEFT JOIN CM_COST_EQUIP_STD C
+     ON A.COMPANY_CODE = C.COMPANY_CODE
+    AND A.EQUIP_M_CODE = C.EQUIP_CODE
+    AND A.EQUIP_D_CODE = C.STD_CODE
+LEFT JOIN SM_CODE_CUST D
+     ON A.CUST_CODE = D.CUST_CODE
+LEFT JOIN SM_CODE_PROJECT E
+     ON A.PROJ_CODE = E.PROJ_CODE  " )
+rectangle(band=background x="242" y="39" height="103" width="90"  name=r_6  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+rectangle(band=background x="495" y="39" height="103" width="90"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+rectangle(band=background x="5" y="38" height="134" width="90"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+text(band=background alignment="0" text="■ 신규등록" border="0" color="8388608" x="7" y="19" height="14" width="152" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림체" font.height="-9" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="3" y1="37" x2="853" y2="37"  name=l_4  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="3" y1="36" x2="853" y2="36"  name=l_12  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="3" y1="62" x2="853" y2="62"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="3" y1="87" x2="853" y2="87"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=background x1="3" y1="114" x2="853" y2="114"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+text(band=background alignment="1" text="장비코드" border="0" color="0" x="12" y="44" height="14" width="75" html.valueishtml="0"  name=cnst_dt_t  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="장비분류" border="0" color="0" x="251" y="44" height="14" width="75" html.valueishtml="0"  name=t_1  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="장비명" border="0" color="255" x="505" y="44" height="14" width="75" html.valueishtml="0"  name=cnst_fr_dt_t  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="거래처코드" border="0" color="255" x="505" y="68" height="14" width="75" html.valueishtml="0"  name=t_8  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="거래처명" border="0" color="0" x="505" y="93" height="14" width="75" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="규격" border="0" color="0" x="12" y="68" height="14" width="75" html.valueishtml="0"  name=exec_amt_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="구분" border="0" color="0" x="252" y="68" height="14" width="75" html.valueishtml="0"  name=t_2  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="소유자" border="0" color="0" x="505" y="121" height="14" width="75" html.valueishtml="0"  name=t_7  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="차량번호" border="0" color="255" x="12" y="93" height="14" width="75" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="차량일련번호" border="0" color="255" x="252" y="93" height="14" width="75" html.valueishtml="0"  name=t_5  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="5" y1="172" x2="853" y2="172"  name=l_1  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="5" y1="172" x2="853" y2="172"  name=l_2  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=background x1="3" y1="141" x2="853" y2="141"  name=l_7  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="336" y="43" height="15" width="157" format="[general]" html.valueishtml="0"  name=equip_name  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=10 border="0" color="33554432" x="588" y="43" height="15" width="261" format="[general]" html.valueishtml="0"  name=std_name  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=20 border="0" color="33554432" x="588" y="67" height="15" width="261" format="[general]" html.valueishtml="0"  name=cust_code  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432" x="588" y="92" height="15" width="261" format="[general]" html.valueishtml="0"  name=cust_name  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="98" y="41" height="16" width="140" format="[general]" html.valueishtml="0"  name=equip_code  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="98" y="67" height="15" width="140" format="[general]" html.valueishtml="0"  name=std_unit  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="336" y="67" height="15" width="157" format="[general]" html.valueishtml="0"  name=use_div  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="854" y="1" height="15" width="21" format="[general]" html.valueishtml="0"  name=equip_m_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="876" y="1" height="15" width="14" format="[general]" html.valueishtml="0"  name=equip_d_code visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="588" y="119" height="15" width="261" format="[general]" html.valueishtml="0"  name=cust_owner  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=40 border="0" color="33554432" x="336" y="92" height="13" width="157" format="[general]" html.valueishtml="0"  name=car_real_no  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="현장명" border="0" color="0" x="252" y="152" height="14" width="75" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="현장코드" border="0" color="255" x="12" y="152" height="14" width="75" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=17 alignment="0" tabsequence=32766 border="0" color="33554432" x="336" y="149" height="15" width="406" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="0" tabsequence=70 border="0" color="33554432" x="98" y="149" height="15" width="140" format="[general]" html.valueishtml="0"  name=proj_code  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=background alignment="1" text="등록일자" border="0" color="255" x="252" y="121" height="14" width="75" html.valueishtml="0"  name=t_9  tag="" visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="단가" border="0" color="255" x="12" y="121" height="14" width="75" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=30 border="0" color="33554432" x="98" y="92" height="15" width="140" format="[general]" html.valueishtml="0"  name=car_no  tag="[R]" visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=60 border="0" color="33554432" x="336" y="119" height="13" width="157" format="[general]" html.valueishtml="0"  name=ins_date  tag="[R]" visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="0" tabsequence=50 border="0" color="33554432" x="98" y="119" height="15" width="140" format="#,###" html.valueishtml="0"  name=work_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

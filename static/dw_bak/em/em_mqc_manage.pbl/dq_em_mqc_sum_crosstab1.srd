@@ -1,0 +1,53 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=4 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no  crosstab.dynamic = yes grid.lines=0 grid.columnmove=no selected.mouse=no )
+header[1](height=0 color="536870912" )
+header[2](height=0 color="536870912" )
+header[3](height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(20) updatewhereclause=yes name=item_name dbname="item_name" )
+ column=(type=char(20) updatewhereclause=yes name=item_std dbname="item_std" )
+ column=(type=char(20) updatewhereclause=yes name=item_unit dbname="item_unit" )
+ column=(type=number updatewhereclause=yes name=f_qty dbname="f_qty" )
+ retrieve="  SELECT A.CONST_CODE,
+         C.CONST_NAME,
+         A.ITEM_CODE,
+         B.ITEM_NAME,
+         B.ITEM_STD,				 
+         B.ITEM_UNIT, 
+         A.F_QTY
+	 FROM EM_MQC_SUM A,
+		   SM_CODE_MATERIAL B,
+		   EM_SITECONST_KIND C
+   WHERE A.ITEM_CODE = B.ITEM_CODE
+     AND A.EST_CODE = C.EST_CODE
+     AND A.CONST_DIV = C.CONST_DIV
+     AND A.CONST_CODE = C.CONST_CODE  
+     AND A.EST_CODE = :as_estcode
+     AND A.CONST_DIV = :as_constdiv
+ORDER BY B.ITEM_NAME, C.CONST_NAME" arguments=(("as_estcode", string),("as_constdiv", string))  sort="item_name A item_std A item_unit A " )
+group(level=1 header.height=0 trailer.height=0 by=("item_name" ) header.color="536870912" trailer.color="536870912" )
+group(level=2 header.height=0 trailer.height=0 by=("item_std" ) header.color="536870912" trailer.color="536870912" )
+text(band=header[1] alignment="0" text="Sum Of Em Mqc Sum F Qty" border="0" color="33554432" x="2" y="4" height="14" width="148" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[1] alignment="0" text="Em Mqc Sum Const Code" border="0" color="33554432" x="152" y="4" height="14" width="138" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[1] alignment="0" text="Em Siteconst Kind Const Name" border="0" color="33554432" x="292" y="4" height="14" width="42" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[2] alignment="0" text="@em_mqc_sum_const_code" border="0" color="33554432" x="336" y="4" height="14" width="101" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[3] alignment="2" text="명칭" border="0" color="33554432" x="2" y="4" height="14" width="148" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[3] alignment="2" text="규격" border="0" color="33554432" x="152" y="4" height="14" width="138" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[3] alignment="2" text="단위" border="0" color="33554432" x="292" y="4" height="14" width="42" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[3] alignment="2" text="@em_siteconst_kind_const_name" border="0" color="33554432" x="336" y="4" height="14" width="101" html.valueishtml="0"  name=f_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header[3] alignment="2" text="소계" border="0" color="33554432" x="439" y="4" height="14" width="99" html.valueishtml="0"  name=grand_sum_em_mqc_sum_f_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="14" width="148" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="152" y="1" height="14" width="138" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="292" y="1" height="14" width="42" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="336" y="1" height="14" width="101" format="~t'#,###' + if ( f_qty = truncate ( f_qty, 0 ), '', '.######' )" html.valueishtml="0"  name=f_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.autohscroll=yes edit.imemode=0 crosstab.repeat=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="crosstabsum(1)"border="0" color="33554432" x="439" y="1" height="14" width="99" format="" html.valueishtml="0"  name=grand_sum_em_mqc_sum_f_qty visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+ crosstab(band = foreground  crosstabonly = yes 
+ columns = "em_mqc_sum_const_code, em_siteconst_kind_const_name" rows = "sm_code_material_item_name, sm_code_material_item_std, sm_code_material_item_unit" values = "sum(em_mqc_sum_f_qty for crosstab)" sourcenames = "em_mqc_sum_const_code, em_siteconst_kind_const_name, em_mqc_sum_item_code, sm_code_material_item_name, sm_code_material_item_std, sm_code_material_item_unit, em_mqc_sum_f_qty")
+sparse(names="item_name	item_std")htmltable(border="0" cellpadding="1" cellspacing="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,140 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(100) update=yes updatewhereclause=yes name=tmp_name dbname="em_synonym_work.tmp_name" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=tmp_size dbname="em_synonym_work.tmp_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=tmp_unit dbname="em_synonym_work.tmp_unit" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tmp_cost dbname="em_synonym_work.tmp_cost" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=sptext1 dbname="em_synonym_work.sptext1" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=tmp_remarks dbname="em_synonym_work.tmp_remarks" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tmp_att_width dbname="em_synonym_work.tmp_att_width" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tmp_att_length dbname="em_synonym_work.tmp_att_length" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tmp_att_height dbname="em_synonym_work.tmp_att_height" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=tmp_att_size dbname="em_synonym_work.tmp_att_size" )
+ column=(type=char(1) updatewhereclause=yes name=chk_tag dbname="chk_tag" )
+ column=(type=char(1) updatewhereclause=yes name=choice_tag dbname="choice_tag" values="	Y/	N" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=item_code dbname="em_synonym_work.item_code" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=item_name dbname="em_synonym_work.item_name" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=item_std dbname="em_synonym_work.item_std" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=item_unit dbname="em_synonym_work.item_unit" )
+ column=(type=char(12) updatewhereclause=yes name=synonym_item_code dbname="synonym_item_code" )
+ column=(type=char(100) updatewhereclause=yes name=synonym_item_name dbname="synonym_item_name" )
+ column=(type=char(100) updatewhereclause=yes name=synonym_item_std dbname="synonym_item_std" )
+ column=(type=char(10) updatewhereclause=yes name=synonym_item_unit dbname="synonym_item_unit" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=remarks dbname="em_synonym_work.remarks" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=company_code dbname="em_synonym_work.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=user_id dbname="em_synonym_work.user_id" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=break_div dbname="em_synonym_work.break_div" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_synonym_work.est_code" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=tmscode dbname="em_synonym_work.tmscode" )
+ column=(type=number update=yes updatewhereclause=yes key=yes name=tmseq dbname="em_synonym_work.tmseq" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=sptext2 dbname="em_synonym_work.sptext2" )
+ retrieve="  SELECT A.TMP_NAME,
+         A.TMP_SIZE,
+         A.TMP_UNIT, 
+         A.TMP_COST,
+         A.SPTEXT1,
+         A.TMP_REMARKS,
+         A.TMP_ATT_WIDTH, 
+         A.TMP_ATT_LENGTH,
+         A.TMP_ATT_HEIGHT,
+         A.TMP_ATT_SIZE,
+         CASE WHEN NVL(LENGTH(A.ITEM_CODE), 0) > 0 AND (NVL(LENGTH(B.ITEM_CODE), NVL(LENGTH(C.ITEM_CODE), 0)) > 0 AND (A.ITEM_CODE = B.ITEM_CODE OR A.ITEM_CODE = C.ITEM_CODE)) THEN 'Y'
+              WHEN NVL(LENGTH(A.ITEM_CODE), 0) > 0 AND (NVL(LENGTH(B.ITEM_CODE), NVL(LENGTH(C.ITEM_CODE), 0)) = 0 OR (A.ITEM_CODE <> B.ITEM_CODE OR A.ITEM_CODE <> C.ITEM_CODE)) THEN 'I'
+              WHEN NVL(LENGTH(A.ITEM_CODE), 0) = 0 AND NVL(LENGTH(B.ITEM_CODE), NVL(LENGTH(C.ITEM_CODE), 0)) > 0 THEN 'M'
+              ELSE 'N' END CHK_TAG,
+         'N' CHOICE_TAG,
+         A.ITEM_CODE,
+         A.ITEM_NAME,
+         A.ITEM_STD,
+         a.ITEM_UNIT,
+         CASE NVL(B.ITEM_CODE,'0') WHEN '0' THEN C.ITEM_CODE
+                                        ELSE B.ITEM_CODE END SYNONYM_ITEM_CODE,
+         CASE NVL(B.ITEM_CODE,'0') WHEN '0' THEN C.ITEM_NAME
+                                        ELSE B.ITEM_NAME END SYNONYM_ITEM_NAME,
+         CASE NVL(B.ITEM_CODE,'0') WHEN '0' THEN C.ITEM_SIZE
+                                        ELSE B.ITEM_STD END SYNONYM_ITEM_STD,
+         CASE NVL(B.ITEM_CODE,'0') WHEN '0' THEN C.ITEM_UNIT
+                                        ELSE B.ITEM_UNIT END SYNONYM_ITEM_UNIT,
+         B.REMARKS,
+         A.COMPANY_CODE,
+         A.USER_ID,
+         A.BREAK_DIV,
+         A.EST_CODE,
+         A.TMSCODE,
+         A.TMSEQ,
+         A.SPTEXT2
+    FROM EM_SYNONYM_WORK A LEFT JOIN (SELECT A.COMPANY_CODE,
+                                             A.TMSCODE,
+                                             A.TMP_NAME,
+                                             A.TMP_SIZE,
+                                             A.TMP_UNIT,
+                                             A.TMP_ATT_WIDTH,
+                                             A.TMP_ATT_LENGTH,
+                                             A.TMP_ATT_HEIGHT,
+                                             A.TMP_ATT_SIZE,
+                                             A.SPTEXT1,
+                                             A.SPTEXT2,
+                                             A.REMARKS,
+                                             A.ITEM_CODE,
+                                             A.ITEM_NAME,
+                                             A.ITEM_STD,
+                                             A.ITEM_UNIT,
+                                             B.DNAME
+                                        FROM EM_SYNONYM A LEFT JOIN  VW_EM_COMCODE_APPLYMETHOD B
+                                                                 ON A.SPTEXT1 = B.DCODE ) B
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                 AND A.TMSCODE = B.TMSCODE
+                                 AND A.TMP_NAME = B.TMP_NAME
+                                 AND A.TMP_SIZE = B.TMP_SIZE
+                                 AND A.TMP_UNIT = B.TMP_UNIT
+                                 AND NVL(LTRIM(A.SPTEXT1), '표준') = NVL(B.DNAME, '표준')
+                           LEFT JOIN ( SELECT Z.ITEM_CODE,
+                                              Z.ITEM_NAME,
+                                              Z.ITEM_SIZE,
+                                              Z.ITEM_UNIT,
+                                              Z.SPTEXT,
+                                              Y.DNAME SPNAME
+                                         FROM SM_CODE_MATERIAL_PLAB Z LEFT JOIN VW_EM_COMCODE_APPLYMETHOD Y
+                                                                             ON Z.SPTEXT = Y.DCODE ) C
+                                  ON A.TMP_NAME = C.ITEM_NAME
+                                 AND A.TMP_SIZE = C.ITEM_SIZE
+                                 AND A.TMP_UNIT = C.ITEM_UNIT
+                                 AND NVL(LTRIM(A.SPTEXT1), '표준') = C.SPNAME
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.USER_ID = :as_user_id
+     AND A.BREAK_DIV = :as_break_div
+     AND A.EST_CODE = :as_est_code
+     AND A.TMSCODE  = :as_tmscode
+ORDER BY A.TMSEQ" update="EM_SYNONYM_WORK" updatewhere=0 updatekeyinplace=no arguments=(("as_compcode", string),("as_user_id", string),("as_break_div", string),("as_est_code", string),("as_tmscode", string)) )
+text(band=header alignment="2" text="조달청자재명" border="0" color="27229506" x="51" y="2" height="14" width="107" html.valueishtml="0"  name=tmp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="27229506" x="160" y="2" height="14" width="96" html.valueishtml="0"  name=tmp_size_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="27229506" x="258" y="2" height="14" width="73" html.valueishtml="0"  name=tmp_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="27229506" x="2" y="2" height="14" width="47" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단가" border="0" color="27229506" x="333" y="2" height="14" width="72" html.valueishtml="0"  name=em_synonym_work_tmp_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품셈기준" border="0" color="27229506" x="407" y="2" height="14" width="99" html.valueishtml="0"  name=em_synonym_work_sptext1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고1" border="0" color="27229506" x="508" y="2" height="14" width="91" html.valueishtml="0"  name=em_synonym_work_tmp_remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="27229506" x="601" y="2" height="14" width="27" html.valueishtml="0"  name=choice_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="품명" border="0" color="27229506" x="630" y="2" height="14" width="136" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="27229506" x="768" y="2" height="14" width="109" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="27229506" x="879" y="2" height="14" width="91" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="Getrow()"border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="2" y="2" height="17" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="51" y="2" height="17" width="107" format="[general]" html.valueishtml="0"  name=tmp_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="160" y="2" height="17" width="96" format="[general]" html.valueishtml="0"  name=tmp_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="258" y="2" height="17" width="73" format="[general]" html.valueishtml="0"  name=tmp_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="333" y="2" height="17" width="72" format="#,##0.00" html.valueishtml="0"  name=tmp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="407" y="2" height="17" width="99" format="[general]" html.valueishtml="0"  name=sptext1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="508" y="2" height="17" width="91" format="[general]" html.valueishtml="0"  name=tmp_remarks visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="630" y="2" height="17" width="136" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="768" y="2" height="17" width="109" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="0" tabsequence=32766 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="879" y="2" height="17" width="91" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=10 border="0" color="33554432~tif( chk_tag = 'Y', rgb(0,0,255), if ( chk_tag = 'I', rgb(0,210,50), if ( chk_tag = 'M', rgb(255,0,0), rgb(0,0,0) ) ) )" x="601" y="2" height="17" width="27" format="[general]" html.valueishtml="0"  name=choice_tag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

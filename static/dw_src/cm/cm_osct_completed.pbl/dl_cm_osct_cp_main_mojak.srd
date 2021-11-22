@@ -1,0 +1,85 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="536870912" )
+detail(height=19 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_osct_completed.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_osct_completed.proj_code" )
+ column=(type=char(1) update=yes updatewhereclause=yes key=yes name=osct_div dbname="cm_osct_completed.osct_div" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=consult_code dbname="cm_osct_completed.consult_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=dem_date dbname="cm_osct_completed.dem_date" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=work_per dbname="cm_osct_completed.work_per" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=work_day dbname="cm_osct_completed.work_day" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=work_qty dbname="cm_osct_completed.work_qty" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=labor_amt dbname="cm_osct_completed.labor_amt" )
+ column=(type=number updatewhereclause=yes name=incentive_amt dbname="incentive_amt" )
+ column=(type=decimal(2) update=yes updatewhereclause=yes name=completed_rate dbname="cm_osct_completed.completed_rate" )
+ column=(type=char(1) updatewhereclause=yes name=trans_tag dbname="cm_osct_completed.trans_tag" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=remarks dbname="cm_osct_completed.remarks" )
+ column=(type=number updatewhereclause=yes name=total_amt dbname="cm_osct_completed.total_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,   
+         A.OSCT_DIV,
+         A.CONSULT_CODE,   
+         A.DEM_DATE,   
+         A.WORK_PER,   
+         A.WORK_DAY,   
+         A.WORK_QTY, 
+         A.LABOR_AMT,  
+         NVL(A.INCENTIVE_AMT,0) INCENTIVE_AMT,
+         A.COMPLETED_RATE,   
+         A.TRANS_TAG,
+         A.REMARKS,
+         B.TOTAL_AMT
+    FROM CM_OSCT_COMPLETED A INNER JOIN (
+                                           SELECT COMPANY_CODE,
+                                              PROJ_CODE,
+                                              OSCT_DIV,
+                                              CONSULT_CODE,
+                                              SUM(OEXE_AMT) TOTAL_AMT
+                                         FROM CM_OSCT_CONSULT_DETAIL
+                                        WHERE COMPANY_CODE = :as_comp_code 
+                                          AND PROJ_CODE    = :as_proj_code
+                                          AND OSCT_DIV     = :as_osct_div
+                                          AND CONSULT_CODE = :as_cons_code
+                                          AND STATUS_DIV   = '3'                                          
+                                     GROUP BY COMPANY_CODE, PROJ_CODE, OSCT_DIV, CONSULT_CODE ) B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.PROJ_CODE    = B.PROJ_CODE
+                                    AND A.OSCT_DIV     = B.OSCT_DIV
+                                    AND A.CONSULT_CODE = B.CONSULT_CODE
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE    = :as_proj_code
+     AND A.OSCT_DIV     = :as_osct_div
+     AND A.CONSULT_CODE = :as_cons_code
+ORDER BY A.DEM_DATE
+" update="CM_OSCT_COMPLETED" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_osct_div", string),("as_cons_code", string)) )
+text(band=header alignment="2" text="회수" border="0" color="33554432" x="2" y="2" height="14" width="46" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성과금" border="0" color="33554432" x="237" y="2" height="14" width="96" html.valueishtml="0"  name=incentive_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="공정율(%)" border="0" color="33554432" x="513" y="2" height="14" width="79" html.valueishtml="0"  name=completed_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합계" border="0" color="33554432" x="335" y="2" height="14" width="95" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기성율(%)" border="0" color="33554432" x="432" y="2" height="14" width="79" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Total Amt" border="0" color="33554432" x="594" y="2" height="14" width="99" html.valueishtml="0"  name=total_amt_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="17" width="46" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=10 border="0" color="33554432" x="51" y="1" height="17" width="83" format="####-##-##" html.valueishtml="0"  name=dem_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="136" y="1" height="17" width="99" format="#,###" html.valueishtml="0"  name=labor_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=20 border="0" color="33554432" x="594" y="1" height="17" width="99" format="[general]" html.valueishtml="0"  name=total_amt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="513" y="1" height="17" width="79" format="#,##0.00" html.valueishtml="0"  name=completed_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="  total_sum / total_amt * 100"border="0" color="33554432" x="432" y="1" height="17" width="79" format="#,##0.00" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="labor_amt  +   incentive_amt "border="0" color="33554432" x="335" y="1" height="17" width="95" format="[General]" html.valueishtml="0"  name=total_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="237" y="1" height="17" width="96" format="#,###" html.valueishtml="0"  name=incentive_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합  계" border="0" color="33554432" x="50" y="1" height="14" width="84" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(labor_amt for all)"border="0" color="33554432" x="136" y="1" height="14" width="99" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(completed_rate for all)"border="0" color="33554432" x="513" y="1" height="14" width="79" format="#,##0.00" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="2" expression="sum(  total_sum / total_amt * 100 for all)"border="0" color="33554432" x="432" y="1" height="14" width="79" format="#,##0.00" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(labor_amt  +   incentive_amt  for all)"border="0" color="33554432" x="335" y="1" height="14" width="95" format="[General]" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(incentive_amt for all)"border="0" color="33554432" x="237" y="1" height="14" width="96" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="월노무비" border="0" color="33554432" x="136" y="2" height="14" width="99" html.valueishtml="0"  name=labor_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="청구일자" border="0" color="33554432" x="50" y="2" height="14" width="84" html.valueishtml="0"  name=dem_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

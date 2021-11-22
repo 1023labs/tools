@@ -1,0 +1,167 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no pointer="HyperLink!" grid.lines=0 selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(8) update=yes updatewhereclause=yes name=est_code dbname="est_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=const_div dbname="const_div" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=const_code dbname="const_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=item_code dbname="item_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=code_tag dbname="code_tag" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=item_name dbname="item_name" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=item_size dbname="item_size" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=item_unit dbname="item_unit" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=remarks dbname="remarks" )
+ column=(type=number updatewhereclause=yes name=color dbname="color" )
+ column=(type=char(20) updatewhereclause=yes name=supply_item dbname="supply_item" )
+ column=(type=number updatewhereclause=yes name=item_qty dbname="item_qty" )
+ column=(type=number updatewhereclause=yes name=mat_cost dbname="mat_cost" )
+ column=(type=number updatewhereclause=yes name=lab_cost dbname="lab_cost" )
+ column=(type=number updatewhereclause=yes name=exp_cost dbname="exp_cost" )
+ retrieve="  SELECT EST_CODE,
+         CONST_DIV,
+         CONST_CODE,
+         ITEM_CODE,
+         CODE_TAG,
+         ITEM_NAME,
+         ITEM_SIZE,
+         ITEM_UNIT,
+         REMARKS,
+         COLOR,
+         SUPPLY_ITEM,
+         SUM(ITEM_QTY) ITEM_QTY,
+         MAX(MAT_COST) MAT_COST,
+         MAX(LAB_COST) LAB_COST,
+         MAX(EXP_COST) EXP_COST            
+    FROM (SELECT A.EST_CODE,
+                 A.CONST_DIV,
+                 A.CONST_CODE,
+                 A.ITEM_CODE,
+                 A.CODE_TAG,
+                 A.ITEM_NAME,
+                 A.ITEM_SIZE,
+                 A.ITEM_UNIT,
+                 A.REMARKS,
+                 A.SORT_SEQ,
+                 0 COLOR,
+                 A.ITEM_QTY,
+                 A.MAT_COST,
+                 A.LAB_COST,
+                 A.EXP_COST,
+                 A.SUPPLY_ITEM
+            FROM EM_EST_EM A
+           WHERE A.BREAK_DIV = :as_breakdiv
+             AND A.EST_CODE  = :as_estcode
+             AND A.CODE_TAG  = '91'
+             AND (NVL(A.ITEM_QTY,0) <> 0 OR NVL(A.MAT_COST,0) <> 0 OR NVL(A.LAB_COST,0) <> 0 OR NVL(A.EXP_COST,0) <> 0)
+             AND ((:as_tag = '%')
+              OR  (:as_tag = '1' AND NOT EXISTS ( SELECT 1
+                                                    FROM EM_TMP_ITEM B
+                                                   WHERE A.BREAK_DIV = B.BREAK_DIV(+)
+                                                     AND A.EST_CODE  = B.EST_CODE(+)
+                                                     AND A.ITEM_CODE = B.TMP_ITEM_CODE(+) ) )
+              OR  (:as_tag = '2' AND EXISTS ( SELECT 1
+                                                FROM EM_TMP_ITEM B
+                                               WHERE A.BREAK_DIV = B.BREAK_DIV(+)
+                                                 AND A.EST_CODE = B.EST_CODE(+)
+                                                 AND A.ITEM_CODE = B.TMP_ITEM_CODE(+) ) ) )                    
+           UNION ALL
+          SELECT A.EST_CODE,
+                 A.IW_CODE,
+                 A.IW_ITEM_SEQ,
+                 A.ITEM_CODE,
+                 A.CODE_TAG,
+                 A.IW_NAME,
+                 A.IW_SIZE,
+                 A.IW_UNIT,
+                 A.REMARKS,
+                 999 SORT_SEQ,
+                 0 COLOR,
+                 A.QTY,
+                 A.MAT_UCOST,
+                 A.LAB_UCOST,
+                 A.EXP_UCOST,
+                 NULL
+            FROM EM_EST_IWITEM A JOIN ( SELECT A.BREAK_DIV,
+                                               A.EST_CODE,
+                                               A.IW_CODE,
+                                               A.IW_ITEM_SEQ,
+                                               A.ITEM_CODE,
+                                               A.CODE_TAG,
+                                               A.IW_NAME,
+                                               A.IW_SIZE,
+                                               A.IW_UNIT,
+                                               A.REMARKS,
+                                               999 SORT_SEQ,
+                                               0 COLOR
+                                          FROM (SELECT DISTINCT
+                                                       A.BREAK_DIV,
+                                                       A.EST_CODE,
+                                                       A.IW_CODE,
+                                                       A.IW_ITEM_SEQ,
+                                                       A.ITEM_CODE,
+                                                       A.CODE_TAG,
+                                                       A.IW_NAME,
+                                                       A.IW_SIZE,
+                                                       A.IW_UNIT,
+                                                       A.REMARKS,
+                                                       999 SORT_SEQ
+                                                  FROM EM_EST_IWITEM A
+                                                 WHERE CODE_TAG  = '91'
+                                                   AND BREAK_DIV = :as_breakdiv
+                                                   AND EST_CODE  = :as_estcode) A JOIN EM_EST_EM B
+                                                                                    ON A.BREAK_DIV = B.BREAK_DIV
+                                                                                   AND A.EST_CODE  = B.EST_CODE
+                                                                                   AND A.IW_CODE   = B.ITEM_CODE ) B
+                                   ON A.BREAK_DIV = B.BREAK_DIV
+                                  AND A.EST_CODE  = B.EST_CODE
+                                  AND A.IW_CODE   = B.ITEM_CODE
+           WHERE A.CODE_TAG = '91'
+             AND ((:as_tag = '%')
+              OR  (:as_tag = '1' AND NOT EXISTS ( SELECT 1
+                                                    FROM EM_TMP_ITEM B
+                                                   WHERE A.BREAK_DIV = B.BREAK_DIV(+)
+                                                     AND A.EST_CODE  = B.EST_CODE(+)
+                                                     AND A.ITEM_CODE = B.TMP_ITEM_CODE(+) ) )
+              OR  (:as_tag = '2' AND EXISTS ( SELECT 1
+                                                FROM EM_TMP_ITEM B
+                                               WHERE A.BREAK_DIV = B.BREAK_DIV(+)
+                                                 AND A.EST_CODE  = B.EST_CODE(+)
+                                                 AND A.ITEM_CODE = B.TMP_ITEM_CODE(+) ) ) ) )
+GROUP BY EST_CODE, CONST_DIV, CONST_CODE, ITEM_CODE, CODE_TAG, ITEM_NAME, 
+         ITEM_SIZE, ITEM_UNIT, REMARKS, COLOR, SUPPLY_ITEM
+ORDER BY ITEM_CODE" arguments=(("as_breakdiv", string),("as_estcode", string),("as_tag", string)) )
+text(band=header alignment="2" text="No," border="0" color="33554432" x="2" y="3" height="14" width="35" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="임시자재코드" border="0" color="33554432" x="39" y="2" height="14" width="93" html.valueishtml="0"  name=item_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="임시품명" border="0" color="33554432" x="134" y="2" height="14" width="219" html.valueishtml="0"  name=item_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="임시규격" border="0" color="33554432" x="355" y="2" height="14" width="206" html.valueishtml="0"  name=item_size_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="임시단위" border="0" color="33554432" x="563" y="2" height="14" width="70" html.valueishtml="0"  name=item_unit_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="695" y="2" height="14" width="72" html.valueishtml="0"  name=mat_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="비고" border="0" color="33554432" x="769" y="2" height="14" width="246" html.valueishtml="0"  name=remarks_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지급구분" border="0" color="33554432" x="1017" y="2" height="14" width="77" html.valueishtml="0"  name=supply_item_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="33554432" x="635" y="2" height="14" width="58" html.valueishtml="0"  name=item_qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="1096" y="2" height="14" width="66" html.valueishtml="0"  name=lab_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="1164" y="2" height="14" width="69" html.valueishtml="0"  name=exp_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="14" width="35" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432~tIF(COLOR= 0, rgb(0,0,0), rgb(255,0,0))" x="39" y="2" height="14" width="93" format="[general]" html.valueishtml="0"  name=item_code visible="1" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432~tIF(COLOR= 0, rgb(0,0,0), rgb(255,0,0))" x="134" y="2" height="14" width="219" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432~tIF(COLOR= 0, rgb(0,0,0), rgb(255,0,0))" x="355" y="2" height="14" width="206" format="[general]" html.valueishtml="0"  name=item_size visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432~tIF(COLOR= 0, rgb(0,0,0), rgb(255,0,0))" x="563" y="2" height="14" width="70" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="695" y="2" height="14" width="72" format="#,##0" html.valueishtml="0"  name=mat_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432~tIF(COLOR= 0, rgb(0,0,0), rgb(255,0,0))" x="769" y="2" height="14" width="246" format="[general]" html.valueishtml="0"  name=remarks visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="1017" y="2" height="14" width="77" format="[general]" html.valueishtml="0"  name=supply_item visible="1" dddw.name=dw_sm_comcode_supplymatdiv dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="635" y="2" height="14" width="58" format="#,##0" html.valueishtml="0"  name=item_qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="1096" y="2" height="14" width="66" format="#,##0" html.valueishtml="0"  name=lab_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="1164" y="2" height="14" width="69" format="#,##0" html.valueishtml="0"  name=exp_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

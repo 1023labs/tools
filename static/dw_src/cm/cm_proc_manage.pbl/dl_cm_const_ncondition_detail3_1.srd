@@ -1,0 +1,187 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=40 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="sm_code_project.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="sm_code_project.proj_code" )
+ column=(type=number update=yes updatewhereclause=yes name=rate1 dbname="sm_code_project.rate1" )
+ column=(type=number update=yes updatewhereclause=yes name=rate2 dbname="sm_code_project.rate2" )
+ column=(type=number updatewhereclause=yes name=rate3 dbname="rate3" )
+ column=(type=number updatewhereclause=yes name=rate4 dbname="rate4" )
+ column=(type=number updatewhereclause=yes name=rate5 dbname="rate5" )
+ column=(type=number updatewhereclause=yes name=rate6 dbname="rate6" )
+ column=(type=number updatewhereclause=yes name=rate7 dbname="rate7" )
+ column=(type=number updatewhereclause=yes name=rate8 dbname="rate8" )
+ column=(type=number updatewhereclause=yes name=rate9 dbname="rate9" )
+ column=(type=number updatewhereclause=yes name=rate10 dbname="rate10" )
+ column=(type=number updatewhereclause=yes name=rate11 dbname="rate11" )
+ retrieve="  SELECT A.COMPANY_CODE
+       , A.PROJ_CODE
+       , B.RATE1
+       , B.RATE2
+       , 0 RATE3
+       , 0 RATE4
+       , 0 RATE5
+       , 0 RATE6
+       , DECODE(NVL(B.EXEC_AMT, 0), 0, 0, ROUND(C.COST_AMT / B.EXEC_AMT, 8))          RATE7
+       , DECODE(NVL(B.EXEC_AMT, 0), 0, 0, ROUND(C.TOT_COST_AMT / B.EXEC_AMT, 8))      RATE8
+       , DECODE(NVL(D.CNTR_AMT, 0), 0, 0, ROUND(D.COMPLETED_AMT / D.CNTR_AMT, 8))     RATE9
+       , DECODE(NVL(D.CNTR_AMT, 0), 0, 0, ROUND(D.TOT_COMPLETED_AMT / D.CNTR_AMT, 8)) RATE10
+       , NVL(E.ADJ_PROC_RATE, 0)                                                      RATE11
+    FROM SM_CODE_PROJECT A LEFT  JOIN (  SELECT A.COMPANY_CODE
+                                              , A.PROJ_CODE
+                                              , ROUND(SUM(B.EXEC_RATE
+                                              * ((B.COST_RATE1 * B.RATE1) + (B.COST_RATE2 * B.RATE2))), 8)         RATE1
+                                              , ROUND(SUM(B.EXEC_RATE
+                                              * ((B.RATE1 * B.TOT_COST_RATE1) + (B.RATE2 * B.TOT_COST_RATE2))), 8) RATE2
+                                              , (SELECT SUM(NVL(DESN_MAT_AMT, 0)
+                                                      + NVL(DESN_LAB_AMT, 0)
+                                                      + NVL(DESN_EXP_AMT, 0))
+                                                   FROM CM_EXEC_DETAIL
+                                                  WHERE COMPANY_CODE = A.COMPANY_CODE
+                                                    AND PROJ_CODE    = A.PROJ_CODE)                                EXEC_AMT
+                                           FROM CM_EXEC_CONST A INNER JOIN (  SELECT COMPANY_CODE
+                                                                                   , PROJ_CODE
+                                                                                   , CONST_CODE
+                                                                                   , TO_NUMBER(SUBSTR(MAX(CONST_YYMM || DECODE(EXEC_AMT, 0, 0, (EXEC_AMT1 + EXEC_AMT2 + EXEC_AMT3) / EXEC_AMT)), 7)) EXEC_RATE
+                                                                                   , TO_NUMBER(SUBSTR(MAX(CONST_YYMM || NVL(RATE1     , 0)), 7)) / 100 RATE1
+                                                                                   , TO_NUMBER(SUBSTR(MAX(CONST_YYMM || NVL(RATE2     , 0)), 7)) / 100 RATE2
+                                                                                   , TO_NUMBER(SUBSTR(MAX(CONST_YYMM || NVL(COST_RATE1, 0)), 7)) / 100 COST_RATE1
+                                                                                   , TO_NUMBER(SUBSTR(MAX(CONST_YYMM || NVL(COST_RATE2, 0)), 7)) / 100 COST_RATE2
+                                                                                   , SUM(COST_RATE1) / 100                                             TOT_COST_RATE1
+                                                                                   , SUM(COST_RATE2) / 100                                             TOT_COST_RATE2
+                                                                                FROM CM_EXEC_SET_CONST
+                                                                               WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                                                 AND PROJ_CODE    = :AS_PROJ_CODE
+                                                                                 AND CONST_YYMM  <= :AS_CC_YM
+                                                                            GROUP BY COMPANY_CODE, PROJ_CODE, CONST_CODE) B
+                                                                        ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                       AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                       AND A.CONST_CODE   = B.CONST_CODE
+                                          WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                            AND A.PROJ_CODE    = :AS_PROJ_CODE
+                                       GROUP BY A.COMPANY_CODE, A.PROJ_CODE) B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                           LEFT  JOIN (  SELECT COMPANY_CODE
+                                              , PROJ_CODE
+                                              , SUM(DECODE(CC_YM, :AS_CC_YM, COST_AMT, 0))      COST_AMT
+                                              , SUM(COST_AMT)                                   TOT_COST_AMT
+                                           FROM (SELECT COMPANY_CODE                            COMPANY_CODE
+                                                      , PROJ_CODE                               PROJ_CODE
+                                                      , COST_YYMM                               CC_YM
+                                                      , NVL(COST_AMT, 0) + NVL(ADJ_COST_AMT, 0) COST_AMT
+                                                   FROM CM_COST_SUM
+                                                  WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                    AND PROJ_CODE    = :AS_PROJ_CODE
+                                                    AND COST_YYMM BETWEEN SUBSTR(:AS_CC_YM, 1, 4) || DECODE(PROJ_CODE, '20999', '01', '00') AND :AS_CC_YM
+                                                    AND COST_ACNT_CODE <> '*')
+                                       GROUP BY COMPANY_CODE, PROJ_CODE) C
+                                   ON A.COMPANY_CODE = C.COMPANY_CODE
+                                  AND A.PROJ_CODE    = C.PROJ_CODE
+                           LEFT  JOIN (  SELECT A.COMPANY_CODE
+                                              , A.PROJ_CODE
+                                              , SUM(NVL(A.MATERIAL_AMT,0) + NVL(A.LABOR_AMT,0) + NVL(A.COST_AMT,0)) CNTR_AMT
+                                              , MAX(B.COMPLETED_AMT)                                                COMPLETED_AMT
+                                              , MAX(B.TOT_COMPLETED_AMT)                                            TOT_COMPLETED_AMT
+                                           FROM CM_CONT_CHANGE_INFO A LEFT JOIN (  SELECT COMPANY_CODE
+                                                                                        , PROJ_CODE
+                                                                                        , SUM(DECODE(SUBSTR(COMPLETED_DATE, 1, 6), :AS_CC_YM, COMPLETED_AMT, 0)) COMPLETED_AMT
+                                                                                        , SUM(COMPLETED_AMT)                                                     TOT_COMPLETED_AMT
+                                                                                     FROM CM_CONSTRUCT_COMPLETED
+                                                                                    WHERE COMPANY_CODE    = :AS_COMP_CODE
+                                                                                      AND PROJ_CODE       = :AS_PROJ_CODE
+                                                                                      AND COMPLETED_DATE BETWEEN DECODE(PROJ_CODE, '20999', SUBSTR(:AS_CC_YM, 1, 4), '0000') AND :AS_CC_YM || '31'
+                                                                                 GROUP BY COMPANY_CODE, PROJ_CODE) B
+                                                                             ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                            AND A.PROJ_CODE    = B.PROJ_CODE
+                                          WHERE A.COMPANY_CODE   = :AS_COMP_CODE
+                                            AND A.PROJ_CODE      = :AS_PROJ_CODE
+                                            AND A.REG_DATE BETWEEN DECODE(A.PROJ_CODE, '20999', SUBSTR(:AS_CC_YM, 1, 4), '0000') AND :AS_CC_YM || '31'
+                                       GROUP BY A.COMPANY_CODE, A.PROJ_CODE) D
+                                   ON A.COMPANY_CODE = D.COMPANY_CODE
+                                  AND A.PROJ_CODE = D.PROJ_CODE
+                           LEFT  JOIN (  SELECT A.COMPANY_CODE
+                                              , A.PROJ_CODE
+                                              , DECODE(SUM(A.CONTRACT_AMT), 0, 0
+                                              , ROUND(SUM(A.CONTRACT_AMT * A.ADJ_PROC_RATE / 100)
+                                              / SUM(A.CONTRACT_AMT), 8))   ADJ_PROC_RATE
+                                           FROM CM_CONT_CONTRACT_COST A
+                                          WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                            AND A.PROJ_CODE    = :AS_PROJ_CODE
+                                            AND A.CC_YM        = :AS_CC_YM
+                                       GROUP BY A.COMPANY_CODE, A.PROJ_CODE) E
+                                   ON A.COMPANY_CODE = E.COMPANY_CODE
+                                  AND A.PROJ_CODE    = E.PROJ_CODE
+   WHERE A.COMPANY_CODE = :AS_COMP_CODE
+     AND A.PROJ_CODE    = :AS_PROJ_CODE" update="SM_CODE_PROJECT" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CC_YM", string)) )
+rectangle(band=header x="811" y="1" height="59" width="134"  name=r_6 visible="1" brush.hatch="6" brush.color="67108864" pen.style="0" pen.width="1" pen.color="67108864"  background.mode="2" background.color="67108864" )
+rectangle(band=header x="649" y="1" height="59" width="163"  name=r_5 visible="1" brush.hatch="6" brush.color="31643390" pen.style="0" pen.width="1" pen.color="31643390"  background.mode="2" background.color="31643390" )
+rectangle(band=header x="487" y="1" height="59" width="163"  name=r_3 visible="1" brush.hatch="6" brush.color="27229506" pen.style="0" pen.width="1" pen.color="27229506"  background.mode="2" background.color="27229506" )
+rectangle(band=header x="325" y="1" height="59" width="163"  name=r_2 visible="1" brush.hatch="6" brush.color="29818579" pen.style="0" pen.width="1" pen.color="29818579"  background.mode="2" background.color="27583231" )
+text(band=header alignment="2" text="실적율" border="0" color="33554432" x="328" y="4" height="14" width="157" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+rectangle(band=header x="163" y="1" height="59" width="163"  name=r_1 visible="1" brush.hatch="6" brush.color="27583231" pen.style="0" pen.width="1" pen.color="27583231"  background.mode="2" background.color="33481150" )
+rectangle(band=header x="1" y="1" height="59" width="163"  name=r_4 visible="1" brush.hatch="6" brush.color="33481150" pen.style="0" pen.width="1" pen.color="33481150"  background.mode="2" background.color="27583231" )
+line(band=header x1="1" y1="1" x2="945" y2="1"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="20" x2="811" y2="20"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="2" x2="1" y2="46"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="82" y1="20" x2="82" y2="46"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="163" y1="2" x2="163" y2="46"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="244" y1="20" x2="244" y2="46"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="325" y1="2" x2="325" y2="46"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="406" y1="20" x2="406" y2="46"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="487" y1="2" x2="487" y2="46"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="568" y1="20" x2="568" y2="46"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="649" y1="2" x2="649" y2="46"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="730" y1="20" x2="730" y2="46"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="811" y1="2" x2="811" y2="46"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="전체" border="0" color="33554432" x="409" y="23" height="14" width="76" html.valueishtml="0"  name=rate6_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="328" y="23" height="14" width="76" html.valueishtml="0"  name=rate5_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="투입율" border="0" color="16777215" x="490" y="4" height="14" width="157" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기성율" border="0" color="33554432" x="652" y="4" height="14" width="157" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전체" border="0" color="33554432" x="733" y="23" height="14" width="76" html.valueishtml="0"  name=rate10_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당월" border="0" color="33554432" x="652" y="23" height="14" width="76" html.valueishtml="0"  name=rate9_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전체" border="0" color="16777215" x="571" y="23" height="14" width="76" html.valueishtml="0"  name=rate8_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당월" border="0" color="16777215" x="490" y="23" height="14" width="76" html.valueishtml="0"  name=rate7_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="944" y1="2" x2="944" y2="46"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공수율" border="0" color="0" x="166" y="4" height="14" width="157" html.valueishtml="0"  name=t_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="0" x="166" y="23" height="14" width="76" html.valueishtml="0"  name=rate3_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전체" border="0" color="0" x="247" y="23" height="14" width="76" html.valueishtml="0"  name=rate4_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공정율" border="0" color="0" x="4" y="4" height="14" width="157" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월" border="0" color="0" x="4" y="23" height="14" width="76" html.valueishtml="0"  name=rate1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전체" border="0" color="0" x="85" y="23" height="14" width="76" html.valueishtml="0"  name=rate2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="확정공정율" border="0" color="33554432" x="814" y="14" height="14" width="128" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=detail x1="1" y1="0" x2="1" y2="28"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="82" y1="0" x2="82" y2="28"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="163" y1="0" x2="163" y2="28"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="325" y1="0" x2="325" y2="28"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="406" y1="0" x2="406" y2="28"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="487" y1="0" x2="487" y2="28"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="568" y1="0" x2="568" y2="28"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="649" y1="0" x2="649" y2="28"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="730" y1="0" x2="730" y2="28"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="811" y1="0" x2="811" y2="28"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="244" y1="0" x2="244" y2="28"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="571" y="3" height="14" width="76" format="~tif( rate8 - ceiling( rate8 ) <> 0, ~"0.00%~", if( rate8 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate8 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="490" y="3" height="14" width="76" format="~tif( rate7 - ceiling( rate7 ) <> 0, ~"0.00%~", if( rate7 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate7 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="944" y1="0" x2="944" y2="28"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1" y1="19" x2="944" y2="19"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="652" y="3" height="14" width="76" format="~tif( rate9 - ceiling( rate9 ) <> 0, ~"0.00%~", if( rate9 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate9 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="733" y="3" height="14" width="76" format="~tif( rate10 - ceiling( rate10 ) <> 0, ~"0.00%~", if( rate10 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate10 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="814" y="3" height="14" width="128" format="~tif( rate11 - ceiling( rate11 ) <> 0, ~"0.00%~", if( rate11 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate11 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="4" y="3" height="14" width="76" format="[general]~tif( rate1 - ceiling( rate1 ) <> 0, ~"0.00%~", if( rate1 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="85" y="3" height="14" width="76" format="[general]~tif( rate2 - ceiling( rate2 ) <> 0, ~"0.00%~", if( rate2 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="166" y="3" height="14" width="76" format="~tif( rate3 - ceiling( rate3 ) <> 0, ~"0.00%~", if( rate3 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate3 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="247" y="3" height="14" width="76" format="~tif( rate4 - ceiling( rate4 ) <> 0, ~"0.00%~", if( rate4 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate4 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="328" y="3" height="14" width="76" format="~tif( rate5 - ceiling( rate5 ) <> 0, ~"0.00%~", if( rate5 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate5 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="409" y="3" height="14" width="76" format="~tif( rate6 - ceiling( rate6 ) <> 0, ~"0.00%~", if( rate6 <> 0, ~"0%~", ~"#~" ) )" html.valueishtml="0"  name=rate6 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="1" y1="39" x2="944" y2="39"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=foreground x1="1" y1="40" x2="944" y2="40"  name=l_29 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

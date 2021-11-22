@@ -1,0 +1,45 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cust_construct.company_code" )
+ column=(type=char(5) update=yes updatewhereclause=yes key=yes name=cnst_code dbname="cm_cust_construct.cnst_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=cnst_name dbname="cm_cust_construct.cnst_name" )
+ column=(type=char(13) update=yes updatewhereclause=yes name=buz_no dbname="cm_cust_construct.buz_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phon_no dbname="cm_cust_construct.phon_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=fax_no dbname="cm_cust_construct.fax_no" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=address dbname="cm_cust_construct.address" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=last_sell dbname="cm_cust_construct.last_sell" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=affl_name dbname="cm_cust_construct.affl_name" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=govn_work dbname="cm_cust_construct.govn_work" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=priv_work dbname="cm_cust_construct.priv_work" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=special dbname="cm_cust_construct.special" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.CNST_CODE,
+         A.CNST_NAME,
+         A.BUZ_NO,
+         A.PHON_NO,
+         A.FAX_NO,
+         A.ADDRESS,
+         A.LAST_SELL,
+         A.AFFL_NAME,
+         A.GOVN_WORK,
+         A.PRIV_WORK,
+         A.SPECIAL
+    FROM CM_CUST_CONSTRUCT A
+   WHERE A.COMPANY_CODE = :as_comp
+ORDER BY A.CNST_CODE ASC" update="CM_CUST_CONSTRUCT" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="32" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="255" x="36" y="2" height="14" width="68" html.valueishtml="0"  name=cnst_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건설사명" border="0" color="33554432" x="106" y="2" height="14" width="174" html.valueishtml="0"  name=cnst_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="36" y="2" height="17" width="68" format="[general]" html.valueishtml="0"  name=cnst_code visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="106" y="2" height="17" width="174" format="[general]" html.valueishtml="0"  name=cnst_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="32" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

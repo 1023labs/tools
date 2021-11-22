@@ -1,0 +1,113 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 1 print.margin.left = 56 print.margin.right = 56 print.margin.top = 50 print.margin.bottom = 50 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+header(height=146 color="536870912" )
+summary(height=421 color="536870912" )
+footer(height=56 color="536870912" )
+detail(height=27 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_cost_car_daily.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="cm_cost_car_daily.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=drive_date dbname="cm_cost_car_daily.drive_date" )
+ column=(type=char(6) updatewhereclause=yes name=drive_yymm dbname="cm_cost_car_daily.drive_yymm" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=drive_seq dbname="cm_cost_car_daily.drive_seq" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=car_code dbname="cm_cost_car_daily.car_code" )
+ column=(type=char(30) updatewhereclause=yes name=car_name dbname="cm_cost_car_master.car_name" )
+ column=(type=char(30) updatewhereclause=yes name=car_type dbname="cm_cost_car_master.car_type" )
+ column=(type=char(30) updatewhereclause=yes name=car_num dbname="cm_cost_car_master.car_num" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=start_place dbname="cm_cost_car_daily.start_place" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=end_place dbname="cm_cost_car_daily.end_place" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=drive_distance dbname="cm_cost_car_daily.drive_distance" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=oil_cost dbname="cm_cost_car_daily.oil_cost" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=dirver dbname="cm_cost_car_daily.dirver" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=drive_contents dbname="cm_cost_car_daily.drive_contents" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.PROJ_CODE,
+         P.PROJ_NAME,   
+         A.DRIVE_DATE,
+         :as_run_yymm AS DRIVE_YYMM,
+         A.DRIVE_SEQ,
+         A.CAR_CODE, 
+         B.CAR_NAME,
+         B.CAR_TYPE,   
+         B.CAR_NUM, 
+         A.START_PLACE,   
+         A.END_PLACE,   
+         A.DRIVE_DISTANCE,   
+         A.OIL_COST,   
+         A.DIRVER,   
+         A.DRIVE_CONTENTS    
+    FROM CM_COST_CAR_DAILY A LEFT JOIN CM_COST_CAR_MASTER B   
+                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                   AND A.PROJ_CODE    = B.PROJ_CODE
+                                   AND A.CAR_CODE     = B.CAR_CODE
+                             LEFT JOIN SM_CODE_PROJECT P
+                                    ON A.COMPANY_CODE = P.COMPANY_CODE
+                                   AND A.PROJ_CODE    = P.PROJ_CODE
+   WHERE A.COMPANY_CODE  = :as_comp_code
+     AND A.PROJ_CODE     = :as_proj_code
+     AND A.DRIVE_DATE LIKE :as_run_yymm||'%'
+ORDER BY A.DRIVE_DATE, A.DRIVE_SEQ
+" arguments=(("as_comp_code", string),("as_proj_code", string),("as_run_yymm", string)) )
+line(band=background x1="1008" y1="141" x2="1008" y2="659"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="448" y1="141" x2="448" y2="638"  name=l_19 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="332" y1="141" x2="332" y2="659"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="228" y1="141" x2="228" y2="638"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="124" y1="141" x2="124" y2="638"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="47" y1="141" x2="47" y2="638"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="1" y1="141" x2="1" y2="659"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+rectangle(band=header x="1" y="116" height="30" width="1009"  name=r_1 visible="1" brush.hatch="6" brush.color="12632256" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="33554432" )
+text(band=header alignment="0" text="차 량 운 행 일 지" border="0" color="33554432" x="249" y="20" height="37" width="285" html.valueishtml="0"  name=t_3 visible="1"  font.face="바탕체" font.height="-24" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=header alignment="0" expression="'('+left(drive_yymm,4) +'년'+right( drive_yymm,2)+'월)'"border="0" color="33554432" x="536" y="20" height="37" width="217" format="[GENERAL]" html.valueishtml="0"  name=compute_4 visible="1"  font.face="바탕체" font.height="-24" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1008" y1="117" x2="1008" y2="170"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="744" y1="117" x2="744" y2="170"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="564" y1="117" x2="564" y2="170"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="332" y1="117" x2="332" y2="170"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="228" y1="117" x2="228" y2="170"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="124" y1="117" x2="124" y2="170"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="47" y1="117" x2="47" y2="170"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="117" x2="1" y2="170"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="448" y1="117" x2="448" y2="170"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="2" y1="117" x2="1008" y2="117"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="2" y1="145" x2="1008" y2="145"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=header x1="662" y1="117" x2="662" y2="170"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="3" y="125" height="18" width="43" html.valueishtml="0"  name=t_1 visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="운행일자" border="0" color="33554432" x="50" y="125" height="18" width="73" html.valueishtml="0"  name=drive_date_t  tag="drive_date" visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="차량번호" border="0" color="33554432" x="127" y="125" height="18" width="100" html.valueishtml="0"  name=car_num_t visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="운전자" border="0" color="33554432" x="231" y="125" height="18" width="100" html.valueishtml="0"  name=dirver_t  tag="dirver" visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="출발지" border="0" color="33554432" x="335" y="125" height="18" width="111" html.valueishtml="0"  name=start_place_t visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="도착지" border="0" color="33554432" x="451" y="125" height="18" width="111" html.valueishtml="0"  name=end_place_t visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주행거리(Km)" border="0" color="33554432" x="567" y="125" height="18" width="92" html.valueishtml="0"  name=drive_distance_t visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="주유금액" border="0" color="33554432" x="665" y="125" height="18" width="75" html.valueishtml="0"  name=oil_cost_t  tag="oil_cost" visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="운행용도" border="0" color="33554432" x="746" y="125" height="18" width="259" html.valueishtml="0"  name=drive_contents_t visible="1"  font.face="바탕체" font.height="-10" font.weight="700"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="0" text="현 장 명 : " border="0" color="33554432" x="2" y="100" height="14" width="61" html.valueishtml="0"  name=t_4 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=header id=3 alignment="0" tabsequence=80 border="0" color="33554432" x="66" y="100" height="14" width="300" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="2" y1="114" x2="365" y2="114"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+compute(band=header alignment="0" expression="'출력일자 : ' + string(today(), 'YYYY/MM/DD')"border="0" color="20132659" x="875" y="19" height="15" width="175" format="[General]" html.valueishtml="0"  name=compute_16 visible="1"  font.face="바탕체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=header alignment="0" expression="'PAGE     : '+string(page(),~"#,###~") + ' of ' + string(pageCount(),~"#,###~")"border="0" color="20132659" x="875" y="37" height="15" width="175" format="[General]" html.valueishtml="0"  name=compute_15 visible="1"  font.face="바탕체" font.height="-8" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="1" tabsequence=60 border="0" color="33554432" x="665" y="6" height="18" width="75" format="#,##0" html.valueishtml="0"  name=oil_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=50 border="0" color="33554432" x="567" y="6" height="18" width="91" format="#,##0" html.valueishtml="0"  name=drive_distance visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=20 border="0" color="33554432" x="231" y="6" height="18" width="100" format="[general]" html.valueishtml="0"  name=dirver visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=10 border="0" color="33554432" x="127" y="6" height="18" width="100" format="[general]" html.valueishtml="0"  name=car_num visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="50" y="6" height="18" width="73" format="####-##-##" html.valueishtml="0"  name=drive_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="6" height="18" width="44" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=11 alignment="0" tabsequence=30 border="0" color="33554432" x="336" y="6" height="18" width="110" format="[general]" html.valueishtml="0"  name=start_place visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=40 border="0" color="33554432" x="452" y="6" height="18" width="110" format="[general]" html.valueishtml="0"  name=end_place visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="3" y1="26" x2="1009" y2="26"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="20132659"  background.mode="2" background.color="1073741824" )
+column(band=detail id=16 alignment="0" tabsequence=70 border="0" color="33554432" x="748" y="6" height="18" width="257" format="[general]" html.valueishtml="0"  name=drive_contents visible="1" edit.limit=200 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="바탕체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="2" y1="0" x2="1009" y2="0"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="392" y="5" height="14" width="111" html.valueishtml="0"  name=t_2 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(drive_distance for all)"border="0" color="33554432" x="570" y="5" height="14" width="89" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(oil_cost for all)"border="0" color="33554432" x="669" y="5" height="14" width="71" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=footer x1="2" y1="21" x2="1009" y2="21"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+text(band=footer alignment="2" text="A4 (210m/m X 297m/m)" border="0" color="0" x="886" y="30" height="14" width="120" html.valueishtml="0"  name=t_10 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=footer alignment="2" text="주식회사 세보엠이씨" border="0" color="0" x="374" y="29" height="14" width="245" html.valueishtml="0"  name=t_12 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+text(band=footer alignment="0" text="A-BC-PUR-001" border="0" color="0" x="2" y="29" height="14" width="83" html.valueishtml="0"  name=t_11 visible="1"  font.face="바탕체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="2" background.color="16777215" )
+line(band=background x1="744" y1="141" x2="744" y2="659"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="662" y1="141" x2="662" y2="659"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+line(band=background x1="564" y1="141" x2="564" y2="659"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="33554432"  background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,100 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=141 color="536870912" )
+table(column=(type=number updatewhereclause=yes name=mat_amt1 dbname="mat_amt1" )
+ column=(type=number updatewhereclause=yes name=lab_amt1 dbname="lab_amt1" )
+ column=(type=number updatewhereclause=yes name=exp_amt1 dbname="exp_amt1" )
+ column=(type=number updatewhereclause=yes name=out_amt1 dbname="out_amt1" )
+ column=(type=number updatewhereclause=yes name=mat_amt2 dbname="mat_amt2" )
+ column=(type=number updatewhereclause=yes name=lab_amt2 dbname="lab_amt2" )
+ column=(type=number updatewhereclause=yes name=exp_amt2 dbname="exp_amt2" )
+ column=(type=number updatewhereclause=yes name=out_amt2 dbname="out_amt2" )
+ retrieve="  SELECT MAX(MAT_AMT1) MAT_AMT1,
+         MAX(LAB_AMT1) LAB_AMT1,
+         MAX(EXP_AMT1) EXP_AMT1,
+         MAX(OUT_AMT1) OUT_AMT1,
+         MAX(MAT_AMT2) MAT_AMT2,
+         MAX(LAB_AMT2) LAB_AMT2,
+         MAX(EXP_AMT2) EXP_AMT2,
+         MAX(OUT_AMT2) OUT_AMT2
+    FROM ( SELECT SUM(CASE ITEM_DIV WHEN '1' THEN NVL(DESN_ITEM_QTY * DESN_MAT_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_MAT_COST, 0)
+                                    ELSE 0 END) MAT_AMT1,
+                  SUM(CASE ITEM_DIV WHEN '2' THEN NVL(DESN_ITEM_QTY * DESN_LAB_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_LAB_COST, 0)
+                                    ELSE 0 END) LAB_AMT1,
+                  SUM(CASE ITEM_DIV WHEN '3' THEN NVL(DESN_ITEM_QTY * DESN_EXP_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_EXP_COST, 0)
+                                    ELSE 0 END) EXP_AMT1,
+                  SUM(CASE ITEM_DIV WHEN '4' THEN NVL(DESN_ITEM_QTY * DESN_MAT_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_MAT_COST, 0)
+                                    ELSE 0 END) OUT_AMT1,
+                  0 MAT_AMT2,
+                  0 LAB_AMT2,
+                  0 EXP_AMT2,
+                  0 OUT_AMT2
+             FROM CM_CONTRACT_DETAIL
+            WHERE COMPANY_CODE = :as_compcode
+              AND PROJ_CODE = :as_projcode              
+            UNION ALL
+           SELECT 0 MAT_AMT1,
+                  0 LAB_AMT1,
+                  0 EXP_AMT1,
+                  0 OUT_AMT1,
+                  SUM(B.MAT_AMT) MAT_AMT2,
+                  SUM(B.LAB_AMT) LAB_AMT2,
+                  SUM(B.EXP_AMT) EXP_AMT2,
+                  SUM(B.OUT_AMT) OUT_AMT2
+             FROM CM_CONTRACT_CONST A LEFT JOIN (SELECT COMPANY_CODE,
+                                                    PROJ_CODE,
+                                                    CONST_CODE,
+                                                    ITEM_CODE,
+                                                    CASE ITEM_DIV WHEN '1' THEN NVL(DESN_ITEM_QTY * DESN_MAT_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_MAT_COST, 0)
+                                                                           ELSE 0 END MAT_AMT,
+                                                    CASE ITEM_DIV WHEN '2' THEN NVL(DESN_ITEM_QTY * DESN_LAB_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_LAB_COST, 0)
+                                                                           ELSE 0 END LAB_AMT,
+                                                    CASE ITEM_DIV WHEN '3' THEN NVL(DESN_ITEM_QTY * DESN_EXP_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_EXP_COST, 0)
+                                                                           ELSE 0 END EXP_AMT,
+                                              CASE ITEM_DIV WHEN '4' THEN NVL(DESN_ITEM_QTY * DESN_MAT_COST, 0) + NVL(CHNG_ITEM_QTY * CHNG_MAT_COST, 0)
+                                                                           ELSE 0 END OUT_AMT
+                                               FROM CM_CONTRACT_DETAIL ) B
+                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                        AND A.PROJ_CODE = B.PROJ_CODE                                        
+                                        AND B.CONST_CODE LIKE A.CONST_CODE||'%'
+            WHERE A.COMPANY_CODE = :as_compcode
+              AND A.PROJ_CODE = :as_projcode
+              AND A.CONST_CODE = :as_constcode )  " arguments=(("as_compcode", string),("as_projcode", string),("as_constcode", string)) )
+rectangle(band=background x="5" y="18" height="132" width="97"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+compute(band=detail alignment="1" expression=" mat_amt2 + lab_amt2 + exp_amt2 + out_amt2 "border="0" color="33554432" x="194" y="114" height="17" width="84" format="#,###" html.valueishtml="0"  name=c_sum2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" mat_amt1 + lab_amt1 + exp_amt1 + out_amt1 "border="0" color="33554432" x="105" y="114" height="17" width="84" format="#,###" html.valueishtml="0"  name=c_sum1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="9" height="17" width="84" format="#,##0" html.valueishtml="0"  name=mat_amt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="35" height="17" width="84" format="#,##0" html.valueishtml="0"  name=lab_amt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="35" height="17" width="84" format="#,##0" html.valueishtml="0"  name=lab_amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="9" height="17" width="84" format="#,##0" html.valueishtml="0"  name=mat_amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="87" height="17" width="84" format="#,##0" html.valueishtml="0"  name=exp_amt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="87" height="17" width="84" format="#,##0" html.valueishtml="0"  name=exp_amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="194" y="61" height="17" width="84" format="#,##0" html.valueishtml="0"  name=out_amt2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="105" y="61" height="17" width="84" format="#,##0" html.valueishtml="0"  name=out_amt1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=foreground alignment="1" text="합계/소계" border="0" color="27229506" x="11" y="130" height="14" width="84" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="경비" border="0" color="27229506" x="11" y="104" height="14" width="84" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="외주비" border="0" color="27229506" x="11" y="78" height="14" width="84" html.valueishtml="0"  name=play_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="노무비" border="0" color="27229506" x="11" y="52" height="14" width="84" html.valueishtml="0"  name=const_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=foreground alignment="1" text="자재비" border="0" color="27229506" x="11" y="26" height="14" width="84" html.valueishtml="0"  name=cnst_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="5" y1="18" x2="282" y2="18"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="71" x2="282" y2="71"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="97" x2="282" y2="97"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="123" x2="282" y2="123"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="149" x2="282" y2="149"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="45" x2="282" y2="45"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="19" x2="282" y2="19"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="150" x2="282" y2="150"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

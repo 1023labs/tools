@@ -1,0 +1,50 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=23 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cust_survey.company_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=dept_gbn dbname="cm_cust_survey.dept_gbn" values="본사	1/현장	2/인건비	3/" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=sur_large dbname="cpm_cust_survey.sur_large" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=sur_middle dbname="cm_cust_survey.sur_middle" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=sur_small dbname="cm_cust_survey.sur_small" )
+ column=(type=char(500) update=yes updatewhereclause=yes name=sur_small_name dbname="cm_cust_survey.sur_small_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sur_cnt dbname="cm_cust_survey.sur_cnt" )
+ retrieve="SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+       A.DEPT_GBN       AS DEPT_GBN,
+       A.SUR_LARGE      AS SUR_LARGE,
+       A.SUR_MIDDLE     AS SUR_MIDDLE,
+       A.SUR_SMALL      AS SUR_SMALL,
+       A.SUR_SMALL_NAME AS SUR_SMALL_NAME,
+       A.SUR_CNT        AS SUR_CNT
+  FROM CM_CUST_SURVEY A
+ORDER BY A.DEPT_GBN, A.SUR_LARGE, A.SUR_MIDDLE, A.SUR_SMALL" update="CM_CUST_SURVEY" updatewhere=1 updatekeyinplace=no )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="40" y="7" height="14" width="67" html.valueishtml="0"  name=dept_gbn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평가구분" border="0" color="33554432" x="109" y="7" height="14" width="125" html.valueishtml="0"  name=sur_large_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평가항목" border="0" color="33554432" x="236" y="7" height="14" width="129" html.valueishtml="0"  name=sur_middle_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평가지문" border="0" color="33554432" x="428" y="7" height="14" width="457" html.valueishtml="0"  name=sur_small_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="배점" border="0" color="33554432" x="887" y="7" height="14" width="84" html.valueishtml="0"  name=sur_cnt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="7" height="14" width="36" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="973" y="7" height="14" width="34" html.valueishtml="0"  name=company_code_t visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="지문코드" border="0" color="33554432" x="367" y="7" height="14" width="59" html.valueishtml="0"  name=sur_small_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="5" height="14" width="36" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=10 border="0" color="33554432" x="40" y="5" height="14" width="67" format="[general]" html.valueishtml="0"  name=dept_gbn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=50 border="0" color="33554432" x="428" y="5" height="14" width="457" format="[general]" html.valueishtml="0"  name=sur_small_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=60 border="0" color="33554432" x="887" y="5" height="14" width="84" format="[general]" html.valueishtml="0"  name=sur_cnt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=20 border="0" color="33554432" x="109" y="5" height="14" width="125" format="[general]" html.valueishtml="0"  name=sur_large visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=30 border="0" color="33554432" x="236" y="5" height="14" width="129" format="[general]" html.valueishtml="0"  name=sur_middle visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="973" y="5" height="14" width="34" format="[general]" html.valueishtml="0"  name=company_code visible="0" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=40 border="0" color="33554432" x="367" y="5" height="14" width="59" format="[general]" html.valueishtml="0"  name=sur_small visible="1" edit.limit=2 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+
+sparse(names="company_code	dept_gbn	sur_large	sur_middle")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

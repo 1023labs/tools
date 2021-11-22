@@ -1,0 +1,48 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="em_complex_sub.est_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=serial dbname="em_complex_sub.serial" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="em_complex_sub.seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=sort_seq dbname="em_complex_sub.sort_seq" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=item_code dbname="em_complex_sub.item_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=item_name dbname="em_complex_sub.item_name" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=item_std dbname="em_complex_sub.item_std" )
+ column=(type=char(5) update=yes updatewhereclause=yes name=item_unit dbname="em_complex_sub.item_unit" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=sum_tag dbname="em_complex_sub.sum_tag" values="	Y/	N" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=complex_name dbname="em_complex_sub.complex_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=name_seq dbname="em_complex_sub.name_seq" )
+ retrieve="  SELECT EST_CODE,
+         SERIAL,
+         SEQ,
+         SORT_SEQ,
+         ITEM_CODE,
+         ITEM_NAME,
+         ITEM_STD,
+         ITEM_UNIT,
+         SUM_TAG,
+         COMPLEX_NAME,
+         NAME_SEQ
+    FROM EM_COMPLEX_SUB 
+   WHERE EST_CODE = :as_estcode
+     AND SERIAL = :as_serial
+ORDER BY SORT_SEQ   " update="EM_COMPLEX_SUB" updatewhere=1 updatekeyinplace=no arguments=(("as_estcode", string),("as_serial", string)) )
+text(band=header alignment="2" text="명칭" border="0" color="33554432" x="112" y="4" height="14" width="230" html.valueishtml="0"  name=item_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="규격" border="0" color="33554432" x="344" y="4" height="14" width="110" html.valueishtml="0"  name=item_std_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="단위" border="0" color="33554432" x="456" y="4" height="14" width="55" html.valueishtml="0"  name=item_unit_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="4" height="14" width="34" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="112" y="2" height="14" width="230" format="[general]" html.valueishtml="0"  name=item_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="344" y="2" height="14" width="110" format="[general]" html.valueishtml="0"  name=item_std visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="456" y="2" height="14" width="55" format="[general]" html.valueishtml="0"  name=item_unit visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="자재코드" border="0" color="33554432" x="38" y="4" height="14" width="72" html.valueishtml="0"  name=item_code_t visible="0"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="38" y="2" height="14" width="72" format="[general]" html.valueishtml="0" protect="0~tif ( isrownew(), 0, 1 )"  name=item_code visible="0" edit.limit=9 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

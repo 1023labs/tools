@@ -1,0 +1,152 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=proj_code dbname="sm_code_project.proj_code" dbalias=".proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" dbalias="DDD.proj_name" )
+ column=(type=char(50) updatewhereclause=yes name=team_name dbname="sm_code_project.team_name" dbalias=".team_name" )
+ column=(type=char(250) updatewhereclause=yes name=job_name dbname="sm_code_project.job_name" dbalias=".job_name" )
+ column=(type=number updatewhereclause=yes name=std_ymd dbname="sm_code_project.std_ymd" dbalias=".std_ymd" )
+ column=(type=char(12) updatewhereclause=yes name=labor_code dbname="sm_code_project.labor_code" dbalias=".labor_code" )
+ column=(type=char(30) updatewhereclause=yes name=labor_name dbname="sm_code_project.labor_name" dbalias=".labor_name" )
+ column=(type=char(30) updatewhereclause=yes name=emp_v_name dbname="sm_code_project.emp_v_name" dbalias=".emp_v_name" )
+ column=(type=char(8) updatewhereclause=yes name=work_employ dbname="sm_code_project.work_employ" dbalias=".work_employ" values="상용직	1/현채직	6/일용직	8/외주업체	11/" )
+ column=(type=char(6) updatewhereclause=yes name=rrn_pre dbname="sm_code_project.rrn_pre" dbalias=".rrn_pre" )
+ column=(type=char(4) updatewhereclause=yes name=in_time dbname="sm_code_project.in_time" dbalias=".in_time" )
+ column=(type=char(4) updatewhereclause=yes name=out_time dbname="sm_code_project.out_time" dbalias=".out_time" )
+ column=(type=char(4) updatewhereclause=yes name=real_in_time dbname="sm_code_project.real_in_time" dbalias=".real_in_time" )
+ column=(type=char(4) updatewhereclause=yes name=real_out_time dbname="sm_code_project.real_out_time" dbalias=".real_out_time" )
+ column=(type=char(10) updatewhereclause=yes name=cnst_in_time dbname="sm_code_project.cnst_in_time" dbalias=".cnst_in_time" )
+ column=(type=char(10) updatewhereclause=yes name=cnst_out_time dbname="sm_code_project.cnst_out_time" dbalias=".cnst_out_time" )
+ column=(type=datetime updatewhereclause=yes name=nsnet_in_time dbname="nsnet_in_time" )
+ column=(type=datetime updatewhereclause=yes name=nsnet_out_time dbname="nsnet_out_time" )
+ column=(type=datetime updatewhereclause=yes name=cust_in_time dbname="cust_in_time" )
+ column=(type=datetime updatewhereclause=yes name=cust_out_time dbname="cust_out_time" )
+ column=(type=number updatewhereclause=yes name=chk_in_time dbname="chk_in_time" )
+ column=(type=number updatewhereclause=yes name=chk_out_time dbname="chk_out_time" )
+ retrieve="SELECT AAA.PROJ_CODE,
+         DDD.PROJ_NAME,
+         AAA.TEAM_NAME,
+         AAA.JOB_NAME,
+         AAA.STD_YMD,
+         AAA.LABOR_CODE,
+         AAA.LABOR_NAME,
+         AAA.EMP_V_NAME,
+         AAA.WORK_EMPLOY,
+         AAA.RRN_PRE,
+         AAA.IN_TIME,
+         AAA.OUT_TIME,
+         AAA.REAL_IN_TIME,
+         AAA.REAL_OUT_TIME,                                             
+         CCC.IN_TIME CNST_IN_TIME,
+         CCC.OUT_TIME CNST_OUT_TIME,
+         TO_DATE( AAA.STD_YMD||' '||AAA.REAL_IN_TIME, 'YYYY-MM-DD HH24:MI') NSNET_IN_TIME,
+         TO_DATE( AAA.STD_YMD||' '||AAA.REAL_OUT_TIME, 'YYYY-MM-DD HH24:MI') NSNET_OUT_TIME,
+         TO_DATE( AAA.STD_YMD||' '||CCC.IN_TIME, 'YYYY-MM-DD HH24:MI') CUST_IN_TIME,
+         TO_DATE( AAA.STD_YMD||' '||CCC.OUT_TIME, 'YYYY-MM-DD HH24:MI') CUST_OUT_TIME,
+         (TO_DATE( AAA.STD_YMD||' '||AAA.REAL_IN_TIME, 'YYYY-MM-DD HH24:MI') -   TO_DATE( AAA.STD_YMD||' '||CCC.IN_TIME, 'YYYY-MM-DD HH24:MI') )  * 1440  CHK_IN_TIME,
+         (TO_DATE( AAA.STD_YMD||' '||AAA.REAL_OUT_TIME, 'YYYY-MM-DD HH24:MI') -   TO_DATE( AAA.STD_YMD||' '||CCC.OUT_TIME, 'YYYY-MM-DD HH24:MI') )  * 1440  CHK_OUT_TIME                 
+  FROM 
+(SELECT AA.STD_YMD,
+            BB.PROJ_CODE,
+            BB.TEAM_NAME,
+            BB.JOB_NAME,
+            BB.LABOR_CODE,
+            BB.LABOR_NAME,
+            BB.EMP_V_NAME,
+            BB.WORK_EMPLOY,
+            BB.RRN_PRE,
+            BB.WORK_DATE,
+            BB.IN_TIME,
+            BB.OUT_TIME, 
+            BB.REAL_IN_TIME,
+            BB.REAL_OUT_TIME                        
+ FROM  (SELECT :as_f_date + ROWNUM - 1 STD_YMD
+                   FROM TAB
+                 WHERE ROWNUM  <= (SELECT TO_DATE(:as_t_date) - TO_DATE(:as_f_date) + 1
+                                                  FROM DUAL) ) AA,          
+            ( SELECT --A.COMPANY_CODE,   
+                          A.PROJ_CODE,                
+                          C.TEAM_NAME,
+                          C.DNAME JOB_NAME,                
+                          A.LABOR_CODE ,
+                          B.EMP_NAME LABOR_NAME ,
+                          A.WORK_EMPLOY,
+                          B.EMP_V_NAME,
+                          B.RRN_PRE,
+                         A.WORK_DATE,     
+                         A.IN_TIME ,
+                         A.OUT_TIME ,
+                         A.REAL_IN_TIME ,
+                         A.REAL_OUT_TIME ,     
+                         NVL(A.DAY_QTY1,0)+NVL(A.DAY_QTY2,0)+NVL(A.NIGHT_QTY,0) AS GONG
+                FROM VW_CM_DAILY_WORK_TOTAL A LEFT JOIN CM_DAILY_SAMENAME B
+                                                                                   ON A.WORK_EMPLOY = B.WORK_EMPLOY AND  A.LABOR_CODE = B.EMP_NO      
+                                                                         LEFT JOIN VW_CM_ATTD_TEAMS_TOTAL C
+                                                                                     ON  A.PROJ_CODE = C.PROJ_CODE AND  A.TEAM_CODE = C.TEAM_CODE AND A.LABOR_CODE = C.LABOR_CODE AND A.WORK_EMPLOY = C.WORK_EMPLOY                                                              
+             WHERE A.PROJ_CODE   = :as_projcode          
+                  AND A.TEAM_CODE LIKE :as_team                                
+                 AND A.WORK_DATE   BETWEEN :as_f_date AND :as_t_date  ) BB
+            WHERE AA.STD_YMD = BB.WORK_DATE(+) ) AAA,
+     (SELECT *
+        FROM LABOR_CUST_DATA
+      WHERE PROJECT_CODE  = :as_projcode       
+          AND M_YMD BETWEEN :as_f_date AND :as_t_date ) CCC,
+      SM_CODE_PROJECT DDD
+WHERE AAA.PROJ_CODE = CCC.PROJECT_CODE(+)
+   AND AAA.STD_YMD = CCC.M_YMD(+)
+   AND AAA.LABOR_NAME = CCC.M_NAME(+)    
+   AND (AAA.LABOR_NAME IS NOT NULL OR CCC.M_NAME IS NOT NULL)
+   AND AAA.PROJ_CODE = DDD.PROJ_CODE
+ORDER BY AAA.LABOR_NAME, AAA.STD_YMD" arguments=(("as_projcode", string),("as_team", string),("as_f_date", string),("as_t_date", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="9" y="8" height="56" width="201" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="658" y="8" height="56" width="882" html.valueishtml="0"  name=proj_name_t  tag="proj_name" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="팀구분" border="0" color="33554432" x="3090" y="8" height="56" width="933" html.valueishtml="0"  name=team_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="직종" border="0" color="33554432" x="2830" y="8" height="56" width="251" html.valueishtml="0"  name=job_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="근무일자" border="0" color="33554432" x="1550" y="8" height="56" width="393" html.valueishtml="0"  name=std_ymd_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사번" border="0" color="33554432" x="1952" y="8" height="56" width="315" html.valueishtml="0"  name=labor_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="2277" y="8" height="56" width="270" html.valueishtml="0"  name=labor_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="성명SEQ" border="0" color="33554432" x="2555" y="8" height="56" width="265" html.valueishtml="0"  name=emp_v_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="근무형태" border="0" color="33554432" x="4032" y="8" height="56" width="265" html.valueishtml="0"  name=work_employ_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="생년월일" border="0" color="33554432" x="4306" y="8" height="56" width="325" html.valueishtml="0"  name=rrn_pre_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="보정출근" border="0" color="33554432" x="4640" y="8" height="56" width="265" html.valueishtml="0"  name=in_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="보정퇴근" border="0" color="33554432" x="4914" y="8" height="56" width="265" html.valueishtml="0"  name=out_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="모바일출근" border="0" color="33554432" x="5189" y="8" height="56" width="302" html.valueishtml="0"  name=real_in_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="모바일퇴근" border="0" color="33554432" x="5499" y="8" height="56" width="283" html.valueishtml="0"  name=real_out_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건설사출근" border="0" color="33554432" x="5792" y="8" height="56" width="293" html.valueishtml="0"  name=cnst_in_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="건설사퇴근" border="0" color="33554432" x="6094" y="8" height="56" width="288" html.valueishtml="0"  name=cnst_out_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="출근차이(분)" border="0" color="33554432" x="6391" y="8" height="56" width="370" html.valueishtml="0"  name=chk_in_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="퇴근차이(분)" border="0" color="33554432" x="6770" y="8" height="56" width="370" html.valueishtml="0"  name=chk_out_time_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="219" y="8" height="56" width="430" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432~tif( week_name ='일',rgb(255,0,0),if( week_name ='토',rgb(0,0,255),rgb(0,0,0)))" x="9" y="8" height="68" width="201" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432~tif( week_name ='일',rgb(255,0,0),if( week_name ='토',rgb(0,0,255),rgb(0,0,0)))" x="658" y="8" height="68" width="882" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="3090" y="8" height="68" width="933" format="[general]" html.valueishtml="0"  name=team_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="2830" y="8" height="68" width="251" format="[general]" html.valueishtml="0"  name=job_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="1554" y="8" height="68" width="389" format="[general]" html.valueishtml="0"  name=std_ymd visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="1952" y="8" height="68" width="315" format="[general]" html.valueishtml="0"  name=labor_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="2277" y="8" height="68" width="270" format="[general]" html.valueishtml="0"  name=labor_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="2555" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=emp_v_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="4032" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=work_employ visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="4306" y="8" height="68" width="325" format="[general]" html.valueishtml="0"  name=rrn_pre visible="1" editmask.mask="XX.XX.XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="4640" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=in_time visible="1" editmask.mask="XX:XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="2" tabsequence=32766 border="0" color="33554432" x="4914" y="8" height="68" width="265" format="[general]" html.valueishtml="0"  name=out_time visible="1" editmask.mask="XX:XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="5189" y="8" height="68" width="302" format="[general]" html.valueishtml="0"  name=real_in_time visible="1" editmask.mask="XX:XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="2" tabsequence=32766 border="0" color="33554432" x="5499" y="8" height="68" width="283" format="[general]" html.valueishtml="0"  name=real_out_time visible="1" editmask.mask="XX:XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="2" tabsequence=32766 border="0" color="33554432" x="5792" y="8" height="68" width="293" format="[general]" html.valueishtml="0"  name=cnst_in_time visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=16 alignment="2" tabsequence=32766 border="0" color="33554432" x="6094" y="8" height="68" width="288" format="[general]" html.valueishtml="0"  name=cnst_out_time visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432~tif( chk_in_time < 0 ,rgb(255,0,0),rgb(0,0,0))" x="6391" y="8" height="68" width="370" format="[general]" html.valueishtml="0"  name=chk_in_time visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432~tif( chk_out_time < 0 ,rgb(255,0,0),rgb(0,0,0))" x="6770" y="8" height="68" width="370" format="[general]" html.valueishtml="0"  name=chk_out_time visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="219" y="8" height="68" width="430" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

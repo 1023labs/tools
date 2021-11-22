@@ -1,0 +1,45 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=item_code dbname="pm_unpr_master.item_code" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="pm_unpr_master.cust_code" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(1) updatewhereclause=yes name=master_yn dbname="master_yn" )
+ column=(type=decimal(2) updatewhereclause=yes name=order_cost dbname="pm_unpr_master.order_cost" )
+ column=(type=char(50) updatewhereclause=yes name=maker_code dbname="maker_code" )
+ column=(type=char(250) updatewhereclause=yes name=maker_name dbname="maker_name" )
+ column=(type=char(75) updatewhereclause=yes name=maker_temp dbname="maker_temp" )
+ retrieve="  SELECT A.ITEM_CODE
+       , A.CUST_CODE
+       , B.CUST_NAME
+       , NVL(A.MASTER_YN,'N') MASTER_YN
+       , A.ORDER_COST
+       , NVL(V.DCODE,'') MAKER_CODE
+       , NVL(V.DNAME,'') MAKER_NAME
+       , A.ITEM_CODE || A.CUST_CODE || V.DCODE MAKER_TEMP
+    FROM PM_UNPR_MASTER A INNER JOIN SM_CODE_CUST B
+                                  ON A.CUST_CODE = B.CUST_CODE 
+                          LEFT  JOIN VW_C_PM_MATMAKER V 
+                                  ON A.ITEM_MAKER = V.DCODE 
+                          CROSS JOIN VW_C_PM_UNPRCUST C
+   WHERE A.OPEN_YN = 'Y'
+      OR A.CUST_CODE = C.DNAME"  sort="cust_name A " )
+text(band=header alignment="2" text="사업자명" border="0" color="33554432" x="77" y="2" height="14" width="149" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="마스터" border="0" color="33554432" x="228" y="2" height="14" width="36" html.valueishtml="0"  name=master_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="구매단가" border="0" color="33554432" x="266" y="2" height="14" width="74" html.valueishtml="0"  name=order_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="제조사" border="0" color="33554432" x="342" y="2" height="14" width="146" html.valueishtml="0"  name=maker_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="거래처코드" border="0" color="33554432" x="2" y="1" height="14" width="73" html.valueishtml="0"  name=cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="3" height="16" width="73" format="[general]" html.valueishtml="0"  name=cust_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="77" y="3" height="16" width="149" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="228" y="3" height="16" width="36" format="[general]" html.valueishtml="0"  name=master_yn visible="1" edit.limit=1 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="266" y="3" height="16" width="74" format="~tif( order_cost - ceiling( order_cost ) = 0, ~"#,###~", ~"#,##0.00~" )" html.valueishtml="0"  name=order_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="342" y="3" height="16" width="146" format="[general]" html.valueishtml="0"  name=maker_name visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

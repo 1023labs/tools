@@ -1,0 +1,80 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cont_contract.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cont_contract.proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="cm_cont_contract.contract_code" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=contract_name dbname="cm_cont_contract.contract_name" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=cont_amt dbname="cm_cont_contract.cont_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=exe_amt dbname="cm_cont_contract.exe_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=exe_rate dbname="exe_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=proj_rate dbname="proj_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=chng_rate dbname="chng_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=this_rate dbname="this_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=comp_amt dbname="cm_cont_contract.comp_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=comp_rate dbname="comp_rate" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=union_tag dbname="union_tag" values="	Y/	N" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONTRACT_CODE,
+         A.CONTRACT_NAME,
+         A.MAIN_AMT CONT_AMT,
+         B.EXE_AMT,
+         CASE NVL(A.MAIN_AMT, 0) WHEN 0 THEN 0 ELSE ROUND(NVL(B.EXE_AMT, 0) / NVL(A.MAIN_AMT, 0), 1) END EXE_RATE,
+         0 PROJ_RATE,
+         0 CHNG_RATE,
+         0 THIS_RATE,
+         C.COMP_AMT,
+         CASE NVL(A.MAIN_AMT, 0) WHEN 0 THEN 0 ELSE ROUND(NVL(C.COMP_AMT, 0) / NVL(A.MAIN_AMT, 0), 1) END COMP_RATE,
+         'N' UNION_TAG
+    FROM CM_CONT_CONTRACT A LEFT JOIN ( SELECT COMPANY_CODE,
+                                               CONTRACT_CODE,
+                                               SUM(EXE_AMT) EXE_AMT
+                                          FROM CM_EXEC_WORK_BUDGET
+                                         WHERE COMPANY_CODE = :as_compcode
+                                           AND LEVEL_NUM = 2
+                                      GROUP BY COMPANY_CODE, CONTRACT_CODE ) B
+                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                  AND A.CONTRACT_CODE = B.CONTRACT_CODE
+                            LEFT JOIN ( SELECT COMPANY_CODE,
+                                               PROJ_CODE,
+                                               CONTRACT_CODE,
+                                               SUM(COMPLETED_AMT) COMP_AMT
+                                          FROM CM_CONSTRUCT_COMPLETED
+                                         WHERE COMPANY_CODE = :as_compcode
+                                           AND PROJ_CODE = :as_projcode
+                                           AND COMPLETED_DATE <= :as_yymm
+                                      GROUP BY COMPANY_CODE, PROJ_CODE, CONTRACT_CODE ) C
+                                   ON A.COMPANY_CODE = C.COMPANY_CODE
+                                  AND A.PROJ_CODE = C.PROJ_CODE
+                                  AND A.CONTRACT_CODE = C.CONTRACT_CODE
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.PROJ_CODE = :as_projcode
+ORDER BY A.CONTRACT_CODE" update="CM_CONT_CONTRACT" updatewhere=1 updatekeyinplace=no arguments=(("as_compcode", string),("as_projcode", string),("as_yymm", string)) )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="2" y="2" height="14" width="71" html.valueishtml="0"  name=contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="75" y="2" height="14" width="256" html.valueishtml="0"  name=contract_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="333" y="2" height="14" width="120" html.valueishtml="0"  name=cont_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="실행율" border="0" color="33554432" x="455" y="2" height="14" width="75" html.valueishtml="0"  name=exe_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장공정율" border="0" color="33554432" x="532" y="2" height="14" width="87" html.valueishtml="0"  name=proj_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="조정공정율" border="0" color="33554432" x="621" y="2" height="14" width="87" html.valueishtml="0"  name=chng_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당월공정율" border="0" color="33554432" x="710" y="2" height="14" width="87" html.valueishtml="0"  name=this_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="확정기성율" border="0" color="33554432" x="799" y="2" height="14" width="87" html.valueishtml="0"  name=comp_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="합병" border="0" color="33554432" x="888" y="2" height="14" width="75" html.valueishtml="0"  name=union_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="71" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="75" y="2" height="17" width="256" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="333" y="2" height="17" width="120" format="#,###" html.valueishtml="0"  name=cont_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="455" y="2" height="17" width="75" format="0.0%" html.valueishtml="0"  name=exe_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="799" y="2" height="17" width="87" format="0.00%" html.valueishtml="0"  name=comp_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="2" tabsequence=10 border="0" color="33554432" x="888" y="2" height="17" width="75" format="[general]" html.valueishtml="0"  name=union_tag visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=no checkbox.threed=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="710" y="2" height="17" width="87" format="0.00%" html.valueishtml="0"  name=this_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="621" y="2" height="17" width="87" format="0.00%" html.valueishtml="0"  name=chng_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="532" y="2" height="17" width="87" format="0.00%" html.valueishtml="0"  name=proj_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

@@ -1,0 +1,134 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=344 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labor_certificate.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_labor_certificate.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=labor_code dbname="cm_labor_certificate.labor_code" )
+ column=(type=char(20) updatewhereclause=yes name=labor_name dbname="cm_labo_master.labor_name" )
+ column=(type=char(4000) updatewhereclause=yes name=jumin_no dbname="jumin_no" )
+ column=(type=char(2) update=yes updatewhereclause=yes key=yes name=cer_div dbname="cm_labor_certificate.cer_div" )
+ column=(type=char(10) update=yes updatewhereclause=yes key=yes name=cer_no dbname="cm_labor_certificate.cer_no" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=work_yymm dbname="cm_labor_certificate.work_yymm" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=job_code dbname="cm_labor_certificate.job_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=submit_date dbname="cm_labor_certificate.submit_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=s_date1 dbname="cm_labor_certificate.s_date1" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=e_date1 dbname="cm_labor_certificate.e_date1" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=s_date2 dbname="cm_labor_certificate.s_date2" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=e_date2 dbname="cm_labor_certificate.e_date2" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=print_count dbname="cm_labor_certificate.print_count" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=napprono dbname="cm_labor_certificate.napprono" )
+ column=(type=char(200) update=yes updatewhereclause=yes name=remark dbname="cm_labor_certificate.remark" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=print_chk dbname="cm_labor_certificate.print_chk" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=use_div dbname="cm_labor_certificate.use_div" )
+ column=(type=char(4000) updatewhereclause=yes name=address dbname="address" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=emp_no dbname="cm_labor_certificate.emp_no" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=jikwi_code dbname="cm_labor_certificate.jikwi_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=print_result dbname="cm_labor_certificate.print_result" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=print_confirm dbname="cm_labor_certificate.print_confirm" )
+ retrieve="SELECT A.COMPANY_CODE                    AS COMPANY_CODE,
+       A.PROJ_CODE                       AS PROJ_CODE,
+       C.PROJ_NAME                       AS PROJ_NAME,
+       A.LABOR_CODE                      AS LABOR_CODE,
+       B.LABOR_NAME                      AS LABOR_NAME,
+       X_DECRYPT(B.RRN_PRE, '(enckey)')||'-'||X_DECRYPT(B.RRN_POST, '(enckey)') AS JUMIN_NO,
+       A.CER_DIV                         AS CER_DIV,
+       A.CER_NO                          AS CER_NO,
+       A.WORK_YYMM                       AS WORK_YYMM,
+       A.JOB_CODE                        AS JOB_CODE,
+       A.SUBMIT_DATE                     AS SUBMIT_DATE,
+       A.S_DATE1                         AS S_DATE1,
+       A.E_DATE1                         AS E_DATE1,
+       A.S_DATE2                         AS S_DATE2,
+       A.E_DATE2                         AS E_DATE2,
+       A.PRINT_COUNT                     AS PRINT_COUNT,
+       A.NAPPRONO                        AS NAPPRONO,
+       A.REMARK                          AS REMARK,
+       A.PRINT_CHK                       AS PRINT_CHK,
+       A.USE_DIV                         AS USE_DIV,
+       X_DECRYPT(B.ADDR1, '(enckey)')||X_DECRYPT(B.ADDR2, '(enckey)') AS ADDRESS,
+       A.EMP_NO                          AS EMP_NO,
+       D.EMP_NAME                        AS EMP_NAME,
+       A.JIKWI_CODE                      AS JIKWI_CODE,
+       A.PRINT_RESULT                    AS PRINT_RESULT,
+       A.PRINT_CONFIRM                   AS PRINT_CONFIRM
+  FROM CM_LABOR_CERTIFICATE A LEFT JOIN CM_LABO_MASTER B
+                                     ON A.COMPANY_CODE = B.COMPANY_CODE
+                                    AND A.LABOR_CODE   = B.LABOR_CODE
+                              LEFT JOIN SM_CODE_PROJECT C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.PROJ_CODE = C.PROJ_CODE
+                              LEFT JOIN HR_PERS_MASTER D
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE
+                                    AND A.EMP_NO       = D.EMP_NO
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE LIKE :AS_PROJ_CODE
+   AND A.CER_DIV   LIKE :AS_CER_DIV
+   AND A.WORK_YYMM = :AS_WORK_YYMM
+   AND (A.LABOR_CODE = :AS_LABOR_CODE OR B.LABOR_NAME = :AS_LABOR_CODE)" update="CM_LABOR_CERTIFICATE" updatewhere=0 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CER_DIV", string),("AS_LABOR_CODE", string),("AS_WORK_YYMM", string)) )
+rectangle(band=background x="256" y="208" height="108" width="78"  name=r_3  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="256" y="18" height="64" width="77"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+rectangle(band=background x="5" y="18" height="332" width="86"  name=r_2  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="32571376"  background.mode="2" background.color="33554432" )
+text(band=background alignment="1" text="증명서구분" border="0" color="27229506" x="12" y="25" height="15" width="75" html.valueishtml="0"  name=cm_labor_certificate_cer_div_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="성명" border="0" color="27229506" x="12" y="58" height="15" width="75" html.valueishtml="0"  name=cm_labo_master_labor_name_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="현장명" border="0" color="27229506" x="12" y="90" height="15" width="75" html.valueishtml="0"  name=sm_code_project_proj_name_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="주소" border="0" color="27229506" x="12" y="121" height="15" width="75" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="기간1" border="0" color="27229506" x="12" y="152" height="15" width="75" html.valueishtml="0"  name=cm_labor_certificate_s_date1_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="기간2" border="0" color="27229506" x="12" y="186" height="15" width="75" html.valueishtml="0"  name=cm_labor_certificate_e_date1_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="직위" border="0" color="27229506" x="12" y="220" height="15" width="75" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="용도" border="0" color="27229506" x="12" y="255" height="15" width="75" html.valueishtml="0"  name=cm_labor_certificate_use_div_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="발급자" border="0" color="27229506" x="12" y="291" height="15" width="75" html.valueishtml="0"  name=cm_labor_certificate_s_date2_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="비고" border="0" color="27229506" x="12" y="325" height="15" width="75" html.valueishtml="0"  name=cm_labor_certificate_remark_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=background filename="\images\button\btn_find.gif" x="238" y="59" height="14" width="15" border="0"  name=find_labor_name pointer="HyperLink!" visible="1~tif(  print_chk = 'Y', 0, 1 )" )
+text(band=background alignment="1" text="문서번호" border="0" color="27229506" x="261" y="25" height="15" width="67" html.valueishtml="0"  name=cm_labor_certificate_cer_no_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="주민번호" border="0" color="27229506" x="261" y="58" height="15" width="67" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="근무직종" border="0" color="27229506" x="261" y="220" height="15" width="67" html.valueishtml="0"  name=cm_labor_certificate_job_code_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="발행부수" border="0" color="27229506" x="261" y="255" height="15" width="67" html.valueishtml="0"  name=cm_labor_certificate_print_count_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="발급일자" border="0" color="27229506" x="261" y="291" height="15" width="67" html.valueishtml="0"  name=cm_labor_certificate_submit_date_t visible="1"  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=background x1="6" y1="16" x2="468" y2="16"  name=l_3  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="17" x2="468" y2="17"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="49" x2="468" y2="49"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="80" x2="468" y2="80"  name=l_4  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="112" x2="468" y2="112"  name=l_5  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="143" x2="468" y2="143"  name=l_6  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="175" x2="468" y2="175"  name=l_7  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="209" x2="468" y2="209"  name=l_8  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="244" x2="468" y2="244"  name=l_9  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="279" x2="468" y2="279"  name=l_10  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="315" x2="468" y2="315"  name=l_11  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="349" x2="468" y2="349"  name=l_12  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=background x1="6" y1="350" x2="468" y2="350"  name=l_13  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+column(band=detail id=7 alignment="2" tabsequence=10 border="0" color="33554432" x="94" y="10" height="15" width="159" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=cer_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="94" y="43" height="15" width="68" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=labor_code visible="1" edit.limit=12 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=30 border="0" color="33554432" x="169" y="43" height="15" width="65" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=labor_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=50 border="0" color="33554432" x="112" y="137" height="15" width="141" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=s_date1 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=70 border="0" color="33554432" x="111" y="171" height="15" width="141" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=s_date2 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=24 alignment="2" tabsequence=90 border="0" color="33554432" x="94" y="206" height="15" width="159" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=jikwi_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="2" tabsequence=100 border="0" color="33554432" x="94" y="240" height="15" width="159" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=use_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=23 alignment="2" tabsequence=32766 border="0" color="33554432" x="94" y="276" height="15" width="159" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=60 border="0" color="33554432" x="283" y="137" height="15" width="141" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=e_date1 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="2" tabsequence=80 border="0" color="33554432" x="282" y="171" height="15" width="141" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=e_date2 visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="338" y="10" height="15" width="128" format="[general]" html.valueishtml="0"  name=cer_no visible="1" editmask.mask="XXXXXX-XXX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="338" y="43" height="15" width="128" format="[general]" html.valueishtml="0"  name=jumin_no visible="1" editmask.mask="XXXXXX-XXXXXXX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="2" tabsequence=32766 border="0" color="33554432" x="338" y="205" height="17" width="128" format="[general]" html.valueishtml="0"  name=job_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="2" tabsequence=110 border="0" color="33554432" x="338" y="240" height="15" width="128" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=print_count visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=32766 border="0" color="33554432" x="338" y="276" height="15" width="128" format="[general]" html.valueishtml="0"  name=submit_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=40 border="0" color="33554432" x="94" y="75" height="15" width="340" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=21 alignment="0" tabsequence=32766 border="0" color="33554432" x="94" y="106" height="15" width="370" format="[general]" html.valueishtml="0"  name=address visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=18 alignment="0" tabsequence=120 border="0" color="33554432" x="92" y="310" height="15" width="373" format="[general]" html.valueishtml="0" protect="0~tif(  print_chk = 'Y', 1, 0 )"  name=remark visible="1" edit.limit=200 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-10" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+bitmap(band=background filename="\images\button\btn_find.gif" x="442" y="90" height="14" width="15" border="0"  name=find_proj_name pointer="HyperLink!" visible="1~tif(  print_chk = 'Y', 0, 1 )" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

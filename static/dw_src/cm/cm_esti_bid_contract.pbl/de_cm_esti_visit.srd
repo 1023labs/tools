@@ -1,0 +1,95 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=109 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_esti_visit.company_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=est_code dbname="cm_esti_visit.est_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=expo_date dbname="cm_esti_visit.expo_date" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=expo_time dbname="cm_esti_visit.expo_time" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=expo_place dbname="cm_esti_visit.expo_place" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=attend_no dbname="cm_esti_visit.attend_no" )
+ column=(type=char(41) updatewhereclause=yes name=expo_attend dbname="expo_attend" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring1 dbname="cm_esti_visit.expo_bring1" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring2 dbname="cm_esti_visit.expo_bring2" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring3 dbname="cm_esti_visit.expo_bring3" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring4 dbname="cm_esti_visit.expo_bring4" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring5 dbname="cm_esti_visit.expo_bring5" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring6 dbname="cm_esti_visit.expo_bring6" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring7 dbname="cm_esti_visit.expo_bring7" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=expo_bring8 dbname="cm_esti_visit.expo_bring8" values="	Y/	N" )
+ column=(type=char(400) update=yes updatewhereclause=yes name=specials dbname="cm_esti_visit.specials" )
+ retrieve="  SELECT A.COMPANY_CODE,   
+         A.EST_CODE,   
+         A.EXPO_DATE,   
+         A.EXPO_TIME,   
+         A.EXPO_PLACE, 
+         A.ATTEND_NO,
+         B.EMP_NAME||' '||B.GRADE_NAME EXPO_ATTEND,  
+         A.EXPO_BRING1,   
+         A.EXPO_BRING2,   
+         A.EXPO_BRING3,   
+         A.EXPO_BRING4,   
+         A.EXPO_BRING5,   
+         A.EXPO_BRING6,   
+         A.EXPO_BRING7,   
+         A.EXPO_BRING8,   
+         A.SPECIALS  
+    FROM CM_ESTI_VISIT A LEFT JOIN ( 
+                                    SELECT A.COMPANY_CODE,
+                                           A.EMP_NO,   
+                                           A.EMP_NAME,
+                                           A.GRADE_CODE,   
+                                           B.GRADE_NAME
+                                    FROM HR_PERS_MASTER A LEFT JOIN HR_CODE_GRADE_COMM B
+                                                                    ON A.GRADE_CODE = B.GRADE_CODE ) B
+                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                               AND A.ATTEND_NO    = B.EMP_NO  
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.EST_CODE     = :as_est_code
+
+" update="CM_ESTI_VISIT" updatewhere=1 updatekeyinplace=no arguments=(("as_comp_code", string),("as_est_code", string)) )
+rectangle(band=background x="5" y="16" height="105" width="91"  name=r_1  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+text(band=background alignment="0" text="자격증" border="0" color="33554432" x="352" y="102" height="14" width="80" html.valueishtml="0"  name=expo_bring7_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="면허수첩" border="0" color="33554432" x="234" y="102" height="14" width="80" html.valueishtml="0"  name=expo_bring6_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="위임장" border="0" color="33554432" x="471" y="76" height="14" width="80" html.valueishtml="0"  name=expo_bring4_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="재직증명서" border="0" color="33554432" x="471" y="102" height="14" width="80" html.valueishtml="0"  name=expo_bring8_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="사업자등록증" border="0" color="33554432" x="106" y="102" height="14" width="84" html.valueishtml="0"  name=expo_bring5_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="법인인감증명서" border="0" color="33554432" x="106" y="76" height="14" width="84" html.valueishtml="0"  name=expo_bring1_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="사용인감계" border="0" color="33554432" x="234" y="76" height="14" width="80" html.valueishtml="0"  name=expo_bring2_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="0" text="사용인감" border="0" color="33554432" x="352" y="76" height="14" width="80" html.valueishtml="0"  name=expo_bring3_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=background x="263" y="17" height="27" width="87"  name=r_3  tag="[B]" visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+text(band=background alignment="1" text="설명회일시" border="0" color="27229506" x="26" y="24" height="14" width="60" html.valueishtml="0"  name=expo_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="설명회장소" border="0" color="27229506" x="26" y="50" height="14" width="60" html.valueishtml="0"  name=expo_place_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="참석지참물" border="0" color="27229506" x="26" y="89" height="14" width="60" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=background alignment="1" text="참석예정자" border="0" color="27229506" x="280" y="24" height="14" width="60" html.valueishtml="0"  name=expo_attend_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+bitmap(band=background filename="\images\button\btn_calendar.gif" x="177" y="24" height="14" width="15" border="0"  name=cld_expo_date pointer="HyperLink!" visible="1" )
+bitmap(band=background filename="/images/button/btn_find.gif" x="481" y="25" height="14" width="13" border="0"  name=find_expo_attend pointer="HyperLink!" visible="1" )
+column(band=detail id=3 alignment="2" tabsequence=10 border="0" color="33554432" x="102" y="10" height="14" width="70" format="####-##-##" html.valueishtml="0"  name=expo_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=40 border="0" color="33554432" x="102" y="36" height="14" width="467" format="[general]" html.valueishtml="0"  name=expo_place visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="198" y="10" height="14" width="59" format="##:##" html.valueishtml="0"  name=expo_time visible="1" editmask.mask="##:##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=50 border="0" color="33554432" x="194" y="61" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring1  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=90 border="0" color="33554432" x="194" y="87" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring5  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=60 border="0" color="33554432" x="315" y="61" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring2  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=100 border="0" color="33554432" x="315" y="87" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring6  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=70 border="0" color="33554432" x="434" y="61" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring3  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=110 border="0" color="33554432" x="434" y="87" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring7  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=80 border="0" color="33554432" x="554" y="61" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring4  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=120 border="0" color="33554432" x="554" y="87" height="13" width="13" format="[general]" html.valueishtml="0"  name=expo_bring8  tag="[NB]" visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=30 border="0" color="33554432" x="355" y="10" height="14" width="121" format="[general]" html.valueishtml="0"  name=expo_attend visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="5" y1="17" x2="973" y2="17"  name=l_1  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="16" x2="973" y2="16"  name=l_2  tag="[HT]" visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="43" x2="975" y2="43"  name=l_3  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="96" y1="95" x2="974" y2="95"  name=l_5  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="69" x2="975" y2="69"  name=l_4  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="121" x2="973" y2="121"  name=l_7  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="5" y1="122" x2="973" y2="122"  name=l_8  tag="[HB]" visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="455" y1="69" x2="455" y2="121"  name=l_10  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="217" y1="69" x2="217" y2="121"  name=l_6  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=foreground x1="337" y1="69" x2="337" y2="121"  name=l_9  tag="[H]" visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

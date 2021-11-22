@@ -1,0 +1,175 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=32 color="536870912" )
+summary(height=0 color="134217752" )
+footer(height=17 color="134217752" )
+detail(height=23 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="proj_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=contract_code dbname="contract_code" )
+ column=(type=char(50) updatewhereclause=yes name=contract_name dbname="cm_cont_contract.contract_name" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=cc_ym dbname="cc_ym" )
+ column=(type=number updatewhereclause=yes name=supplay_amt dbname="supplay_amt" )
+ column=(type=number updatewhereclause=yes name=completed_amt dbname="completed_amt" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=default_yn dbname="default_yn" values="	Y/	N" )
+ column=(type=number update=yes updatewhereclause=yes name=exec_rate dbname="exec_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=fld_proc_rate dbname="fld_proc_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=adj_proc_rate dbname="adj_proc_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=proc_rate dbname="proc_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=comp_rate dbname="comp_rate" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=close_yn dbname="close_yn" values="	Y/	N" )
+ column=(type=char(8) updatewhereclause=yes name=insert_yn dbname="insert_yn" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=check_yn dbname="check_yn" values="	Y/	N" )
+ column=(type=number update=yes updatewhereclause=yes name=g_exec_rate dbname="g_exec_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=g_contract_amt dbname="g_contract_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=g_proc_rate dbname="g_proc_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=m_proc_rate dbname="m_proc_rate" )
+ column=(type=number update=yes updatewhereclause=yes name=g_sales_amt dbname="g_sales_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=m_sales_amt dbname="m_sales_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=g_cost_amt dbname="g_cost_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=m_cost_amt dbname="m_cost_amt" )
+ column=(type=number updatewhereclause=yes name=p_g_exec_rate dbname="p_g_exec_rate" )
+ column=(type=number updatewhereclause=yes name=p_g_contract_amt dbname="p_g_contract_amt" )
+ column=(type=number updatewhereclause=yes name=p_g_proc_rate dbname="p_g_proc_rate" )
+ column=(type=number updatewhereclause=yes name=p_m_proc_rate dbname="p_m_proc_rate" )
+ column=(type=number updatewhereclause=yes name=p_g_sales_amt dbname="p_g_sales_amt" )
+ column=(type=number updatewhereclause=yes name=p_m_sales_amt dbname="p_m_sales_amt" )
+ column=(type=number updatewhereclause=yes name=p_g_cost_amt dbname="p_g_cost_amt" )
+ column=(type=number updatewhereclause=yes name=p_m_cost_amt dbname="p_m_cost_amt" )
+ retrieve="  SELECT NVL(B.COMPANY_CODE, :AS_COMP_CODE) COMPANY_CODE
+       , NVL(B.PROJ_CODE, A.PROJ_CODE) PROJ_CODE
+       , NVL(B.CONTRACT_CODE,A.CONTRACT_CODE) CONTRACT_CODE 
+       , A.CONTRACT_NAME
+       , NVL(B.CC_YM, :AS_CC_YM) CC_YM
+       , NVL((SELECT SUM(NVL(MATERIAL_AMT, 0)
+                   + NVL(LABOR_AMT, 0)
+                   + NVL(COST_AMT, 0))
+                FROM CM_CONT_CHANGE_INFO
+               WHERE COMPANY_CODE  = A.COMPANY_CODE
+                 AND PROJ_CODE     = A.PROJ_CODE
+                 AND CONTRACT_CODE = A.CONTRACT_CODE), 0) SUPPLAY_AMT
+       , NVL((SELECT SUM(COMPLETED_AMT)
+                FROM CM_CONSTRUCT_COMPLETED
+               WHERE COMPANY_CODE    = A.COMPANY_CODE
+                 AND PROJ_CODE       = A.PROJ_CODE
+                 AND CONTRACT_CODE   = A.CONTRACT_CODE
+                 AND COMPLETED_DATE <= :AS_CC_YM || '31'), 0) COMPLETED_AMT
+       , NVL(B.DEFAULT_YN, 'N')          DEFAULT_YN
+       , NVL(B.EXEC_RATE, 0)             EXEC_RATE
+       , NVL(B.FLD_PROC_RATE, 0)         FLD_PROC_RATE
+       , NVL(B.ADJ_PROC_RATE, 0)         ADJ_PROC_RATE
+       , NVL(B.PROC_RATE, 0)             PROC_RATE
+       , NVL(B.COMP_RATE, 0)             COMP_RATE
+       , NVL(B.CLOSE_YN, 'N')            CLOSE_YN
+       , NVL(B.CONTRACT_CODE, 'Y')       INSERT_YN
+       , NVL(B.CHECK_YN, 'N')            CHECK_YN
+       , NVL(B.G_EXEC_RATE,0)            G_EXEC_RATE   
+       , NVL(B.G_CONTRACT_AMT,0)         G_CONTRACT_AMT
+       , NVL(B.G_PROC_RATE,0)            G_PROC_RATE   
+       , NVL(B.M_PROC_RATE,0)            M_PROC_RATE   
+       , NVL(B.G_SALES_AMT,0)            G_SALES_AMT   
+       , NVL(B.M_SALES_AMT,0)            M_SALES_AMT   
+       , NVL(B.G_COST_AMT,0)             G_COST_AMT    
+       , NVL(B.M_COST_AMT,0)             M_COST_AMT    
+       , NVL(C.G_EXEC_RATE,0)            P_G_EXEC_RATE   
+       , NVL(C.G_CONTRACT_AMT,0)         P_G_CONTRACT_AMT
+       , NVL(C.G_PROC_RATE,0)            P_G_PROC_RATE   
+       , NVL(C.M_PROC_RATE,0)            P_M_PROC_RATE   
+       , NVL(C.G_SALES_AMT,0)            P_G_SALES_AMT   
+       , NVL(C.M_SALES_AMT,0)            P_M_SALES_AMT   
+       , NVL(C.G_COST_AMT,0)             P_G_COST_AMT    
+       , NVL(C.M_COST_AMT,0)             P_M_COST_AMT    
+    FROM CM_CONT_CONTRACT A LEFT JOIN CM_CONT_CONTRACT_COST B
+                                   ON A.COMPANY_CODE  = B.COMPANY_CODE
+                                  AND A.PROJ_CODE     = B.PROJ_CODE
+                                  AND A.CONTRACT_CODE = B.CONTRACT_CODE
+                                  AND B.CC_YM         = :AS_CC_YM
+                            LEFT JOIN (  SELECT A.COMPANY_CODE
+                                              , A.PROJ_CODE
+                                              , A.CONTRACT_CODE
+                                              , A.CC_YM
+                                              , A.G_EXEC_RATE
+                                              , A.G_CONTRACT_AMT
+                                              , A.G_PROC_RATE
+                                              , A.M_PROC_RATE
+                                              , A.G_SALES_AMT
+                                              , A.M_SALES_AMT
+                                              , A.G_COST_AMT
+                                              , A.M_COST_AMT
+                                           FROM CM_CONT_CONTRACT_COST A
+                                          WHERE A.COMPANY_CODE  = :AS_COMP_CODE
+                                            AND A.PROJ_CODE     = :AS_PROJ_CODE
+                                            AND A.CC_YM         = (SELECT MAX(CC_YM)
+                                                                     FROM CM_CONT_CONTRACT_COST
+                                                                    WHERE COMPANY_CODE = A.COMPANY_CODE
+                                                                      AND PROJ_CODE    = A.PROJ_CODE)
+                                            AND A.DEFAULT_YN    = 'Y') C
+                                   ON A.COMPANY_CODE  = C.COMPANY_CODE
+                                  AND A.PROJ_CODE     = C.PROJ_CODE
+                                  AND A.CONTRACT_CODE = C.CONTRACT_CODE
+   WHERE A.COMPANY_CODE  = :AS_COMP_CODE
+     AND A.PROJ_CODE     = :AS_PROJ_CODE
+ORDER BY A.CONTRACT_CODE" update="CM_CONT_CONTRACT_COST" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_proj_code", string),("as_cc_ym", string)) )
+text(band=header alignment="2" text="계약금액" border="0" color="33554432" x="266" y="10" height="14" width="93" html.valueishtml="0"  name=supplay_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="58" y="10" height="14" width="206" html.valueishtml="0"  name=contract_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="2" y="10" height="14" width="54" html.valueishtml="0"  name=contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="실공정율" border="0" color="33554432" x="748" y="9" height="14" width="51" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="합
+병" border="0" color="33554432" x="720" y="3" height="26" width="26" html.valueishtml="0"  name=check_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전월
+실행율" border="0" color="33554432" x="801" y="4" height="26" width="55" html.valueishtml="0"  name=p_g_exec_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월
+월매출액" border="0" color="33554432" x="1048" y="4" height="26" width="73" html.valueishtml="0"  name=p_m_sales_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월
+총투입비" border="0" color="33554432" x="1123" y="4" height="26" width="75" html.valueishtml="0"  name=p_g_cost_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월
+월투입비" border="0" color="33554432" x="1200" y="4" height="26" width="71" html.valueishtml="0"  name=p_m_cost_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월
+총실행율" border="0" color="33554432" x="858" y="4" height="28" width="53" html.valueishtml="0"  name=p_g_proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월
+공정율" border="0" color="33554432" x="913" y="4" height="28" width="53" html.valueishtml="0"  name=p_m_proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전월
+총매출액" border="0" color="33554432" x="968" y="4" height="26" width="78" html.valueishtml="0"  name=p_g_sales_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="확정
+기성율(%)" border="0" color="33554432" x="654" y="4" height="26" width="64" html.valueishtml="0"  name=c_comp_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="당월
+공정율(%)" border="0" color="33554432" x="588" y="4" height="26" width="64" html.valueishtml="0"  name=proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="조정
+공정율(%)" border="0" color="33554432" x="522" y="4" height="26" width="64" html.valueishtml="0"  name=adj_proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장
+공정율(%)" border="0" color="33554432" x="455" y="4" height="26" width="65" html.valueishtml="0"  name=fld_proc_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="실행율
+(%)" border="0" color="33554432" x="389" y="4" height="26" width="64" html.valueishtml="0"  name=exec_rate_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="기
+본" border="0" color="33554432" x="361" y="4" height="26" width="26" html.valueishtml="0"  name=default_yn_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="58" y="3" height="17" width="206" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="266" y="3" height="17" width="93" format="#,###" html.valueishtml="0"  name=supplay_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=40 border="0" color="33554432" x="455" y="3" height="17" width="65" format="[general]" html.valueishtml="0" protect="0~tif(close_yn = 'Y' , 1,  0)"  name=fld_proc_rate visible="1" editmask.autoskip=yes editmask.mask="##0.0" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=30 border="0" color="33554432" x="389" y="3" height="17" width="64" format="##0.0" html.valueishtml="0" protect="0~tif(close_yn = 'Y' , 1,  0)"  name=exec_rate visible="1" edit.limit=0 edit.case=any edit.format="##0.0" edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=50 border="0" color="33554432" x="522" y="3" height="17" width="64" format="##0.0" html.valueishtml="0" protect="0~tif(close_yn = 'Y' , 1,  0)"  name=adj_proc_rate visible="1" edit.limit=0 edit.case=any edit.format="##0.0" edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=20 border="0" color="33554432" x="361" y="3" height="17" width="26" format="[general]" html.valueishtml="0"  name=default_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=60 border="0" color="33554432" x="588" y="3" height="17" width="64" format="##0.0" html.valueishtml="0" protect="0~tif(close_yn = 'Y' , 1,  0)"  name=proc_rate visible="1" edit.limit=0 edit.case=any edit.format="##0.0" edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="completed_amt / supplay_amt * 100"border="0" color="33554432" x="654" y="3" height="17" width="64" format="0.0" html.valueishtml="0"  name=c_comp_rate visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=16 alignment="2" tabsequence=70 border="0" color="33554432" x="720" y="3" height="17" width="26" format="[general]" html.valueishtml="0"  name=check_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="supplay_amt / sum_contract_amt * adj_proc_rate "border="0" color="33554432" x="748" y="3" height="17" width="51" format="0.0%" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="2" y="3" height="17" width="54" format="[general]" html.valueishtml="0"  name=contract_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=25 alignment="1" tabsequence=32766 border="0" color="33554432" x="801" y="3" height="17" width="55" format="0.0" html.valueishtml="0"  name=p_g_exec_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=27 alignment="1" tabsequence=32766 border="0" color="33554432" x="858" y="3" height="17" width="53" format="0.0" html.valueishtml="0"  name=p_g_proc_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=28 alignment="1" tabsequence=32766 border="0" color="33554432" x="913" y="3" height="17" width="53" format="0.0" html.valueishtml="0"  name=p_m_proc_rate visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=29 alignment="1" tabsequence=32766 border="0" color="33554432" x="968" y="3" height="17" width="78" format="0.0" html.valueishtml="0"  name=p_g_sales_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=30 alignment="1" tabsequence=32766 border="0" color="33554432" x="1048" y="3" height="17" width="73" format="0.0" html.valueishtml="0"  name=p_m_sales_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=31 alignment="1" tabsequence=32766 border="0" color="33554432" x="1123" y="3" height="17" width="75" format="0.0" html.valueishtml="0"  name=p_g_cost_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=32 alignment="1" tabsequence=32766 border="0" color="33554432" x="1200" y="3" height="17" width="71" format="0.0" html.valueishtml="0"  name=p_m_cost_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="2" text="합   계" border="0" color="16711680" x="58" y="1" height="14" width="206" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(supplay_amt for all)"border="0" color="16711680" x="266" y="1" height="14" width="93" format="#,###" html.valueishtml="0"  name=sum_contract_amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(default_yn='Y',exec_rate,0) for all)"border="0" color="16711680" x="389" y="1" height="14" width="64" format="##0.0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(default_yn='Y',fld_proc_rate,0) for all)"border="0" color="16711680" x="455" y="1" height="14" width="65" format="##0.0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(default_yn='Y',adj_proc_rate,0) for all)"border="0" color="16711680" x="522" y="1" height="14" width="64" format="##0.0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(if(default_yn='Y',proc_rate,0) for all)"border="0" color="16711680" x="588" y="1" height="14" width="64" format="##0.0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( (supplay_amt / sum_contract_amt)   *  adj_proc_rate   for all)"border="0" color="16711680" x="748" y="1" height="14" width="51" format="0.0%" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

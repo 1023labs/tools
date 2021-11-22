@@ -1,0 +1,72 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=19 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=19 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=acnt_code dbname="cm_cost_house_refund_list.acnt_code" )
+ column=(type=char(30) updatewhereclause=yes name=acnt_name dbname="ac_code_acnt.acnt_name" )
+ column=(type=char(13) updatewhereclause=yes name=cust_code dbname="cm_cost_house_refund_list.cust_code" )
+ column=(type=char(400) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=decimal(0) updatewhereclause=yes name=db_sum dbname="cm_cost_house_refund_list.db_sum" )
+ column=(type=number updatewhereclause=yes name=cr_sum dbname="cr_sum" )
+ retrieve=" SELECT :as_acnt_code AS ACNT_CODE 
+      ,D.ACNT_NAME AS ACNT_NAME
+      ,A.CUST_CODE    AS CUST_CODE
+      ,C.CUST_NAME    AS CUST_NAME
+      ,A.RENT_COST AS DB_SUM
+      , (SELECT nvl(SUM(T.CR_AMT),0) FROM AC_SUM_DD_CUST T
+          WHERE T.COMPANY_CODE = A.COMPANY_CODE
+            AND T.CUST_CODE = A.CUST_CODE
+            AND T.YYYYMMDD  BETWEEN :as_fromdate AND :as_todate
+            AND T.ACNT_CODE = :as_acnt_code ) AS    CR_SUM
+  FROM CM_COST_HOUSE_REFUND_LIST A
+  LEFT JOIN SM_CODE_PROJECT B 
+    ON A.COMPANY_CODE = B.COMPANY_CODE 
+   AND A.PROJ_CODE = B.PROJ_CODE
+  LEFT JOIN SM_CODE_CUST C 
+    ON A.CUST_CODE = C.CUST_CODE
+  LEFT JOIN AC_CODE_ACNT D
+         ON D.ACNT_CODE = :as_acnt_code
+  WHERE A.COMPANY_CODE = :as_company_code
+    AND A.SLIP_DATE BETWEEN :as_fromdate AND :as_todate
+    AND SLIP_NO IS NOT NULL
+    AND SEND_YN = 'Y'
+  GROUP BY A.COMPANY_CODE,D.ACNT_NAME,A.RENT_COST,A.CUST_CODE,C.CUST_NAME,A.SLIP_NO,A.SEND_YN
+  ORDER BY C.CUST_NAME" arguments=(("as_company_code", string),("as_fromdate", string),("as_todate", string),("as_acnt_code", stringlist)) )
+group(level=1 header.height=0 trailer.height=0 by=("acnt_code" ) header.color="536870912" trailer.color="536870912~t RGB(239,245,250)" )
+text(band=header alignment="2" text="설  정" border="0" color="33554432" x="482" y="2" height="14" width="110" html.valueishtml="0"  name=setmat_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="반  제" border="0" color="33554432" x="594" y="1" height="14" width="110" html.valueishtml="0"  name=resetamt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="319" y="2" height="14" width="161" html.valueishtml="0"  name=cust_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계정 과목명" border="0" color="33554432" x="81" y="2" height="14" width="130" html.valueishtml="0"  name=acntname2_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코     드" border="0" color="33554432" x="2" y="2" height="19" width="77" html.valueishtml="0"  name=acnt_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="잔  액" border="0" color="33554432" x="706" y="2" height="14" width="110" html.valueishtml="0"  name=remainamt_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업자등록번호" border="0" color="33554432" x="213" y="2" height="19" width="104" html.valueishtml="0"  name=cust_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="1" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="0" expression="acnt_name"border="0" color="0" x="81" y="2" height="17" width="130" format="[GENERAL]" html.valueishtml="0"  name=acntname2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="319" y="2" height="17" width="161" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.autoselect=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="1" text="" border="0" color="0" x="706" y="2" height="14" width="110" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+compute(band=detail alignment="1" expression="cr_sum"border="0" color="0" x="594" y="2" height="17" width="110" format="#,###" html.valueishtml="0"  name=resetamt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+compute(band=detail alignment="1" expression="db_sum"border="0" color="0" x="482" y="2" height="17" width="110" format="#,###" html.valueishtml="0"  name=setmat visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+compute(band=detail alignment="1" expression=" db_sum - cr_sum"border="0" color="128" x="706" y="2" height="17" width="110" format="#,###" html.valueishtml="0"  name=remainamt  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="16777215" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="1" height="14" width="77" format="[general]" html.valueishtml="0"  name=acnt_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="213" y="1" height="14" width="104" format="[general]" html.valueishtml="0"  name=cust_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=trailer.1 alignment="1" expression="/* sum(setmat for all) */"border="0" color="128" x="482" y="2" height="17" width="110" format="#,### " html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="33550576" )
+compute(band=trailer.1 alignment="1" expression="/* sum(resetamt for all) */"border="0" color="128" x="594" y="2" height="17" width="110" format="#,### " html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="33550576" )
+compute(band=trailer.1 alignment="1" expression="/* sum(remainamt for all) */"border="0" color="128" x="706" y="1" height="17" width="110" format="#,### " html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="33550576" )
+text(band=footer alignment="1" text="" border="0" color="128" x="706" y="3" height="14" width="110" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(remainamt for all)"border="0" color="128" x="706" y="3" height="17" width="110" format="#,###" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(cr_sum for all)"border="0" color="8388608" x="594" y="3" height="17" width="110" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(db_sum for all)"border="0" color="8388608" x="482" y="3" height="17" width="110" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합            계" border="0" color="128" x="190" y="3" height="14" width="101" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="acnt_code	acntname2")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

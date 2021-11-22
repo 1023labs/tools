@@ -1,0 +1,164 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=35 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=26 color="536870912" )
+table(column=(type=char(45) updatewhereclause=yes name=defects dbname="defects" )
+ column=(type=char(12) updatewhereclause=yes name=cm_defects_master_project_code dbname="project_code" )
+ column=(type=char(50) updatewhereclause=yes name=sm_code_project_proj_name dbname="proj_name" )
+ column=(type=datetime updatewhereclause=yes name=cm_defects_master_rqst_date dbname="rqst_date" )
+ column=(type=char(4) updatewhereclause=yes name=cm_defects_master_year dbname="year" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_defects_master_defects_no dbname="defects_no" )
+ column=(type=char(1) updatewhereclause=yes name=cm_defects_master_level_tag dbname="level_tag" )
+ column=(type=datetime updatewhereclause=yes name=cm_defects_master_complete_date dbname="complete_date" )
+ column=(type=char(2) updatewhereclause=yes name=cm_defects_master_gong_tag dbname="gong_tag" )
+ column=(type=char(2) updatewhereclause=yes name=cm_defects_master_defects_tag dbname="defects_tag" )
+ column=(type=char(2) updatewhereclause=yes name=cm_defects_master_defects_cause dbname="defects_cause" )
+ column=(type=char(1000) updatewhereclause=yes name=cm_defects_master_defects_couse dbname="defects_couse" )
+ column=(type=char(1000) updatewhereclause=yes name=cm_defects_master_process_result dbname="process_result" )
+ column=(type=char(1000) updatewhereclause=yes name=cm_defects_master_compensation dbname="compensation" )
+ column=(type=char(1000) updatewhereclause=yes name=cm_defects_master_cause_analysis dbname="cause_analysis" )
+ column=(type=char(1) updatewhereclause=yes name=cm_defects_master_status_tag dbname="status_tag" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_file_name1 dbname="file_name1" )
+ column=(type=char(5) updatewhereclause=yes name=cm_defects_master_file_type1 dbname="file_type1" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_file_path1 dbname="file_path1" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_file_name2 dbname="file_name2" )
+ column=(type=char(5) updatewhereclause=yes name=cm_defects_master_file_type2 dbname="file_type2" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_file_path2 dbname="file_path2" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_file_name3 dbname="file_name3" )
+ column=(type=char(5) updatewhereclause=yes name=cm_defects_master_file_type3 dbname="file_type3" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_file_path3 dbname="file_path3" )
+ column=(type=decimal(0) updatewhereclause=yes name=cm_defects_master_ea dbname="ea" )
+ column=(type=char(50) updatewhereclause=yes name=cm_defects_master_doc_no dbname="doc_no" )
+ column=(type=char(100) updatewhereclause=yes name=cm_defects_master_place dbname="place" )
+ column=(type=char(250) updatewhereclause=yes name=c_dname dbname="dname" )
+ retrieve="SELECT A.YEAR||'-'||A.DEFECTS_NO DEFECTS,
+       A.PROJECT_CODE,
+       B.PROJ_NAME,
+       A.RQST_DATE,
+       A.YEAR           ,    
+       A.DEFECTS_NO     ,  
+       A.LEVEL_TAG      ,        
+       A.COMPLETE_DATE  ,  
+       A.GONG_TAG       ,  
+       A.DEFECTS_TAG    ,  
+       A.DEFECTS_CAUSE  ,  
+       A.DEFECTS_COUSE  ,  
+       A.PROCESS_RESULT ,  
+       A.COMPENSATION   ,  
+       A.CAUSE_ANALYSIS ,  
+       A.STATUS_TAG     ,  
+       A.FILE_NAME1     ,  
+       A.FILE_TYPE1     ,  
+       A.FILE_PATH1     ,  
+       A.FILE_NAME2     ,  
+       A.FILE_TYPE2     ,  
+       A.FILE_PATH2     ,  
+       A.FILE_NAME3     ,  
+       A.FILE_TYPE3     ,  
+       A.FILE_PATH3     ,  
+       A.EA             ,  
+       A.DOC_NO         ,
+       A.PLACE          ,
+       C.DNAME
+  FROM (SELECT A.* 
+          FROM
+              (SELECT ROWNUM SEQ FROM TAB WHERE ROWNUM < 12) B,
+              (SELECT ROWNUM SEQ,
+                      A.YEAR||'-'||A.DEFECTS_NO DEFECTS,
+                      A.PROJECT_CODE,       
+                      A.RQST_DATE,
+                      A.YEAR           ,    
+                      A.DEFECTS_NO     ,  
+                      A.LEVEL_TAG      ,        
+                      A.COMPLETE_DATE  ,  
+                      A.GONG_TAG       ,  
+                      A.DEFECTS_TAG    ,  
+                      A.DEFECTS_CAUSE  ,  
+                      A.DEFECTS_COUSE  ,  
+                      A.PROCESS_RESULT ,  
+                      A.COMPENSATION   ,  
+                      A.CAUSE_ANALYSIS ,  
+                      A.STATUS_TAG     ,  
+                      A.FILE_NAME1     ,  
+                      A.FILE_TYPE1     ,  
+                      A.FILE_PATH1     ,  
+                      A.FILE_NAME2     ,  
+                      A.FILE_TYPE2     ,  
+                      A.FILE_PATH2     ,  
+                      A.FILE_NAME3     ,  
+                      A.FILE_TYPE3     ,  
+                      A.FILE_PATH3     ,  
+                      A.EA             ,  
+                      A.DOC_NO         ,
+                      A.PLACE         
+                 FROM CM_DEFECTS_MASTER A 
+                WHERE TO_CHAR(A.COMPLETE_DATE,'YYYYMM') = :as_yyyymm) A
+         WHERE B.SEQ = A.SEQ(+) ) A,
+       SM_CODE_PROJECT   B,
+       (SELECT * FROM SM_COMCODE_D WHERE SYS_ID = 'CM' AND HCODE = 'CONSTTYPE') C
+ WHERE A.PROJECT_CODE = B.PROJ_CODE(+)      
+   AND B.GROUPING_CODE = C.DCODE(+)
+ORDER BY  A.PROJECT_CODE,  A.RQST_DATE" arguments=(("as_yyyymm", string)) )
+line(band=header x1="1" y1="6" x2="1" y2="34"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="44" y="12" height="14" width="213" html.valueishtml="0"  name=dname_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=header x1="39" y1="6" x2="39" y2="34"  name=l_33 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1008" y1="6" x2="1008" y2="34"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="6" x2="1008" y2="6"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1" y1="33" x2="1008" y2="33"  name=l_11 visible="1" pen.style="0" pen.width="3" pen.color="33479123"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="장소" border="0" color="33554432" x="264" y="12" height="14" width="115" html.valueishtml="0"  name=tar_qtt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=header x1="541" y1="6" x2="541" y2="34"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="하자내용" border="0" color="33554432" x="385" y="12" height="14" width="153" html.valueishtml="0"  name=cur_qtt_t visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=header x1="382" y1="6" x2="382" y2="34"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=header x1="260" y1="6" x2="260" y2="34"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="처리내용" border="0" color="33554432" x="544" y="12" height="14" width="165" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="유형별" border="0" color="33554432" x="715" y="12" height="14" width="94" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="원인별" border="0" color="33554432" x="814" y="12" height="14" width="93" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공종별" border="0" color="33554432" x="912" y="12" height="14" width="93" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=header x1="909" y1="7" x2="909" y2="35"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=header x1="811" y1="7" x2="811" y2="35"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=header x1="712" y1="6" x2="712" y2="34"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="5" y="12" height="14" width="31" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+line(band=detail x1="1" y1="0" x2="1" y2="26"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="39" y1="0" x2="39" y2="26"  name=l_34 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1008" y1="0" x2="1008" y2="26"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1" y1="25" x2="1008" y2="25"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="541" y1="0" x2="541" y2="26"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="382" y1="1" x2="382" y2="27"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="260" y1="0" x2="260" y2="26"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="909" y1="1" x2="909" y2="27"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="811" y1="1" x2="811" y2="27"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="712" y1="0" x2="712" y2="26"  name=l_20 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="43" y="6" height="14" width="214" format="[general]" html.valueishtml="0"  name=sm_code_project_proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=28 alignment="0" tabsequence=32766 border="0" color="33554432" x="264" y="6" height="14" width="115" format="[general]" html.valueishtml="0"  name=cm_defects_master_place visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="386" y="6" height="14" width="152" format="[general]" html.valueishtml="0"  name=cm_defects_master_defects_couse visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="33554432" x="545" y="6" height="14" width="165" format="[general]" html.valueishtml="0"  name=cm_defects_master_process_result visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="716" y="6" height="14" width="92" format="[general]" html.valueishtml="0"  name=cm_defects_master_defects_tag visible="1" dddw.name=dddw_com_defectscode_01 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="815" y="6" height="14" width="91" format="[general]" html.valueishtml="0"  name=cm_defects_master_defects_cause visible="1" dddw.name=dddw_com_defectscode_03 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="914" y="6" height="14" width="90" format="[general]" html.valueishtml="0"  name=cm_defects_master_gong_tag visible="1" dddw.name=dddw_com_defectscode_02 dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="3" y="5" height="15" width="34" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1" y1="2" x2="1" y2="26"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+text(band=footer alignment="2" text="합   계" border="0" color="33554432" x="46" y="8" height="14" width="146" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="/* sum(mat_amt) */"border="0" color="33554432" x="274" y="8" height="14" width="77" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-8" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="39" y1="2" x2="39" y2="26"  name=l_35 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1008" y1="2" x2="1008" y2="26"  name=l_32 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1" y1="2" x2="1008" y2="2"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1" y1="26" x2="1008" y2="26"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="541" y1="2" x2="541" y2="26"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="382" y1="3" x2="382" y2="27"  name=l_18 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="260" y1="2" x2="260" y2="26"  name=l_17 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="909" y1="3" x2="909" y2="27"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="811" y1="3" x2="811" y2="27"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="712" y1="2" x2="712" y2="26"  name=l_30 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,44 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_cust_buz_persons.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_cust_buz_persons.proj_code" )
+ column=(type=char(4) update=yes updatewhereclause=yes key=yes name=pers_seq dbname="cm_cust_buz_persons.pers_seq" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=buz_duty dbname="cm_cust_buz_persons.buz_duty" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=pers_name dbname="cm_cust_buz_persons.pers_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=buz_post dbname="cm_cust_buz_persons.buz_post" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=phone_no dbname="cm_cust_buz_persons.phone_no" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=hp_no dbname="cm_cust_buz_persons.hp_no" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE, 
+         A.PERS_SEQ, 
+         A.BUZ_DUTY, 
+         A.PERS_NAME, 
+         A.BUZ_POST, 
+         A.PHONE_NO,  
+         A.HP_NO
+    FROM CM_CUST_BUZ_PERSONS A
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE = :as_code
+ORDER BY A.PERS_SEQ ASC" update="CM_CUST_BUZ_PERSONS" updatewhere=1 updatekeyinplace=no arguments=(("as_comp", string),("as_code", string)) )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="28" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="담당업무" border="0" color="33554432" x="32" y="2" height="14" width="101" html.valueishtml="0"  name=buz_duty_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="성명" border="0" color="33554432" x="135" y="2" height="14" width="76" html.valueishtml="0"  name=pers_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="직급" border="0" color="33554432" x="213" y="2" height="14" width="105" html.valueishtml="0"  name=buz_post_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전화" border="0" color="33554432" x="320" y="2" height="14" width="142" html.valueishtml="0"  name=phone_no_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="휴대전화" border="0" color="33554432" x="464" y="2" height="14" width="140" html.valueishtml="0"  name=hp_no_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=10 border="0" color="33554432" x="32" y="2" height="14" width="101" format="[general]" html.valueishtml="0"  name=buz_duty visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=20 border="0" color="33554432" x="135" y="2" height="14" width="76" format="[general]" html.valueishtml="0"  name=pers_name visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=30 border="0" color="33554432" x="213" y="2" height="14" width="105" format="[general]" html.valueishtml="0"  name=buz_post visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="0" tabsequence=40 border="0" color="33554432" x="320" y="2" height="14" width="142" format="[general]~tif(len(phone_no) = 9, '@@-@@@-@@@@', if(len(phone_no) = 11, '@@@-@@@@-@@@@', if(len(phone_no) = 10, if(left(phone_no, 2) = '02', '@@-@@@@-@@@@', '@@@-@@@-@@@@'), '[general]')))  " html.valueishtml="0"  name=phone_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="0" tabsequence=50 border="0" color="33554432" x="464" y="2" height="14" width="140" format="[general]~tif(len(hp_no) = 9, '@@-@@@-@@@@', if(len(hp_no) = 11, '@@@-@@@@-@@@@', if(len(hp_no) = 10, if(left(hp_no, 2) = '02', '@@-@@@@-@@@@', '@@@-@@@-@@@@'), '[general]')))  " html.valueishtml="0"  name=hp_no visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="28" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

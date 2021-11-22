@@ -1,0 +1,53 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=2 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=18 color="536870912" )
+table(column=(type=char(50) updatewhereclause=yes name=hcode dbname="sm_comcode_d.hcode" )
+ column=(type=char(50) updatewhereclause=yes name=dcode dbname="sm_comcode_d.dcode" )
+ column=(type=char(250) updatewhereclause=yes name=dname dbname="sm_comcode_d.dname" )
+ column=(type=decimal(3) updatewhereclause=yes name=dvalue dbname="sm_comcode_d.dvalue" )
+ column=(type=number updatewhereclause=yes name=qty dbname="qty" )
+ column=(type=number updatewhereclause=yes name=months dbname="months" )
+ column=(type=char(1) updatewhereclause=yes name=check_tag dbname="check_tag" values="	Y/	N" )
+ retrieve="  SELECT A.HCODE,   
+         A.DCODE,   
+         A.DNAME,
+         A.DVALUE,
+		1 QTY,
+		1  MONTHS,
+         'N' AS CHECK_TAG  
+    FROM SM_COMCODE_D A   
+   WHERE SYS_ID   = 'CM' 
+     AND A.HCODE  = :as_hcode
+     AND A.USE_YN = 'Y' 
+ORDER BY A.DCODE 
+" arguments=(("as_hcode", string)) )
+text(band=header alignment="2" text="항목명" border="0" color="33554432" x="116" y="2" height="14" width="86" html.valueishtml="0"  name=dname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="항목코드" border="0" color="33554432" x="51" y="2" height="14" width="63" html.valueishtml="0"  name=dcode_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="47" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="선택" border="0" color="33554432" x="480" y="2" height="14" width="49" html.valueishtml="0"  name=check_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="수량" border="0" color="33554432" x="204" y="2" height="14" width="47" html.valueishtml="0"  name=qty_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="개월" border="0" color="33554432" x="253" y="2" height="14" width="56" html.valueishtml="0"  name=months_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="116" y="2" height="14" width="86" format="[general]" html.valueishtml="0"  name=dname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=30 border="0" color="33554432" x="480" y="2" height="14" width="49" format="[general]" html.valueishtml="0"  name=check_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="51" y="2" height="14" width="63" format="[general]" html.valueishtml="0"  name=dcode visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="14" width="47" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="1" tabsequence=10 border="0" color="33554432" x="204" y="2" height="14" width="47" format="[general]" html.valueishtml="0"  name=qty visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=20 border="0" color="33554432" x="253" y="2" height="14" width="56" format="[general]" html.valueishtml="0"  name=months visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="1" tabsequence=32766 border="0" color="33554432" x="311" y="2" height="14" width="71" format="#,##0" html.valueishtml="0"  name=dvalue visible="1" edit.limit=0 edit.case=any edit.format="#,##0" edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="qty * months * dvalue"border="0" color="33554432" x="384" y="2" height="14" width="95" format="#,##0" html.valueishtml="0"  name=amt visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="311" y="2" height="14" width="71" html.valueishtml="0"  name=dvalue_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="384" y="2" height="14" width="95" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,467 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=71 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=50 color="536870912" )
+detail(height=43 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_saly_labor_account.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_saly_labor_account.proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(20) updatewhereclause=yes name=pm_empname dbname="hr_pers_master.pm_empname" )
+ column=(type=number updatewhereclause=yes name=lab_day dbname="lab_day" )
+ column=(type=number updatewhereclause=yes name=lab_qty dbname="lab_qty" )
+ column=(type=number updatewhereclause=yes name=lab_cnt dbname="lab_cnt" )
+ column=(type=number updatewhereclause=yes name=lab_labor_amt dbname="lab_labor_amt" )
+ column=(type=number updatewhereclause=yes name=lab_incentive_amt dbname="lab_incentive_amt" )
+ column=(type=number updatewhereclause=yes name=lab_total_amt dbname="lab_total_amt" )
+ column=(type=number updatewhereclause=yes name=con_qty dbname="con_qty" )
+ column=(type=number updatewhereclause=yes name=con_day dbname="con_day" )
+ column=(type=number updatewhereclause=yes name=con_labor_amt dbname="con_labor_amt" )
+ column=(type=number updatewhereclause=yes name=con_consult_amt dbname="con_consult_amt" )
+ column=(type=number updatewhereclause=yes name=con_cnt dbname="con_cnt" )
+ column=(type=number updatewhereclause=yes name=con_total_amt dbname="con_total_amt" )
+ column=(type=number updatewhereclause=yes name=out_qty dbname="out_qty" )
+ column=(type=number updatewhereclause=yes name=out_day dbname="out_day" )
+ column=(type=number updatewhereclause=yes name=out_gisung_amt dbname="out_gisung_amt" )
+ column=(type=number updatewhereclause=yes name=out2_qty dbname="out2_qty" )
+ column=(type=number updatewhereclause=yes name=out2_day dbname="out2_day" )
+ column=(type=number updatewhereclause=yes name=out2_supplay_amt dbname="out2_supplay_amt" )
+ retrieve="SELECT A.COMPANY_CODE                AS COMPANY_CODE, 
+       A.PROJ_CODE                   AS PROJ_CODE,
+       H.PROJ_NAME                   AS PROJ_NAME,
+       I.EMP_NAME                    AS PM_EMPNAME,
+       SUM(NVL(A.WORK_DAY,0))        AS LAB_DAY,
+       SUM(NVL((CASE WHEN A.WORK_QTY = '1' THEN A.WORK_DAY ELSE A.WORK_QTY END),0))        AS LAB_QTY,
+       SUM(NVL((CASE WHEN A.PAY_TAG = '1' THEN A.WORK_QTY ELSE TO_NUMBER(SUBSTR(TO_CHAR((TO_DATE(A.PAY_YYMM||'01','YYYYMMDD')-1),'YYYYMMDD'),7,2)) END),0))        AS LAB_CNT,
+       --SUM(NVL((CASE WHEN T.PAY_DIV = '1' THEN A.WORK_QTY ELSE S.DAY_QTY1 END),0))        AS LAB_QTY,
+       SUM(NVL(A.PAY_TOT,0))         AS LAB_LABOR_AMT,
+       SUM(NVL(A.INCENTIVE_AMT,0))   AS LAB_INCENTIVE_AMT,
+       SUM(NVL(A.PAY_TOT,0)) +
+       SUM(NVL(A.INCENTIVE_AMT,0)) +
+       SUM(NVL(A.HOLY_AMT,0))   AS LAB_TOTAL_AMT,
+       --NVL(MAX(D.WORK_QTY),0)        AS FAC_QTY,
+       --NVL(MAX(D.WORK_DAY),0)        AS FAC_DAY,
+       --NVL(MAX(D.TOT_AMT),0)         AS FAC_LABOR_AMT,
+       --NVL(MAX(D.FAC_AMT),0)         AS FAC_INCENTIVE_AMT,
+       --NVL(MAX(D.TOT_AMT),0) +
+       --NVL(MAX(D.FAC_AMT),0)         AS FAC_TOTAL_AMT,
+       NVL(MAX(E.WORK_QTY),0)        AS CON_QTY,
+       NVL(MAX(E.WORK_DAY),0)        AS CON_DAY,
+       NVL(MAX(E.TOT_AMT),0)         AS CON_LABOR_AMT,
+       NVL(MAX(E.CONSULT_AMT),0)     AS CON_CONSULT_AMT,
+       NVL(MAX(E.CONSULT_CNT),0)     AS CON_CNT,
+       NVL(MAX(E.TOT_AMT),0) +
+       NVL(MAX(E.CONSULT_AMT),0)     AS CON_TOTAL_AMT,
+       NVL(MAX(F.WORK_QTY),0)        AS OUT_QTY,
+       NVL(MAX(F.WORK_DAY),0)        AS OUT_DAY,
+       NVL(MAX(F.OUT_GISUNG_AMT),0)  AS OUT_GISUNG_AMT,
+       NVL(MAX(G.WORK_QTY),0)        AS OUT2_QTY,
+       NVL(MAX(G.WORK_DAY),0)        AS OUT2_DAY,
+       NVL(MAX(G.SUPPLAY_AMT),0)     AS OUT2_SUPPLAY_AMT
+  FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN (SELECT A.COMPANY_CODE                                                              AS COMPANY_CODE,   
+                                                 A.TEAM_CODE                                                                 AS PROJ_CODE,  
+                                                 SUM(NVL((CASE WHEN V.PAY_DIV = '1' THEN A.WORK_QTY ELSE U.DAY_QTY1 END),0)) AS WORK_QTY,
+                                                 SUM(NVL(A.WORK_DAY,0))                                                      AS WORK_DAY,   
+                                                 SUM(NVL(A.PAY_TOT,0)) +
+                                                 SUM(NVL(A.INCENTIVE_AMT,0)) +
+                                                 SUM(NVL(A.HOLY_AMT,0))                                                 AS TOT_AMT,
+                                                 MAX(B.FAC_AMT)                                                              AS FAC_AMT
+                                            FROM CM_SALY_LABOR_ACCOUNT A LEFT JOIN (SELECT A.COMPCODE   AS COMPANY_CODE,
+                                                                                           A.DEPT_CODE  AS PROJ_CODE,
+                                                                                           SUM(DB_AMT)  AS FAC_AMT
+                                                                                      FROM MM_ACNT_CHANGE_AMT A
+                                                                                     WHERE A.YYYYMM BETWEEN :AS_FROM AND :AS_TO
+                                                                                       AND A.ACNT_CODE = '82413008'
+                                                                                    GROUP BY A.COMPCODE,
+                                                                                           A.DEPT_CODE) B
+                                                                                ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                               AND A.TEAM_CODE    = B.PROJ_CODE
+                                                                         LEFT JOIN (SELECT COMPANY_CODE
+                                                                                         , PROJ_CODE
+                                                                                         , TEAM_CODE
+                                                                                         , LABOR_CODE
+                                                                                         , SUBSTR(WORK_DATE, 1, 6) PAY_YYMM
+                                                                                         , SUM(NVL(DAY_QTY1,0)+NVL(DAY_QTY2,0)+NVL(NIGHT_QTY,0)) DAY_QTY1
+                                                                                      FROM CM_ATTD_DAILY_WORK
+                                                                                     WHERE COMPANY_CODE = :AS_COMP_CODE
+                                                                                       AND SUBSTR(WORK_DATE, 1, 6) BETWEEN :AS_FROM AND :AS_TO
+                                                                                  GROUP BY COMPANY_CODE, 
+                                                                                           PROJ_CODE, 
+                                                                                           TEAM_CODE, 
+                                                                                           LABOR_CODE, 
+                                                                                           SUBSTR(WORK_DATE, 1, 6)) U
+                                                                                ON A.COMPANY_CODE = U.COMPANY_CODE 
+                                                                               AND A.PROJ_CODE    = U.PROJ_CODE 
+                                                                               AND A.TEAM_CODE    = U.TEAM_CODE
+                                                                               AND A.LABOR_CODE   = U.LABOR_CODE 
+                                                                               AND A.PAY_YYMM     = U.PAY_YYMM
+                                                                        LEFT JOIN CM_LABO_MASTER V
+                                                                               ON A.COMPANY_CODE = V.COMPANY_CODE
+                                                                              AND A.LABOR_CODE   = V.LABOR_CODE
+                                         WHERE A.PAY_YYMM BETWEEN :AS_FROM AND :AS_TO
+                                           AND A.COMPANY_CODE = :AS_COMP_CODE
+                                           AND LENGTH(A.TEAM_CODE) > '3'
+                                        GROUP BY A.COMPANY_CODE,
+                                                 A.TEAM_CODE) D
+                                     ON A.COMPANY_CODE = D.COMPANY_CODE
+                                    AND A.PROJ_CODE    = D.PROJ_CODE
+                              LEFT JOIN (SELECT A.COMPANY_CODE              AS COMPANY_CODE,
+                                                A.PROJ_CODE                 AS PROJ_CODE,
+                                                SUM(A.WORK_DAY)             AS WORK_DAY,
+                                                SUM(A.WORK_QTY)             AS WORK_QTY,
+                                                SUM(NVL(A.PAY_TOT,0)) +
+                                                SUM(NVL(A.INCENTIVE_AMT,0)) AS TOT_AMT,
+                                                MAX(B.CONSULT_AMT)          AS CONSULT_AMT,
+                                                SUM(NVL((CASE WHEN A.PAY_TAG = '1' THEN A.WORK_QTY ELSE TO_NUMBER(SUBSTR(TO_CHAR((TO_DATE(A.PAY_YYMM||'01','YYYYMMDD')-1),'YYYYMMDD'),7,2)) END),0))        AS CONSULT_CNT
+                                           FROM CM_SALY_LABOR_ACCOUNT_H A LEFT JOIN (SELECT A.COMPANY_CODE               AS COMPANY_CODE,
+                                                                                            A.PROJ_CODE                  AS PROJ_CODE,
+                                                                                            SUM(NVL(A.CONSULT_AMT,0)) +
+                                                                                            SUM(NVL(A.GEN_AMT,0))        AS CONSULT_AMT
+                                                                                       FROM CM_OSCT_COMPLETED A
+                                                                                      WHERE A.OSCT_DIV = '1'
+                                                                                        AND SUBSTR(A.DEM_DATE,1,6) BETWEEN :AS_FROM AND :AS_TO
+                                                                                   GROUP BY A.COMPANY_CODE,
+                                                                                            A.PROJ_CODE ) B
+                                                                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                AND A.PROJ_CODE    = B.PROJ_CODE
+                                          WHERE A.PAY_YYMM BETWEEN :AS_FROM AND :AS_TO
+                                            AND A.COMPANY_CODE = :AS_COMP_CODE
+                                       GROUP BY A.COMPANY_CODE,
+                                                A.PROJ_CODE) E
+                                     ON A.COMPANY_CODE = E.COMPANY_CODE
+                                    AND A.PROJ_CODE    = E.PROJ_CODE
+                              LEFT JOIN (SELECT A.COMPANY_CODE              AS COMPANY_CODE,
+                                                A.PROJ_CODE                 AS PROJ_CODE,
+                                                SUM(NVL(A.WORK_DAY,0))      AS WORK_DAY,
+                                                SUM(NVL(A.WORK_QTY,0))      AS WORK_QTY,
+                                                MAX(C.OUT_GISUNG_AMT)       AS OUT_GISUNG_AMT
+                                           FROM CM_OUT_SALY_LABOR_ACCOUNT A LEFT JOIN CM_OUT_ATTD_TEAMS B
+                                                                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                                  AND A.TEAM_CODE    = B.TEAM_CODE
+                                                                            LEFT JOIN (SELECT A.COMPANY_CODE  AS COMPANY_CODE,
+                                                                                              A.PROJ_CODE     AS PROJ_CODE,
+                                                                                              SUM(A.GEN_AMT)  AS OUT_GISUNG_AMT
+                                                                                         FROM CM_OSCT_COMPLETED A LEFT JOIN CM_OUT_ATTD_TEAMS B
+                                                                                                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                                                         AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                                                                         AND A.CONSULT_CODE = B.CONSULT_CODE
+                                                                                        WHERE A.OSCT_DIV = '3'
+                                                                                          AND B.CONSULT_CODE IS NOT NULL 
+                                                                                          AND SUBSTR(A.DEM_DATE,1,6) BETWEEN :AS_FROM AND :AS_TO
+                                                                                     GROUP BY A.COMPANY_CODE,
+                                                                                              A.PROJ_CODE  ) C
+                                                                                    ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                                                   AND A.PROJ_CODE    = C.PROJ_CODE
+                                          WHERE A.PAY_YYMM BETWEEN :AS_FROM AND :AS_TO
+                                            AND A.COMPANY_CODE = :AS_COMP_CODE
+                                            AND B.CONSULT_CODE IS NOT NULL
+                                       GROUP BY A.COMPANY_CODE,A.PROJ_CODE) F
+                                     ON A.COMPANY_CODE = F.COMPANY_CODE
+                                    AND A.PROJ_CODE    = F.PROJ_CODE
+                              LEFT JOIN (SELECT A.COMPANY_CODE              AS COMPANY_CODE,
+                                                A.PROJ_CODE                 AS PROJ_CODE,
+                                                SUM(NVL(A.WORK_DAY,0))      AS WORK_DAY,
+                                                SUM(NVL(A.WORK_QTY,0))      AS WORK_QTY,
+                                                MAX(C.SUPPLAY_AMT)          AS SUPPLAY_AMT
+                                           FROM CM_OUT_SALY_LABOR_ACCOUNT A LEFT JOIN CM_OUT_ATTD_TEAMS B
+                                                                                   ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                  AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                                  AND A.TEAM_CODE    = B.TEAM_CODE
+                                                                            LEFT JOIN (SELECT A.COMPANY_CODE            AS COMPANY_CODE,
+                                                                                                A.PROJ_CODE               AS PROJ_CODE,
+                                                                                                SUM(NVL(A.SUPPLAY_AMT,0)) AS SUPPLAY_AMT
+                                                                                           FROM CM_COST_CREATE_BUY A
+                                                                                          WHERE A.YYYYMM BETWEEN :AS_FROM AND :AS_TO
+                                                                                            AND A.CREATE_DIV = '1'
+                                                                                            AND A.ACNT_CD IN('81300050','81300099')
+                                                                                         GROUP BY A.COMPANY_CODE,
+                                                                                                  A.PROJ_CODE  ) C
+                                                                                   ON A.COMPANY_CODE = C.COMPANY_CODE
+                                                                                  AND A.PROJ_CODE    = C.PROJ_CODE
+                                          WHERE A.PAY_YYMM BETWEEN :AS_FROM AND :AS_TO
+                                            AND A.COMPANY_CODE = :AS_COMP_CODE
+                                            AND B.CONSULT_CODE IS NULL
+                                       GROUP BY A.COMPANY_CODE,A.PROJ_CODE) G
+                                    ON A.COMPANY_CODE = G.COMPANY_CODE
+                                   AND A.PROJ_CODE    = G.PROJ_CODE
+                             LEFT JOIN SM_CODE_PROJECT H LEFT JOIN HR_PERS_MASTER I
+                                                                ON H.COMPANY_CODE = I.COMPANY_CODE
+                                                               AND H.PM_EMPNO     = I.EMP_NO
+                                                         LEFT JOIN SM_COMCODE_D J
+                                                                ON H.PM_EMPNO = J.DCODE
+                                                               AND J.SYS_ID = 'CM'
+                                                               AND J.HCODE = 'PM_ORDER_LIST'
+                                    ON A.COMPANY_CODE = H.COMPANY_CODE
+                                   AND A.PROJ_CODE    = H.PROJ_CODE 
+                             LEFT JOIN (SELECT COMPANY_CODE
+                                             , PROJ_CODE
+                                             , TEAM_CODE
+                                             , LABOR_CODE
+                                             , SUBSTR(WORK_DATE, 1, 6) PAY_YYMM
+                                             , SUM(NVL(DAY_QTY1,0)+NVL(DAY_QTY2,0)+NVL(NIGHT_QTY,0)) DAY_QTY1
+                                          FROM CM_ATTD_DAILY_WORK
+                                         WHERE COMPANY_CODE = :AS_COMP_CODE
+                                           AND SUBSTR(WORK_DATE, 1, 6) BETWEEN :AS_FROM AND :AS_TO
+                                      GROUP BY COMPANY_CODE, 
+                                               PROJ_CODE, 
+                                               TEAM_CODE, 
+                                               LABOR_CODE, 
+                                               SUBSTR(WORK_DATE, 1, 6)) S
+                                    ON A.COMPANY_CODE = S.COMPANY_CODE 
+                                   AND A.PROJ_CODE    = S.PROJ_CODE 
+                                   AND A.TEAM_CODE    = S.TEAM_CODE
+                                   AND A.LABOR_CODE   = S.LABOR_CODE 
+                                   AND A.PAY_YYMM     = S.PAY_YYMM
+                             LEFT JOIN CM_LABO_MASTER T
+                                    ON A.COMPANY_CODE = T.COMPANY_CODE
+                                   AND A.LABOR_CODE   = T.LABOR_CODE
+ WHERE A.PAY_YYMM BETWEEN :AS_FROM AND :AS_TO
+   AND A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE NOT LIKE '1204%'
+   AND H.PM_EMPNO LIKE :AS_PM
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         H.PROJ_NAME,
+         I.EMP_NAME,
+         J.DVALUE
+ORDER BY J.DVALUE, H.PROJ_NAME" arguments=(("AS_COMP_CODE", string),("AS_FROM", string),("AS_TO", string),("AS_PM", string)) )
+group(level=1 header.height=46 trailer.height=0 by=("pm_empname" ) header.color="536870912" trailer.color="536870912" )
+rectangle(band=header x="0" y="0" height="84" width="1482"  name=r_1 visible="1" brush.hatch="6" brush.color="32896501" pen.style="0" pen.width="1" pen.color="1073741824"  background.mode="2" background.color="33554432" )
+text(band=header alignment="2" text="직  영" border="0" color="33554432" x="458" y="6" height="13" width="231" html.valueishtml="0"  name=t_14 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1" y1="1" x2="1" y2="83"  name=l_60 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="5" y="30" height="13" width="21" html.valueishtml="0"  name=company_code_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="27" y1="1" x2="27" y2="80"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="299" y1="1" x2="299" y2="80"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="전  체" border="0" color="33554432" x="303" y="6" height="13" width="147" html.valueishtml="0"  name=lab_incentive_amt_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1" y1="1" x2="1570" y2="1"  name=l_5 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="299" y1="22" x2="916" y2="22"  name=l_54 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="외주 전체" border="0" color="33554432" x="1017" y="6" height="13" width="150" html.valueishtml="0"  name=t_18 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="외  주" border="0" color="33554432" x="1173" y="6" height="13" width="150" html.valueishtml="0"  name=t_19 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="외상매입금" border="0" color="33554432" x="1329" y="6" height="13" width="150" html.valueishtml="0"  name=t_20 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="32" y="30" height="13" width="75" html.valueishtml="0"  name=lab_day_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="109" y1="1" x2="109" y2="80"  name=l_82 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="113" y="31" height="13" width="184" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1169" y1="1" x2="1169" y2="80"  name=l_79 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1014" y1="22" x2="1481" y2="22"  name=l_99 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1481" y1="1" x2="1481" y2="80"  name=l_83 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="기성금액" border="0" color="33554432" x="1393" y="40" height="13" width="86" html.valueishtml="0"  name=t_26 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1389" y1="22" x2="1389" y2="87"  name=l_93 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="1329" y="51" height="13" width="58" html.valueishtml="0"  name=t_13 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="1329" y="28" height="13" width="58" html.valueishtml="0"  name=t_8 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1325" y1="1" x2="1325" y2="80"  name=l_80 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1326" y1="46" x2="1389" y2="46"  name=l_98 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="기성금액" border="0" color="33554432" x="1237" y="40" height="13" width="86" html.valueishtml="0"  name=t_25 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1233" y1="22" x2="1233" y2="87"  name=l_92 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="기성금액" border="0" color="33554432" x="1081" y="40" height="13" width="86" html.valueishtml="0"  name=t_24 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1077" y1="22" x2="1077" y2="87"  name=l_91 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="1017" y="28" height="13" width="58" html.valueishtml="0"  name=t_6 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="1017" y="51" height="13" width="58" html.valueishtml="0"  name=t_11 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="1011" y1="1" x2="1011" y2="80"  name=l_77 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1013" y1="1" x2="1013" y2="80"  name=l_78 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1013" y1="46" x2="1077" y2="46"  name=l_96 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="직불
+
+노임합계" border="0" color="33554432" x="920" y="18" height="39" width="86" html.valueishtml="0"  name=t_17 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="916" y1="1" x2="916" y2="80"  name=l_76 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="361" y1="22" x2="361" y2="87"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="300" y1="46" x2="361" y2="46"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="302" y="51" height="13" width="58" html.valueishtml="0"  name=lab_labor_amt_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="302" y="29" height="13" width="58" html.valueishtml="0"  name=lab_qty_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="합  계" border="0" color="33554432" x="365" y="40" height="13" width="85" html.valueishtml="0"  name=fac_qty_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="452" y1="1" x2="452" y2="80"  name=l_11 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="454" y1="1" x2="454" y2="80"  name=l_10 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="456" y1="46" x2="600" y2="46"  name=l_84 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="457" y="51" height="13" width="58" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="457" y="28" height="13" width="58" html.valueishtml="0"  name=lab_total_amt_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="517" y1="22" x2="517" y2="87"  name=l_85 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="성과급" border="0" color="33554432" x="521" y="51" height="13" width="77" html.valueishtml="0"  name=t_29 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평균단가" border="0" color="33554432" x="521" y="28" height="13" width="77" html.valueishtml="0"  name=fac_day_t visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="599" y1="22" x2="599" y2="87"  name=l_86 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="노임총계" border="0" color="33554432" x="603" y="40" height="13" width="86" html.valueishtml="0"  name=t_21 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="691" y1="1" x2="691" y2="80"  name=l_75 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="838" y1="22" x2="838" y2="87"  name=l_90 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="업무위탁(팀장)" border="0" color="33554432" x="695" y="6" height="13" width="219" html.valueishtml="0"  name=t_16 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="합  계" border="0" color="33554432" x="842" y="40" height="13" width="69" html.valueishtml="0"  name=t_23 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="693" y1="46" x2="838" y2="46"  name=l_95 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header x1="1169" y1="46" x2="1233" y2="46"  name=l_97 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="1171" y="51" height="13" width="58" html.valueishtml="0"  name=t_12 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="1172" y="28" height="13" width="58" html.valueishtml="0"  name=t_7 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="일수" border="0" color="33554432" x="695" y="28" height="13" width="52" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공수" border="0" color="33554432" x="695" y="51" height="13" width="52" html.valueishtml="0"  name=t_10 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header x1="749" y1="22" x2="749" y2="87"  name=l_89 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header alignment="2" text="노임총계(자문료)" border="0" color="33554432" x="752" y="28" height="13" width="85" html.valueishtml="0"  name=t_28 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="평균단가" border="0" color="33554432" x="752" y="51" height="13" width="85" html.valueishtml="0"  name=t_31 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="1156" y1="59" x2="1156" y2="113"  name=l_26 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="1" y1="0" x2="1" y2="60"  name=l_12 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+text(band=header.1 alignment="2" text="[ PM ]" border="0" color="33554432" x="8" y="14" height="13" width="49" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-8" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=header.1 id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="60" y="14" height="14" width="118" format="[general]" html.valueishtml="0"  name=pm_empname visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="299" y1="0" x2="299" y2="54"  name=l_40 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="0" y1="44" x2="1482" y2="44"  name=l_59 visible="1" pen.style="0" pen.width="3" pen.color="12639424"  background.mode="2" background.color="16777215" )
+line(band=header.1 x1="1481" y1="0" x2="1481" y2="54"  name=l_67 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(out2_supplay_amt for group 1)"border="0" color="33554432" x="1393" y="16" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_36 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="1389" y1="0" x2="1389" y2="54"  name=l_66 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(out2_qty for group 1)"border="0" color="33554432" x="1329" y="26" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_35 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(out2_day for group 1)"border="0" color="33554432" x="1329" y="4" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_34 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="1325" y1="0" x2="1325" y2="54"  name=l_65 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="1326" y1="22" x2="1389" y2="22"  name=l_73 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=header.1 alignment="1" expression="sum(out_gisung_amt for group 1)"border="0" color="33554432" x="1237" y="16" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_33 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="1233" y1="0" x2="1233" y2="54"  name=l_64 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="1169" y1="0" x2="1169" y2="54"  name=l_63 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( out_gisung_amt  +  out2_supplay_amt  for group 1)"border="0" color="33554432" x="1081" y="16" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_30 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="1077" y1="0" x2="1077" y2="54"  name=l_62 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum( out_qty  +  out2_qty  for group 1)"border="0" color="33554432" x="1017" y="26" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_29 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum( out_day  +  out2_day  for group 1)"border="0" color="33554432" x="1017" y="4" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_28 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="1011" y1="0" x2="1011" y2="54"  name=l_57 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="1013" y1="0" x2="1013" y2="54"  name=l_58 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="1013" y1="22" x2="1077" y2="22"  name=l_71 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=header.1 alignment="1" expression="sum( lab_labor_amt  +  con_labor_amt   for group 1) "border="0" color="33554432" x="920" y="16" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_27 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="916" y1="0" x2="916" y2="54"  name=l_56 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="361" y1="0" x2="361" y2="54"  name=l_41 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="300" y1="22" x2="361" y2="22"  name=l_39 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=header.1 alignment="1" expression=" sum( lab_qty  +  con_qty  +  out_qty  +  out2_qty  for group 1) "border="0" color="33554432" x="302" y="26" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_10 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression=" sum( lab_day  +   con_day  +  out_day  +  out2_day  for group 1) "border="0" color="33554432" x="302" y="4" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum( lab_total_amt   +  con_total_amt + out_gisung_amt  +  out2_supplay_amt   for group 1)"border="0" color="33554432" x="365" y="16" height="14" width="85" format="#,###" html.valueishtml="0"  name=compute_11 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="452" y1="0" x2="452" y2="54"  name=l_45 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="454" y1="0" x2="454" y2="54"  name=l_44 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="456" y1="22" x2="600" y2="22"  name=l_68 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=header.1 alignment="1" expression="sum(lab_qty for group 1)"border="0" color="33554432" x="457" y="26" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_13 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(lab_day for group 1)"border="0" color="33554432" x="457" y="4" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_12 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="517" y1="0" x2="517" y2="54"  name=l_46 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(lab_incentive_amt for group 1)"border="0" color="33554432" x="521" y="26" height="13" width="77" format="#,###" html.valueishtml="0"  name=compute_15 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(lab_labor_amt for group 1)/sum(lab_cnt for group 1)"border="0" color="33554432" x="521" y="4" height="13" width="77" format="#,###" html.valueishtml="0"  name=compute_14 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="599" y1="0" x2="599" y2="54"  name=l_47 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(lab_total_amt for group 1)"border="0" color="33554432" x="603" y="16" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_16 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="691" y1="0" x2="691" y2="54"  name=l_52 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=header.1 x1="838" y1="0" x2="838" y2="54"  name=l_55 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(con_total_amt for group 1)"border="0" color="33554432" x="842" y="16" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_26 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="693" y1="22" x2="838" y2="22"  name=l_70 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=header.1 x1="1170" y1="22" x2="1234" y2="22"  name=l_72 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=header.1 alignment="1" expression="sum(out_qty for group 1)"border="0" color="33554432" x="1173" y="26" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_32 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(out_day for group 1)"border="0" color="33554432" x="1173" y="4" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_31 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(con_day for group 1)"border="0" color="33554432" x="695" y="4" height="13" width="52" format="#,##0.0" html.valueishtml="0"  name=compute_22 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(con_qty for group 1)"border="0" color="33554432" x="695" y="26" height="13" width="52" format="#,##0.0" html.valueishtml="0"  name=compute_23 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=header.1 x1="749" y1="0" x2="749" y2="54"  name=l_53 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=header.1 alignment="1" expression="sum(con_labor_amt for group 1)"border="0" color="33554432" x="752" y="4" height="13" width="85" format="#,###" html.valueishtml="0"  name=compute_25 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=header.1 alignment="1" expression="sum(con_labor_amt for group 1)/sum(con_cnt for group 1)"border="0" color="33554432" x="752" y="26" height="13" width="85" format="#,###" html.valueishtml="0"  name=compute_24 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+rectangle(band=detail x="0" y="0" height="45" width="1482"  name=r_2 visible="1~tif ( getrow() = currentrow(), 1 , 0 )" brush.hatch="6" brush.color="31649000~tRGB(232, 236, 226)" pen.style="0" pen.width="1" pen.color="1073741824~tRGB(232, 236, 226)"  background.mode="0" background.color="32896501~tRGB(232, 236, 226)" )
+line(band=detail x1="1" y1="0" x2="1" y2="60"  name=l_61 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="5" y="15" height="14" width="21" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="27" y1="0" x2="27" y2="54"  name=l_33 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="299" y1="0" x2="299" y2="54"  name=l_31 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="1590" y="13" height="13" width="77" format="#,###" html.valueishtml="0"  name=lab_labor_amt visible="0" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="1511" y="27" height="13" width="62" format="[general]" html.valueishtml="0"  name=lab_cnt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="0" tabsequence=32766 border="0" color="33554432" x="1513" y="5" height="22" width="71" format="[general]" html.valueishtml="0"  name=con_cnt visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="32" y="15" height="14" width="75" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=8 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="109" y1="0" x2="109" y2="54"  name=l_32 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="113" y="15" height="14" width="184" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1" y1="42" x2="1481" y2="42"  name=l_36 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="16777215" )
+line(band=detail x1="1481" y1="0" x2="1481" y2="54"  name=l_43 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=22 alignment="1" tabsequence=32766 border="0" color="33554432" x="1393" y="15" height="14" width="86" format="#,###" html.valueishtml="0"  name=out2_supplay_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1389" y1="0" x2="1389" y2="54"  name=l_42 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=20 alignment="1" tabsequence=32766 border="0" color="33554432" x="1329" y="27" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=out2_qty visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=21 alignment="1" tabsequence=32766 border="0" color="33554432" x="1329" y="6" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=out2_day visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1325" y1="0" x2="1325" y2="54"  name=l_35 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="1326" y1="21" x2="1389" y2="21"  name=l_38 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=19 alignment="1" tabsequence=32766 border="0" color="33554432" x="1237" y="15" height="14" width="86" format="#,###" html.valueishtml="0"  name=out_gisung_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1233" y1="0" x2="1233" y2="54"  name=l_34 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="1169" y1="0" x2="1169" y2="54"  name=l_30 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" out_gisung_amt  +  out2_supplay_amt "border="0" color="33554432" x="1081" y="15" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1077" y1="0" x2="1077" y2="54"  name=l_29 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" out_qty  +  out2_qty "border="0" color="33554432" x="1017" y="27" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" out_day  +  out2_day "border="0" color="33554432" x="1017" y="6" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_7 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="1011" y1="0" x2="1011" y2="54"  name=l_25 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="1013" y1="0" x2="1013" y2="54"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="1013" y1="21" x2="1077" y2="21"  name=l_28 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression="lab_labor_amt   +  con_labor_amt "border="0" color="33554432" x="920" y="15" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="916" y1="0" x2="916" y2="54"  name=l_24 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="361" y1="0" x2="361" y2="54"  name=l_9 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="300" y1="21" x2="361" y2="21"  name=l_81 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=detail alignment="1" expression=" lab_qty   +  con_qty  +  out_qty  +  out2_qty  "border="0" color="33554432" x="302" y="27" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="lab_day  +  con_day  +  out_day  +  out2_day"border="0" color="33554432" x="302" y="6" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression=" lab_total_amt  + con_total_amt  + out_gisung_amt  +  out2_supplay_amt "border="0" color="33554432" x="365" y="15" height="14" width="85" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="452" y1="0" x2="452" y2="54"  name=l_27 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="454" y1="0" x2="454" y2="54"  name=l_13 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="456" y1="21" x2="600" y2="21"  name=l_15 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="457" y="27" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=lab_qty visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="1" tabsequence=32766 border="0" color="33554432" x="457" y="6" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=lab_day visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="517" y1="0" x2="517" y2="54"  name=l_16 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="521" y="27" height="13" width="77" format="#,###" html.valueishtml="0"  name=lab_incentive_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="LAB_LABOR_AMT/LAB_CNT"border="0" color="33554432" x="521" y="6" height="13" width="77" format="#,##0" html.valueishtml="0"  name=compute_18 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="599" y1="0" x2="599" y2="54"  name=l_14 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="603" y="15" height="14" width="86" format="#,###" html.valueishtml="0"  name=lab_total_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="691" y1="0" x2="691" y2="54"  name=l_21 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=detail x1="838" y1="0" x2="838" y2="54"  name=l_23 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="1" tabsequence=32766 border="0" color="33554432" x="842" y="15" height="14" width="72" format="#,###" html.valueishtml="0"  name=con_total_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="693" y1="21" x2="838" y2="21"  name=l_6 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=detail x1="1170" y1="21" x2="1234" y2="21"  name=l_37 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+column(band=detail id=17 alignment="1" tabsequence=32766 border="0" color="33554432" x="1173" y="27" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=out_qty visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=18 alignment="1" tabsequence=32766 border="0" color="33554432" x="1173" y="6" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=out_day visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="695" y="6" height="13" width="52" format="#,##0.0" html.valueishtml="0"  name=con_day visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="695" y="27" height="13" width="52" format="#,##0.0" html.valueishtml="0"  name=con_qty visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="749" y1="0" x2="749" y2="54"  name=l_22 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="752" y="6" height="13" width="85" format="#,###" html.valueishtml="0"  name=con_labor_amt visible="1" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="1" expression="con_labor_amt/con_cnt"border="0" color="33554432" x="752" y="26" height="13" width="85" format="#,##0" html.valueishtml="0"  name=compute_17 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1" y1="1" x2="1" y2="61"  name=l_100 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="299" y1="1" x2="299" y2="55"  name=l_101 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="134217856" x="60" y="15" height="14" width="164" html.valueishtml="0"  name=t_32 visible="1"  font.face="굴림" font.height="-9" font.weight="700"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+line(band=footer x1="452" y1="1" x2="452" y2="55"  name=l_103 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=footer x1="454" y1="1" x2="454" y2="55"  name=l_104 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression=" sum( lab_day  + con_day  +  out_day  +  out2_day  for all) "border="0" color="134217856" x="302" y="9" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_37 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(lab_qty for all)"border="0" color="134217856" x="457" y="31" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_42 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1010" y1="1" x2="1010" y2="55"  name=l_111 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=footer x1="1012" y1="1" x2="1012" y2="55"  name=l_116 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(out2_day for all)"border="0" color="134217856" x="1329" y="9" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_62 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1" y1="1" x2="1481" y2="1"  name=l_7 visible="1" pen.style="0" pen.width="3" pen.color="12639424"  background.mode="2" background.color="16777215" )
+line(band=footer x1="1" y1="48" x2="1481" y2="48"  name=l_112 visible="1" pen.style="0" pen.width="3" pen.color="12639424"  background.mode="2" background.color="16777215" )
+line(band=footer x1="1481" y1="1" x2="1481" y2="55"  name=l_122 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(out2_supplay_amt for all)"border="0" color="134217856" x="1393" y="17" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_64 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1389" y1="1" x2="1389" y2="55"  name=l_121 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(out2_qty for all)"border="0" color="134217856" x="1329" y="31" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_63 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1325" y1="1" x2="1325" y2="55"  name=l_120 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=footer x1="1326" y1="24" x2="1389" y2="24"  name=l_129 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="sum(out_gisung_amt for all)"border="0" color="134217856" x="1237" y="17" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_61 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1233" y1="1" x2="1233" y2="55"  name=l_119 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(out_qty for all)"border="0" color="134217856" x="1173" y="31" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_60 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1169" y1="1" x2="1169" y2="55"  name=l_118 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( out_gisung_amt  +  out2_supplay_amt  for all)"border="0" color="134217856" x="1081" y="17" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_58 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1077" y1="1" x2="1077" y2="55"  name=l_117 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( out_day  +  out2_day  for all)"border="0" color="134217856" x="1017" y="9" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_56 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum( out_qty  +  out2_qty  for all)"border="0" color="134217856" x="1017" y="31" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_57 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="1013" y1="24" x2="1077" y2="24"  name=l_127 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="sum( lab_labor_amt  +  con_labor_amt   for all)"border="0" color="134217856" x="920" y="17" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_55 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="916" y1="1" x2="916" y2="55"  name=l_110 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=footer x1="361" y1="1" x2="361" y2="55"  name=l_102 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=footer x1="300" y1="24" x2="361" y2="24"  name=l_123 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="sum( lab_qty +  con_qty  +  out_qty  +  out2_qty  for all)"border="0" color="134217856" x="302" y="31" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_38 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression=" sum( lab_total_amt  +   con_total_amt + out_gisung_amt  +  out2_supplay_amt   for all)"border="0" color="134217856" x="365" y="17" height="14" width="85" format="#,###" html.valueishtml="0"  name=compute_39 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="456" y1="24" x2="600" y2="24"  name=l_124 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="sum(lab_day for all)"border="0" color="134217856" x="457" y="9" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_40 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(lab_incentive_amt for all)"border="0" color="134217856" x="521" y="31" height="13" width="77" format="#,###" html.valueishtml="0"  name=compute_43 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="517" y1="1" x2="517" y2="55"  name=l_115 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(lab_labor_amt for all)/sum(lab_cnt for all)"border="0" color="134217856" x="521" y="9" height="13" width="77" format="#,###" html.valueishtml="0"  name=compute_41 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="599" y1="1" x2="599" y2="55"  name=l_105 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(lab_total_amt for all)"border="0" color="134217856" x="603" y="17" height="14" width="86" format="#,###" html.valueishtml="0"  name=compute_44 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="691" y1="1" x2="691" y2="55"  name=l_114 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+line(band=footer x1="838" y1="1" x2="838" y2="55"  name=l_109 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(con_total_amt for all)"border="0" color="134217856" x="842" y="17" height="14" width="72" format="#,###" html.valueishtml="0"  name=compute_54 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="693" y1="24" x2="838" y2="24"  name=l_126 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+line(band=footer x1="1170" y1="24" x2="1234" y2="24"  name=l_128 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="2" background.color="1073741824" )
+compute(band=footer alignment="1" expression="sum(out_day for all)"border="0" color="134217856" x="1173" y="9" height="13" width="58" format="#,##0.0" html.valueishtml="0"  name=compute_59 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(con_day for all)"border="0" color="134217856" x="695" y="9" height="13" width="52" format="#,##0.0" html.valueishtml="0"  name=compute_50 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(con_qty for all)"border="0" color="134217856" x="695" y="31" height="13" width="52" format="#,##0.0" html.valueishtml="0"  name=compute_51 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=footer x1="749" y1="1" x2="749" y2="55"  name=l_113 visible="1" pen.style="0" pen.width="1" pen.color="12632256"  background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(con_labor_amt for all)"border="0" color="134217856" x="752" y="9" height="13" width="85" format="#,###" html.valueishtml="0"  name=compute_53 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=footer alignment="1" expression="sum(con_labor_amt for all)/sum(con_cnt for all)"border="0" color="134217856" x="752" y="31" height="13" width="85" format="#,###" html.valueishtml="0"  name=compute_52 visible="1"  font.face="굴림" font.height="-8" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=foreground x1="0" y1="69" x2="1480" y2="69"  name=l_50 visible="1" pen.style="0" pen.width="3" pen.color="30992876~t32498906"  background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

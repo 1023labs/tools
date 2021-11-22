@@ -1,0 +1,57 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=22 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_labo_attach_child.company_code" dbalias="A.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=emp_no dbname="cm_labo_attach_child.emp_no" dbalias="A.emp_no" )
+ column=(type=char(50) update=yes updatewhereclause=yes name=court_name dbname="cm_labo_attach_child.court_name" dbalias="A.court_name" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=court_emp_name dbname="cm_labo_attach_child.court_emp_name" dbalias="A.court_emp_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=start_yymm dbname="cm_labo_attach_child.start_yymm" dbalias="A.start_yymm" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=end_yymm dbname="cm_labo_attach_child.end_yymm" dbalias="A.end_yymm" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=attach_amt dbname="cm_labo_attach_child.attach_amt" dbalias="A.attach_amt" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=seq dbname="cm_labo_attach_child.seq" dbalias="A.seq" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes key=yes name=master_seq dbname="cm_labo_attach_child.master_seq" dbalias="A.master_seq" )
+ retrieve="SELECT A.COMPANY_CODE     AS COMPANY_CODE,
+       A.EMP_NO           AS EMP_NO,
+       A.COURT_NAME       AS COURT_NAME,
+       A.COURT_EMP_NAME   AS COURT_EMP_NAME,
+       A.START_YYMM       AS START_YYMM,
+       A.END_YYMM         AS END_YYMM,
+       A.ATTACH_AMT       AS ATTACH_AMT,
+       A.SEQ              AS SEQ,
+       A.MASTER_SEQ       AS MASTER_SEQ
+  FROM CM_LABO_ATTACH_CHILD A
+ WHERE A.COMPANY_CODE = :as_company
+   AND A.EMP_NO       = :as_empno
+   AND A.MASTER_SEQ   = :as_seq" update="CM_LABO_ATTACH_CHILD" updatewhere=1 updatekeyinplace=no arguments=(("as_company", string),("as_empno", string),("as_seq", string)) )
+text(band=header alignment="2" text="NO" border="0" color="33554432" x="2" y="2" height="14" width="21" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="요청법원/세무서" border="0" color="33554432" x="25" y="2" height="14" width="128" html.valueishtml="0"  name=court_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="담당자" border="0" color="33554432" x="155" y="2" height="14" width="82" html.valueishtml="0"  name=court_emp_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="시작일자" border="0" color="33554432" x="239" y="2" height="14" width="71" html.valueishtml="0"  name=start_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="종료일자" border="0" color="33554432" x="312" y="2" height="14" width="73" html.valueishtml="0"  name=end_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Seq" border="0" color="33554432" x="488" y="2" height="14" width="551" html.valueishtml="0"  name=seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="Master Seq" border="0" color="33554432" x="1041" y="2" height="14" width="551" html.valueishtml="0"  name=master_seq_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="양육비요청금액" border="0" color="33554432" x="387" y="2" height="14" width="98" html.valueishtml="0"  name=attach_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="21" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="0" tabsequence=10 border="0" color="33554432" x="25" y="2" height="19" width="128" format="[general]" html.valueishtml="0"  name=court_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=4 alignment="2" tabsequence=20 border="0" color="33554432" x="155" y="2" height="19" width="82" format="[general]" html.valueishtml="0"  name=court_emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="2" tabsequence=30 border="0" color="33554432" x="240" y="2" height="19" width="70" format="[general]" html.valueishtml="0"  name=start_yymm visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=40 border="0" color="33554432" x="313" y="2" height="19" width="72" format="[general]" html.valueishtml="0"  name=end_yymm visible="1" editmask.mask="XXXX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="1" tabsequence=50 border="0" color="33554432" x="387" y="2" height="19" width="98" format="#,##0" html.valueishtml="0"  name=attach_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="488" y="2" height="19" width="551" format="[general]" html.valueishtml="0"  name=seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="1041" y="2" height="19" width="551" format="[general]" html.valueishtml="0"  name=master_seq visible="0" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=footer alignment="1" text="합      계" border="0" color="33554432" x="25" y="5" height="14" width="128" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(attach_amt for all)"border="0" color="33554432" x="387" y="5" height="14" width="98" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

@@ -1,0 +1,41 @@
+release 7;
+datawindow(units=0 timer_interval=0 color=81324524 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+header(height=68 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=68 color="536870912" )
+table(column=(type=datetime update=yes updatewhereclause=yes key=yes name=yyyymm dbname="l_labor_contract_tax.yyyymm" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=basic_tax dbname="l_labor_contract_tax.basic_tax" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=ju_tax dbname="l_labor_contract_tax.ju_tax" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=time_etc_tax dbname="l_labor_contract_tax.time_etc_tax" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=holiday_cut_tax dbname="l_labor_contract_tax.holiday_cut_tax" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=year_tax dbname="l_labor_contract_tax.year_tax" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=total_tax dbname="l_labor_contract_tax.total_tax" )
+ retrieve="SELECT YYYYMM,
+       BASIC_TAX,
+       JU_TAX,
+       TIME_ETC_TAX,
+       HOLIDAY_CUT_TAX,
+       YEAR_TAX,
+       TOTAL_TAX 
+  FROM L_LABOR_CONTRACT_TAX" update="L_LABOR_CONTRACT_TAX" updatewhere=1 updatekeyinplace=no )
+text(band=header alignment="2" text="NO" border="6" color="8388608" x="9" y="4" height="60" width="101"  name=t_1  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="년월" border="6" color="8388608" x="123" y="4" height="60" width="347"  name=yyyymm_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="기본급" border="6" color="8388608" x="485" y="4" height="60" width="274"  name=basic_tax_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="주휴수당" border="6" color="8388608" x="773" y="4" height="60" width="274"  name=ju_tax_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="시간 외 수당" border="6" color="8388608" x="1061" y="4" height="60" width="357"  name=time_etc_tax_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="휴일가산분할수당" border="6" color="8388608" x="1431" y="4" height="60" width="517"  name=holiday_cut_tax_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="연차수당" border="6" color="8388608" x="1961" y="4" height="60" width="274"  name=year_tax_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+text(band=header alignment="2" text="총 세율" border="6" color="8388608" x="2249" y="4" height="60" width="242"  name=total_tax_t  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="0" x="5" y="4" height="60" width="110" format="[GENERAL]"  name=compute_1  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="0" x="119" y="4" height="60" width="352" format="[shortdate] [time]"  name=yyyymm editmask.mask="yyyy-mm-dd" editmask.focusrectangle=no  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+column(band=detail id=2 alignment="2" tabsequence=20 border="0" color="0" x="475" y="4" height="60" width="279" format="[General]"  name=basic_tax edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+column(band=detail id=3 alignment="2" tabsequence=30 border="0" color="0" x="759" y="4" height="60" width="288" format="[General]"  name=ju_tax edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+column(band=detail id=4 alignment="2" tabsequence=40 border="0" color="0" x="1051" y="4" height="60" width="366" format="[General]"  name=time_etc_tax edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+column(band=detail id=5 alignment="2" tabsequence=50 border="0" color="0" x="1422" y="4" height="60" width="526" format="[General]"  name=holiday_cut_tax edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+compute(band=detail alignment="2" expression="truncate( 100  -  (  basic_tax  +  ju_tax  +  time_etc_tax  +  holiday_cut_tax  ) , 1 )"border="0" color="0" x="1952" y="4" height="60" width="283" format="[GENERAL]"  name=year  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" basic_tax  +  ju_tax  +  time_etc_tax  +  holiday_cut_tax  +   year "border="0" color="0" x="2240" y="4" height="60" width="261" format="[GENERAL]"  name=total  font.face="Arial" font.height="-9" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="81324524" )
+column(band=detail id=6 alignment="2" tabsequence=60 border="0" color="0" x="2533" y="4" height="60" width="5" format="[General]"  name=year_tax visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+column(band=detail id=7 alignment="2" tabsequence=70 border="0" color="0" x="2542" y="4" height="60" width="5" format="[General]"  name=total_tax visible="1~t0" edit.limit=0 edit.case=any edit.autoselect=yes edit.autohscroll=yes  font.face="Arial" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="1090519039" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )

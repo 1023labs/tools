@@ -1,0 +1,83 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=decimal(0) update=yes updatewhereclause=yes name=revision dbname="revision" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=consult_date dbname="consult_date" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=consult_title dbname="consult_title" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=consult_status dbname="consult_status" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=consult_const_yn dbname="consult_const_yn" values="Y	Y/N	N/" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=field_ment dbname="field_ment" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=head_ment dbname="head_ment" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=desn_mat_amt dbname="desn_mat_amt" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=desn_lab_amt dbname="desn_lab_amt" )
+ column=(type=decimal(1) update=yes updatewhereclause=yes name=desn_exp_amt dbname="desn_exp_amt" )
+ column=(type=number updatewhereclause=yes name=tot_amt dbname="tot_amt" )
+ column=(type=number updatewhereclause=yes name=desn_amt dbname="desn_amt" )
+ column=(type=number updatewhereclause=yes name=nocalc_amt dbname="nocalc_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.REVISION,
+         A.CONSULT_DATE,
+         A.CONSULT_TITLE,
+         A.CONSULT_STATUS,
+         A.CONSULT_CONST_YN,
+         A.FIELD_MENT,
+         A.HEAD_MENT,
+         A.DESN_MAT_AMT,
+         A.DESN_LAB_AMT,
+         A.DESN_EXP_AMT,
+         NVL(DESN_MAT_AMT, 0) + NVL(DESN_LAB_AMT, 0) + NVL(DESN_EXP_AMT, 0) TOT_AMT,
+         B.DESN_AMT,
+         (NVL(DESN_MAT_AMT, 0) + NVL(DESN_LAB_AMT, 0) + NVL(DESN_EXP_AMT, 0)) - NVL(B.DESN_AMT, 0) NOCALC_AMT
+    FROM CM_CHNG_CONSULT A LEFT JOIN (SELECT COMPANY_CODE,
+                                             PROJ_CODE,
+                                             REVISION,
+                                             SUM(DESN_MAT_AMT + DESN_LAB_AMT + DESN_EXP_AMT) DESN_AMT
+                                        FROM CM_CHNG_DETAIL
+                                    GROUP BY COMPANY_CODE, PROJ_CODE, REVISION) B
+                                  ON A.COMPANY_CODE = B.COMPANY_CODE
+                                 AND A.PROJ_CODE = B.PROJ_CODE
+                                 AND A.REVISION = B.REVISION  
+   WHERE A.COMPANY_CODE = :as_compcode
+     AND A.PROJ_CODE = :as_projcode
+ORDER BY A.REVISION" arguments=(("as_compcode", string),("as_projcode", string)) )
+text(band=header alignment="2" text="차수" border="0" color="33554432" x="2" y="2" height="14" width="35" html.valueishtml="0"  name=revision_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="년월" border="0" color="33554432" x="39" y="2" height="14" width="71" html.valueishtml="0"  name=consult_date_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="변경내역" border="0" color="33554432" x="112" y="2" height="14" width="203" html.valueishtml="0"  name=consult_title_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="자재비" border="0" color="33554432" x="317" y="2" height="14" width="90" html.valueishtml="0"  name=desn_mat_amt_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="노무비" border="0" color="33554432" x="409" y="2" height="14" width="90" html.valueishtml="0"  name=desn_lab_amt_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="경비" border="0" color="33554432" x="501" y="2" height="14" width="90" html.valueishtml="0"  name=desn_exp_amt_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="593" y="2" height="14" width="90" html.valueishtml="0"  name=tot_amt_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="상태" border="0" color="33554432" x="685" y="2" height="14" width="65" html.valueishtml="0"  name=consult_status_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적용" border="0" color="33554432" x="752" y="2" height="14" width="29" html.valueishtml="0"  name=consult_const_yn_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약확정" border="0" color="33554432" x="783" y="2" height="14" width="90" html.valueishtml="0"  name=desn_amt_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="미정산" border="0" color="33554432" x="875" y="2" height="14" width="90" html.valueishtml="0"  name=nocalc_amt_t pointer="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="35" format="[general]" html.valueishtml="0"  name=revision visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="39" y="2" height="17" width="71" format="@@@@-@@" html.valueishtml="0"  name=consult_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="112" y="2" height="17" width="203" format="[general]" html.valueishtml="0"  name=consult_title visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="685" y="2" height="17" width="65" format="[general]" html.valueishtml="0"  name=consult_status visible="1" dddw.name=dw_cm_comcode dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=10 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0 dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="752" y="2" height="17" width="29" format="[general]" html.valueishtml="0"  name=consult_const_yn visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=32766 border="0" color="33554432" x="875" y="2" height="17" width="90" format="#,###" html.valueishtml="0"  name=nocalc_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="1" tabsequence=32766 border="0" color="33554432" x="783" y="2" height="17" width="90" format="#,###" html.valueishtml="0"  name=desn_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="317" y="2" height="17" width="90" format="#,##0" html.valueishtml="0"  name=desn_mat_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="409" y="2" height="17" width="90" format="#,##0" html.valueishtml="0"  name=desn_lab_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="501" y="2" height="17" width="90" format="#,##0" html.valueishtml="0"  name=desn_exp_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="593" y="2" height="17" width="90" format="#,##0" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=footer alignment="0" text="합계" border="0" color="33554432" x="112" y="2" height="14" width="203" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( desn_mat_amt for all )"border="0" color="33554432" x="317" y="2" height="14" width="90" format="#,###" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( desn_lab_amt for all )"border="0" color="33554432" x="409" y="2" height="14" width="90" format="#,###" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( desn_exp_amt for all )"border="0" color="33554432" x="501" y="2" height="14" width="90" format="#,###" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( tot_amt for all )"border="0" color="33554432" x="593" y="2" height="14" width="90" format="#,###" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( desn_amt for all )"border="0" color="33554432" x="783" y="2" height="14" width="90" format="#,###" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum ( nocalc_amt for all )"border="0" color="33554432" x="875" y="2" height="14" width="90" format="#,###" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

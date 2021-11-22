@@ -1,0 +1,29 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(12) updatewhereclause=yes name=item_code dbname="pm_unpr_history.item_code" )
+ column=(type=decimal(2) updatewhereclause=yes name=order_cost dbname="pm_unpr_history.order_cost" )
+ column=(type=char(8) updatewhereclause=yes name=strt_date dbname="pm_unpr_history.strt_date" )
+ column=(type=char(8) updatewhereclause=yes name=end_date dbname="pm_unpr_history.end_date" )
+ retrieve="  SELECT A.ITEM_CODE,
+         A.ORDER_COST,
+         A.STRT_DATE,
+         A.END_DATE
+    FROM PM_UNPR_HISTORY A INNER JOIN VW_C_PM_UNPRCUST V ON A.CUST_CODE = V.DNAME
+   WHERE A.ITEM_CODE = :as_itemcode
+ORDER BY A.STRT_DATE DESC, A.ROW_INPUT_DATE DESC" arguments=(("as_itemcode", string)) )
+text(band=header alignment="2" text="적용일자" border="0" color="33554432" x="2" y="2" height="14" width="80" html.valueishtml="0"  name=strt_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="종료일자" border="0" color="33554432" x="84" y="2" height="14" width="80" html.valueishtml="0"  name=end_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="단가" border="0" color="33554432" x="166" y="2" height="14" width="113" html.valueishtml="0"  name=order_cost_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="1" tabsequence=32766 border="0" color="33554432" x="166" y="2" height="17" width="113" format="#,###.00" html.valueishtml="0"  name=order_cost visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="80" format="@@@@-@@-@@" html.valueishtml="0"  name=strt_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="84" y="2" height="17" width="80" format="@@@@-@@-@@" html.valueishtml="0"  name=end_date visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

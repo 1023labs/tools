@@ -1,0 +1,75 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=17 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=17 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=req_div dbname="req_div" )
+ column=(type=char(0) updatewhereclause=yes name=req_mm dbname="req_mm" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=req_date dbname="req_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=balance_amt dbname="balance_amt" )
+ column=(type=number update=yes updatewhereclause=yes name=req_amount dbname="req_amount" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=status_div dbname="status_div" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=trans_tag dbname="trans_tag" values="	Y/	N" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=slip_no dbname="slip_no" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         P.PROJ_NAME,
+         A.REQ_DIV,
+         SUBSTR(TO_CHAR(TO_NUMBER(:as_req_yymm)-1),5,2) REQ_MM,
+         A.REQ_DATE,
+         C.BALANCE_AMT,
+         SUM(A.REQ_AMOUNT) REQ_AMOUNT,
+         A.STATUS_DIV,
+         A.TRANS_TAG,
+         A.SLIP_NO
+    FROM CM_COST_REQUEST_ADV A LEFT JOIN (
+                                              SELECT COMPANY_CODE,
+                                                     PROJ_CODE,
+                                                     CLOSE_YYYYMM,
+                                                     BALANCE_AMT
+                                                FROM CM_COST_REQADV_CLOSE
+                                               WHERE CLOSE_YYYYMM = :as_req_yymm ) C
+                                      ON A.COMPANY_CODE = C.COMPANY_CODE 
+                                     AND A.PROJ_CODE    = C.PROJ_CODE
+                                     AND SUBSTR(A.REQ_DATE,1,6)   = C.CLOSE_YYYYMM  
+                               LEFT JOIN SM_CODE_PROJECT P
+                                      ON A.COMPANY_CODE = P.COMPANY_CODE AND A.PROJ_CODE = P.PROJ_CODE                                             
+   WHERE A.COMPANY_CODE = :as_comp_code
+     AND A.PROJ_CODE LIKE :as_proj_code
+     AND A.REQ_DATE  LIKE :as_req_yymm||'%' 
+GROUP BY A.COMPANY_CODE, A.PROJ_CODE,P.PROJ_NAME, A.REQ_DIV,A.REQ_DATE, C.BALANCE_AMT, A.STATUS_DIV,A.TRANS_TAG, A.SLIP_NO
+ORDER BY A.TRANS_TAG DESC, A.SLIP_NO, A.PROJ_CODE, A.REQ_DIV, A.REQ_DATE
+                 " arguments=(("as_comp_code", string),("as_proj_code", string),("as_req_yymm", string)) )
+group(level=1 header.height=0 trailer.height=18 by=("company_code" , "req_mm" , "trans_tag" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="35" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="구분" border="0" color="33554432" x="225" y="2" height="14" width="77" html.valueishtml="0"  name=req_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="청구일자" border="0" color="33554432" x="304" y="2" height="14" width="74" html.valueishtml="0"  name=req_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="39" y="2" height="14" width="184" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금월청구분" border="0" color="33554432" x="477" y="2" height="14" width="93" html.valueishtml="0"  name=req_amount_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="이체" border="0" color="33554432" x="572" y="2" height="14" width="51" html.valueishtml="0"  name=trans_tag_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전표번호" border="0" color="33554432" x="625" y="2" height="14" width="269" html.valueishtml="0"  name=slip_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전월잔액" border="0" color="33554432" x="380" y="2" height="14" width="95" html.valueishtml="0"  name=balance_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="1" height="14" width="35" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="225" y="1" height="14" width="77" format="[general]" html.valueishtml="0"  name=req_div visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="304" y="1" height="14" width="74" format="####-##-##" html.valueishtml="0"  name=req_date visible="1" editmask.mask="####-##-##" editmask.imemode=0 editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="39" y="1" height="14" width="184" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=10 border="0" color="33554432" x="572" y="1" height="14" width="51" format="[general]" html.valueishtml="0"  name=trans_tag visible="1" edit.name="chkbox_YN" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="0" tabsequence=32766 border="0" color="33554432" x="625" y="1" height="14" width="269" format="[general]" html.valueishtml="0"  name=slip_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="477" y="1" height="14" width="93" format="#,##0" html.valueishtml="0"  name=req_amount visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="380" y="1" height="14" width="95" format="#,##0" html.valueishtml="0"  name=balance_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(req_amount for group 1)"border="0" color="33554432" x="477" y="2" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_8 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(balance_amt for group 1)"border="0" color="33554432" x="380" y="2" height="14" width="95" format="#,##0" html.valueishtml="0"  name=compute_9 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=trailer.1 alignment="1" text="기청구금액~t if( trans_tag = 'Y' , '기청구금액' , '금회청구금액')" border="0" color="33554432" x="39" y="2" height="14" width="184" html.valueishtml="0"  name=t_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(req_amount for all)"border="0" color="33554432" x="477" y="1" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(balance_amt for all)"border="0" color="33554432" x="380" y="1" height="14" width="95" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합    계" border="0" color="33554432" x="39" y="1" height="14" width="184" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

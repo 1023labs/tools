@@ -1,0 +1,64 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=20 color="536870912" )
+table(column=(type=char(6) updatewhereclause=yes name=sm_code_cust_bank_code dbname="bank_code" )
+ column=(type=char(30) updatewhereclause=yes name=sm_code_cust_deposit_no dbname="deposit_no" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="cust_name" )
+ column=(type=char(30) updatewhereclause=yes name=sm_code_cust_deposit_owner dbname="deposit_owner" )
+ column=(type=char(14) updatewhereclause=yes name=bill_typenm dbname="bill_typenm" )
+ column=(type=number updatewhereclause=yes name=tot_amt dbname="tot_amt" )
+ retrieve="SELECT S.BANK_CODE, S.DEPOSIT_NO, S.CUST_NAME, S.DEPOSIT_OWNER, BILL_TYPENM, SUM(S.TOT_AMT) AS TOT_AMT 
+  FROM (SELECT C.CUST_NAME, 
+               CASE WHEN A.BILL_TYPE = '3' THEN (SELECT DEPOSITOR
+                                                   FROM HR_PAYX_MASTER
+                                                  WHERE COMPANY_CODE = A.COMPANY_CODE
+                                                    AND EMP_NO = A.CARD_USER) 
+                                           ELSE C.DEPOSIT_OWNER END DEPOSIT_OWNER,
+               CASE WHEN A.BILL_TYPE = '3' THEN (SELECT BANK_CODE
+                                                   FROM HR_PAYX_MASTER
+                                                  WHERE COMPANY_CODE = A.COMPANY_CODE
+                                                    AND EMP_NO = A.CARD_USER) 
+                                           ELSE C.BANK_CODE END BANK_CODE,
+               CASE WHEN A.BILL_TYPE = '3' THEN (SELECT ACCOUNT_NO
+                                                   FROM HR_PAYX_MASTER
+                                                  WHERE COMPANY_CODE = A.COMPANY_CODE
+                                                    AND EMP_NO = A.CARD_USER)
+                                           ELSE C.DEPOSIT_NO END DEPOSIT_NO, 
+               SUPPLAY_AMT + VAT_AMT TOT_AMT,
+               CASE WHEN A.BILL_TYPE = '3' THEN '개인카드'
+                                           ELSE '일반,전자 세금' END BILL_TYPENM
+          FROM CM_COST_CREATE_BUY A INNER JOIN SM_CODE_PROJECT B 
+                                            ON A.COMPANY_CODE = B.COMPANY_CODE 
+                                           AND A.PROJ_CODE = B.PROJ_CODE 
+                                    INNER JOIN SM_CODE_CUST C 
+                                            ON C.CUST_CODE = (CASE WHEN A.BILL_TYPE = '3' THEN A.CARD_USER ELSE A.CUST_CODE END) 
+         WHERE A.COMPANY_CODE = :as_comp 
+           AND A.PROJ_CODE LIKE :as_proj 
+           AND A.YYYYMM = :as_month 
+           AND A.CREATE_DIV = '2' 
+         ORDER BY B.PROJ_NAME, A.PUB_DATE, C.CUST_NAME) S
+         WHERE S.BANK_CODE||S.DEPOSIT_NO||S.CUST_NAME||S.DEPOSIT_OWNER IS NOT NULL
+        GROUP BY S.BANK_CODE, S.DEPOSIT_NO, S.CUST_NAME, S.DEPOSIT_OWNER, S.BILL_TYPENM
+ ORDER BY S.CUST_NAME, S.DEPOSIT_OWNER" arguments=(("as_comp", string),("as_proj", string),("as_month", string)) )
+text(band=header alignment="2" text="금융코드" border="0" color="33554432" x="2" y="2" height="14" width="76" html.valueishtml="0"  name=sm_code_cust_bank_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계좌" border="0" color="33554432" x="80" y="2" height="14" width="110" html.valueishtml="0"  name=sm_code_cust_deposit_no_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="거래처명" border="0" color="33554432" x="192" y="2" height="14" width="169" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="금액" border="0" color="33554432" x="619" y="2" height="14" width="93" html.valueishtml="0"  name=tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="192" y="1" height="17" width="169" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="76" format="[general]" html.valueishtml="0"  name=sm_code_cust_bank_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="80" y="2" height="17" width="110" format="[general]" html.valueishtml="0"  name=sm_code_cust_deposit_no visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="619" y="2" height="17" width="93" format="#,###" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예금주" border="0" color="33554432" x="363" y="2" height="14" width="129" html.valueishtml="0"  name=sm_code_cust_deposit_owner_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="증빙구분" border="0" color="33554432" x="494" y="2" height="14" width="123" html.valueishtml="0"  name=bill_typenm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="363" y="2" height="17" width="129" format="[general]" html.valueishtml="0"  name=sm_code_cust_deposit_owner visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="494" y="2" height="17" width="123" format="[general]" html.valueishtml="0"  name=bill_typenm visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+
+sparse(names="bill_typenm")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

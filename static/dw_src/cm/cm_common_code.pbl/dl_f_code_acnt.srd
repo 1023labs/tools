@@ -1,0 +1,31 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(8) update=yes updatewhereclause=yes key=yes name=acnt_code dbname="ac_code_acnt.acnt_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=acnt_name dbname="ac_code_acnt.acnt_name" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=remainder_pos dbname="ac_code_acnt.remainder_pos" values="차변	D/대변	C/" )
+ retrieve="    SELECT ACNT_CODE,
+         ACNT_NAME,
+         REMAINDER_POS
+    FROM AC_CODE_ACNT
+   WHERE REMAINDER_POS LIKE :as_dc_tag
+     AND (SUBSTR(ACNT_CODE, 1, 1) NOT IN :as_retrievediv OR ACNT_CODE LIKE :as_retrievediv||'%')
+     AND ( ACNT_CODE LIKE :as_acnt_name||'%' OR ACNT_NAME LIKE '%'||:as_acnt_name||'%' )
+ORDER BY ACNT_CODE" update="AC_CODE_ACNT" updatewhere=1 updatekeyinplace=no arguments=(("as_dc_tag", string),("as_retrievediv", string),("as_acnt_name", string)) )
+text(band=header alignment="2" text="계정코드" border="0" color="33554432" x="59" y="2" height="14" width="74" html.valueishtml="0"  name=acnt_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계정명" border="0" color="33554432" x="135" y="2" height="14" width="256" html.valueishtml="0"  name=acnt_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="차대구분" border="0" color="33554432" x="393" y="2" height="14" width="88" html.valueishtml="0"  name=remainder_pos_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="55" html.valueishtml="0"  name=c_row_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=1 alignment="2" tabsequence=10 border="0" color="33554432" x="59" y="2" height="17" width="74" format="[general]" html.valueishtml="0"  name=acnt_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="0" tabsequence=20 border="0" color="33554432" x="135" y="2" height="17" width="256" format="[general]" html.valueishtml="0"  name=acnt_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="0" tabsequence=30 border="0" color="33554432" x="393" y="2" height="17" width="88" format="[general]" html.valueishtml="0"  name=remainder_pos visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any ddlb.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="17" width="55" format="[GENERAL]" html.valueishtml="0"  name=c_row visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

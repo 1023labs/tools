@@ -1,0 +1,43 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=20 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=17 color="536870912" )
+table(column=(type=char(10) updatewhereclause=yes name=hcode dbname="sm_comcode_d.hcode" )
+ column=(type=char(50) updatewhereclause=yes name=dcode dbname="sm_comcode_d.dcode" )
+ column=(type=char(4) updatewhereclause=yes name=sys_id dbname="sm_comcode_d.sys_id" )
+ column=(type=char(250) updatewhereclause=yes name=dname dbname="sm_comcode_d.dname" )
+ column=(type=char(250) updatewhereclause=yes name=dname1 dbname="sm_comcode_d.dname1" )
+ column=(type=char(250) updatewhereclause=yes name=dname2 dbname="sm_comcode_d.dname2" )
+ column=(type=decimal(3) updatewhereclause=yes name=dvalue dbname="sm_comcode_d.dvalue" )
+ column=(type=char(250) updatewhereclause=yes name=dvalue2 dbname="sm_comcode_d.dvalue2" )
+ column=(type=char(20) updatewhereclause=yes name=relate_code1 dbname="sm_comcode_d.relate_code1" )
+ column=(type=char(20) updatewhereclause=yes name=relate_code2 dbname="sm_comcode_d.relate_code2" )
+ retrieve="  select a.hcode,
+         a.dcode,
+         a.sys_id,
+         a.dname,
+         a.dname1,
+         a.dname2,
+         a.dvalue,
+         a.dvalue2,
+         a.relate_code1,
+         a.relate_code2
+    from sm_comcode_d a,
+         sm_code_material_plab b
+   where a.dcode = b.sptext
+     and a.hcode = :as_hcode
+     and a.sys_id = :as_sysid
+     and b.item_code = :as_code
+     and (a.dcode like '%'||:as_find||'%' or a.dname like '%'||:as_find||'%')" arguments=(("as_hcode", string),("as_sysid", string),("as_code", string),("as_find", string)) )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="2" y="4" height="14" width="63" html.valueishtml="0"  name=sm_comcode_d_dcode_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="명칭" border="0" color="33554432" x="67" y="4" height="14" width="370" html.valueishtml="0"  name=sm_comcode_d_dname_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="63" format="[general]" html.valueishtml="0"  name=dcode visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="67" y="2" height="14" width="370" format="[general]" html.valueishtml="0"  name=dname visible="1" edit.limit=250 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

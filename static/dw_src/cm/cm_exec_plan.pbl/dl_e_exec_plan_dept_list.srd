@@ -1,0 +1,59 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=26 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="sm_bud_dept.company_code" values="(주)세보엠이씨	100/(주)에스비테크	200/(주)에스비콘	300/(주)하나엠텍	400/" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=level_code1 dbname="sm_bud_dept.level_code1" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=level_code2 dbname="sm_bud_dept.level_code2" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=dept_code dbname="sm_bud_dept.dept_code" )
+ column=(type=char(100) updatewhereclause=yes name=dept_name dbname="sm_code_dept.dept_name" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=plant_code dbname="sm_bud_dept.plant_code" )
+ column=(type=char(22) update=yes updatewhereclause=yes name=bud_code dbname="sm_bud_dept.bud_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=using_tag dbname="sm_bud_dept.using_tag" values="사용	Y/미사용	N/" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=attack_tag dbname="sm_bud_dept.attack_tag" values="예산통제	Y/허용	N/" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE,
+       A.LEVEL_CODE1  AS LEVEL_CODE1,
+       A.LEVEL_CODE2  AS LEVEL_CODE2,
+       A.DEPT_CODE    AS DEPT_CODE,
+       B.DEPT_NAME   AS DEPT_NAME,
+       A.PLANT_CODE   AS PLANT_CODE,
+       A.BUD_CODE     AS BUD_CODE,
+       A.USING_TAG    AS USING_TAG,
+       A.ATTACK_TAG AS ATTACK_TAG
+  FROM SM_BUD_DEPT A INNER JOIN SM_CODE_DEPT B
+                                           ON A.COMPANY_CODE = B.COMPANY_CODE
+                                         AND A.DEPT_CODE = B.DEPT_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+  AND A.DEPT_CODE like :as_dept
+ORDER BY A.DEPT_CODE DESC" update="SM_BUD_DEPT" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_dept", string)) )
+text(band=header alignment="2" text="사업장" border="0" color="33554432" x="2" y="8" height="14" width="103" html.valueishtml="0"  name=company_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업본부" border="0" color="33554432" x="107" y="8" height="14" width="122" html.valueishtml="0"  name=level_code1_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사업부" border="0" color="33554432" x="231" y="8" height="14" width="128" html.valueishtml="0"  name=level_code2_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="부서코드" border="0" color="33554432" x="485" y="8" height="14" width="74" html.valueishtml="0"  name=dept_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="부서명" border="0" color="33554432" x="561" y="8" height="14" width="379" html.valueishtml="0"  name=dept_name_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="설비구분" border="0" color="33554432" x="361" y="8" height="14" width="122" html.valueishtml="0"  name=plant_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예산코드" border="0" color="33554432" x="942" y="8" height="14" width="114" html.valueishtml="0"  name=bud_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="사용여부" border="0" color="33554432" x="1058" y="8" height="14" width="74" html.valueishtml="0"  name=using_tag_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예산통제 여부" border="0" color="33554432" x="1134" y="8" height="14" width="89" html.valueishtml="0"  name=attack_tag_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="561" y="2" height="17" width="379" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="361" y="2" height="17" width="122" format="[general]" html.valueishtml="0"  name=plant_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="942" y="2" height="17" width="114" format="[general]" html.valueishtml="0"  name=bud_code visible="1" edit.limit=18 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="2" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="17" width="103" format="[general]" html.valueishtml="0"  name=company_code visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="2" tabsequence=32766 border="0" color="33554432" x="107" y="2" height="17" width="122" format="[general]" html.valueishtml="0"  name=level_code1 visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="231" y="2" height="17" width="128" format="[general]" html.valueishtml="0"  name=level_code2 visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="485" y="2" height="17" width="74" format="[general]" html.valueishtml="0"  name=dept_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="2" tabsequence=32766 border="0" color="33554432" x="1058" y="2" height="17" width="74" format="[general]" html.valueishtml="0"  name=using_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="2" tabsequence=32766 border="0" color="33554432" x="1135" y="2" height="17" width="88" format="[general]" html.valueishtml="0"  name=attack_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

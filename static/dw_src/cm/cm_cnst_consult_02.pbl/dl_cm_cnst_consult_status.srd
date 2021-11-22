@@ -1,0 +1,65 @@
+release 9;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=19 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_osct_consult.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_osct_consult.proj_code" )
+ column=(type=char(4) updatewhereclause=yes name=consult_code dbname="cm_osct_consult.consult_code" )
+ column=(type=char(50) updatewhereclause=yes name=consult_name dbname="cm_osct_consult.consult_name" )
+ column=(type=char(30) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ column=(type=char(10) updatewhereclause=yes name=owner dbname="sm_code_cust.owner" )
+ column=(type=number updatewhereclause=yes name=recv_amt dbname="recv_amt" )
+ column=(type=number updatewhereclause=yes name=mexe_amt dbname="mexe_amt" )
+ column=(type=number updatewhereclause=yes name=oexe_amt dbname="oexe_amt" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONSULT_CODE,
+         A.CONSULT_NAME,
+         B.CUST_NAME,
+         B.OWNER,
+         SUM(NVL(C.RECV_AMT,0)) RECV_AMT, 
+         SUM(NVL(C.MEXE_AMT,0)) MEXE_AMT,
+         SUM(NVL(C.OEXE_AMT,0)) OEXE_AMT
+    FROM CM_OSCT_CONSULT A LEFT JOIN SM_CODE_CUST B
+                                  ON A.CUST_CODE = B.CUST_CODE
+                           LEFT JOIN CM_OSCT_CONSULT_DETAIL C
+                                  ON A.COMPANY_CODE = C.COMPANY_CODE
+                                 AND A.PROJ_CODE = C.PROJ_CODE
+                                 AND A.OSCT_DIV = C.OSCT_DIV
+                                 AND A.CONSULT_CODE = C.CONSULT_CODE
+   WHERE A.COMPANY_CODE = :as_comp
+     AND A.PROJ_CODE    = :as_proj
+     AND A.OSCT_DIV     = :as_osct_div
+GROUP BY A.COMPANY_CODE,
+         A.PROJ_CODE,
+         A.CONSULT_CODE,
+         A.CONSULT_NAME,
+         B.CUST_NAME,
+         B.OWNER              
+ORDER BY A.CONSULT_CODE  " arguments=(("as_comp", string),("as_proj", string),("as_osct_div", string)) )
+text(band=header alignment="2" text="업체명" border="0" color="33554432" x="287" y="2" height="14" width="85" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="대표자" border="0" color="33554432" x="374" y="2" height="14" width="66" html.valueishtml="0"  name=owner_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="도급금액" border="0" color="33554432" x="442" y="2" height="14" width="105" html.valueishtml="0"  name=recv_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="실행금액" border="0" color="33554432" x="549" y="2" height="14" width="93" html.valueishtml="0"  name=mexe_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="외주금액" border="0" color="33554432" x="644" y="2" height="14" width="93" html.valueishtml="0"  name=oexe_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="No." border="0" color="33554432" x="2" y="2" height="14" width="46" html.valueishtml="0"  name=t_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="하도율(%)" border="0" color="33554432" x="739" y="2" height="14" width="68" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="컨설팅명" border="0" color="33554432" x="98" y="2" height="14" width="187" html.valueishtml="0"  name=consult_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="50" y="2" height="14" width="46" html.valueishtml="0"  name=consult_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression="getrow()"border="0" color="33554432" x="2" y="2" height="18" width="46" format="[GENERAL]" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="33554432" x="287" y="2" height="18" width="85" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=32766 border="0" color="33554432" x="374" y="2" height="18" width="66" format="[general]" html.valueishtml="0"  name=owner visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="442" y="2" height="18" width="105" format="#,##0" html.valueishtml="0"  name=recv_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="1" tabsequence=32766 border="0" color="33554432" x="549" y="2" height="18" width="93" format="#,##0" html.valueishtml="0"  name=mexe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="644" y="2" height="18" width="93" format="#,##0" html.valueishtml="0"  name=oexe_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+compute(band=detail alignment="2" expression=" oexe_amt / recv_amt * 100"border="0" color="33554432" x="739" y="2" height="18" width="68" format="#,##0.00" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="98" y="2" height="18" width="187" format="[general]" html.valueishtml="0"  name=consult_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="33554432" x="50" y="2" height="18" width="46" format="[general]" html.valueishtml="0"  name=consult_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" )
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+ 

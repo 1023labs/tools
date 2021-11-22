@@ -1,0 +1,75 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=19 color="553648127" )
+summary(height=0 color="536870912" )
+footer(height=19 color="29946350" )
+detail(height=19 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="CM_PROJ_HIRE_SCHOOL_CAR.company_code" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=labor_code dbname="CM_PROJ_HIRE_SCHOOL_CAR.labor_code" )
+ column=(type=decimal(20) update=yes updatewhereclause=yes key=yes name=c_row dbname="CM_PROJ_HIRE_SCHOOL_CAR.seq" )
+ column=(type=char(4) update=yes updatewhereclause=yes name=major_code dbname="CM_PROJ_HIRE_SCHOOL_CAR.major_code" )
+ column=(type=char(30) update=yes updatewhereclause=yes name=major_name dbname="CM_PROJ_HIRE_SCHOOL_CAR.major_name" )
+ column=(type=char(20) update=yes updatewhereclause=yes name=school_car_code dbname="CM_PROJ_HIRE_SCHOOL_CAR.school_car_code" values="" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=enter_date dbname="CM_PROJ_HIRE_SCHOOL_CAR.enter_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=grad_date dbname="CM_PROJ_HIRE_SCHOOL_CAR.grad_date" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=acq_div dbname="CM_PROJ_HIRE_SCHOOL_CAR.acq_div" values="" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=last_school_yn dbname="CM_PROJ_HIRE_SCHOOL_CAR.last_school_yn" values="	Y/	N" )
+ column=(type=char(1) update=yes updatewhereclause=yes name=permit_school_yn dbname="CM_PROJ_HIRE_SCHOOL_CAR.permit_school_yn" values="YES	Y/NO	N/" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=school_code dbname="CM_PROJ_HIRE_SCHOOL_CAR.school_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes name=school_name dbname="CM_PROJ_HIRE_SCHOOL_CAR.school_name" )
+ column=(type=char(2) updatewhereclause=yes name=school_div_code dbname="hr_code_school_car.school_div_code" )
+ column=(type=char(100) update=yes updatewhereclause=yes name=etc dbname="CM_PROJ_HIRE_SCHOOL_CAR.etc" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=region_code dbname="CM_PROJ_HIRE_SCHOOL_CAR.region_code" )
+ retrieve="  SELECT A.COMPANY_CODE,
+         A.labor_code,
+         A.SEQ,
+         A.MAJOR_CODE,
+         A.MAJOR_NAME,
+         A.SCHOOL_CAR_CODE,
+         A.ENTER_DATE,
+         A.GRAD_DATE,
+         A.ACQ_DIV,
+         A.LAST_SCHOOL_YN,
+         A.PERMIT_SCHOOL_YN,
+         A.SCHOOL_CODE,
+         A.SCHOOL_NAME,
+         B.SCHOOL_DIV_CODE,
+         A.ETC,
+         A.REGION_CODE
+         FROM CM_PROJ_HIRE_SCHOOL_CAR A LEFT OUTER JOIN HR_CODE_SCHOOL_CAR B
+                                           ON A.SCHOOL_CAR_CODE = B.SCHOOL_CAR_CODE
+   WHERE A.labor_code          = :as_labor_code
+     AND A.COMPANY_CODE    = :as_comp" update="CM_PROJ_HIRE_SCHOOL_CAR" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_labor_code", string)) )
+text(band=header alignment="2" text="최종여부" border="0" color="20790589" x="636" y="3" height="14" width="49" html.valueishtml="0"  name=last_school_yn_t  tag="last_school_yn" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전공명칭" border="0" color="20790589" x="520" y="3" height="14" width="114" html.valueishtml="0"  name=major_name_t  tag="major_name" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="학력" border="0" color="20790589" x="37" y="3" height="14" width="95" html.valueishtml="0"  name=school_car_code_t  tag="school_car_code" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="입학일" border="0" color="20790589" x="134" y="3" height="14" width="65" html.valueishtml="0"  name=enter_date_t  tag="enter_date" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="학교명칭" border="0" color="20790589" x="362" y="3" height="14" width="103" html.valueishtml="0"  name=school_name_t  tag="school_name" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="졸업일" border="0" color="20790589" x="201" y="3" height="14" width="64" html.valueishtml="0"  name=grad_date_t  tag="grad_date" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="지역" border="0" color="20790589" x="267" y="3" height="14" width="43" html.valueishtml="0"  name=region_code_t pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="순번" border="0" color="20790589" x="2" y="3" height="14" width="33" html.valueishtml="0"  name=seq_t  tag="seq" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="학교코드" border="0" color="29132032" x="312" y="3" height="14" width="48" html.valueishtml="0"  name=school_code_t  tag="school_code" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전공코드" border="0" color="29132032" x="467" y="3" height="14" width="51" html.valueishtml="0"  name=major_code_t  tag="major_code" pointer="HyperLink!" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="0" tabsequence=10 border="2" color="20790589" x="37" y="3" height="14" width="95" format="[general]" html.valueishtml="0"  name=school_car_code visible="1" dddw.name=hr_d_code_school_car dddw.displaycolumn=school_car_name dddw.datacolumn=school_car_code dddw.percentwidth=0 dddw.lines=5 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="0" tabsequence=32766 border="0" color="20790589" x="520" y="3" height="14" width="114" format="[general]" html.valueishtml="0"  name=major_name visible="1" edit.limit=20 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="0" tabsequence=32766 border="0" color="20790589" x="362" y="3" height="14" width="103" format="[general]" html.valueishtml="0"  name=school_name visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=70 border="0" color="20790589" x="636" y="3" height="14" width="49" format="[general]" html.valueishtml="0"  name=last_school_yn visible="1" checkbox.text="" checkbox.on="Y" checkbox.off="N" checkbox.scale=yes checkbox.threed=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=32766 border="0" color="20790589" x="2" y="3" height="14" width="33" format="[general]" html.valueishtml="0"  name=c_row visible="1" editmask.mask="#" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=50 border="0" color="20790589" x="312" y="3" height="14" width="48" format="[general]" html.valueishtml="0"  name=school_code pointer="HyperLink!" visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=60 border="0" color="20790589" x="467" y="3" height="14" width="51" format="[general]" html.valueishtml="0"  name=major_code pointer="HyperLink!" visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=20 border="0" color="20790589" x="134" y="3" height="14" width="65" format="[general]" html.valueishtml="0"  name=enter_date visible="1" editmask.autoskip=yes editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=30 border="0" color="20790589" x="201" y="3" height="14" width="64" format="[general]" html.valueishtml="0"  name=grad_date visible="1" editmask.autoskip=yes editmask.mask="####-##-##" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=16 alignment="2" tabsequence=40 border="2" color="20790589" x="267" y="3" height="14" width="43" format="[general]" html.valueishtml="0"  name=region_code visible="1" dddw.name=hr_d_code_common dddw.displaycolumn=ref_name dddw.datacolumn=ref_code dddw.percentwidth=120 dddw.lines=5 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any dddw.vscrollbar=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="0" expression="'총 ' + string(rowcount(), '#,##0') + ' 건'"border="0" color="8388608" x="37" y="3" height="14" width="95" format="[GENERAL]" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="0" expression="/* if(isNull(max(seq)), 1, max(seq)+1) */"border="0" color="8388608" x="362" y="3" height="14" width="103" format="[GENERAL]" html.valueishtml="0"  name=cc_maxplus visible="0"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

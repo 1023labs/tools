@@ -1,0 +1,66 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=0 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no )
+header(height=0 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=59 color="536870912" )
+table(column=(type=char(15) update=yes updatewhereclause=yes key=yes name=company_code dbname="sm_bud_dept.company_code" dbalias="A.company_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=level_code1 dbname="sm_bud_dept.level_code1" dbalias="A.level_code1" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=level_code2 dbname="sm_bud_dept.level_code2" dbalias="A.level_code2" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=dept_code dbname="sm_bud_dept.dept_code" dbalias="A.dept_code" )
+ column=(type=char(100) updatewhereclause=yes name=dept_name dbname="sm_code_dept.dept_name" dbalias="B.dept_name" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=plant_code dbname="sm_bud_dept.plant_code" dbalias="A.plant_code" )
+ column=(type=char(22) update=yes updatewhereclause=yes name=bud_code dbname="sm_bud_dept.bud_code" dbalias="A.bud_code" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=using_tag dbname="sm_bud_dept.using_tag" dbalias="A.using_tag" values="사용	Y/미사용	N/" )
+ column=(type=char(2) update=yes updatewhereclause=yes name=attack_tag dbname="sm_bud_dept.attack_tag" dbalias="A.attack_tag" values="예산통제	Y/허용	N/" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE,
+       A.LEVEL_CODE1  AS LEVEL_CODE1,
+       A.LEVEL_CODE2  AS LEVEL_CODE2,
+       A.DEPT_CODE    AS DEPT_CODE,
+       B.DEPT_NAME   AS DEPT_NAME,
+       A.PLANT_CODE   AS PLANT_CODE,
+       A.BUD_CODE     AS BUD_CODE,
+       A.USING_TAG    AS USING_TAG,
+       A.ATTACK_TAG AS ATTACK_TAG
+  FROM SM_BUD_DEPT A INNER JOIN SM_CODE_DEPT B
+                                           ON A.COMPANY_CODE = B.COMPANY_CODE
+                                         AND A.DEPT_CODE = B.DEPT_CODE
+ WHERE A.COMPANY_CODE = :as_comp
+  AND A.DEPT_CODE like :as_dept" update="SM_BUD_DEPT" updatewhere=0 updatekeyinplace=no arguments=(("as_comp", string),("as_dept", string)) )
+rectangle(band=detail x="247" y="30" height="27" width="99"  name=r_2 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="491" y="5" height="52" width="99"  name=r_3 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="5" y="3" height="54" width="97"  name=r_1 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33224175" )
+rectangle(band=detail x="838" y="6" height="24" width="55"  name=r_5 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+rectangle(band=detail x="735" y="30" height="24" width="99"  name=r_6 visible="1" brush.hatch="6" brush.color="33224175" pen.style="0" pen.width="1" pen.color="33224175"  background.mode="2" background.color="33554432" )
+text(band=detail alignment="1" text="설비구분" border="0" color="27229506" x="495" y="37" height="14" width="89" html.valueishtml="0"  name=this_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="부서현장 코드명" border="0" color="18110176" x="7" y="12" height="14" width="89" html.valueishtml="0"  name=t_1  tag="[R]" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="예산코드" border="0" color="27229506" x="495" y="12" height="14" width="89" html.valueishtml="0"  name=next_amt_t  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="사용여부" border="0" color="27229506" x="842" y="12" height="14" width="50" html.valueishtml="0"  name=t_3  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="5" y1="30" x2="975" y2="30"  name=l_3 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+line(band=detail x1="5" y1="4" x2="973" y2="4"  name=l_1 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="5" y1="3" x2="973" y2="3"  name=l_2 visible="1" pen.style="0" pen.width="1" pen.color="27618874"  background.mode="2" background.color="33554431" )
+line(band=detail x1="5" y1="56" x2="975" y2="56"  name=l_4 visible="1" pen.style="0" pen.width="1" pen.color="29409472"  background.mode="2" background.color="33554431" )
+column(band=detail id=4 alignment="2" tabsequence=10 border="0" color="33554432" x="106" y="10" height="16" width="70" format="[general]" html.valueishtml="0"  name=dept_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=5 alignment="0" tabsequence=20 border="0" color="33554432" x="184" y="11" height="16" width="271" format="[general]" html.valueishtml="0"  name=dept_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=8 alignment="2" tabsequence=30 border="0" color="33554432" x="907" y="11" height="16" width="52" format="[general]" html.valueishtml="0"  name=using_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="1" text="사업본부" border="0" color="27229506" x="10" y="37" height="14" width="86" html.valueishtml="0"  name=const_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=detail alignment="1" text="사업부" border="0" color="27229506" x="253" y="37" height="14" width="89" html.valueishtml="0"  name=recv_div_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+line(band=detail x1="5" y1="55" x2="973" y2="55"  name=l_7 visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+line(band=detail x1="5" y1="56" x2="973" y2="56"  name=l_8 visible="1" pen.style="0" pen.width="1" pen.color="31706532"  background.mode="2" background.color="33554431" )
+column(band=detail id=2 alignment="2" tabsequence=40 border="0" color="33554432" x="110" y="37" height="14" width="123" format="[general]" html.valueishtml="0"  name=level_code1 visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=3 alignment="2" tabsequence=50 border="0" color="33554432" x="351" y="37" height="14" width="124" format="[general]" html.valueishtml="0"  name=level_code2 visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=6 alignment="2" tabsequence=60 border="0" color="33554432" x="597" y="37" height="14" width="122" format="[general]" html.valueishtml="0"  name=plant_code visible="1" dddw.name=dddw_com_code dddw.displaycolumn=dname dddw.datacolumn=dcode dddw.percentwidth=0 dddw.lines=0 dddw.limit=0 dddw.allowedit=no dddw.useasborder=no dddw.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=7 alignment="2" tabsequence=32766 border="0" color="33554432" x="595" y="11" height="16" width="126" format="[general]" html.valueishtml="0"  name=bud_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=9 alignment="2" tabsequence=70 border="0" color="33554432" x="861" y="36" height="15" width="80" html.valueishtml="0"  name=attack_tag visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+text(band=detail alignment="1" text="통제여부" border="0" color="27229506" x="761" y="37" height="14" width="50" html.valueishtml="0"  name=t_2  tag="" visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0  template=(comment="" encoding="euc-kr" name="t" xml="<?xml version=~"1.0~" encoding=~"euc-kr~" standalone=~"no~"?><de_code_dept_1><de_code_dept_1_row __pbband=~"detail~"><chk/><dept_code>dept_code</dept_code><dept_name>dept_name</dept_name></de_code_dept_1_row></de_code_dept_1>"))
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

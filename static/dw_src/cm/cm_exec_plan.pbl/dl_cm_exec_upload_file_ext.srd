@@ -1,0 +1,83 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 )
+header(height=72 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=84 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_exec_plan_month2.company_code" dbalias="A.company_code" )
+ column=(type=char(13) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_exec_plan_month2.proj_code" dbalias="A.proj_code" )
+ column=(type=char(40) update=yes updatewhereclause=yes key=yes name=const_code dbname="cm_exec_plan_month2.const_code" dbalias="A.const_code" )
+ column=(type=char(0) updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=char(0) updatewhereclause=yes name=gcost_acnt_code dbname="gcost_acnt_code" )
+ column=(type=char(3) update=yes updatewhereclause=yes key=yes name=cost_acnt_code dbname="cm_exec_plan_month2.cost_acnt_code" dbalias="A.cost_acnt_code" )
+ column=(type=char(8) update=yes updatewhereclause=yes key=yes name=acnt_code dbname="cm_exec_plan_month2.acnt_code" dbalias="A.acnt_code" )
+ column=(type=char(0) updatewhereclause=yes name=acnt_name dbname="acnt_name" )
+ column=(type=number updatewhereclause=yes name=pre_amt dbname="pre_amt" )
+ column=(type=number updatewhereclause=yes name=year_amt dbname="year_amt" )
+ column=(type=number updatewhereclause=yes name=tot_amt dbname="tot_amt" )
+ column=(type=number updatewhereclause=yes name=exec_amt dbname="exec_amt" )
+ column=(type=number updatewhereclause=yes name=amt dbname="amt" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=plan_yymm dbname="cm_exec_plan_month2.plan_yymm" dbalias="A.plan_yymm" )
+ column=(type=number update=yes updatewhereclause=yes name=plan_amt dbname="cm_exec_plan_month2.plan_amt" dbalias="A.plan_amt" )
+ retrieve="SELECT A.COMPANY_CODE,
+       A.PROJ_CODE,
+       A.CONST_CODE,
+       '' AS CONST_NAME,
+       '' AS GCOST_ACNT_CODE,
+       A.COST_ACNT_CODE AS COST_ACNT_CODE,
+       A.ACNT_CODE,
+       '' AS ACNT_NAME,
+       0 AS PRE_AMT,
+       0 AS YEAR_AMT,
+       0 AS TOT_AMT,
+       0 AS EXEC_AMT,
+       0 AS AMT,
+       A.PLAN_YYMM,
+       A.PLAN_AMT
+  FROM CM_EXEC_PLAN_MONTH2 A
+ WHERE A.COMPANY_CODE = :AS_COMP_CODE
+   AND A.PROJ_CODE = :AS_PROJ_CODE
+   AND A.PLAN_YYMM = :AS_CC_YM
+   AND SUBSTR(A.COST_ACNT_CODE,1,1) LIKE :AS_CONST_CODE
+   AND SUBSTR(A.COST_ACNT_CODE,1,1) LIKE :AS_CONST_CODE2" update="CM_EXEC_PLAN_MONTH2" updatewhere=1 updatekeyinplace=no arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_CC_YM", string),("AS_CONST_CODE", string),("AS_CONST_CODE2", string)) )
+text(band=header alignment="2" text="Company Code" border="0" color="33554432" x="14" y="8" height="56" width="407" html.valueishtml="0"  name=company_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Proj Code" border="0" color="33554432" x="434" y="8" height="56" width="302" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Const Code" border="0" color="33554432" x="750" y="8" height="56" width="1125" html.valueishtml="0"  name=const_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Const Name" border="0" color="33554432" x="1888" y="8" height="56" width="329" html.valueishtml="0"  name=const_name_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Gcost Acnt Code" border="0" color="33554432" x="2231" y="8" height="56" width="439" html.valueishtml="0"  name=gcost_acnt_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Cost Acnt Code" border="0" color="33554432" x="2683" y="8" height="56" width="407" html.valueishtml="0"  name=cost_acnt_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Acnt Code" border="0" color="33554432" x="3104" y="8" height="56" width="270" html.valueishtml="0"  name=acnt_code_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Acnt Name" border="0" color="33554432" x="3387" y="8" height="56" width="288" html.valueishtml="0"  name=acnt_name_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Pre Amt" border="0" color="33554432" x="3689" y="8" height="56" width="329" html.valueishtml="0"  name=pre_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Year Amt" border="0" color="33554432" x="4032" y="8" height="56" width="329" html.valueishtml="0"  name=year_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Tot Amt" border="0" color="33554432" x="4375" y="8" height="56" width="329" html.valueishtml="0"  name=tot_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Exec Amt" border="0" color="33554432" x="4718" y="8" height="56" width="329" html.valueishtml="0"  name=exec_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Amt" border="0" color="33554432" x="5061" y="8" height="56" width="329" html.valueishtml="0"  name=amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Plan Yymm" border="0" color="33554432" x="5403" y="8" height="56" width="302" html.valueishtml="0"  name=plan_yymm_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="Plan Amt" border="0" color="33554432" x="5719" y="8" height="56" width="329" html.valueishtml="0"  name=plan_amt_t visible="1"  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=10 border="0" color="33554432" x="14" y="8" height="68" width="407" format="[general]" html.valueishtml="0"  name=company_code visible="1" edit.limit=3 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=20 border="0" color="33554432" x="434" y="8" height="68" width="302" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=30 border="0" color="33554432" x="750" y="8" height="68" width="1125" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=40 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=40 border="0" color="33554432" x="1888" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="0" tabsequence=50 border="0" color="33554432" x="2231" y="8" height="68" width="439" format="[general]" html.valueishtml="0"  name=gcost_acnt_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="0" tabsequence=60 border="0" color="33554432" x="2683" y="8" height="68" width="407" format="[general]" html.valueishtml="0"  name=cost_acnt_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=70 border="0" color="33554432" x="3104" y="8" height="68" width="270" format="[general]" html.valueishtml="0"  name=acnt_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=80 border="0" color="33554432" x="3387" y="8" height="68" width="288" format="[general]" html.valueishtml="0"  name=acnt_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=90 border="0" color="33554432" x="3689" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=pre_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=100 border="0" color="33554432" x="4032" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=year_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=110 border="0" color="33554432" x="4375" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=120 border="0" color="33554432" x="4718" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=exec_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=130 border="0" color="33554432" x="5061" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=140 border="0" color="33554432" x="5403" y="8" height="68" width="302" format="[general]" html.valueishtml="0"  name=plan_yymm visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=150 border="0" color="33554432" x="5719" y="8" height="68" width="329" format="[general]" html.valueishtml="0"  name=plan_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="援대┝" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

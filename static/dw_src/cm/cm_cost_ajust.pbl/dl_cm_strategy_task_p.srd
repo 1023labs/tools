@@ -1,0 +1,85 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 selected.mouse=no )
+header(height=27 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=22 color="536870912" )
+table(column=(type=char(3) update=yes updatewhereclause=yes key=yes name=company_code dbname="cm_strategy_task.company_code" dbalias="A.company_code" )
+ column=(type=char(6) update=yes updatewhereclause=yes key=yes name=work_year dbname="cm_strategy_task.work_year" dbalias="A.work_year" )
+ column=(type=char(12) update=yes updatewhereclause=yes key=yes name=proj_code dbname="cm_strategy_task.proj_code" dbalias="A.proj_code" )
+ column=(type=char(100) updatewhereclause=yes name=proj_name dbname="proj_name" )
+ column=(type=char(10) update=yes updatewhereclause=yes name=pm_empno dbname="cm_strategy_task.pm_empno" dbalias="A.pm_empno" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" dbalias="D.emp_name" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=start_date dbname="cm_strategy_task.start_date" dbalias="A.start_date" )
+ column=(type=char(8) update=yes updatewhereclause=yes name=end_date dbname="cm_strategy_task.end_date" dbalias="A.end_date" )
+ column=(type=decimal(3) update=yes updatewhereclause=yes name=process_per dbname="cm_strategy_task.process_per" dbalias="A.process_per" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=task_code dbname="cm_strategy_task.task_code" dbalias="A.task_code" )
+ column=(type=char(2000) update=yes updatewhereclause=yes name=title dbname="cm_strategy_task.title" dbalias="A.title" )
+ column=(type=char(3) update=yes updatewhereclause=yes name=task_level dbname="cm_strategy_task.task_level" dbalias="A.task_level" values="1레벨	100/2레벨	200/병행과제	300/" )
+ column=(type=number update=yes updatewhereclause=yes key=yes name=task_seq dbname="cm_strategy_task.task_seq" dbalias="A.task_seq" )
+ column=(type=char(4000) update=yes updatewhereclause=yes name=remark1 dbname="cm_strategy_task.remark1" dbalias="A.remark1" )
+ column=(type=char(4000) update=yes updatewhereclause=yes name=remark2 dbname="cm_strategy_task.remark2" dbalias="A.remark2" )
+ retrieve="SELECT A.COMPANY_CODE AS COMPANY_CODE
+      ,A.WORK_YEAR    AS WORK_YEAR
+      ,A.PROJ_CODE    AS PROJ_CODE
+      ,NVL(B.PROJ_NAME,C.DEPT_NAME) AS PROJ_NAME
+      ,A.PM_EMPNO     AS PM_EMPNO
+      ,D.EMP_NAME     AS EMP_NAME
+      ,A.START_DATE   AS START_DATE
+      ,A.END_DATE     AS END_DATE
+      ,A.PROCESS_PER  AS PROCESS_PER
+      ,A.TASK_CODE    AS TASK_CODE
+      ,A.TITLE        AS TITLE
+      ,A.TASK_LEVEL   AS TASK_LEVEL
+      ,A.TASK_SEQ     AS TASK_SEQ
+      ,A.REMARK1      AS REMARK1
+      ,A.REMARK2      AS REMARK2
+  FROM CM_STRATEGY_TASK A LEFT JOIN SM_CODE_PROJECT B
+                                 ON A.COMPANY_CODE = B.COMPANY_CODE
+                                AND A.PROJ_CODE = B.PROJ_CODE
+                          LEFT JOIN SM_CODE_DEPT C
+                                 ON A.COMPANY_CODE = C.COMPANY_CODE
+                                AND A.PROJ_CODE = C.DEPT_CODE
+                          LEFT JOIN HR_PERS_MASTER D
+                                 ON A.COMPANY_CODE = D.COMPANY_CODE
+                                AND A.PM_EMPNO = D.EMP_NO
+ WHERE A.COMPANY_CODE = :as_comp_code
+   AND A.WORK_YEAR    = :as_yymm
+ ORDER BY A.PROJ_CODE, A.TASK_CODE, A.START_DATE, A.TASK_LEVEL" update="CM_STRATEGY_TASK" updatewhere=0 updatekeyinplace=no arguments=(("as_comp_code", string),("as_yymm", string)) )
+text(band=header alignment="2" text="사업부코드" border="0" color="33554432" x="2" y="6" height="16" width="82" html.valueishtml="0"  name=cm_strategy_task_proj_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="사업부명" border="0" color="33554432" x="86" y="6" height="16" width="114" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM 성명" border="0" color="33554432" x="262" y="6" height="16" width="88" html.valueishtml="0"  name=hr_pers_master_emp_name_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="시작일" border="0" color="33554432" x="594" y="6" height="16" width="78" html.valueishtml="0"  name=cm_strategy_task_start_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="종료일" border="0" color="33554432" x="674" y="6" height="16" width="76" html.valueishtml="0"  name=cm_strategy_task_end_date_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="진행율" border="0" color="33554432" x="752" y="6" height="16" width="94" html.valueishtml="0"  name=cm_strategy_task_process_per_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="전략명" border="0" color="33554432" x="388" y="6" height="16" width="138" html.valueishtml="0"  name=cm_strategy_task_title_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="레벨" border="0" color="33554432" x="528" y="6" height="16" width="64" html.valueishtml="0"  name=cm_strategy_task_task_level_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요1(총괄화면)" border="0" color="33554432" x="848" y="6" height="16" width="205" html.valueishtml="0"  name=cm_strategy_task_remark1_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="적요2(상세화면)" border="0" color="33554432" x="1055" y="6" height="16" width="207" html.valueishtml="0"  name=cm_strategy_task_remark2_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="코드" border="0" color="33554432" x="352" y="6" height="16" width="34" html.valueishtml="0"  name=cm_strategy_task_task_code_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="PM사번" border="0" color="33554432" x="202" y="6" height="16" width="58" html.valueishtml="0"  name=cm_strategy_task_pm_empno_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="순번" border="0" color="33554432" x="1264" y="6" height="16" width="33" html.valueishtml="0"  name=cm_strategy_task_task_seq_t visible="1"  font.face="굴림체" font.height="-9" font.weight="400"  font.family="1" font.pitch="1" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=10 border="0" color="33554432" x="2" y="4" height="15" width="82" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=4 alignment="2" tabsequence=32766 border="0" color="33554432" x="86" y="4" height="15" width="114" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="262" y="4" height="15" width="88" format="[general]" html.valueishtml="0"  name=emp_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=11 alignment="2" tabsequence=40 border="0" color="33554432" x="388" y="4" height="15" width="138" format="[general]" html.valueishtml="0"  name=title visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=12 alignment="2" tabsequence=50 border="0" color="33554432" x="528" y="4" height="15" width="64" format="[general]" html.valueishtml="0"  name=task_level visible="1" ddlb.limit=0 ddlb.allowedit=no ddlb.case=any  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="2" tabsequence=30 border="0" color="33554432" x="352" y="4" height="15" width="34" format="[general]" html.valueishtml="0"  name=task_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=20 border="0" color="33554432" x="202" y="4" height="15" width="58" format="[general]" html.valueishtml="0"  name=pm_empno visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="2" tabsequence=60 border="0" color="33554432" x="595" y="4" height="15" width="77" format="[general]" html.valueishtml="0"  name=start_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=8 alignment="2" tabsequence=70 border="0" color="33554432" x="675" y="4" height="15" width="75" format="[general]" html.valueishtml="0"  name=end_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="2" tabsequence=80 border="0" color="33554432" x="752" y="4" height="15" width="94" format="#,##0.000" html.valueishtml="0"  name=process_per visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=14 alignment="2" tabsequence=90 border="0" color="33554432" x="848" y="4" height="15" width="205" format="[general]" html.valueishtml="0"  name=remark1 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=15 alignment="2" tabsequence=100 border="0" color="33554432" x="1055" y="4" height="15" width="207" format="[general]" html.valueishtml="0"  name=remark2 visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=13 alignment="2" tabsequence=32766 border="0" color="33554432" x="1264" y="4" height="15" width="33" format="[general]" html.valueishtml="0"  name=task_seq visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림체" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

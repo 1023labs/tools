@@ -1,0 +1,85 @@
+release 11;
+datawindow(units=1 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=18 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=21 color="536870912" )
+detail(height=21 color="536870912" )
+table(column=(type=char(3) updatewhereclause=yes name=company_code dbname="cm_construct_completed.company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="cm_construct_completed.proj_code" )
+ column=(type=char(8) updatewhereclause=yes name=contract_code dbname="cm_construct_completed.contract_code" )
+ column=(type=char(8) updatewhereclause=yes name=completed_date dbname="cm_construct_completed.completed_date" )
+ column=(type=char(8) updatewhereclause=yes name=input_date dbname="cm_construct_completed.input_date" )
+ column=(type=decimal(0) updatewhereclause=yes name=completed_amt dbname="cm_construct_completed.completed_amt" )
+ column=(type=decimal(0) updatewhereclause=yes name=completed_vat dbname="cm_construct_completed.completed_vat" )
+ column=(type=char(2) updatewhereclause=yes name=expect_tag dbname="cm_construct_completed.expect_tag" values="	Y/	N" )
+ column=(type=char(50) updatewhereclause=yes name=proj_name dbname="sm_code_project.proj_name" )
+ column=(type=char(50) updatewhereclause=yes name=contract_name dbname="cm_cont_contract.contract_name" )
+ column=(type=char(20) updatewhereclause=yes name=emp_name dbname="hr_pers_master.emp_name" )
+ column=(type=char(50) updatewhereclause=yes name=cust_name dbname="sm_code_cust.cust_name" )
+ retrieve="  SELECT A.COMPANY_CODE,  
+         A.PROJ_CODE, 
+         A.CONTRACT_CODE,
+         A.COMPLETED_DATE,
+         A.INPUT_DATE,
+         A.COMPLETED_AMT, 
+         A.COMPLETED_VAT,
+         A.EXPECT_TAG,
+         B.PROJ_NAME,
+         C.CONTRACT_NAME,
+         D.EMP_NAME,
+         E.CUST_NAME
+    FROM CM_CONSTRUCT_COMPLETED A LEFT JOIN SM_CODE_PROJECT B                                      
+                                         ON A.COMPANY_CODE = B.COMPANY_CODE
+                                        AND A.PROJ_CODE = B.PROJ_CODE 
+                                  LEFT JOIN CM_CONT_CONTRACT C
+                                         ON A.COMPANY_CODE = C.COMPANY_CODE
+                                        AND A.PROJ_CODE = C.PROJ_CODE
+                                        AND A.CONTRACT_CODE = C.CONTRACT_CODE
+                                  LEFT JOIN HR_PERS_MASTER D
+                                         ON B.COMPANY_CODE = D.COMPANY_CODE
+                                        AND B.PM_EMPNO = D.EMP_NO
+                                 INNER JOIN SM_CODE_CUST E
+                                         ON C.CUST_CODE = E.CUST_CODE
+  WHERE A.COMPANY_CODE = :as_comp      
+    AND (CASE :as_tag WHEN '1' THEN A.COMPLETED_DATE
+                      ELSE A.INPUT_DATE END) BETWEEN :as_fromdate AND :as_todate
+ORDER BY E.CUST_NAME, B.PROJ_NAME" arguments=(("as_comp", string),("as_tag", string),("as_fromdate", string),("as_todate", string)) )
+group(level=1 header.height=0 trailer.height=23 by=("cust_name" ) header.color="536870912" trailer.color="536870912" )
+text(band=header alignment="2" text="공급가액" border="0" color="33554432" x="821" y="2" height="14" width="93" html.valueishtml="0"  name=completed_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="부가세" border="0" color="33554432" x="916" y="2" height="14" width="101" html.valueishtml="0"  name=completed_vat_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약명" border="0" color="33554432" x="432" y="2" height="14" width="298" html.valueishtml="0"  name=contract_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="건설사" border="0" color="33554432" x="2" y="2" height="14" width="109" html.valueishtml="0"  name=cust_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계" border="0" color="33554432" x="1019" y="2" height="14" width="103" html.valueishtml="0"  name=t_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="발행일자" border="0" color="33554432" x="732" y="2" height="14" width="87" html.valueishtml="0"  name=cm_construct_completed_input_date_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=10 alignment="0" tabsequence=32766 border="0" color="33554432" x="432" y="2" height="14" width="298" format="[general]" html.valueishtml="0"  name=contract_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=6 alignment="1" tabsequence=32766 border="0" color="33554432" x="821" y="2" height="14" width="93" format="#,##0" html.valueishtml="0"  name=completed_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=7 alignment="1" tabsequence=32766 border="0" color="33554432" x="916" y="2" height="14" width="101" format="#,##0" html.valueishtml="0"  name=completed_vat visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=detail alignment="1" expression=" completed_amt + completed_vat "border="0" color="33554432" x="1019" y="2" height="14" width="103" format="#,##0" html.valueishtml="0"  name=tot_sum visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="733" y="2" height="14" width="86" format="[general]" html.valueishtml="0"  name=input_date visible="1" editmask.mask="XXXX-XX-XX" editmask.focusrectangle=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=trailer.1 alignment="2" text="건설사 소계" border="0" color="33554432" x="191" y="4" height="14" width="151" html.valueishtml="0"  name=t_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(tot_sum for group 1)"border="0" color="33554432" x="1019" y="2" height="14" width="103" format="#,##0" html.valueishtml="0"  name=compute_3 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(completed_amt for group 1)"border="0" color="33554432" x="821" y="2" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_1 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=trailer.1 alignment="1" expression="sum(completed_vat for group 1)"border="0" color="33554432" x="916" y="2" height="14" width="101" format="#,##0" html.valueishtml="0"  name=compute_2 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=footer alignment="2" text="합계" border="0" color="33554432" x="191" y="2" height="14" width="151" html.valueishtml="0"  name=t_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( completed_amt for all)"border="0" color="33554432" x="821" y="2" height="14" width="93" format="#,##0" html.valueishtml="0"  name=compute_4 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum( completed_vat for all)"border="0" color="33554432" x="916" y="2" height="14" width="101" format="#,##0" html.valueishtml="0"  name=compute_5 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+compute(band=footer alignment="1" expression="sum(tot_sum for all)"border="0" color="33554432" x="1019" y="2" height="14" width="103" format="#,##0" html.valueishtml="0"  name=compute_6 visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=2 alignment="2" tabsequence=0 border="0" color="33554432" x="114" y="2" height="14" width="76" html.valueishtml="0"  name=proj_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="2" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+column(band=detail id=12 alignment="0" tabsequence=32766 border="0" color="33554432" x="2" y="2" height="14" width="109" format="[general]" html.valueishtml="0"  name=cust_name visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="113" y="2" height="14" width="77" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=9 alignment="0" tabsequence=32766 border="0" color="33554432" x="191" y="2" height="14" width="151" format="[general]" html.valueishtml="0"  name=proj_name visible="1" edit.limit=50 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+column(band=detail id=3 alignment="2" tabsequence=0 border="0" color="33554432" x="345" y="2" height="14" width="86" html.valueishtml="0"  name=contract_code visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="현장명" border="0" color="33554432" x="191" y="2" height="14" width="151" html.valueishtml="0"  name=proj_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+text(band=header alignment="2" text="계약코드" border="0" color="33554432" x="344" y="2" height="14" width="87" html.valueishtml="0"  name=contract_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
+
+sparse(names="cust_name	proj_name	contract_name")htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 

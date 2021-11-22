@@ -1,0 +1,467 @@
+release 11;
+datawindow(units=0 timer_interval=0 color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 96 print.margin.bottom = 96 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes print.preview.outline=yes hidegrayline=no showbackcoloronxp=no grid.lines=0 grid.columnmove=no selected.mouse=no )
+header(height=128 color="536870912" )
+summary(height=0 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=108 color="536870912" )
+table(column=(type=char(15) updatewhereclause=yes name=company_code dbname="company_code" )
+ column=(type=char(12) updatewhereclause=yes name=proj_code dbname="proj_code" )
+ column=(type=char(41) updatewhereclause=yes name=const_code dbname="const_code" )
+ column=(type=char(100) updatewhereclause=yes name=const_name dbname="const_name" )
+ column=(type=char(1) updatewhereclause=yes name=gcost_acnt_code dbname="gcost_acnt_code" )
+ column=(type=char(5) updatewhereclause=yes name=cost_acnt_code dbname="cost_acnt_code" )
+ column=(type=char(8) updatewhereclause=yes name=acnt_code dbname="acnt_code" )
+ column=(type=char(30) updatewhereclause=yes name=acnt_name dbname="acnt_name" )
+ column=(type=number updatewhereclause=yes name=pre_amt dbname="pre_amt" )
+ column=(type=number updatewhereclause=yes name=year_amt dbname="year_amt" )
+ column=(type=number updatewhereclause=yes name=tot_amt dbname="tot_amt" )
+ column=(type=number updatewhereclause=yes name=exec_amt dbname="exec_amt" )
+ column=(type=number updatewhereclause=yes name=amt dbname="amt" )
+ column=(type=char(6) updatewhereclause=yes name=plan_yymm dbname="plan_yymm" )
+ column=(type=number updatewhereclause=yes name=plan_amt dbname="plan_amt" )
+ retrieve="SELECT TOT.COMPANY_CODE                                          AS COMPANY_CODE,
+       TOT.PROJ_CODE                                             AS PROJ_CODE,
+       '@'||TOT.CONST_CODE                                       AS CONST_CODE,
+       EXCO.CONST_NAME                                           AS CONST_NAME,
+       SUBSTR(TOT.COST_ACNT_CODE,1,1)                            AS GCOST_ACNT_CODE,
+       TOT.COST_ACNT_CODE                                        AS COST_ACNT_CODE,
+       TOT.ACNT_CODE                                             AS ACNT_CODE,
+       DECODE(ACNT.ACNT_NAME,'접대비','공사경비',ACNT.ACNT_NAME) AS ACNT_NAME,
+       SUM(TOT.PRE_AMT)                                          AS PRE_AMT,
+       SUM(TOT.YEAR_AMT)                                         AS YEAR_AMT,
+       SUM(TOT.TOT_AMT)                                          AS TOT_AMT,
+       SUM(TOT.EXEC_AMT) +
+       SUM(TOT.CHG_AMT) +
+       SUM(TOT.WHAT_AMT)                                         AS EXEC_AMT,
+       CASE WHEN SUBSTR(:AS_CC_YM,5,2) = '01' THEN T.AMT01 
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '02' THEN T.AMT02
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '03' THEN T.AMT03
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '04' THEN T.AMT04
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '05' THEN T.AMT05
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '06' THEN T.AMT06
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '07' THEN T.AMT07
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '08' THEN T.AMT08
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '09' THEN T.AMT09
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '10' THEN T.AMT10
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '11' THEN T.AMT11
+            WHEN SUBSTR(:AS_CC_YM,5,2) = '12' THEN T.AMT12 END  AS AMT,
+       YM.PLAN_YYMM                                             AS PLAN_YYMM,
+       0                                                        AS PLAN_AMT
+  FROM
+(SELECT C.COMPANY_CODE                 AS COMPANY_CODE,
+       C.PROJ_CODE                     AS PROJ_CODE,
+       NVL(E.CONST_CODE, C.CONST_CODE) AS CONST_CODE,
+       C.COST_ACNT_CODE                AS COST_ACNT_CODE,
+       C.ACNT_CODE                     AS ACNT_CODE,
+       SUM(E.EXEC_AMT)                 AS EXEC_AMT,
+       SUM(E.CHG_AMT)                  AS CHG_AMT,
+       SUM(E.WHAT_AMT)                 AS WHAT_AMT,
+       0                               AS PRE_AMT,
+       0                               AS YEAR_AMT,
+       0                               AS TOT_AMT
+  FROM (SELECT A.COMPANY_CODE   AS COMPANY_CODE,
+               A.DEPT_CODE      AS PROJ_CODE,
+               A.ACNT_CODE      AS ACNT_CODE,
+               B.ACNT_NAME      AS ACNT_NAME,
+               B.COST_ACNT_CODE AS COST_ACNT_CODE,
+               D.CONST_ACNT_NAME AS COST_ACNT_NAME,
+               B.CONST_CODE     AS CONST_CODE
+          FROM SM_BUD_DEPT_ACNT A INNER JOIN AC_CODE_ACNT B LEFT JOIN SM_CODE_COSTACC D
+                                                                   ON B.COST_ACNT_CODE = D.CONST_ACNT_CODE
+                                                                  AND D.COSTCODE = :AS_COSTCODE
+                                          ON A.ACNT_CODE = B.ACNT_CODE
+                                         AND B.CM_USE_TAG = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.DEPT_CODE = :AS_PROJ_CODE) C LEFT JOIN (SELECT A.COMPANY_CODE,
+                                                             A.PROJ_CODE,
+                                                             A.CONST_CODE,
+                                                             A.CONST_NAME,
+                                                             B.ACNT_CODE,
+                                                             SUM(DECODE(B.PLAN_GBN, '1',B.PLAN_AMT,0)) AS EXEC_AMT,
+                                                             SUM(DECODE(B.PLAN_GBN, '2',B.PLAN_AMT,0)) AS CHG_AMT,
+                                                             SUM(DECODE(B.PLAN_GBN, '3',B.PLAN_AMT,0)) AS WHAT_AMT
+                                                        FROM CM_EXEC_CONST A LEFT JOIN CM_EXEC_PLAN_MONTH B 
+                                                                                    ON A.COMPANY_CODE = B.COMPANY_CODE
+                                                                                   AND A.PROJ_CODE    = B.PROJ_CODE
+                                                                                   AND A.CONST_CODE   = B.CONST_CODE
+                                                       WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                                         AND A.PROJ_CODE = :AS_PROJ_CODE
+                                                         AND A.CONST_CODE <> '01'
+                                                    GROUP BY A.COMPANY_CODE,
+                                                             A.PROJ_CODE,
+                                                             A.CONST_CODE,
+                                                             A.CONST_NAME,
+                                                             B.ACNT_CODE) E
+                                                  ON C.COMPANY_CODE = E.COMPANY_CODE
+                                                 AND C.PROJ_CODE    = E.PROJ_CODE
+                                                 AND C.ACNT_CODE    = E.ACNT_CODE
+GROUP BY C.COMPANY_CODE,
+         C.PROJ_CODE,
+         NVL(E.CONST_CODE, C.CONST_CODE),
+         C.COST_ACNT_CODE,
+         C.ACNT_CODE
+UNION ALL
+SELECT K.COMPANY_CODE        AS COMPANY_CODE,
+       K.PROJ_CODE           AS PROJ_CODE,
+       K.CONST_CODE          AS CONST_CODE,
+       K.COST_ACNT_CODE      AS COST_ACNT_CODE,
+       K.ACNT_CODE           AS ACNT_CODE,
+       0                     AS EXEC_AMT,
+       0                     AS CHG_AMT,
+       0                     AS WHAT_AMT,
+       SUM(K.PRE_AMT)        AS PRE_AMT,
+       SUM(K.YEAR_AMT)       AS YEAR_AMT,
+       SUM(K.TOT_AMT)        AS TOT_AMT
+  FROM (SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+               A.PROJ_CODE                    AS PROJ_CODE,
+               A.CONST_CODE                   AS CONST_CODE,
+               NVL(SUBSTR(B.COST_ACNT_CODE, 1, 1),'X') AS COST_ACNT_GRP_CODE,
+               NVL(B.COST_ACNT_CODE,'X38')               AS COST_ACNT_CODE,
+               A.ACNT_CODE                    AS ACNT_CODE,
+               SUM(A.AMOUNT)                AS PRE_AMT,
+               0                              AS YEAR_AMT,
+               0                              AS TOT_AMT
+          FROM AC_SUM_MM_CC A LEFT JOIN AC_CODE_ACNT B
+                                     ON A.ACNT_CODE= B.ACNT_CODE
+                                    AND B.CM_USE_TAG = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.PROJ_CODE = :AS_PROJ_CODE
+           AND SUBSTR(A.YYYYMM,1,4)= SUBSTR(:AS_CC_YM,1,4) -1
+           AND (A.ACNT_CODE LIKE '81%' OR A.ACNT_CODE = '12210000')
+           AND A.UPPER_TAG = '0'
+      GROUP BY A.COMPANY_CODE,
+               A.PROJ_CODE,
+               A.CONST_CODE,
+               NVL(SUBSTR(B.COST_ACNT_CODE, 1, 1),'X'),
+               NVL(B.COST_ACNT_CODE,'X38'),
+               A.ACNT_CODE
+       UNION ALL         
+        SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+               A.PROJ_CODE                    AS PROJ_CODE,
+               A.CONST_CODE                   AS CONST_CODE,
+               NVL(SUBSTR(B.COST_ACNT_CODE, 1, 1),'X') AS COST_ACNT_GRP_CODE,
+               NVL(B.COST_ACNT_CODE,'X38')               AS COST_ACNT_CODE,
+               A.ACNT_CODE                    AS ACNT_CODE,
+               0                              AS PRE_AMT,
+               SUM(A.AMOUNT)                AS YEAR_AMT,
+               0                              AS TOT_AMT
+          FROM AC_SUM_MM_CC A LEFT JOIN AC_CODE_ACNT B
+                                     ON A.ACNT_CODE= B.ACNT_CODE
+                                    AND B.CM_USE_TAG = 'Y'
+                              LEFT JOIN (SELECT :AS_COMP_CODE  AS COMPANY_CODE,
+                                                :AS_CC_YM      AS YYYYMM,
+                                                FN_SM_IS_CLOSED2(:AS_COMP_CODE,:AS_CC_YM,'AC_CC_CLOSE') AS CLOSE_CHK 
+                                           FROM DUAL) C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.YYYYMM       = C.YYYYMM
+                                    AND C.CLOSE_CHK = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.PROJ_CODE = :AS_PROJ_CODE
+           AND A.YYYYMM BETWEEN SUBSTR(:AS_CC_YM,1,4)||'01' AND :AS_CC_YM
+           AND (A.ACNT_CODE LIKE '81%' OR A.ACNT_CODE = '12210000')
+           AND A.UPPER_TAG = '0'
+      GROUP BY A.COMPANY_CODE,
+               A.PROJ_CODE,
+               A.CONST_CODE,
+               NVL(SUBSTR(B.COST_ACNT_CODE, 1, 1),'X'),
+               NVL(B.COST_ACNT_CODE,'X38'),
+               A.ACNT_CODE
+       UNION ALL
+        SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+               A.PROJ_CODE                    AS PROJ_CODE,
+               A.CONST_CODE                   AS CONST_CODE,
+               NVL(SUBSTR(B.COST_ACNT_CODE, 1, 1),'X') AS COST_ACNT_GRP_CODE,
+               NVL(B.COST_ACNT_CODE,'X38')               AS COST_ACNT_CODE,
+               A.ACNT_CODE                    AS ACNT_CODE,
+               0                              AS PRE_AMT,
+               0                              AS YEAR_AMT,
+               SUM(A.AMOUNT)                AS TOT_AMT
+          FROM AC_SUM_MM_CC A LEFT JOIN AC_CODE_ACNT B
+                                     ON A.ACNT_CODE= B.ACNT_CODE
+                                    AND B.CM_USE_TAG = 'Y'
+                              LEFT JOIN (SELECT :AS_COMP_CODE  AS COMPANY_CODE,
+                                                :AS_CC_YM      AS YYYYMM,
+                                                FN_SM_IS_CLOSED2(:AS_COMP_CODE,:AS_CC_YM,'AC_CC_CLOSE') AS CLOSE_CHK 
+                                           FROM DUAL) C
+                                     ON A.COMPANY_CODE = C.COMPANY_CODE
+                                    AND A.YYYYMM       = C.YYYYMM
+                                    AND C.CLOSE_CHK = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.PROJ_CODE = :AS_PROJ_CODE
+           AND A.YYYYMM <= :AS_CC_YM
+           AND (A.ACNT_CODE LIKE '81%' OR A.ACNT_CODE = '12210000')
+           AND A.UPPER_TAG = '0'
+      GROUP BY A.COMPANY_CODE,
+               A.PROJ_CODE,
+               A.CONST_CODE,
+               NVL(SUBSTR(B.COST_ACNT_CODE, 1, 1),'X'),
+               NVL(B.COST_ACNT_CODE,'X38'),
+               A.ACNT_CODE
+       UNION ALL
+       SELECT D.COMPANY_CODE                 AS COMPANY_CODE,
+       D.PROJ_CODE                    AS PROJ_CODE,
+       D.CONST_CODE                   AS CONST_CODE,
+       SUBSTR(E.COST_ACNT_CODE, 1, 1) AS COST_ACNT_GRP_CODE,
+       E.COST_ACNT_CODE               AS COST_ACNT_CODE,
+       D.ACNT_CD                      AS ACNT_CODE,
+       SUM(D.SUPPLAY_AMT)             AS PRE_AMT,
+       0                              AS YEAR_AMT,
+       0                              AS TOT_AMT
+  FROM CM_COST_AJUST_CLOSE D LEFT JOIN AC_CODE_ACNT E
+                              ON D.ACNT_CD = E.ACNT_CODE
+                             AND E.CM_USE_TAG = 'Y'
+ WHERE D.COMPANY_CODE = :AS_COMP_CODE
+   AND D.PROJ_CODE    = :AS_PROJ_CODE
+   AND SUBSTR(D.YYYYMM,1,4) = SUBSTR(:AS_CC_YM,1,4) - 1
+   AND D.ACNT_CD LIKE '81%'
+GROUP BY D.COMPANY_CODE,
+         D.PROJ_CODE,
+         D.CONST_CODE,
+         SUBSTR(E.COST_ACNT_CODE, 1, 1),
+         E.COST_ACNT_CODE,
+         D.ACNT_CD
+UNION ALL
+SELECT D.COMPANY_CODE                 AS COMPANY_CODE,
+       D.PROJ_CODE                    AS PROJ_CODE,
+       D.CONST_CODE                   AS CONST_CODE,
+       SUBSTR(E.COST_ACNT_CODE, 1, 1) AS COST_ACNT_GRP_CODE,
+       E.COST_ACNT_CODE               AS COST_ACNT_CODE,
+       D.ACNT_CD                      AS ACNT_CODE,
+       0                              AS PRE_AMT,
+       SUM(D.SUPPLAY_AMT)             AS YEAR_AMT,
+       0                              AS TOT_AMT
+  FROM CM_COST_AJUST_CLOSE D LEFT JOIN AC_CODE_ACNT E
+                              ON D.ACNT_CD = E.ACNT_CODE
+                             AND E.CM_USE_TAG = 'Y'
+ WHERE D.COMPANY_CODE = :AS_COMP_CODE
+   AND D.PROJ_CODE    = :AS_PROJ_CODE
+   AND D.YYYYMM BETWEEN SUBSTR(:AS_CC_YM,1,4)||'01' AND :AS_CC_YM
+   AND D.ACNT_CD LIKE '81%'
+GROUP BY D.COMPANY_CODE,
+         D.PROJ_CODE,
+         D.CONST_CODE,
+         SUBSTR(E.COST_ACNT_CODE, 1, 1),
+         E.COST_ACNT_CODE,
+         D.ACNT_CD
+UNION ALL
+SELECT D.COMPANY_CODE                 AS COMPANY_CODE,
+       D.PROJ_CODE                    AS PROJ_CODE,
+       D.CONST_CODE                   AS CONST_CODE,
+       SUBSTR(E.COST_ACNT_CODE, 1, 1) AS COST_ACNT_GRP_CODE,
+       E.COST_ACNT_CODE               AS COST_ACNT_CODE,
+       D.ACNT_CD                      AS ACNT_CODE,
+       0                              AS PRE_AMT,
+       0                              AS YEAR_AMT,
+       SUM(D.SUPPLAY_AMT)             AS TOT_AMT
+  FROM CM_COST_AJUST_CLOSE D LEFT JOIN AC_CODE_ACNT E
+                              ON D.ACNT_CD = E.ACNT_CODE
+                             AND E.CM_USE_TAG = 'Y'
+ WHERE D.COMPANY_CODE = :AS_COMP_CODE
+   AND D.PROJ_CODE    = :AS_PROJ_CODE
+   AND YYYYMM <= :AS_CC_YM
+   AND D.ACNT_CD LIKE '81%'
+GROUP BY D.COMPANY_CODE,
+         D.PROJ_CODE,
+         D.CONST_CODE,
+         SUBSTR(E.COST_ACNT_CODE, 1, 1),
+         E.COST_ACNT_CODE,
+         D.ACNT_CD         
+    UNION ALL
+            SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+               A.DEPT_CODE                    AS PROJ_CODE,
+               A.CONST_CODE                   AS CONST_CODE,
+               SUBSTR(A.COST_ACNT_CODE, 1, 1) AS COST_ACNT_GRP_CODE,
+               A.COST_ACNT_CODE               AS COST_ACNT_CODE,
+               A.ACNT_CODE                    AS ACNT_CODE,
+               SUM(A.COST_TOT)                AS PRE_AMT,
+               0                              AS YEAR_AMT,
+               0                              AS TOT_AMT
+          FROM CM_CC_SUM A LEFT JOIN AC_CODE_ACNT B
+                                     ON A.ACNT_CODE= B.ACNT_CODE
+                                    AND B.MM_USE_TAG = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.DEPT_CODE = :AS_PROJ_CODE
+           AND SUBSTR(A.CC_YM,1,4)= SUBSTR(:AS_CC_YM,1,4) -1
+           AND A.ACNT_CODE LIKE '82%'
+           AND A.CDEPT_CODE = 'CM'
+      GROUP BY A.COMPANY_CODE,
+               A.DEPT_CODE,
+               A.CONST_CODE,
+               SUBSTR(A.COST_ACNT_CODE, 1, 1),
+               A.COST_ACNT_CODE,
+               A.ACNT_CODE
+       UNION ALL
+       SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+               A.DEPT_CODE                    AS PROJ_CODE,
+               A.CONST_CODE                   AS CONST_CODE,
+               SUBSTR(A.COST_ACNT_CODE, 1, 1) AS COST_ACNT_GRP_CODE,
+               A.COST_ACNT_CODE               AS COST_ACNT_CODE,
+               A.ACNT_CODE                    AS ACNT_CODE,
+               0                              AS PRE_AMT,
+               SUM(A.COST_TOT)                AS YEAR_AMT,
+               0                              AS TOT_AMT
+          FROM CM_CC_SUM A LEFT JOIN AC_CODE_ACNT B
+                                     ON A.ACNT_CODE= B.ACNT_CODE
+                                    AND B.MM_USE_TAG = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.DEPT_CODE = :AS_PROJ_CODE
+           AND A.CC_YM BETWEEN SUBSTR(:AS_CC_YM,1,4)||'01' AND :AS_CC_YM
+           AND A.ACNT_CODE LIKE '82%'
+           AND A.CDEPT_CODE = 'CM'
+      GROUP BY A.COMPANY_CODE,
+               A.DEPT_CODE,
+               A.CONST_CODE,
+               SUBSTR(A.COST_ACNT_CODE, 1, 1),
+               A.COST_ACNT_CODE,
+               A.ACNT_CODE
+       UNION ALL
+       SELECT A.COMPANY_CODE                 AS COMPANY_CODE,
+               A.DEPT_CODE                    AS PROJ_CODE,
+               A.CONST_CODE                   AS CONST_CODE,
+               SUBSTR(A.COST_ACNT_CODE, 1, 1) AS COST_ACNT_GRP_CODE,
+               A.COST_ACNT_CODE               AS COST_ACNT_CODE,
+               A.ACNT_CODE                    AS ACNT_CODE,
+               0                              AS PRE_AMT,
+               0                              AS YEAR_AMT,
+               SUM(A.COST_TOT)                AS TOT_AMT
+          FROM CM_CC_SUM A LEFT JOIN AC_CODE_ACNT B
+                                     ON A.ACNT_CODE= B.ACNT_CODE
+                                    AND B.MM_USE_TAG = 'Y'
+         WHERE A.COMPANY_CODE = :AS_COMP_CODE
+           AND A.DEPT_CODE = :AS_PROJ_CODE
+           AND A.CC_YM <= :AS_CC_YM
+           AND A.ACNT_CODE LIKE '82%'
+           AND A.CDEPT_CODE = 'CM'
+      GROUP BY A.COMPANY_CODE,
+               A.DEPT_CODE,
+               A.CONST_CODE,
+               SUBSTR(A.COST_ACNT_CODE, 1, 1),
+               A.COST_ACNT_CODE,
+               A.ACNT_CODE) K
+GROUP BY K.COMPANY_CODE,
+         K.PROJ_CODE,
+         K.CONST_CODE,
+         K.COST_ACNT_CODE,
+         K.ACNT_CODE) TOT LEFT JOIN (SELECT C.COMPANY_CODE                                                        AS COMPANY_CODE
+                                          , C.PROJ_CODE                                                                    AS PROJ_CODE
+                                          , C.CONST_CODE                                                                   AS CONST_CODE
+                                          , C.COST_ACNT_CODE                                                               AS COST_ACNT_CODE
+                                          , C.ACNT_CODE                                                                    AS ACNT_CODE
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '01' THEN C.AMT ELSE 0 END) AS AMT01
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '02' THEN C.AMT ELSE 0 END) AS AMT02
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '03' THEN C.AMT ELSE 0 END) AS AMT03
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '04' THEN C.AMT ELSE 0 END) AS AMT04
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '05' THEN C.AMT ELSE 0 END) AS AMT05
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '06' THEN C.AMT ELSE 0 END) AS AMT06
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '07' THEN C.AMT ELSE 0 END) AS AMT07
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '08' THEN C.AMT ELSE 0 END) AS AMT08
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '09' THEN C.AMT ELSE 0 END) AS AMT09
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '10' THEN C.AMT ELSE 0 END) AS AMT10
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '11' THEN C.AMT ELSE 0 END) AS AMT11
+                                          , SUM(CASE WHEN C.CC_YM = SUBSTR(:AS_CC_YM, 1, 4) || '12' THEN C.AMT ELSE 0 END) AS AMT12
+                                       FROM (SELECT A.COMPANY_CODE         COMPANY_CODE
+                                                  , A.PROJ_CODE            PROJ_CODE
+                                                  , A.CONST_CODE           CONST_CODE
+                                                  , B.COST_ACNT_CODE       COST_ACNT_CODE
+                                                  , A.ACNT_CODE            ACNT_CODE
+                                                  , A.YYYYMM               CC_YM
+                                                  , NVL(A.AMOUNT, 0)       AMT
+                                               FROM AC_SUM_MM_CC A LEFT JOIN AC_CODE_ACNT B
+                                                                          ON A.ACNT_CODE= B.ACNT_CODE
+                                                                         AND B.CM_USE_TAG = 'Y'
+                                              WHERE A.COMPANY_CODE = :AS_COMP_CODE
+                                                AND A.PROJ_CODE    = :AS_PROJ_CODE
+                                                AND (B.COST_ACNT_CODE LIKE :AS_CONST_CODE || '%' OR B.COST_ACNT_CODE LIKE :AS_CONST_CODE2 || '%')
+                                                AND A.YYYYMM BETWEEN SUBSTR(:AS_CC_YM, 1, 4) || DECODE(A.PROJ_CODE, '20999', '01', '00') 
+                                                                  AND :AS_CC_YM) C LEFT JOIN SM_CODE_COSTACC D 
+                                                                                          ON D.COMPANY_CODE = :AS_COMP_CODE 
+                                                                                         AND C.COST_ACNT_CODE = D.CONST_ACNT_CODE
+                                                                                         AND D.COSTCODE = :AS_COSTCODE
+                                     WHERE D.COSTCODE = :AS_COSTCODE
+                                  GROUP BY C.COMPANY_CODE, C.PROJ_CODE,C.CONST_CODE, C.COST_ACNT_CODE, C.ACNT_CODE) T
+                                         ON TOT.COMPANY_CODE = T.COMPANY_CODE
+                                        AND TOT.PROJ_CODE    = T.PROJ_CODE
+                                        AND TOT.CONST_CODE   = T.CONST_CODE
+                                        AND TOT.COST_ACNT_CODE = T.COST_ACNT_CODE
+                                        AND TOT.ACNT_CODE      = T.ACNT_CODE
+                              LEFT JOIN CM_EXEC_CONST EXCO
+                                     ON TOT.COMPANY_CODE = EXCO.COMPANY_CODE
+                                    AND TOT.PROJ_CODE    = EXCO.PROJ_CODE
+                                    AND TOT.CONST_CODE   = EXCO.CONST_CODE
+                              LEFT JOIN SM_CODE_COSTACC ACC
+                                     ON TOT.COMPANY_CODE = ACC.COMPANY_CODE
+                                    AND TOT.COST_ACNT_CODE = ACC.CONST_ACNT_CODE
+                                    AND ACC.COSTCODE = :AS_COSTCODE
+                              LEFT JOIN (SELECT :AS_COMP_CODE AS COMPANY_CODE,
+                                                TO_CHAR(ADD_MONTHS(TO_DATE(:AS_CC_YM,'YYYYMM'), 1),'YYYYMM')     AS PLAN_YYMM
+                                           FROM DUAL) YM
+                                     ON TOT.COMPANY_CODE = YM.COMPANY_CODE
+                              LEFT JOIN AC_CODE_ACNT ACNT
+                                     ON TOT.ACNT_CODE = ACNT.ACNT_CODE
+--                                    AND ACNT.CM_USE_TAG = 'Y'
+ WHERE TOT.COMPANY_CODE = :AS_COMP_CODE
+   AND TOT.PROJ_CODE    = :AS_PROJ_CODE
+   AND (TOT.COST_ACNT_CODE LIKE :AS_CONST_CODE || '%' OR TOT.COST_ACNT_CODE LIKE :AS_CONST_CODE2 || '%')
+GROUP BY TOT.COMPANY_CODE,
+         TOT.PROJ_CODE,
+         TOT.CONST_CODE,
+         EXCO.CONST_NAME,
+         SUBSTR(TOT.COST_ACNT_CODE,1,1),
+         TOT.COST_ACNT_CODE,
+         TOT.ACNT_CODE,
+         DECODE(ACNT.ACNT_NAME,'접대비','공사경비',ACNT.ACNT_NAME),
+         T.AMT01,
+         T.AMT02,
+         T.AMT03,
+         T.AMT04,
+         T.AMT05,
+         T.AMT06,
+         T.AMT07,
+         T.AMT08,
+         T.AMT09,
+         T.AMT10,
+         T.AMT11,
+         T.AMT12,
+         YM.PLAN_YYMM
+ORDER BY TOT.CONST_CODE, TOT.COST_ACNT_CODE" arguments=(("AS_COMP_CODE", string),("AS_PROJ_CODE", string),("AS_COSTCODE", string),("AS_CC_YM", string),("AS_CONST_CODE", string),("AS_CONST_CODE2", string)) )
+text(band=header alignment="2" text="회사구분" border="0" color="33554432" x="14" y="36" height="56" width="325" html.valueishtml="0"  name=company_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="현장코드" border="0" color="33554432" x="352" y="36" height="56" width="302" html.valueishtml="0"  name=proj_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공종코드" border="0" color="33554432" x="667" y="36" height="56" width="521" html.valueishtml="0"  name=const_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공종명" border="0" color="33554432" x="1202" y="36" height="56" width="672" html.valueishtml="0"  name=const_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="계정구분" border="0" color="33554432" x="1888" y="36" height="56" width="297" html.valueishtml="0"  name=gcost_acnt_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="공사계정코드" border="0" color="33554432" x="2199" y="36" height="56" width="407" html.valueishtml="0"  name=cost_acnt_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회계계정코드" border="0" color="33554432" x="2624" y="36" height="56" width="361" html.valueishtml="0"  name=acnt_code_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="회계계정명" border="0" color="33554432" x="2999" y="36" height="56" width="850" html.valueishtml="0"  name=acnt_name_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="전년실적" border="0" color="33554432" x="3863" y="36" height="56" width="329" html.valueishtml="0"  name=pre_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당년실적" border="0" color="33554432" x="4206" y="36" height="56" width="329" html.valueishtml="0"  name=year_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="실적누계" border="0" color="33554432" x="4549" y="36" height="56" width="329" html.valueishtml="0"  name=tot_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예산금액" border="0" color="33554432" x="4891" y="36" height="56" width="329" html.valueishtml="0"  name=exec_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="당월실적" border="0" color="33554432" x="5234" y="36" height="56" width="329" html.valueishtml="0"  name=amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="등록년월" border="0" color="33554432" x="5577" y="36" height="56" width="302" html.valueishtml="0"  name=plan_yymm_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=1 alignment="0" tabsequence=32766 border="0" color="33554432" x="14" y="20" height="68" width="325" format="[general]" html.valueishtml="0"  name=company_code visible="1" edit.limit=15 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="352" y="20" height="68" width="302" format="[general]" html.valueishtml="0"  name=proj_code visible="1" edit.limit=10 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=3 alignment="0" tabsequence=32766 border="0" color="33554432" x="667" y="20" height="68" width="521" format="[general]" html.valueishtml="0"  name=const_code visible="1" edit.limit=41 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=4 alignment="0" tabsequence=32766 border="0" color="33554432" x="1202" y="20" height="68" width="672" format="[general]" html.valueishtml="0"  name=const_name visible="1" edit.limit=100 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=5 alignment="2" tabsequence=32766 border="0" color="33554432" x="1888" y="20" height="68" width="297" format="[general]" html.valueishtml="0"  name=gcost_acnt_code visible="1" edit.limit=1 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=6 alignment="2" tabsequence=32766 border="0" color="33554432" x="2199" y="20" height="68" width="407" format="[general]" html.valueishtml="0"  name=cost_acnt_code visible="1" edit.limit=5 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=7 alignment="0" tabsequence=32766 border="0" color="33554432" x="2624" y="20" height="68" width="361" format="[general]" html.valueishtml="0"  name=acnt_code visible="1" edit.limit=8 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=8 alignment="0" tabsequence=32766 border="0" color="33554432" x="2999" y="20" height="68" width="850" format="[general]" html.valueishtml="0"  name=acnt_name visible="1" edit.limit=30 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=9 alignment="1" tabsequence=32766 border="0" color="33554432" x="3863" y="20" height="68" width="329" format="[general]" html.valueishtml="0"  name=pre_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=10 alignment="1" tabsequence=32766 border="0" color="33554432" x="4206" y="20" height="68" width="329" format="[general]" html.valueishtml="0"  name=year_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=11 alignment="1" tabsequence=32766 border="0" color="33554432" x="4549" y="20" height="68" width="329" format="[general]" html.valueishtml="0"  name=tot_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=12 alignment="1" tabsequence=32766 border="0" color="33554432" x="4891" y="20" height="68" width="329" format="[general]" html.valueishtml="0"  name=exec_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=13 alignment="1" tabsequence=32766 border="0" color="33554432" x="5234" y="20" height="68" width="329" format="[general]" html.valueishtml="0"  name=amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=14 alignment="0" tabsequence=32766 border="0" color="33554432" x="5577" y="20" height="68" width="302" format="[general]" html.valueishtml="0"  name=plan_yymm visible="1" edit.limit=6 edit.case=any edit.focusrectangle=no edit.autoselect=yes edit.autohscroll=yes  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+column(band=detail id=15 alignment="1" tabsequence=0 border="0" color="33554432" x="5893" y="28" height="56" width="475" html.valueishtml="0"  name=plan_amt visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="536870912" )
+text(band=header alignment="2" text="예산금액" border="0" color="33554432" x="5888" y="36" height="56" width="480" html.valueishtml="0"  name=plan_amt_t visible="1"  font.face="굴림" font.height="-9" font.weight="400"  font.family="1" font.pitch="2" font.charset="129" background.mode="2" background.color="1073741824" )
+htmltable(border="1" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" encodeselflinkargs="1" netscapelayers="0" pagingmethod=0 generatedddwframes="1" )
+xhtmlgen() cssgen(sessionspecific="0" )
+xmlgen(inline="0" )
+xsltgen()
+jsgen()
+export.xml(headgroups="1" includewhitespace="0" metadatatype=0 savemetadata=0 )
+import.xml()
+export.pdf(method=0 distill.custompostscript="0" xslfop.print="0" )
+export.xhtml()
+ 
