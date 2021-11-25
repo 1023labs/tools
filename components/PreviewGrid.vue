@@ -19,7 +19,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-card
-              class="py-1 dw-preview-col text-no-wrap"
+              class="py-1 dw-preview-col text-no-wrap bg-text"
               outlined
               v-bind:style="'left: '+el.x+'px; width: '+el.width+'px;'"
               tile
@@ -49,7 +49,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-card
-              class="py-1 dw-preview-col text-no-wrap"
+              class="py-1 dw-preview-col text-no-wrap bg-column"
               outlined
               v-bind:style="'left: '+el.x+'px; width: '+el.width+'px; overflow: hidden'"
               tile
@@ -70,47 +70,5 @@
 <script>
   export default {
     props: ['ctrls'],
-    // data () {
-    //   return {
-    //     // loading: false,
-    //     // items: [],
-    //     // search: null,
-    //     // selDw: this.datawindow,
-    //     // // datawindow: null,
-    //     // dws: [
-    //     // ],
-    //   }
-    // },
-    // async mounted() {
-    //   const res = await axios.get(`/dw_src/dw_list.csv`, { responseType: 'blob',}); 
-    //   const csvData = res.data;
-      
-    //   csvData.text().then((csvStr) => {
-    //     const csvArr = csvStr.split(/\r?\n/);
-    //     this.dws = csvArr;
-    //     // console.log( lineArray )
-    //   })
-    // },
-    // watch: {
-    //   search (val) {
-    //     val && val !== this.datawindow && this.querySelections(val)
-    //   },
-    //   // datawindow (val) {
-    //   //   //
-    //   //   console.log(val)
-    //   // }
-    // },
-    // methods: {
-    //   querySelections (v) {
-    //     this.loading = true
-    //     // Simulated ajax query
-    //     setTimeout(() => {
-    //       this.items = this.dws.filter(e => {
-    //         return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-    //       })
-    //       this.loading = false
-    //     }, 500)
-    //   },
-    // },
   }
 </script>

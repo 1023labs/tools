@@ -21,7 +21,7 @@ exports.test = () => {
 // step1 - line text => Grouping 
 exports.parsing_dwtxt = (arrDw) => {
   let ctrls = {
-    // datawindow: [], header: [], summary: [], footer: [], detail: [], table: [], text: [], compute: [], column: [], etc: [],
+    // datawindow: [], header: [], summary: [], footer: [], detail: [], table: [], text: [], compute: [], column: [], etc: [], line: []
   }
   
   let is_table = false;
@@ -39,6 +39,9 @@ exports.parsing_dwtxt = (arrDw) => {
       ctrls = add_controls(ctrls, "bands", "summary", el);
       ctrls = add_controls(ctrls, "bands", "footer", el);
       ctrls = add_controls(ctrls, "bands", "detail", el);
+      ctrls = add_controls(ctrls, "line", "line", el);
+      // ctrls = add_controls(ctrls, "bands", "background", el);
+      // ctrls = add_controls(ctrls, "bands", "foreround", el);
       ctrls = add_controls(ctrls, "text", "text", el);
       ctrls = add_controls(ctrls, "compute", "compute", el);
       ctrls = add_controls(ctrls, "column", "column", el);
@@ -100,17 +103,22 @@ exports.parsing_sql = (arrTb) => {
 
 // step3 - Grouping => Controls
 exports.parsing_controls = (arrGrp) => {
-  let hds = [];
-  let dtls = [];
+  let controls = {
+    header: [],
+    detail: [],
+    background: [],
+    foreground: [],
+    maxx: 0,
+    maxy: 0,
+  }
 
   if("text" in arrGrp) {
     arrGrp["text"].forEach((ag, idx) => {
       const aT = parsing_props(ag);
-      if(aT.band=='header') {
-        hds.push(aT);
-      } else if(aT.band=='detail') {
-        dtls.push(aT);
-      }
+      controls[aT.band].push(aT)
+
+      if((parseInt(aT.x) + parseInt(aT.width))>controls.maxx) controls.maxx = (parseInt(aT.x) + parseInt(aT.width));
+      if((parseInt(aT.y) + parseInt(aT.height))>controls.maxy) controls.maxy = (parseInt(aT.y) + parseInt(aT.height));
     })
   }
 
@@ -118,11 +126,10 @@ exports.parsing_controls = (arrGrp) => {
   if("compute" in arrGrp) {
     arrGrp["compute"].forEach((ag, idx) => {
       const aCom = parsing_props(ag)
-      if(aCom.band=='header') {
-        hds.push(aCom);
-      } else if(aCom.band=='detail') {
-        dtls.push(aCom);
-      }
+      controls[aCom.band].push(aCom)
+      
+      if((parseInt(aCom.x) + parseInt(aCom.width))>controls.maxx) controls.maxx = (parseInt(aCom.x) + parseInt(aCom.width));
+      if((parseInt(aCom.y) + parseInt(aCom.height))>controls.maxy) controls.maxy = (parseInt(aCom.y) + parseInt(aCom.height));
     })
   }
 
@@ -130,27 +137,28 @@ exports.parsing_controls = (arrGrp) => {
   if("column" in arrGrp) {
     arrGrp["column"].forEach((ag, idx) => {
       const aCol = parsing_props(ag)
-      if(aCol.band=='header') {
-        hds.push(aCol);
-      } else if(aCol.band=='detail') {
-        dtls.push(aCol);
-      }
+      controls[aCol.band].push(aCol)
+      
+      if((parseInt(aCol.x) + parseInt(aCol.width))>controls.maxx) controls.maxx = (parseInt(aCol.x) + parseInt(aCol.width));
+      if((parseInt(aCol.y) + parseInt(aCol.height))>controls.maxy) controls.maxy = (parseInt(aCol.y) + parseInt(aCol.height));
     })
   }
 
-  hds.sort(function(a,b) {
-    return parseFloat(a.x) - parseFloat(b.x);
-  });
-  dtls.sort(function(a,b) {
-    return parseFloat(a.x) - parseFloat(b.x);
-  });
+  // 정렬은 그리기 전에 다시 
+  // controls.header.sort(function(a,b) {
+  //   return parseFloat(a.x) - parseFloat(b.x);
+  // });
+  // controls.detail.sort(function(a,b) {
+  //   return parseFloat(a.x) - parseFloat(b.x);
+  // });
+  // controls.background.sort(function(a,b) {
+  //   return parseFloat(a.x) - parseFloat(b.x);
+  // });
+  // controls.foreground.sort(function(a,b) {
+  //   return parseFloat(a.x) - parseFloat(b.x);
+  // });
 
-  let ctrls = {
-    header: hds,
-    detail: dtls,
-  }
-
-  return ctrls;
+  return controls;
 }
 
 // step4 - Check Grid Type
@@ -172,19 +180,57 @@ exports.check_grid_type = (arrGrp) => {
   return dw_type;
 }
 
-// step5 - Make Grid Header Text Update Sql
-exports.make_upd_sql = (arrCtrl, pcode, dgid) => {
+// step5 - Make Grid Header Text Update Sql pcode, dgid, 
+exports.make_upd_sql = (arrCtrl, csql) => {
   // "UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '', VISIBLE = 'Y' WHERE PGM_CODE = 'EM01010' AND GRID_ID = 'db_1' AND FIELDNAME = 'PHONE_NO'; ";
+  // csql.text , csql.width , csql.show
+  let arrHd = arrCtrl.header;
+  arrHd.sort(function(a,b) {
+    return parseFloat(a.x) - parseFloat(b.x);
+  });
+  
   let sqls = [];
-  arrCtrl.header.forEach((el, idx) => {
+  arrHd.forEach((el, idx) => {
     let matchCol = arrCtrl.detail.filter(col => Math.abs(col.x - el.x) <= 3 );
     if(matchCol.length>0) {
-      sqls.push(`UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '${el.text}', VISIBLE = 'Y' WHERE PGM_CODE = '${pcode}' AND GRID_ID = '${dgid}' AND FIELDNAME = '${matchCol[0].name}'; `);
+      let tWidth = 100;
+      try {
+        tWidth = Math.floor((parseInt(el.width) + parseInt(csql.add_width)) / 10) * 10 ;
+      } catch(err) {
+        console.log(`error width calc ${matchCol[0].name.toUpperCase()}`)
+      }
+      // MUST_INPUT, READONLY, EDITOBLE, STYLES, EDITOR, UPDATABLE ('Y')
+      // console.log(csql);
+
+      if(!(!csql.compute && matchCol[0].ctrl_type=="compute")) {
+        const uSql = [];
+        if(csql.title) uSql.push(`HEADER_TEXT = '${el.text}'`);
+        if(csql.width) uSql.push(`WIDTH = '${tWidth}'`);
+        if(csql.show) uSql.push(`VISIBLE = 'Y'`);
+        
+        sqls.push(`UPDATE SM_DEV_GRID_COLS SET ${uSql.join(', ') ?? ''} WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
+      }
     }
   });
   // console.log(sqls)
   return sqls.join('\n');
 }
+
+// step5 - Make Grid Header Text Update Sql
+exports.make_freeform = (arrCtrl) => {
+  // "UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '', VISIBLE = 'Y' WHERE PGM_CODE = 'EM01010' AND GRID_ID = 'db_1' AND FIELDNAME = 'PHONE_NO'; ";
+  let sqls = [];
+  // arrCtrl.header.forEach((el, idx) => {
+  //   let matchCol = arrCtrl.detail.filter(col => Math.abs(col.x - el.x) <= 3 );
+  //   if(matchCol.length>0) {
+  //     sqls.push(`UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '${el.text}', VISIBLE = 'Y' WHERE PGM_CODE = '${pcode}' AND GRID_ID = '${dgid}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
+  //   }
+  // });
+  // console.log(sqls)
+  return sqls.join('\n');
+}
+
+
 
 const add_controls = (robj, rkey, needle, rel) => {
   if(rel.indexOf(needle)===0||needle=="") {

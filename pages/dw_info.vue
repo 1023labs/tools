@@ -17,8 +17,8 @@
               v-model="tabSrc"
               height="30"
             >
-              <v-tab :key="'conotrols'">
-                Controls
+              <v-tab :key="'preview'">
+                Preview
               </v-tab>
               <v-tab :key="'sql'">
                 SQL
@@ -26,30 +26,72 @@
               <v-tab :key="'group1'">
                 Group1
               </v-tab>
+              <v-tab :key="'lines'">
+                Source (Line)
+              </v-tab>
               <v-tab :key="'src'">
-                Source
+                From Source
               </v-tab>
             </v-tabs>
  
            
             
             <v-tabs-items v-model="tabSrc">
-              <v-tab-item :key="'controls'">
+              <v-tab-item :key="'preview'">
                 <v-container fluid>
                   <preview-grid v-if="dwType=='grid'" :ctrls="this.ctrls" />
-                  <v-row>
-                    <v-col col="3">
+                  <v-row v-if="dwType=='grid'" >
+                    <v-col cols="1">
                       <v-text-field
                         label="PGM_CODE"
-                         v-model="pgm_code"
+                         v-model="chk_sqls.pgm_code"
                       ></v-text-field>
                     </v-col>
-                    <v-col col="3">
-                      <v-text-field label="Grid ID" v-model="dg_id"></v-text-field>
+                    <v-col cols="1">
+                      <v-text-field label="Grid ID" v-model="chk_sqls.dg_id"></v-text-field>
                     </v-col>
+                    <v-col cols="1">
+                      <v-text-field label="Add width" v-model="chk_sqls.add_width"></v-text-field>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
+                        v-model="chk_sqls.title"
+                        label="Title"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
+                        v-model="chk_sqls.width"
+                        label="Width"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
+                        v-model="chk_sqls.show"
+                        label="Show"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
+                        v-model="chk_sqls.compute"
+                        label="Computed Field"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <!-- width, text, radio 추가 -->
                   </v-row>
                   <prism-editor v-if="dwType=='grid'" class="my-editor" v-model="ctrls_upd_sql" :highlight="highlighter" line-numbers></prism-editor>
-                  <preview-freeform v-if="dwType=='freeform'" />
+                  <v-row v-if="dwType=='freeform'" >
+                    <v-col col="6">
+                      <preview-freeform v-if="dwType=='freeform'" :ctrls="this.ctrls" />
+                    </v-col>
+                    <v-col col="6">
+                      <prism-editor v-if="dwType=='freeform'" class="my-editor" v-model="freeform_html" :highlight="highlighter" line-numbers></prism-editor>
+                    </v-col>
+                  </v-row>
                 </v-container>
 
                 <v-card flat>
@@ -59,6 +101,7 @@
                     >
                       <v-container fluid
                         v-bind:key="key"
+                        v-if="(key!='maxx' && key!='maxy')"
                       >
                         <h5>[ {{ key }} ]</h5>
                         <v-simple-table
@@ -205,7 +248,7 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
-              <v-tab-item :key="'src'">
+              <v-tab-item :key="'lines'">
                 <v-card flat>
                   <v-card-text>
                     <template>
@@ -235,6 +278,15 @@
                           </tbody>
                         </template>
                       </v-simple-table>
+                    </template>
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+              <v-tab-item :key="'src'">
+                <v-card flat>
+                  <v-card-text>
+                    <template>
+                      <prism-editor class="my-editor" v-model="source_srd" :highlight="highlighter" line-numbers></prism-editor>
                     </template>
                   </v-card-text>
                 </v-card>
@@ -276,12 +328,32 @@
       dwType: 'grid',
       ctrls: {
         header: [],
-        detail: []
+        detail: [],
+        background: [],
+        foreground: [],
+        maxx: 0,
+        maxy: 0,
       },
       ctrls_upd_sql: '',
-      dg_id: 'dg_1',
-      pgm_code: 'EM',
       sql_code: '',
+      source_srd: '',
+      chk_sqls: {
+        dg_id: 'dg_1',
+        pgm_code: 'EM',
+        add_width: 20,
+        width: true,
+        title: true,
+        show: true,
+        compute: false,
+      },
+      freeform_html: `<div id='freeform' class='detail_box ver2'>
+  <div class='detail_row'>
+    <label class='detail_label w100'>샘플</label>
+    <div class='detail_input_bg w100'>
+      <input id='SAMPLE' type='text'>
+    </div>
+  </div>
+</div>`,
       args: [],
       details: [
         {
@@ -301,48 +373,56 @@
         const CSV = response.data;
 
         CSV.text().then((csvStr) => {
-          // set Source
-          const lineArray = csvStr.split(/\r?\n/)
-          this.details = lineArray ;
-          // console.log( lineArray )
-
-          // Grouping
-          this.group1 = common.parsing_dwtxt(lineArray);
-
-          // Sql  
-          if("table" in this.group1) {
-            const rSql = common.parsing_sql(this.group1["table"]);
-            this.sql_code = rSql.sql_src;
-            this.args = rSql.arguments;
-          }
-
-          // Controls
-          if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
-            this.ctrls = common.parsing_controls(this.group1);
-          }
-
-          // Preview
-          this.dwType = common.check_grid_type(this.group1["bands"]);
-
-          // Grid Title Update Sql
-          if(this.dwType=='grid') {
-            this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.pgm_code, this.dg_id);
-          } else {
-            this.ctrls_upd_sql = '';
-          }
+          this.analysis_datawindow(csvStr);
         })
       },
-      pgm_code (val) {
-        this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, val, this.dg_id);
+      chk_sqls: {
+        deep: true,
+
+        handler (val) {
+          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, val);
+        }
       },
-      dg_id (val) {
-        this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.pgm_code, val);
+      source_srd (val) {
+        this.analysis_datawindow(val);
       }
     },
     methods: {
       highlighter(code) {
         return highlight(code, languages.js); // languages.<insert language> to return html with markup
       },
+      analysis_datawindow(srcTxt) {
+        // set Source
+        const lineArray = srcTxt.split(/\r?\n/)
+        this.details = lineArray ;
+        // console.log( lineArray )
+
+        // Grouping
+        this.group1 = common.parsing_dwtxt(lineArray);
+
+        // Sql  
+        if("table" in this.group1) {
+          const rSql = common.parsing_sql(this.group1["table"]);
+          this.sql_code = rSql.sql_src;
+          this.args = rSql.arguments;
+        }
+
+        // Controls
+        if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
+          this.ctrls = common.parsing_controls(this.group1);
+        }
+
+        // Preview
+        this.dwType = common.check_grid_type(this.group1["bands"]);
+
+        // Grid Title Update Sql
+        if(this.dwType=='grid') {
+          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls);
+        } else {
+          this.ctrls_upd_sql = '';
+          this.freeform_html = common.make_freeform(this.ctrls);
+        }
+      }
     }
   }
 </script>
