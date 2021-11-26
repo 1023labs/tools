@@ -76,6 +76,13 @@
                     </v-col>
                     <v-col cols="auto">
                       <v-checkbox
+                        v-model="chk_sqls.style"
+                        label="Style"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
                         v-model="chk_sqls.compute"
                         label="Computed Field"
                         hide-details
@@ -83,13 +90,13 @@
                     </v-col>
                     <!-- width, text, radio 추가 -->
                   </v-row>
-                  <prism-editor v-if="dwType=='grid'" class="my-editor" v-model="ctrls_upd_sql" :highlight="highlighter" line-numbers></prism-editor>
+                  <prism-editor v-if="dwType=='grid'" class="my-editor style-grid" v-model="ctrls_upd_sql" :highlight="highlighter" line-numbers></prism-editor>
                   <v-row v-if="dwType=='freeform'" >
                     <v-col col="6">
                       <preview-freeform v-if="dwType=='freeform'" :ctrls="this.ctrls" />
                     </v-col>
                     <v-col col="6">
-                      <prism-editor v-if="dwType=='freeform'" class="my-editor" v-model="freeform_html" :highlight="highlighter" line-numbers></prism-editor>
+                      <prism-editor v-if="dwType=='freeform'" class="my-editor style-freeform" v-model="freeform_html" :highlight="highlighter" line-numbers></prism-editor>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -304,10 +311,12 @@
 </template>
 
 <script>
+  import Vue from "vue";
   import axios from "axios";
   import SearchDw from '~/components/SearchDw.vue';
   import PreviewGrid from '~/components/PreviewGrid.vue';
   import PreviewFreeform from '~/components/PreviewFreeform.vue';
+  import FreeForm from '~/components/FreeForm.vue';
   import common from '~/plugins/common.js';
   
   // import Prism Editor
@@ -319,6 +328,7 @@
   import 'prismjs/components/prism-clike';
   import 'prismjs/components/prism-javascript';
   import 'prismjs/themes/prism-tomorrow.css'; // import syntax highlighting styles
+  const jsBeautify = require('js-beautify').html;
 
   export default {
     components: { SearchDw, PreviewGrid, PreviewFreeform, PrismEditor },
@@ -344,6 +354,7 @@
         width: true,
         title: true,
         show: true,
+        style: true,
         compute: false,
       },
       freeform_html: `<div id='freeform' class='detail_box ver2'>
@@ -355,6 +366,7 @@
   </div>
 </div>`,
       args: [],
+      dbcols: {},
       details: [
         {
           name: 'Frozen Yogurt',
@@ -405,6 +417,7 @@
           const rSql = common.parsing_sql(this.group1["table"]);
           this.sql_code = rSql.sql_src;
           this.args = rSql.arguments;
+          this.dbcols = rSql.columns;
         }
 
         // Controls
@@ -417,10 +430,68 @@
 
         // Grid Title Update Sql
         if(this.dwType=='grid') {
-          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls);
+          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls, this.dbcols);
         } else {
           this.ctrls_upd_sql = '';
-          this.freeform_html = common.make_freeform(this.ctrls);
+
+          const fObj = {
+            closing: true,
+            label_width: "100",
+            rows: [[
+            {
+              label: "부서코드",
+              required: true,
+              tags: "input",
+              width: "100",
+              colname: "DEPT_CODE",
+              coltype: "text"
+            },
+            {
+              label: "none",
+              required: true,
+              tags: "input",
+              width: "200",
+              colname: "DEPT_NAME",
+              coltype: "text"
+            },
+            {
+              label: "부서명(영문)",
+              required: true,
+              tags: "input",
+              width: "300",
+              colname: "DEPT_NAME_ENG",
+              coltype: "text"
+            },
+            {
+              label: "부서구분",
+              required: false,
+              tags: "select",
+              width: "300",
+              colname: "DEPT_DIV_CODE",
+              coltype: "text"
+            },
+            {
+              label: "레벨코드",
+              required: false,
+              tags: "input",
+              width: "300",
+              colname: "LEVELS",
+              coltype: "text"
+            },]]
+          }
+
+          const ffHtml = new Vue({
+            ...FreeForm,
+            parent: this,
+            propsData: { fInfo: fObj }
+          }).$mount();
+
+          const options = {
+            "indent_size": 2,
+            "extra_liners": ["input", "label", "div", "button", "select"],
+          };
+          const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
+          this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
         }
       }
     }

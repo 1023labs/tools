@@ -58,6 +58,7 @@ exports.parsing_dwtxt = (arrDw) => {
 // step2 - table line array => Sql text
 exports.parsing_sql = (arrTb) => {
   let sql_txt = [];
+  let cols = {};
   let sql_mode = false;
 
   arrTb.forEach((el, idx) => {
@@ -67,6 +68,15 @@ exports.parsing_sql = (arrTb) => {
 
     if(sql_mode) {
       sql_txt.push( el.replace('retrieve="', '') );
+    } else {
+      if(el.indexOf('column=')>=0) {
+        const cText = el.replace('table(column=(', '')
+                        .replace('column=(', '')
+                        .replace(/\)$/, '') 
+        const cProps = parsing_cols(cText)
+        // console.log(cProps)
+        cols[cProps.name] = cProps;
+      }
     }
 
     if(el.indexOf('arguments=(')>=0) {
@@ -98,7 +108,7 @@ exports.parsing_sql = (arrTb) => {
   // console.log(args);
   // const args
   
-  return { sql_src, arguments: args }
+  return { sql_src, arguments: args, columns: cols }
 }
 
 // step3 - Grouping => Controls
@@ -181,7 +191,7 @@ exports.check_grid_type = (arrGrp) => {
 }
 
 // step5 - Make Grid Header Text Update Sql pcode, dgid, 
-exports.make_upd_sql = (arrCtrl, csql) => {
+exports.make_upd_sql = (arrCtrl, csql, cols) => {
   // "UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '', VISIBLE = 'Y' WHERE PGM_CODE = 'EM01010' AND GRID_ID = 'db_1' AND FIELDNAME = 'PHONE_NO'; ";
   // csql.text , csql.width , csql.show
   let arrHd = arrCtrl.header;
@@ -201,14 +211,26 @@ exports.make_upd_sql = (arrCtrl, csql) => {
       }
       // MUST_INPUT, READONLY, EDITOBLE, STYLES, EDITOR, UPDATABLE ('Y')
       // console.log(csql);
+      const colInfo = cols[matchCol[0].name];
 
-      if(!(!csql.compute && matchCol[0].ctrl_type=="compute")) {
+      if(csql.compute || matchCol[0].ctrl_type!="compute") {
         const uSql = [];
+        let tAlign = '';
+
+        if(matchCol[0].alignment=='2') tAlign = 'c';
+
         if(csql.title) uSql.push(`HEADER_TEXT = '${el.text}'`);
         if(csql.width) uSql.push(`WIDTH = '${tWidth}'`);
         if(csql.show) uSql.push(`VISIBLE = 'Y'`);
+        if(csql.style) {
+          if(colInfo.type.indexOf('decimal')>=0||colInfo.type.indexOf('number')>=0||colInfo.type.indexOf('integer')>=0||colInfo.type.indexOf('float')>=0) {
+            uSql.push(`STYLE = '_Styles_number${tAlign}'`);
+          } else {
+            uSql.push(`STYLE = '_Styles_text${tAlign}'`);
+          }
+        }
         
-        sqls.push(`UPDATE SM_DEV_GRID_COLS SET ${uSql.join(', ') ?? ''} WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
+        sqls.push(`UPDATE SM_DEV_GRID_COLS SET  ${uSql.join(', ') ?? ''}   WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
       }
     }
   });
@@ -277,6 +299,31 @@ const parsing_props = (propStr) => {
   // console.log(category, found2);
   // console.log(category, found3);
   // console.log(category, found4);
+  
+  return pp;
+}
+
+const parsing_cols = (colsStr) => {
+  // console.log('test');
+  // type=char(3) update=yes updatewhereclause=yes name=company_code dbname="cm_esti_master.company_code" 
+  const str = ` ${colsStr} `;
+  
+  const re4 = /(?<=\s)([.|\w|\d|_]+)\=([.,=-\w\d\'\[\]\(\)\n\r가-힣]+)(?=\s)|(?<=\s)([.|\w|\d|_]+)\=\"([.,=-\w\d\'\[\]\(\)\s\n\r가-힣]+)\"(?=\s)/g; // /(^\=)\"(\w+)/gi;
+  const found4 = str.match(re4);
+  
+  let pp = {};
+  found4.forEach((el, idx) => {
+    const epos = el.indexOf("=");
+    const key = el.substring(0, epos);
+    const val = el.substr(epos + 1, 999999);
+    
+    pp[`${key}`] = `${val.replace(/^\"|\"$/g, '')}`;
+  })
+  // console.log(pp)
+  // // console.log(category, found[2]);
+  // // console.log(category, found2);
+  // // console.log(category, found3);
+  // // console.log(category, found4);
   
   return pp;
 }
