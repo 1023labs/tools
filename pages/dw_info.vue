@@ -55,6 +55,13 @@
                     </v-col>
                     <v-col cols="auto">
                       <v-checkbox
+                        v-model="chk_sqls.sort"
+                        label="Sort"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
                         v-model="chk_sqls.title"
                         label="Title"
                         hide-details
@@ -83,10 +90,20 @@
                     </v-col>
                     <v-col cols="auto">
                       <v-checkbox
+                        v-model="chk_sqls.editor"
+                        label="Editor"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
                         v-model="chk_sqls.compute"
                         label="Computed Field"
                         hide-details
                       ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <snack-bar></snack-bar>
                     </v-col>
                     <!-- width, text, radio 추가 -->
                   </v-row>
@@ -317,6 +334,7 @@
   import PreviewGrid from '~/components/PreviewGrid.vue';
   import PreviewFreeform from '~/components/PreviewFreeform.vue';
   import FreeForm from '~/components/FreeForm.vue';
+  import SnackBar from '~/components/SnackBar.vue';
   import common from '~/plugins/common.js';
   
   // import Prism Editor
@@ -331,7 +349,7 @@
   const jsBeautify = require('js-beautify').html;
 
   export default {
-    components: { SearchDw, PreviewGrid, PreviewFreeform, PrismEditor },
+    components: { SearchDw, PreviewGrid, PreviewFreeform, PrismEditor, SnackBar },
     data: () => ({
       selDw: "",
       tabSrc: null,
@@ -351,11 +369,16 @@
         dg_id: 'dg_1',
         pgm_code: 'EM',
         add_width: 20,
+        sort: true,
         width: true,
         title: true,
         show: true,
         style: true,
+        editor: true,
         compute: false,
+      },
+      chk_freeform: {
+        row_closing: true,
       },
       freeform_html: `<div id='freeform' class='detail_box ver2'>
   <div class='detail_row'>
@@ -392,7 +415,7 @@
         deep: true,
 
         handler (val) {
-          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, val);
+          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, val, this.dbcols);
         }
       },
       source_srd (val) {
@@ -404,94 +427,64 @@
         return highlight(code, languages.js); // languages.<insert language> to return html with markup
       },
       analysis_datawindow(srcTxt) {
-        // set Source
-        const lineArray = srcTxt.split(/\r?\n/)
-        this.details = lineArray ;
-        // console.log( lineArray )
+        try{
+          // set Source
+          const lineArray = srcTxt.split(/\r?\n/)
+          this.details = lineArray ;
+          // console.log( lineArray )
 
-        // Grouping
-        this.group1 = common.parsing_dwtxt(lineArray);
+          // Grouping
+          this.group1 = common.parsing_dwtxt(lineArray);
 
-        // Sql  
-        if("table" in this.group1) {
-          const rSql = common.parsing_sql(this.group1["table"]);
-          this.sql_code = rSql.sql_src;
-          this.args = rSql.arguments;
-          this.dbcols = rSql.columns;
-        }
-
-        // Controls
-        if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
-          this.ctrls = common.parsing_controls(this.group1);
-        }
-
-        // Preview
-        this.dwType = common.check_grid_type(this.group1["bands"]);
-
-        // Grid Title Update Sql
-        if(this.dwType=='grid') {
-          this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls, this.dbcols);
-        } else {
-          this.ctrls_upd_sql = '';
-
-          const fObj = {
-            closing: true,
-            label_width: "100",
-            rows: [[
-            {
-              label: "부서코드",
-              required: true,
-              tags: "input",
-              width: "100",
-              colname: "DEPT_CODE",
-              coltype: "text"
-            },
-            {
-              label: "none",
-              required: true,
-              tags: "input",
-              width: "200",
-              colname: "DEPT_NAME",
-              coltype: "text"
-            },
-            {
-              label: "부서명(영문)",
-              required: true,
-              tags: "input",
-              width: "300",
-              colname: "DEPT_NAME_ENG",
-              coltype: "text"
-            },
-            {
-              label: "부서구분",
-              required: false,
-              tags: "select",
-              width: "300",
-              colname: "DEPT_DIV_CODE",
-              coltype: "text"
-            },
-            {
-              label: "레벨코드",
-              required: false,
-              tags: "input",
-              width: "300",
-              colname: "LEVELS",
-              coltype: "text"
-            },]]
+          // Sql  
+          if("table" in this.group1) {
+            const rSql = common.parsing_sql(this.group1["table"]);
+            this.sql_code = rSql.sql_src;
+            this.args = rSql.arguments;
+            this.dbcols = rSql.columns;
           }
 
-          const ffHtml = new Vue({
-            ...FreeForm,
-            parent: this,
-            propsData: { fInfo: fObj }
-          }).$mount();
+          // Controls
+          if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
+            this.ctrls = common.parsing_controls(this.group1);
+          }
+        } catch(err1) {
+          console.log(err1);
+        }        
 
-          const options = {
-            "indent_size": 2,
-            "extra_liners": ["input", "label", "div", "button", "select"],
-          };
-          const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
-          this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
+        try {
+          // Preview
+          this.dwType = common.check_grid_type(this.group1["bands"]);
+
+          // Grid Title Update Sql
+          if(this.dwType=='grid') {
+            this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls, this.dbcols);
+          } else {
+            const fRows = common.make_freeform(this.ctrls, this.chk_freeform, this.dbcols);
+
+            // console.log(fRows);
+
+            const fObj = {
+              closing: true,
+              label_width: "100",
+              rows: fRows,
+            }
+
+            const ffHtml = new Vue({
+              ...FreeForm,
+              parent: this,
+              propsData: { fInfo: fObj }
+            }).$mount();
+
+            const options = {
+              "indent_size": 2,
+              "extra_liners": ["input", "label", "div", "button", "select"],
+            };
+            const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
+            this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
+          }
+        } catch(err2) {
+          console.log(err2);
         }
       }
     }

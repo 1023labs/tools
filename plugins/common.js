@@ -98,12 +98,15 @@ exports.parsing_sql = (arrTb) => {
   const args1 = args_str.match(re);
   let args = [];
   // console.log('end' + args1)
-  args1.forEach((el, idx) => {
-    const str_arg = el.replace(/[\(|\|\"|\s)]/g, '');
-    const arr_arg = str_arg.split(',');
-    const arg = {name: arr_arg[0], type: arr_arg[1]}
-    args.push(arg)
-  })
+  if(args1&&args1.length>0) {
+    args1.forEach((el, idx) => {
+      const str_arg = el.replace(/[\(|\|\"|\s)]/g, '');
+      const arr_arg = str_arg.split(',');
+      const arg = {name: arr_arg[0], type: arr_arg[1]}
+      args.push(arg)
+    })
+  }
+  
 
   // console.log(args);
   // const args
@@ -200,6 +203,12 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
   });
   
   let sqls = [];
+  const iSqls = [];
+  if(csql.sort) iSqls.push(`FIELD_SEQ = 990`)
+  if(csql.show) iSqls.push(`VISIBLE = 'N'`)
+
+  if(iSqls.length>0) sqls.push(`UPDATE SM_DEV_GRID_COLS SET ${iSqls.join(', ')} WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' ; `);
+
   arrHd.forEach((el, idx) => {
     let matchCol = arrCtrl.detail.filter(col => Math.abs(col.x - el.x) <= 3 );
     if(matchCol.length>0) {
@@ -211,27 +220,48 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
       }
       // MUST_INPUT, READONLY, EDITOBLE, STYLES, EDITOR, UPDATABLE ('Y')
       // console.log(csql);
-      const colInfo = cols[matchCol[0].name];
+      let colInfo = {};
+      if(cols && (matchCol[0].name in cols)) {
+        colInfo = cols[matchCol[0].name];
+      } 
 
+      const uSql = [];
       if(csql.compute || matchCol[0].ctrl_type!="compute") {
-        const uSql = [];
         let tAlign = '';
 
         if(matchCol[0].alignment=='2') tAlign = 'c';
 
+        if(csql.sort) uSql.push(`FIELD_SEQ = ${(idx + 1) * 10}`);
         if(csql.title) uSql.push(`HEADER_TEXT = '${el.text}'`);
         if(csql.width) uSql.push(`WIDTH = '${tWidth}'`);
         if(csql.show) uSql.push(`VISIBLE = 'Y'`);
         if(csql.style) {
-          if(colInfo.type.indexOf('decimal')>=0||colInfo.type.indexOf('number')>=0||colInfo.type.indexOf('integer')>=0||colInfo.type.indexOf('float')>=0) {
+          if(('type' in colInfo) && (colInfo.type.indexOf('decimal')>=0 || colInfo.type.indexOf('number')>=0||colInfo.type.indexOf('integer')>=0||colInfo.type.indexOf('float')>=0)) {
             uSql.push(`STYLE = '_Styles_number${tAlign}'`);
+          } else if(matchCol[0].name.indexOf('_date')>=0) {
+            uSql.push(`STYLE = '_Styles_date'`);
           } else {
             uSql.push(`STYLE = '_Styles_text${tAlign}'`);
           }
         }
-        
-        sqls.push(`UPDATE SM_DEV_GRID_COLS SET  ${uSql.join(', ') ?? ''}   WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
+        if(csql.editor) {
+          if(('dddw.name' in matchCol[0])) {
+            uSql.push(`EDITOR = '_Editor_dropdown'`);
+          } else if(('checkbox.text' in matchCol[0])) {
+            uSql.push(`EDITOR = '_Editor_checkbox'`);
+          } else if(matchCol[0].name.indexOf('_date')>=0) {
+            uSql.push(`EDITOR = '_Editor_date'`);
+          } else {
+            uSql.push(`EDITOR = '_Editor_text'`);
+          }
+        }
+      } else {
+        if(csql.compute) {
+          if(csql.sort) uSql.push(`FIELD_SEQ = ${(idx + 1) * 10}`);
+        }
       }
+
+      if(uSql.length > 0) sqls.push(`UPDATE SM_DEV_GRID_COLS SET  ${uSql.join(', ') ?? ''}   WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
     }
   });
   // console.log(sqls)
@@ -239,19 +269,145 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
 }
 
 // step5 - Make Grid Header Text Update Sql
-exports.make_freeform = (arrCtrl) => {
-  // "UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '', VISIBLE = 'Y' WHERE PGM_CODE = 'EM01010' AND GRID_ID = 'db_1' AND FIELDNAME = 'PHONE_NO'; ";
-  let sqls = [];
-  // arrCtrl.header.forEach((el, idx) => {
-  //   let matchCol = arrCtrl.detail.filter(col => Math.abs(col.x - el.x) <= 3 );
-  //   if(matchCol.length>0) {
-  //     sqls.push(`UPDATE SM_DEV_GRID_COLS SET HEADER_TEXT = '${el.text}', VISIBLE = 'Y' WHERE PGM_CODE = '${pcode}' AND GRID_ID = '${dgid}' AND FIELDNAME = '${matchCol[0].name.toUpperCase()}'; `);
-  //   }
-  // });
-  // console.log(sqls)
-  return sqls.join('\n');
+exports.make_freeform = (arrCtrl, csql, cols) => {
+  let aCols = arrCtrl.detail;
+  aCols.sort(function(a,b) {
+    return parseFloat(a.y) - parseFloat(b.y);
+  });
+
+  // console.log(aCols)
+
+  let tRows = [];
+  let cRow = [];
+  let preY = 0;
+
+  // column 먼저 Row 구분해서 넣고, 
+  // Row 변경될 때, 해당 Row 에 맞는 label 추가 
+  aCols.forEach((el, i) => {
+    // new Row
+    if(preY===0||(preY+20<parseInt(el.y))) {
+      if(cRow.length>0) {
+        // row 칼럼 정렬 & 헤더 넣기 
+        tRows.push(proc_ff_row(cRow, arrCtrl));
+      }
+      // new Row
+      cRow = [];
+    }
+
+    // ( "checkbox.text" in el) ? "checkbox" { 
+    const cTag = ("dddw.name" in el) ? "select" : "input" ;
+
+    const cInfo = {
+      left: el.x,
+      top: el.y,
+      type: "column",
+      tags: "input",
+      width: "100",
+      colname: el.name.toUpperCase(),
+      coltype: "text"
+    };
+    cRow.push(cInfo);
+
+    preY = parseInt(el.y);
+  })
+
+
+  // const rows = [[
+  //   {
+  //     type: "label",
+  //     text: "부서코드",
+  //     required: true,
+  //   },
+  //   {
+  //     type: "column",
+  //     tags: "input",
+  //     width: "100",
+  //     colname: "DEPT_CODE",
+  //     coltype: "text"
+  //   },
+  //   {
+  //     type: "column",
+  //     tags: "input",
+  //     width: "200",
+  //     colname: "DEPT_NAME",
+  //     coltype: "text"
+  //   },
+  //   {
+  //     type: "label",
+  //     text: "부서명(영문)",
+  //     required: true,
+  //   },
+  //   {
+  //     type: "column",
+  //     tags: "input",
+  //     width: "300",
+  //     colname: "DEPT_NAME_ENG",
+  //     coltype: "text"
+  //   },
+  //   {
+  //     type: "label",
+  //     text: "부서구분",
+  //     required: true,
+  //   },
+  //   {
+  //     type: "column",
+  //     tags: "select",
+  //     width: "300",
+  //     colname: "DEPT_DIV_CODE",
+  //     coltype: "text"
+  //   },
+  //   {
+  //     type: "label",
+  //     text: "레벨코드",
+  //     required: true,
+  //   },
+  //   {
+  //     type: "column",
+  //     tags: "input",
+  //     width: "300",
+  //     colname: "LEVELS",
+  //     coltype: "text"
+  //   },]]
+  
+  return tRows;
 }
 
+const proc_ff_row = (rRow, rCtrls) => {
+  const bgShift = 15; // background 와 detail y 값 보정 
+  let newRow;
+
+  if (rRow.length>0) {
+    const minY = rRow[0].top - 2;
+    const maxY = minY + 22;
+    let matchLabels = [];
+
+    rCtrls.background.forEach((col, idx) => {
+      const tY = col.y - bgShift;
+      if((col.ctrl_type=='text') && (minY<=tY&&tY<=maxY)) {
+        matchLabels.push({
+          left: col.x,
+          top: tY,
+          type: "label",
+          text: col.text,
+          required: false,
+        })
+      }
+    });
+
+    newRow = [
+      ...rRow,
+      ...matchLabels,
+    ];
+  
+    newRow.sort(function(a,b) {
+      return parseFloat(a.left) - parseFloat(b.left);
+    });
+  }
+
+  
+  
+  return newRow;
+}
 
 
 const add_controls = (robj, rkey, needle, rel) => {

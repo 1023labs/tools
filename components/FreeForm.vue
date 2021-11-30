@@ -1,31 +1,33 @@
 <template>
   <div id='freeform' class='detail_box ver2'>
     <div
-      v-for="(row, idx) in this.fInfo.rows"
+      v-for="(row, idx) in rows"
       :class="'detail_row'"
       :key="'row-'+idx"
     >
       <template
-        v-for="(cell, ic) in row"
+        v-for="(el, ic) in row"
       >
         <label 
-          v-if="cell.label!='none'"
+          v-if="el.type=='label'"
           :class="'detail_label w'+label_width"
           v-bind:key="'in-'+ic"
-        >{{ (cell.required ? "*" : "") + cell.label }}</label>
+        >{{ (el.required ? "*" : "") + el.text }}</label>
+        
         <div 
-          v-if="cell.tags=='input'"
-          :class="'detail_input_bg w'+cell.width"
+          v-else-if="el.type='column'&&el.tags=='input'"
+          :class="'detail_input_bg w'+el.width"
           v-bind:key="'div-'+ic"
         >
-          <input v-bind:id="cell.colname" type='text'>
+          <input v-bind:id="el.colname" type='text'>
         </div>
+
         <div 
-          v-if="cell.tags=='select'"
-          :class="'detail_input_bg w'+cell.width"
+          v-else-if="el.type='column'&&el.tags=='select'"
+          :class="'detail_input_bg w'+el.width"
           v-bind:key="'sel-'+ic"
         >
-          <select v-bind:id="cell.colname" ></select>
+          <select v-bind:id="el.colname" ></select>
         </div>
       </template>
     </div>
@@ -39,6 +41,8 @@
     data () {
       return {
         label_width: this.fInfo.label_width,
+        controls: this.fInfo.controls,
+        rows: this.fInfo.rows,
         // cols: this.fInfo,
         // loading: false,
         // items: [],
