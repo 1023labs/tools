@@ -20,6 +20,9 @@
               <v-tab :key="'preview'">
                 Preview
               </v-tab>
+              <v-tab :key="'src'">
+                From Source
+              </v-tab>
               <v-tab :key="'sql'">
                 SQL
               </v-tab>
@@ -29,12 +32,8 @@
               <v-tab :key="'lines'">
                 Source (Line)
               </v-tab>
-              <v-tab :key="'src'">
-                From Source
-              </v-tab>
+              
             </v-tabs>
- 
-           
             
             <v-tabs-items v-model="tabSrc">
               <v-tab-item :key="'preview'">
@@ -113,6 +112,22 @@
                       <preview-freeform v-if="dwType=='freeform'" :ctrls="this.ctrls" />
                     </v-col>
                     <v-col col="6">
+                      <v-row v-if="dwType=='freeform'" >
+                        <v-col cols="4">
+                          <v-text-field
+                            label="Label Width"
+                            v-model="chk_freeform.label_width"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="auto">
+                          <v-checkbox
+                            v-model="chk_freeform.row_closing"
+                            label="Horizontal 100%"
+                            hide-details
+                          ></v-checkbox>
+                        </v-col>
+                        <!-- width, text, radio 추가 -->
+                      </v-row>
                       <prism-editor v-if="dwType=='freeform'" class="my-editor style-freeform" v-model="freeform_html" :highlight="highlighter" line-numbers></prism-editor>
                     </v-col>
                   </v-row>
@@ -378,14 +393,11 @@
         compute: false,
       },
       chk_freeform: {
+        label_width: 100,
         row_closing: true,
       },
       freeform_html: `<div id='freeform' class='detail_box ver2'>
   <div class='detail_row'>
-    <label class='detail_label w100'>샘플</label>
-    <div class='detail_input_bg w100'>
-      <input id='SAMPLE' type='text'>
-    </div>
   </div>
 </div>`,
       args: [],
@@ -416,6 +428,13 @@
 
         handler (val) {
           this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, val, this.dbcols);
+        }
+      },
+      chk_freeform: {
+        deep: true,
+
+        handler (val) {
+          this.draw_freeform();
         }
       },
       source_srd (val) {
@@ -460,32 +479,35 @@
           if(this.dwType=='grid') {
             this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls, this.dbcols);
           } else {
-            const fRows = common.make_freeform(this.ctrls, this.chk_freeform, this.dbcols);
-
-            // console.log(fRows);
-
-            const fObj = {
-              closing: true,
-              label_width: "100",
-              rows: fRows,
-            }
-
-            const ffHtml = new Vue({
-              ...FreeForm,
-              parent: this,
-              propsData: { fInfo: fObj }
-            }).$mount();
-
-            const options = {
-              "indent_size": 2,
-              "extra_liners": ["input", "label", "div", "button", "select"],
-            };
-            const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
-            this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
+            this.draw_freeform();
           }
         } catch(err2) {
           console.log(err2);
         }
+      },
+      draw_freeform() {
+        const fRows = common.make_freeform(this.ctrls, this.chk_freeform, this.dbcols);
+
+        // console.log(fRows);
+
+        const fObj = {
+          row_closing: this.chk_freeform.row_closing,
+          label_width: this.chk_freeform.label_width,
+          rows: fRows,
+        }
+
+        const ffHtml = new Vue({
+          ...FreeForm,
+          parent: this,
+          propsData: { fInfo: fObj }
+        }).$mount();
+
+        const options = {
+          "indent_size": 2,
+          "extra_liners": ["input", "label", "div", "button", "select"],
+        };
+        const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
+        this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
       }
     }
   }

@@ -204,7 +204,7 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
   
   let sqls = [];
   const iSqls = [];
-  if(csql.sort) iSqls.push(`FIELD_SEQ = 990`)
+  if(csql.sort) iSqls.push(`FIELD_SEQ = FIELD_SEQ + 9000`)
   if(csql.show) iSqls.push(`VISIBLE = 'N'`)
 
   if(iSqls.length>0) sqls.push(`UPDATE SM_DEV_GRID_COLS SET ${iSqls.join(', ')} WHERE PGM_CODE = '${csql.pgm_code}' AND GRID_ID = '${csql.dg_id}' ; `);
@@ -269,7 +269,7 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
 }
 
 // step5 - Make Grid Header Text Update Sql
-exports.make_freeform = (arrCtrl, csql, cols) => {
+exports.make_freeform = (arrCtrl, cff, cols) => {
   let aCols = arrCtrl.detail;
   aCols.sort(function(a,b) {
     return parseFloat(a.y) - parseFloat(b.y);
@@ -295,13 +295,13 @@ exports.make_freeform = (arrCtrl, csql, cols) => {
     }
 
     // ( "checkbox.text" in el) ? "checkbox" { 
-    const cTag = ("dddw.name" in el) ? "select" : "input" ;
+    const cTag = (("dddw.name" in el)||("ddlb.case" in el)) ? "select" : ( ("checkbox.text" in el) ? "checkbox" : "input" ) ;
 
     const cInfo = {
       left: el.x,
       top: el.y,
       type: "column",
-      tags: "input",
+      tags: cTag,
       width: "100",
       colname: el.name.toUpperCase(),
       coltype: "text"
@@ -311,63 +311,7 @@ exports.make_freeform = (arrCtrl, csql, cols) => {
     preY = parseInt(el.y);
   })
 
-
-  // const rows = [[
-  //   {
-  //     type: "label",
-  //     text: "부서코드",
-  //     required: true,
-  //   },
-  //   {
-  //     type: "column",
-  //     tags: "input",
-  //     width: "100",
-  //     colname: "DEPT_CODE",
-  //     coltype: "text"
-  //   },
-  //   {
-  //     type: "column",
-  //     tags: "input",
-  //     width: "200",
-  //     colname: "DEPT_NAME",
-  //     coltype: "text"
-  //   },
-  //   {
-  //     type: "label",
-  //     text: "부서명(영문)",
-  //     required: true,
-  //   },
-  //   {
-  //     type: "column",
-  //     tags: "input",
-  //     width: "300",
-  //     colname: "DEPT_NAME_ENG",
-  //     coltype: "text"
-  //   },
-  //   {
-  //     type: "label",
-  //     text: "부서구분",
-  //     required: true,
-  //   },
-  //   {
-  //     type: "column",
-  //     tags: "select",
-  //     width: "300",
-  //     colname: "DEPT_DIV_CODE",
-  //     coltype: "text"
-  //   },
-  //   {
-  //     type: "label",
-  //     text: "레벨코드",
-  //     required: true,
-  //   },
-  //   {
-  //     type: "column",
-  //     tags: "input",
-  //     width: "300",
-  //     colname: "LEVELS",
-  //     coltype: "text"
-  //   },]]
+  tRows.push(proc_ff_row(cRow, arrCtrl));
   
   return tRows;
 }

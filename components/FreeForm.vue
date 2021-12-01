@@ -29,6 +29,12 @@
         >
           <select v-bind:id="el.colname" ></select>
         </div>
+        
+        <div
+          v-if="row_closing" 
+          v-bind:key="'rc-'+ic"
+          class="row-closing"
+        ></div>
       </template>
     </div>
   </div>
@@ -42,6 +48,7 @@
       return {
         label_width: this.fInfo.label_width,
         controls: this.fInfo.controls,
+        row_closing: this.fInfo.row_closing,
         rows: this.fInfo.rows,
         // cols: this.fInfo,
         // loading: false,
