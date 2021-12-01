@@ -13,14 +13,6 @@
           :class="'detail_label w'+label_width"
           v-bind:key="'in-'+ic"
         >{{ (el.required ? "*" : "") + el.text }}</label>
-        
-        <div 
-          v-else-if="el.type='column'&&el.tags=='input'"
-          :class="'detail_input_bg w'+el.width"
-          v-bind:key="'div-'+ic"
-        >
-          <input v-bind:id="el.colname" type='text'>
-        </div>
 
         <div 
           v-else-if="el.type='column'&&el.tags=='select'"
@@ -29,6 +21,23 @@
         >
           <select v-bind:id="el.colname" ></select>
         </div>
+
+        <div 
+          v-else-if="el.type='column'&&el.tags=='checkbox'"
+          :class="'detail_input_bg w'+el.width"
+          v-bind:key="'chk-'+ic"
+        >
+          <input v-bind:id="el.colname" type='checkbox'>
+        </div>
+
+        <div 
+          v-else
+          :class="'detail_input_bg w'+el.width"
+          v-bind:key="'div-'+ic"
+        >
+          <input v-bind:id="el.colname" type='text'>
+        </div>
+        
       </template>
 
       <div

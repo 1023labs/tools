@@ -208,6 +208,16 @@
                 </v-card>
               </v-tab-item>
               
+              <v-tab-item :key="'src'">
+                <v-card flat>
+                  <v-card-text>
+                    <template>
+                      <prism-editor class="my-editor" v-model="source_srd" :highlight="highlighter" line-numbers></prism-editor>
+                    </template>
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+
               <v-tab-item :key="'sql'">
                 <v-card flat>
                   <v-card-text>
@@ -294,6 +304,7 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
+
               <v-tab-item :key="'lines'">
                 <v-card flat>
                   <v-card-text>
@@ -328,15 +339,7 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
-              <v-tab-item :key="'src'">
-                <v-card flat>
-                  <v-card-text>
-                    <template>
-                      <prism-editor class="my-editor" v-model="source_srd" :highlight="highlighter" line-numbers></prism-editor>
-                    </template>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
+
             </v-tabs-items>
 
 
@@ -442,8 +445,7 @@
         deep: true,
 
         handler (val) {
-          console.log('watch chk_freeform')
-          // this.draw_freeform(val);
+          this.draw_freeform(val);
         }
       },
       source_srd (val) {
@@ -455,6 +457,7 @@
         return highlight(code, languages.js); // languages.<insert language> to return html with markup
       },
       analysis_datawindow(srcTxt) {
+        // console.log('analysis datawindow')
         try{
           // set Source
           const lineArray = srcTxt.split(/\r?\n/)
