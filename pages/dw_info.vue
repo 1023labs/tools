@@ -119,6 +119,13 @@
                             v-model="chk_freeform.label_width"
                           ></v-text-field>
                         </v-col>
+                        <!-- v-col cols="auto">
+                          <v-checkbox
+                            v-model="chk_freeform.btn_find"
+                            label="Add Find Btn"
+                            hide-details
+                          ></v-checkbox>
+                        </v-col -->
                         <v-col cols="auto">
                           <v-checkbox
                             v-model="chk_freeform.row_closing"
@@ -394,7 +401,8 @@
       },
       chk_freeform: {
         label_width: 100,
-        row_closing: true,
+        row_closing: false,
+        // btn_find: true,
       },
       freeform_html: `<div id='freeform' class='detail_box ver2'>
   <div class='detail_row'>
@@ -434,7 +442,8 @@
         deep: true,
 
         handler (val) {
-          this.draw_freeform();
+          console.log('watch chk_freeform')
+          // this.draw_freeform(val);
         }
       },
       source_srd (val) {
@@ -479,34 +488,37 @@
           if(this.dwType=='grid') {
             this.ctrls_upd_sql = common.make_upd_sql(this.ctrls, this.chk_sqls, this.dbcols);
           } else {
-            this.draw_freeform();
+            this.draw_freeform(this.chk_freeform);
           }
         } catch(err2) {
           console.log(err2);
         }
       },
-      draw_freeform() {
-        const fRows = common.make_freeform(this.ctrls, this.chk_freeform, this.dbcols);
+      draw_freeform(cff) {
+        const fRows = common.make_freeform(this.ctrls, cff, this.dbcols);
 
         // console.log(fRows);
-
+        // console.log('draw_freeform 1')
         const fObj = {
-          row_closing: this.chk_freeform.row_closing,
-          label_width: this.chk_freeform.label_width,
+          row_closing: cff.row_closing,
+          label_width: cff.label_width,
+          btn_find: cff.btn_find,
           rows: fRows,
         }
-
+        // console.log('draw_freeform 2')
         const ffHtml = new Vue({
           ...FreeForm,
           parent: this,
           propsData: { fInfo: fObj }
         }).$mount();
-
+        // console.log('draw_freeform 3')
         const options = {
           "indent_size": 2,
           "extra_liners": ["input", "label", "div", "button", "select"],
         };
+        // console.log('draw_freeform 4')
         const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
+        // console.log('draw_freeform 5')
         this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
       }
     }

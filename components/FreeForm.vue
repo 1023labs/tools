@@ -29,13 +29,13 @@
         >
           <select v-bind:id="el.colname" ></select>
         </div>
-        
-        <div
-          v-if="row_closing" 
-          v-bind:key="'rc-'+ic"
-          class="row-closing"
-        ></div>
       </template>
+
+      <div
+        v-if="row_closing" 
+        v-bind:key="'rc-'+ic"
+        class="row-closing"
+      ></div>
     </div>
   </div>
 </template>
@@ -49,6 +49,7 @@
         label_width: this.fInfo.label_width,
         controls: this.fInfo.controls,
         row_closing: this.fInfo.row_closing,
+        // btn_find: this.fInfo.btn_find,
         rows: this.fInfo.rows,
         // cols: this.fInfo,
         // loading: false,
