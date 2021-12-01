@@ -37,12 +37,11 @@
         >
           <input v-bind:id="el.colname" type='text'>
         </div>
-        
+
       </template>
 
       <div
         v-if="row_closing" 
-        v-bind:key="'rc-'+ic"
         class="row-closing"
       ></div>
     </div>

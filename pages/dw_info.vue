@@ -101,9 +101,7 @@
                         hide-details
                       ></v-checkbox>
                     </v-col>
-                    <v-col cols="auto">
-                      <snack-bar></snack-bar>
-                    </v-col>
+                    
                     <!-- width, text, radio 추가 -->
                   </v-row>
                   <prism-editor v-if="dwType=='grid'" class="my-editor style-grid" v-model="ctrls_upd_sql" :highlight="highlighter" line-numbers></prism-editor>
@@ -347,8 +345,31 @@
         </v-col>
       </v-row>
 
-    
     </v-main>
+
+    <div class="text-center">
+
+      <v-snackbar
+        :color="`${errCol} lighten-2`"
+        v-model="errShow"
+        :multi-line="errMulti"
+        :timeout="errTimeout"
+      >
+        {{ errMsg }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="red darken-4"
+            text
+            v-bind="attrs"
+            @click="sbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+    
   </v-container>
 </template>
 
@@ -359,7 +380,7 @@
   import PreviewGrid from '~/components/PreviewGrid.vue';
   import PreviewFreeform from '~/components/PreviewFreeform.vue';
   import FreeForm from '~/components/FreeForm.vue';
-  import SnackBar from '~/components/SnackBar.vue';
+  // import SnackBar from '~/components/SnackBar.vue';
   import common from '~/plugins/common.js';
   
   // import Prism Editor
@@ -374,7 +395,7 @@
   const jsBeautify = require('js-beautify').html;
 
   export default {
-    components: { SearchDw, PreviewGrid, PreviewFreeform, PrismEditor, SnackBar },
+    components: { SearchDw, PreviewGrid, PreviewFreeform, PrismEditor }, // , SnackBar
     data: () => ({
       selDw: "",
       tabSrc: null,
@@ -421,6 +442,11 @@
       ],
       group1: {
       },
+      errCol: "orange",
+      errMsg: "",
+      errShow: false,
+      errMulti: true,
+      errTimeout: 4000,
     }),
     watch: {
       async selDw (val) {
@@ -481,6 +507,7 @@
           }
         } catch(err1) {
           console.log(err1);
+          this.show_error(err1, "orange");
         }        
 
         try {
@@ -495,7 +522,10 @@
           }
         } catch(err2) {
           console.log(err2);
+          this.show_error(err2, "orange");
         }
+
+        this.show_error("finished", "green");
       },
       draw_freeform(cff) {
         const fRows = common.make_freeform(this.ctrls, cff, this.dbcols);
@@ -523,6 +553,14 @@
         const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
         // console.log('draw_freeform 5')
         this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
+      },
+      show_error(eMsg, eCol) {
+        this.errShow = true;
+        this.errMsg = eMsg;
+        this.errCol = eCol;
+        if(eCol!="green") {
+          this.errTimeout = 6000;
+        }
       }
     }
   }
