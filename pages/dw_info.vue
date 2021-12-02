@@ -352,17 +352,28 @@
       <v-snackbar
         :color="`${errCol} lighten-2`"
         v-model="errShow"
-        :multi-line="errMulti"
+        :vertical="true"
+        :multi-line="true"
         :timeout="errTimeout"
       >
         {{ errMsg }}
 
         <template v-slot:action="{ attrs }">
           <v-btn
-            color="red darken-4"
-            text
+            v-if="errCol=='green'"
+            color="teal darken-2"
             v-bind="attrs"
-            @click="sbar = false"
+            @click="tabSrc = 'preview'; errShow = false"
+            class="mr-5"
+            outlined
+          >
+            Go Preview
+          </v-btn>
+          <v-btn
+            color="grey darken-2"
+            v-bind="attrs"
+            text
+            @click="errShow = false"
           >
             Close
           </v-btn>
@@ -446,7 +457,7 @@
       errMsg: "",
       errShow: false,
       errMulti: true,
-      errTimeout: 4000,
+      errTimeout: 10000,
     }),
     watch: {
       async selDw (val) {
@@ -459,6 +470,9 @@
         CSV.text().then((csvStr) => {
           this.analysis_datawindow(csvStr);
         })
+      },
+      tabSrc (val) {
+        if(val=='preview') window.scrollTo(0,0);
       },
       chk_sqls: {
         deep: true,
@@ -483,6 +497,7 @@
         return highlight(code, languages.js); // languages.<insert language> to return html with markup
       },
       analysis_datawindow(srcTxt) {
+        let is_err = false;
         // console.log('analysis datawindow')
         try{
           // set Source
@@ -507,6 +522,7 @@
           }
         } catch(err1) {
           console.log(`${err1}`);
+          is_err = true;
           this.show_error(err1, "orange");
         }        
 
@@ -521,11 +537,12 @@
             this.draw_freeform(this.chk_freeform);
           }
         } catch(err2) {
-          console.log(err2);
+          console.log(`${err2}`);
+          is_err = true;
           this.show_error(err2, "orange");
         }
 
-        this.show_error("finished", "green");
+        if(!is_err) this.show_error("finished", "green");
       },
       draw_freeform(cff) {
         const fRows = common.make_freeform(this.ctrls, cff, this.dbcols);
