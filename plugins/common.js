@@ -121,6 +121,7 @@ exports.parsing_controls = (arrGrp) => {
     detail: [],
     background: [],
     foreground: [],
+    etc: [],
     maxx: 0,
     maxy: 0,
   }
@@ -128,7 +129,11 @@ exports.parsing_controls = (arrGrp) => {
   if("text" in arrGrp) {
     arrGrp["text"].forEach((ag, idx) => {
       const aT = parsing_props(ag);
-      controls[aT.band].push(aT)
+      if((aT.band in controls)) {
+        controls[aT.band].push(aT)
+      } else {
+        controls['etc'].push(aT)
+      }
 
       if((parseInt(aT.x) + parseInt(aT.width))>controls.maxx) controls.maxx = (parseInt(aT.x) + parseInt(aT.width));
       if((parseInt(aT.y) + parseInt(aT.height))>controls.maxy) controls.maxy = (parseInt(aT.y) + parseInt(aT.height));
@@ -139,7 +144,11 @@ exports.parsing_controls = (arrGrp) => {
   if("compute" in arrGrp) {
     arrGrp["compute"].forEach((ag, idx) => {
       const aCom = parsing_props(ag)
-      controls[aCom.band].push(aCom)
+      if((aCom.band in controls)) {
+        controls[aCom.band].push(aCom)
+      } else {
+        controls['etc'].push(aCom)
+      }
       
       if((parseInt(aCom.x) + parseInt(aCom.width))>controls.maxx) controls.maxx = (parseInt(aCom.x) + parseInt(aCom.width));
       if((parseInt(aCom.y) + parseInt(aCom.height))>controls.maxy) controls.maxy = (parseInt(aCom.y) + parseInt(aCom.height));
@@ -150,7 +159,11 @@ exports.parsing_controls = (arrGrp) => {
   if("column" in arrGrp) {
     arrGrp["column"].forEach((ag, idx) => {
       const aCol = parsing_props(ag)
-      controls[aCol.band].push(aCol)
+      if((aCol.band in controls)) {
+        controls[aCol.band].push(aCol)
+      } else {
+        controls['etc'].push(aCol)
+      }
       
       if((parseInt(aCol.x) + parseInt(aCol.width))>controls.maxx) controls.maxx = (parseInt(aCol.x) + parseInt(aCol.width));
       if((parseInt(aCol.y) + parseInt(aCol.height))>controls.maxy) controls.maxy = (parseInt(aCol.y) + parseInt(aCol.height));

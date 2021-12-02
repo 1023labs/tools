@@ -500,13 +500,13 @@
             this.args = rSql.arguments;
             this.dbcols = rSql.columns;
           }
-
+          console.log(this.group1)
           // Controls
           if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
             this.ctrls = common.parsing_controls(this.group1);
           }
         } catch(err1) {
-          console.log(err1);
+          console.log(`${err1}`);
           this.show_error(err1, "orange");
         }        
 
