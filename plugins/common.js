@@ -196,7 +196,7 @@ exports.check_grid_type = (arrGrp) => {
     // console.log(aCol)
     if(aCol.ctrl_type=='header'||aCol.ctrl_type=='detail') {
       // console.log(aCol.height, aCol.height > 30)
-      if(aCol.height > 30) {
+      if(aCol.height > 40) {
         dw_type = 'freeform';
         // console.log( dw_type )
       }
