@@ -58,12 +58,12 @@
         v-for="(el, idx) in this.ctrls.background"
         :key="'bg-'+idx"
       >
-        <v-tooltip bottom>
+        <v-tooltip bottom v-if="el.ctrl_type=='text'">
           <template v-slot:activator="{ on, attrs }">
             <v-card
               class="dw-preview-col text-no-wrap bd-text"
               outlined
-              v-bind:style="'top: '+(parseInt(el.y) - 15)+'px; left: '+el.x+'px; width: '+el.width+'px; height: '+(parseInt(el.height) + 8)+'px;'"
+              v-bind:style="'top: '+(parseInt(el.y)+parseInt(hshift))+'px; left: '+el.x+'px; width: '+el.width+'px; height: '+(parseInt(el.height) + 8)+'px;'"
               tile
               v-bind="attrs"
               v-on="on"
@@ -83,7 +83,7 @@
 
 <script>
   export default {
-    props: ['ctrls'],
+    props: ['ctrls', 'hshift'],
     // data () {
     //   return {
     //     // loading: false,

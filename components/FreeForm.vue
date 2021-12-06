@@ -11,33 +11,18 @@
         <label 
           v-if="el.type=='label'"
           :class="'detail_label w'+label_width"
-          v-bind:key="'in-'+ic"
+          :key="'in-'+ic"
         >{{ (el.required ? "*" : "") + el.text }}</label>
 
         <div 
-          v-else-if="el.type='column'&&el.tags=='select'"
+          v-else-if="el.type='column'"
           :class="'detail_input_bg w'+el.width"
-          v-bind:key="'sel-'+ic"
+          v-bind:key="'col-'+ic"
         >
-          <select v-bind:id="el.colname" ></select>
+          <select v-bind:id="el.colname" v-if="el.tags=='select'"></select>
+          <input v-bind:id="el.colname" v-else-if="el.tags=='checkbox'" type='checkbox'>
+          <input v-bind:id="el.colname" v-else type='text'>
         </div>
-
-        <div 
-          v-else-if="el.type='column'&&el.tags=='checkbox'"
-          :class="'detail_input_bg w'+el.width"
-          v-bind:key="'chk-'+ic"
-        >
-          <input v-bind:id="el.colname" type='checkbox'>
-        </div>
-
-        <div 
-          v-else
-          :class="'detail_input_bg w'+el.width"
-          v-bind:key="'div-'+ic"
-        >
-          <input v-bind:id="el.colname" type='text'>
-        </div>
-
       </template>
 
       <div
@@ -55,7 +40,7 @@
     data () {
       return {
         label_width: this.fInfo.label_width,
-        controls: this.fInfo.controls,
+        // controls: this.fInfo.// ,
         row_closing: this.fInfo.row_closing,
         // btn_find: this.fInfo.btn_find,
         rows: this.fInfo.rows,

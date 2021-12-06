@@ -1,7 +1,31 @@
 <template>
-  <v-container fluid class="pa-0">
-    <v-row>
-      <v-col class="pa-5">^^;</v-col>
+  <v-container fluid class="pa-0 fill-height">
+    <v-row 
+      class="justify-center"
+    >
+      <v-col 
+        cols="auto"
+        align-self="center" 
+        class="pa-5"
+      >
+        <v-btn
+          x-large
+          color="light-green darken-4"
+          to="/dw_info/grid"
+          dark
+        >
+          Grid DW 헤더수정 Sql 생성
+        </v-btn>
+
+        <v-btn
+          x-large
+          color="light-green darken-3"
+          to="/dw_info/freeform"
+          dark
+        >
+          FreeForm DW Html 생성
+        </v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>

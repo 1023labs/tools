@@ -5,8 +5,136 @@
       app
       flat
       height="70px"
-    >
-      <search-dw :datawindow.sync="selDw" :sys_id="'em'" />
+    > 
+      <v-toolbar
+        dense
+        color="grey lighten-4"
+      >
+        <v-toolbar-title
+          class="mr-15"
+        >
+          <span 
+            class="text-h4 font-weight-black text-capitalize teal--text"
+          >
+            {{ this.dwType }}
+          </span> 
+          - DataWindow 분석
+        </v-toolbar-title>
+
+        <v-btn
+          v-if="this.dwType=='grid'"
+          color="light-blue lighten-2"
+          small
+          dark
+          outlined
+          to="/dw_info/freeform"
+          class="mr-5"
+        >
+          Freeform 분석으로 가기
+          <v-icon class="ml-1">mdi-transfer-right</v-icon>
+        </v-btn>
+
+        <v-btn
+          v-if="this.dwType=='freeform'"
+          color="light-blue lighten-2"
+          small
+          dark
+          outlined
+          to="/dw_info/grid"
+          class="mr-5"
+        >
+          Grid 분석으로 가기
+          <v-icon class="ml-1">mdi-transfer-right</v-icon>
+        </v-btn>
+
+        <v-dialog
+          v-model="dialog_help"
+          width="700"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="red lighten-2"
+              dark
+              small
+              outlined
+              v-bind="attrs"
+              v-on="on"
+            >
+              도움말
+              <v-icon class="ml-1">mdi-help-box</v-icon>
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="text-h5 grey lighten-2">
+              도움말
+            </v-card-title>
+
+            <v-card-text>
+              <div
+                class="text-h6 mt-5"
+              >
+                가. [Datawindow Name 검색]
+              </div>
+              <v-text>
+                1) DataWindow Name 에서 데이터윈도우 이름으로 검색 
+                <br />
+                ex) dl_cm_esti_master 
+                <br />
+                2) 검색된 목록을 선택후, "PREVIEW"탭에서 결과 확인
+              </v-text>
+              <div
+                class="text-h6 mt-5"
+              >
+                나. [Datawindow Source 입력]
+              </div>
+              <v-text>
+                1) "FROM SOURCE" 탭에 export 된 Datawindow 소스를 입력
+                <br />
+                2) "PREVIEW" 탭에서 결과 확인
+              </v-text>
+
+              <v-divider class="my-5"></v-divider>
+
+              <div
+                class="text-h6 mt-5"
+              >
+                [탭 설명]
+              </div>
+              <v-text>
+                <span class="font-weight-black">PREVIEW :</span>
+                (결과) 데이터윈도우 소스 결과 표시
+                <br />
+                <span class="font-weight-black">FROM SOURCE :</span>
+                (입력) 데이터윈도우 export 소스를 입력해서 분석 (Datawindow가 검색되지 않을때)
+                <br />
+                <span class="font-weight-black">SQL :</span>
+                (결과) 데이터윈도우 소스를 분석해서 SQL 표시. "PREVIEW"의 분석결과가 이상할때 확인용
+                <br />
+                <span class="font-weight-black">GROUP1 :</span>
+                (결과) 데이터윈도우 Controls 를 type 별로 Grouping. "PREVIEW"의 분석결과가 이상할때 확인용
+                <br />
+                <span class="font-weight-black">SOURCE(Line) :</span>
+                (결과) 데이터윈도우 소스를 라인별로 표시. "PREVIEW"의 분석결과가 이상할때 확인용
+              </v-text>
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                text
+                @click="dialog_help = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+      <!-- search-dw :datawindow.sync="selDw" :sys_id="'em'" / -->
     </v-app-bar>
 
     <v-main class="grey lighten-3 fill-height px-3 pb-1 pt-20 ">
@@ -17,26 +145,36 @@
               v-model="tabSrc"
               height="30"
             >
-              <v-tab :key="'preview'">
-                Preview
+              <v-tab :key="0">
+                Dw Source
               </v-tab>
-              <v-tab :key="'src'">
-                From Source
+              <v-tab :key="1">
+                Result
               </v-tab>
-              <v-tab :key="'sql'">
+              <v-tab :key="2">
                 SQL
               </v-tab>
-              <v-tab :key="'group1'">
+              <v-tab :key="3">
                 Group1
               </v-tab>
-              <v-tab :key="'lines'">
+              <v-tab :key="4">
                 Source (Line)
               </v-tab>
               
             </v-tabs>
             
             <v-tabs-items v-model="tabSrc">
-              <v-tab-item :key="'preview'">
+              <v-tab-item :key="0">
+                <v-card flat>
+                  <v-card-text>
+                    <template>
+                      <prism-editor class="my-editor" v-model="source_srd" :highlight="highlighter" line-numbers></prism-editor>
+                    </template>
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+
+              <v-tab-item :key="1">
                 <v-container fluid>
                   <preview-grid v-if="dwType=='grid'" :ctrls="this.ctrls" />
                   <v-row v-if="dwType=='grid'" >
@@ -107,11 +245,37 @@
                   <prism-editor v-if="dwType=='grid'" class="my-editor style-grid" v-model="ctrls_upd_sql" :highlight="highlighter" line-numbers></prism-editor>
                   <v-row v-if="dwType=='freeform'" >
                     <v-col col="6">
-                      <preview-freeform v-if="dwType=='freeform'" :ctrls="this.ctrls" />
+                      <preview-freeform v-if="dwType=='freeform'" :ctrls="this.ctrls" :hshift="this.chk_freeform.header_shift" />
                     </v-col>
                     <v-col col="6">
                       <v-row v-if="dwType=='freeform'" >
-                        <v-col cols="4">
+                        <v-col cols="2">
+                          <v-text-field
+                            label="Header Shift"
+                            v-model="chk_freeform.header_shift"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="auto">
+                          <v-btn
+                            class="mt-5 px-1"
+                            outlined
+                            x-small
+                            color="red"
+                            @click="chk_freeform.header_shift += 1"
+                          >
+                            <v-icon>mdi-menu-up</v-icon>
+                          </v-btn>
+                          <v-btn
+                            class="mt-5 px-1"
+                            outlined
+                            x-small
+                            color="primary"
+                            @click="chk_freeform.header_shift -= 1"
+                          >
+                            <v-icon>mdi-menu-down</v-icon>
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="2">
                           <v-text-field
                             label="Label Width"
                             v-model="chk_freeform.label_width"
@@ -205,18 +369,8 @@
                   </v-card-text>
                 </v-card>
               </v-tab-item>
-              
-              <v-tab-item :key="'src'">
-                <v-card flat>
-                  <v-card-text>
-                    <template>
-                      <prism-editor class="my-editor" v-model="source_srd" :highlight="highlighter" line-numbers></prism-editor>
-                    </template>
-                  </v-card-text>
-                </v-card>
-              </v-tab-item>
 
-              <v-tab-item :key="'sql'">
+              <v-tab-item :key="2">
                 <v-card flat>
                   <v-card-text>
                     <prism-editor class="my-editor" v-model="sql_code" :highlight="highlighter" line-numbers></prism-editor>
@@ -256,7 +410,7 @@
                 </v-card>
               </v-tab-item>
               
-              <v-tab-item :key="'group1'">
+              <v-tab-item :key="3">
                 <v-card flat>
                   <v-card-text>
                     <template
@@ -303,7 +457,7 @@
                 </v-card>
               </v-tab-item>
 
-              <v-tab-item :key="'lines'">
+              <v-tab-item :key="4">
                 <v-card flat>
                   <v-card-text>
                     <template>
@@ -363,11 +517,11 @@
             v-if="errCol=='green'"
             color="teal darken-2"
             v-bind="attrs"
-            @click="tabSrc = 'preview'; errShow = false"
+            @click.prevent="show_result()"
             class="mr-5"
             outlined
           >
-            Go Preview
+            Go Result
           </v-btn>
           <v-btn
             color="grey darken-2"
@@ -406,11 +560,17 @@
   const jsBeautify = require('js-beautify').html;
 
   export default {
+    props: ['dw_type'],
     components: { SearchDw, PreviewGrid, PreviewFreeform, PrismEditor }, // , SnackBar
-    data: () => ({
+    asyncData({params}) { 
+      return { 
+        dwType: params.dwtype ?? "grid", 
+      }; 
+    },
+    data: (params) => ({
       selDw: "",
-      tabSrc: null,
-      dwType: 'grid',
+      tabSrc: 'src',
+      // dwType: params.dwtype,
       ctrls: {
         header: [],
         detail: [],
@@ -419,6 +579,7 @@
         maxx: 0,
         maxy: 0,
       },
+      ctrls_ini: {},
       ctrls_upd_sql: '',
       sql_code: '',
       source_srd: '',
@@ -435,6 +596,7 @@
         compute: false,
       },
       chk_freeform: {
+        header_shift: 0,
         label_width: 100,
         row_closing: false,
         // btn_find: true,
@@ -458,6 +620,7 @@
       errShow: false,
       errMulti: true,
       errTimeout: 10000,
+      dialog_help: false,
     }),
     watch: {
       async selDw (val) {
@@ -472,7 +635,7 @@
         })
       },
       tabSrc (val) {
-        if(val=='preview') window.scrollTo(0,0);
+        if(val==1) window.scrollTo(0,0);
       },
       chk_sqls: {
         deep: true,
@@ -496,14 +659,20 @@
       highlighter(code) {
         return highlight(code, languages.js); // languages.<insert language> to return html with markup
       },
+      show_result(){
+          // this.$refs.result.click()
+          this.tabSrc=1;
+          this.errShow=false;
+      },
       analysis_datawindow(srcTxt) {
+        const is_dev = false;
         let is_err = false;
         // console.log('analysis datawindow')
         try{
           // set Source
-          const lineArray = srcTxt.split(/\r?\n/)
+          const lineArray = common.parsing_line( srcTxt ) 
           this.details = lineArray ;
-          // console.log( lineArray )
+          if(is_dev) console.log('split line', lineArray )
 
           // Grouping
           this.group1 = common.parsing_dwtxt(lineArray);
@@ -515,10 +684,12 @@
             this.args = rSql.arguments;
             this.dbcols = rSql.columns;
           }
-          console.log(this.group1)
+          if(is_dev) console.log('grouping', this.group1)
           // Controls
           if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
-            this.ctrls = common.parsing_controls(this.group1);
+            this.ctrls_ini = common.parsing_controls(this.group1);
+            this.ctrls = this.ctrls_ini;
+            if(is_dev) console.log('parsing_controls', this.ctrls)
           }
         } catch(err1) {
           console.log(`${err1}`);
@@ -528,7 +699,7 @@
 
         try {
           // Preview
-          this.dwType = common.check_grid_type(this.group1["bands"]);
+          // this.dwType = "grid"; // common.check_grid_type(this.group1["bands"]);
 
           // Grid Title Update Sql
           if(this.dwType=='grid') {
@@ -545,6 +716,7 @@
         if(!is_err) this.show_error("finished", "green");
       },
       draw_freeform(cff) {
+        // make - controls object 
         const fRows = common.make_freeform(this.ctrls, cff, this.dbcols);
 
         // console.log(fRows);

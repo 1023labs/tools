@@ -18,6 +18,45 @@ exports.test = () => {
   console.log(3, found3);
 }
 
+exports.parsing_line = (dwTxt) => {
+  // 우선 엔터로 나눔 
+  let pLine = dwTxt.split(/\r?\n/);
+  const lineArr = [];
+
+  // 루프 돌면서, 나눠진 문장 붙이기 
+  // lineMode: meta sql controls footer 
+  let lineMode = 'meta';
+  let preLine = '';
+  const re = /(text|compute|column|line|bitmap|rectangle)\((.*)\)/i;
+  pLine.forEach((el, idx) => {
+    // console.log()
+    if(el.indexOf('table')===0) {
+      lineMode = 'sql';
+    }
+
+    if(lineMode=='sql') {
+      lineArr.push(el)
+    } else if(lineMode=='controls') {
+      const found = el.match(re);
+      if(found&&found.length>0) {
+        if(preLine!='') lineArr.push(preLine);
+        preLine = `${el}`;
+      } else {
+        preLine = `${preLine} ${el}`;
+      }
+    } else {
+      lineArr.push(el)
+    }
+    
+    if(lineMode=='sql' && el.indexOf('arguments=')>=0) {
+      lineMode = 'controls';
+    } 
+  })  
+
+  // srcTxt.split(/\r?\n/)
+  return lineArr;
+}
+
 // step1 - line text => Grouping 
 exports.parsing_dwtxt = (arrDw) => {
   let ctrls = {
@@ -116,6 +155,7 @@ exports.parsing_sql = (arrTb) => {
 
 // step3 - Grouping => Controls
 exports.parsing_controls = (arrGrp) => {
+  // console.log('parsing_controls')
   let controls = {
     header: [],
     detail: [],
@@ -139,6 +179,7 @@ exports.parsing_controls = (arrGrp) => {
       if((parseInt(aT.y) + parseInt(aT.height))>controls.maxy) controls.maxy = (parseInt(aT.y) + parseInt(aT.height));
     })
   }
+  // console.log('text finished')
 
   // text(band=header alignment="2" text="작성자" border="0" color="33554432" x="31" y="2" height="14" width="81" html.valueishtml="0" name=user_id_t visible="1" font.face="굴림" font.height="-9" font.weight="400" font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
   if("compute" in arrGrp) {
@@ -154,6 +195,7 @@ exports.parsing_controls = (arrGrp) => {
       if((parseInt(aCom.y) + parseInt(aCom.height))>controls.maxy) controls.maxy = (parseInt(aCom.y) + parseInt(aCom.height));
     })
   }
+  // console.log('compute finished')
 
   // column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="31" y="2" height="14" width="81" format="[general]" html.valueishtml="0" name=user_id visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0 font.face="굴림" font.height="-9" font.weight="400" font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
   if("column" in arrGrp) {
@@ -169,6 +211,7 @@ exports.parsing_controls = (arrGrp) => {
       if((parseInt(aCol.y) + parseInt(aCol.height))>controls.maxy) controls.maxy = (parseInt(aCol.y) + parseInt(aCol.height));
     })
   }
+  // console.log('column finished')
 
   // 정렬은 그리기 전에 다시 
   // controls.header.sort(function(a,b) {
@@ -293,15 +336,18 @@ exports.make_freeform = (arrCtrl, cff, cols) => {
   let tRows = [];
   let cRow = [];
   let preY = 0;
+  let preYto = 0;
 
   // column 먼저 Row 구분해서 넣고, 
   // Row 변경될 때, 해당 Row 에 맞는 label 추가 
   aCols.forEach((el, i) => {
+    const shiftY = parseInt(el.y); //  + cff.header_shift;  parsing 단계에서 추가 
     // new Row
-    if(preY===0||(preY+20<parseInt(el.y))) {
+    // if(preY===0||(preY+20<parseInt(el.y))) { // 기존 로직은 칼럼을 20으로 봐서 문제 
+    if(preY===0||(preY+20<shiftY)) {
       if(cRow.length>0) {
         // row 칼럼 정렬 & 헤더 넣기 
-        tRows.push(proc_ff_row(cRow, arrCtrl));
+        tRows.push(proc_ff_row(cRow, arrCtrl, cff.header_shift));
       }
       // new Row
       cRow = [];
@@ -312,7 +358,7 @@ exports.make_freeform = (arrCtrl, cff, cols) => {
 
     const cInfo = {
       left: el.x,
-      top: el.y,
+      top: shiftY,
       type: "column",
       tags: cTag,
       width: "100",
@@ -324,13 +370,13 @@ exports.make_freeform = (arrCtrl, cff, cols) => {
     preY = parseInt(el.y);
   })
 
-  tRows.push(proc_ff_row(cRow, arrCtrl));
+  tRows.push(proc_ff_row(cRow, arrCtrl, cff.header_shift));
   
   return tRows;
 }
 
-const proc_ff_row = (rRow, rCtrls) => {
-  const bgShift = 15; // background 와 detail y 값 보정 
+const proc_ff_row = (rRow, rCtrls, rShift) => {
+  const bgShift = parseInt(rShift); // background 와 detail y 값 보정  powerbuilder 9 : 15
   let newRow;
 
   if (rRow.length>0) {
@@ -339,7 +385,7 @@ const proc_ff_row = (rRow, rCtrls) => {
     let matchLabels = [];
 
     rCtrls.background.forEach((col, idx) => {
-      const tY = col.y - bgShift;
+      const tY = parseInt(col.y) + bgShift;
       if((col.ctrl_type=='text') && (minY<=tY&&tY<=maxY)) {
         matchLabels.push({
           left: col.x,
@@ -355,7 +401,7 @@ const proc_ff_row = (rRow, rCtrls) => {
       ...rRow,
       ...matchLabels,
     ];
-  
+    // console.log( matchLabels )
     newRow.sort(function(a,b) {
       return parseFloat(a.left) - parseFloat(b.left);
     });
@@ -388,7 +434,7 @@ const parsing_props = (propStr) => {
   const found = str.match(re);
   
   const category = found[1];
-
+  // console.log('category', category, str);
   const re2 = /\s\=\s/g;
   const found2 = found[2].replace(re2, "=");
 
