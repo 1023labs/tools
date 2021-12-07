@@ -385,12 +385,12 @@
                     class="fill-height"
                   >
                     <v-col 
-                      cols="5"
+                      cols="auto"
                     >
-                      <prism-editor class="my-editor" v-model="modify_ff" :highlight="highlighter" line-numbers></prism-editor>
+                      <prism-editor class="my-editor style-freeform-html" v-model="modify_ff" :highlight="highlighter" line-numbers></prism-editor>
                     </v-col>
                     <v-col 
-                      cols="7"
+                      width="1000px"
                     >
                       <v-card
                         class="px-2"
