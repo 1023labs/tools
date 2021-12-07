@@ -384,14 +384,20 @@
                   <v-row
                     class="fill-height"
                   >
-                    <v-col 
-                      cols="auto"
+                    <v-col
+                      :style="'max-width: calc(100% - '+width_ff+'px)'"
                     >
                       <prism-editor class="my-editor style-freeform-html" v-model="modify_ff" :highlight="highlighter" line-numbers></prism-editor>
                     </v-col>
                     <v-col 
-                      width="1000px"
+                      :style="'max-width: '+width_ff+'px'"
                     >
+                      <v-container>
+                        <v-text-field
+                          label="FreeForm Width"
+                          v-model="width_ff"
+                        ></v-text-field>
+                      </v-container>
                       <v-card
                         class="px-2"
                         height="100%"
@@ -649,6 +655,7 @@
       group1: {
       },
       modify_ff: "<h1>test</h1>",
+      width_ff: 500,
       errCol: "orange",
       errMsg: "",
       errShow: false,

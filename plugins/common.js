@@ -293,11 +293,11 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
         if(csql.show) uSql.push(`VISIBLE = 'Y'`);
         if(csql.style) {
           if(('type' in colInfo) && (colInfo.type.indexOf('decimal')>=0 || colInfo.type.indexOf('number')>=0||colInfo.type.indexOf('integer')>=0||colInfo.type.indexOf('float')>=0)) {
-            uSql.push(`STYLE = '_Styles_number${tAlign}'`);
+            uSql.push(`STYLES = '_Styles_number${tAlign}'`);
           } else if(matchCol[0].name.indexOf('_date')>=0) {
-            uSql.push(`STYLE = '_Styles_date'`);
+            uSql.push(`STYLES = '_Styles_date'`);
           } else {
-            uSql.push(`STYLE = '_Styles_text${tAlign}'`);
+            uSql.push(`STYLES = '_Styles_text${tAlign}'`);
           }
         }
         if(csql.editor) {
