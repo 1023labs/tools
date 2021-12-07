@@ -407,7 +407,7 @@ const proc_ff_row = (rRow, rCtrls, rShift) => {
     });
   }
 
-  
+  newRow[newRow.length - 1].width = "";
   
   return newRow;
 }

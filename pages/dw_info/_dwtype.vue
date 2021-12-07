@@ -151,13 +151,16 @@
               <v-tab :key="1">
                 Result
               </v-tab>
-              <v-tab :key="2">
-                SQL
+              <v-tab :key="2" v-if="dwType=='freeform'">
+                Modify Freeform
               </v-tab>
               <v-tab :key="3">
-                Group1
+                SQL
               </v-tab>
               <v-tab :key="4">
+                Group1
+              </v-tab>
+              <v-tab :key="5">
                 Source (Line)
               </v-tab>
               
@@ -243,6 +246,7 @@
                     <!-- width, text, radio 추가 -->
                   </v-row>
                   <prism-editor v-if="dwType=='grid'" class="my-editor style-grid" v-model="ctrls_upd_sql" :highlight="highlighter" line-numbers></prism-editor>
+                  
                   <v-row v-if="dwType=='freeform'" >
                     <v-col col="6">
                       <preview-freeform v-if="dwType=='freeform'" :ctrls="this.ctrls" :hshift="this.chk_freeform.header_shift" />
@@ -297,7 +301,12 @@
                         </v-col>
                         <!-- width, text, radio 추가 -->
                       </v-row>
-                      <prism-editor v-if="dwType=='freeform'" class="my-editor style-freeform" v-model="freeform_html" :highlight="highlighter" line-numbers></prism-editor>
+                      <v-container>
+                        <prism-editor v-if="dwType=='freeform'" class="my-editor style-freeform" v-model="freeform_html" :highlight="highlighter" line-numbers></prism-editor>
+                      </v-container>
+                      <v-btn v-if="dwType=='freeform'" color="primary" class="ml-10" @click="modify_freeform()">
+                        Modify Freeform
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -370,7 +379,31 @@
                 </v-card>
               </v-tab-item>
 
-              <v-tab-item :key="2">
+              <v-tab-item :key="2" v-if="dwType=='freeform'">
+                <v-container fluid>
+                  <v-row
+                    class="fill-height"
+                  >
+                    <v-col 
+                      cols="5"
+                    >
+                      <prism-editor class="my-editor" v-model="modify_ff" :highlight="highlighter" line-numbers></prism-editor>
+                    </v-col>
+                    <v-col 
+                      cols="7"
+                    >
+                      <v-card
+                        class="px-2"
+                        height="100%"
+                      >
+                        <iframe :srcdoc="previewFreeformHtml" style="border: 0; width: 100%; height: 100%;"></iframe>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-tab-item>
+
+              <v-tab-item :key="3">
                 <v-card flat>
                   <v-card-text>
                     <prism-editor class="my-editor" v-model="sql_code" :highlight="highlighter" line-numbers></prism-editor>
@@ -410,7 +443,7 @@
                 </v-card>
               </v-tab-item>
               
-              <v-tab-item :key="3">
+              <v-tab-item :key="4">
                 <v-card flat>
                   <v-card-text>
                     <template
@@ -457,7 +490,7 @@
                 </v-card>
               </v-tab-item>
 
-              <v-tab-item :key="4">
+              <v-tab-item :key="5">
                 <v-card flat>
                   <v-card-text>
                     <template>
@@ -615,6 +648,7 @@
       ],
       group1: {
       },
+      modify_ff: "<h1>test</h1>",
       errCol: "orange",
       errMsg: "",
       errShow: false,
@@ -653,6 +687,20 @@
       },
       source_srd (val) {
         this.analysis_datawindow(val);
+      }
+    },
+    computed: {
+      // computed getter
+      previewFreeformHtml() {
+        // 여기서의 `this` 는 vm 인스턴스이다.
+        return `<html>
+  <head>
+    <link rel="stylesheet" href="/mighty/css/mighty-2.0.3.css">
+  </head>  
+  <body>
+    ${this.modify_ff}
+  </body>
+</html>`;
       }
     },
     methods: {
@@ -742,6 +790,10 @@
         const styledHtml = jsBeautify(ffHtml.$el.outerHTML, options);
         // console.log('draw_freeform 5')
         this.freeform_html = styledHtml.replace(/\<\!\-\-\-\-\>/g, '').replace(/\n\s*\n/g, '\n');
+      },
+      modify_freeform() {
+        this.modify_ff = this.freeform_html;
+        this.tabSrc  = 2;
       },
       show_error(eMsg, eCol) {
         this.errShow = true;

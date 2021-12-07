@@ -16,7 +16,7 @@
 
         <div 
           v-else-if="el.type='column'"
-          :class="'detail_input_bg w'+el.width"
+          :class="'detail_input_bg'+(el.width!='' ? ` w${el.width}` : '')"
           v-bind:key="'col-'+ic"
         >
           <select v-bind:id="el.colname" v-if="el.tags=='select'"></select>
