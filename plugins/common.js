@@ -22,35 +22,43 @@ exports.parsing_line = (dwTxt) => {
   // 우선 엔터로 나눔 
   let pLine = dwTxt.split(/\r?\n/);
   const lineArr = [];
-
+  // console.log('parsing_lineeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
   // 루프 돌면서, 나눠진 문장 붙이기 
   // lineMode: meta sql controls footer 
   let lineMode = 'meta';
   let preLine = '';
   const re = /(text|compute|column|line|bitmap|rectangle)\((.*)\)/i;
   pLine.forEach((el, idx) => {
-    // console.log()
     if(el.indexOf('table')===0) {
       lineMode = 'sql';
     }
 
+    const found = el.match(re);
     if(lineMode=='sql') {
       lineArr.push(el)
-    } else if(lineMode=='controls') {
-      const found = el.match(re);
+
+      if(found && found.length>0) {
+        lineMode = 'controls';
+      }
+    }
+
+    // console.log('nl: ', lineMode, found, el);
+    if(lineMode=='controls') {
       if(found&&found.length>0) {
         if(preLine!='') lineArr.push(preLine);
         preLine = `${el}`;
       } else {
         preLine = `${preLine} ${el}`;
       }
-    } else {
+    } 
+    
+    if(lineMode!='sql' && lineMode!='controls') {
       lineArr.push(el)
     }
     
-    if(lineMode=='sql' && el.indexOf('arguments=')>=0) {
-      lineMode = 'controls';
-    } 
+    // if(lineMode=='sql' && el.indexOf('arguments=')>=0) {
+    //   lineMode = 'controls';
+    // } 
   })  
 
   // srcTxt.split(/\r?\n/)
@@ -70,6 +78,12 @@ exports.parsing_dwtxt = (arrDw) => {
       is_table = true;
     }
 
+    const re = /(text|compute|column|line|bitmap|rectangle)\((.*)\)/i;
+    const fnd = el.match(re);
+    if(fnd && fnd.length>0) {
+      is_table = false;
+    } 
+
     if(is_table) {
       ctrls = add_controls(ctrls, "table", "", el);
     } else {
@@ -84,11 +98,7 @@ exports.parsing_dwtxt = (arrDw) => {
       ctrls = add_controls(ctrls, "text", "text", el);
       ctrls = add_controls(ctrls, "compute", "compute", el);
       ctrls = add_controls(ctrls, "column", "column", el);
-    }
-    
-    if(el.indexOf('arguments=')>=0) {
-      is_table = false;
-    }  
+    } 
   });
   
   return ctrls;
@@ -154,7 +164,7 @@ exports.parsing_sql = (arrTb) => {
 }
 
 // step3 - Grouping => Controls
-exports.parsing_controls = (arrGrp) => {
+exports.parsing_controls = (arrGrp, dwUnit = "1") => {
   // console.log('parsing_controls')
   let controls = {
     header: [],
@@ -168,7 +178,7 @@ exports.parsing_controls = (arrGrp) => {
 
   if("text" in arrGrp) {
     arrGrp["text"].forEach((ag, idx) => {
-      const aT = parsing_props(ag);
+      const aT = parsing_props(ag, dwUnit);
       if((aT.band in controls)) {
         controls[aT.band].push(aT)
       } else {
@@ -184,7 +194,7 @@ exports.parsing_controls = (arrGrp) => {
   // text(band=header alignment="2" text="작성자" border="0" color="33554432" x="31" y="2" height="14" width="81" html.valueishtml="0" name=user_id_t visible="1" font.face="굴림" font.height="-9" font.weight="400" font.family="1" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
   if("compute" in arrGrp) {
     arrGrp["compute"].forEach((ag, idx) => {
-      const aCom = parsing_props(ag)
+      const aCom = parsing_props(ag, dwUnit)
       if((aCom.band in controls)) {
         controls[aCom.band].push(aCom)
       } else {
@@ -200,7 +210,7 @@ exports.parsing_controls = (arrGrp) => {
   // column(band=detail id=2 alignment="0" tabsequence=32766 border="0" color="33554432" x="31" y="2" height="14" width="81" format="[general]" html.valueishtml="0" name=user_id visible="1" edit.limit=0 edit.case=any edit.focusrectangle=no edit.autoselect=no edit.imemode=0 font.face="굴림" font.height="-9" font.weight="400" font.family="2" font.pitch="2" font.charset="129" background.mode="1" background.color="553648127" )
   if("column" in arrGrp) {
     arrGrp["column"].forEach((ag, idx) => {
-      const aCol = parsing_props(ag)
+      const aCol = parsing_props(ag, dwUnit)
       if((aCol.band in controls)) {
         controls[aCol.band].push(aCol)
       } else {
@@ -230,24 +240,39 @@ exports.parsing_controls = (arrGrp) => {
   return controls;
 }
 
-// step4 - Check Grid Type
-// header, detail 이 둘다 30보다 작으면 Grid 
-exports.check_grid_type = (arrGrp) => {
-  let dw_type = 'grid';
-  arrGrp.forEach((el, idx) => {
-    const aCol = parsing_props(el);
-    // console.log(aCol)
-    if(aCol.ctrl_type=='header'||aCol.ctrl_type=='detail') {
-      // console.log(aCol.height, aCol.height > 30)
-      if(aCol.height > 40) {
-        dw_type = 'freeform';
-        // console.log( dw_type )
-      }
-    }
-  })
+// step3.5 - Grouping => headers
+exports.parsing_dw_info = (arrGrp) => {
+  let dwInfo = {}
 
-  return dw_type;
+  if("datawindow" in arrGrp) {
+    arrGrp["datawindow"].forEach((ag, idx) => {
+      const aCol = parsing_props(ag)
+      console.log('parsing_dw_info: ', aCol)
+      dwInfo = aCol;
+    })
+  }
+
+  return dwInfo;
 }
+
+// // step4 - Check Grid Type
+// // header, detail 이 둘다 30보다 작으면 Grid 
+// exports.check_grid_type = (arrGrp) => {
+//   let dw_type = 'grid';
+//   arrGrp.forEach((el, idx) => {
+//     const aCol = parsing_props(el);
+//     // console.log(aCol)
+//     if(aCol.ctrl_type=='header'||aCol.ctrl_type=='detail') {
+//       // console.log(aCol.height, aCol.height > 30)
+//       if(aCol.height > 40) {
+//         dw_type = 'freeform';
+//         // console.log( dw_type )
+//       }
+//     }
+//   })
+
+//   return dw_type;
+// }
 
 // step5 - Make Grid Header Text Update Sql pcode, dgid, 
 exports.make_upd_sql = (arrCtrl, csql, cols) => {
@@ -303,6 +328,7 @@ exports.make_upd_sql = (arrCtrl, csql, cols) => {
         if(csql.editor) {
           if(('dddw.name' in matchCol[0])) {
             uSql.push(`EDITOR = '_Editor_dropdown'`);
+            if(csql.lookup) uSql.push(`LOOKUPDISPLAY = 'Y'`);
           } else if(('checkbox.text' in matchCol[0])) {
             uSql.push(`EDITOR = '_Editor_checkbox'`);
           } else if(matchCol[0].name.indexOf('_date')>=0) {
@@ -331,6 +357,7 @@ exports.make_freeform = (arrCtrl, cff, cols) => {
     return parseFloat(a.y) - parseFloat(b.y);
   });
 
+  // console.log('make_freeform - Controls: ', arrCtrl)
   // console.log(aCols)
 
   let tRows = [];
@@ -384,6 +411,19 @@ const proc_ff_row = (rRow, rCtrls, rShift) => {
     const maxY = minY + 22;
     let matchLabels = [];
 
+    rCtrls.foreground.forEach((col, idx) => {
+      const tY = parseInt(col.y) + bgShift;
+      if((col.ctrl_type=='text') && (minY<=tY&&tY<=maxY)) {
+        matchLabels.push({
+          left: col.x,
+          top: tY,
+          type: "label",
+          text: col.text,
+          required: false,
+        })
+      }
+    });
+
     rCtrls.background.forEach((col, idx) => {
       const tY = parseInt(col.y) + bgShift;
       if((col.ctrl_type=='text') && (minY<=tY&&tY<=maxY)) {
@@ -424,15 +464,16 @@ const add_controls = (robj, rkey, needle, rel) => {
   return robj;
 }
 
-const parsing_props = (propStr) => {
+const parsing_props = (propStr, dwUnit = "1") => {
   // console.log('test');
   // const str = `datawindow(units=1 chk=""timer_interval=0 chk2="string"color=1073741824 processing=1 HTMLDW=no print.printername="" print.documentname="" print.orientation = 0 print.margin.left = 24 print.margin.right = 24 print.margin.top = 24 print.margin.bottom = 24 print.paper.source = 0 print.paper.size = 0 print.canusedefaultprinter=yes print.prompt=no print.buttons=no print.preview.buttons=no print.cliptext=no print.overrideprintjob=no print.collate=yes hidegrayline=no grid.lines=0 grid.columnmove=no selected.mouse=no )`
-  const str = propStr;
+  const str = propStr.replace(/\s\(/, '(');
   
   // const re = /(datawindow|text|compute|column)\((.*?)\)/i;
   const re = /(datawindow|text|compute|column|line|header|summary|footer|detail)\((.*)\)/i;
   const found = str.match(re);
-  
+  // console.log('found: ', found)
+
   const category = found[1];
   // console.log('category', category, str);
   const re2 = /\s\=\s/g;
@@ -449,9 +490,21 @@ const parsing_props = (propStr) => {
   found4.forEach((el, idx) => {
     const epos = el.indexOf("=");
     const key = el.substring(0, epos);
-    const val = el.substr(epos + 1, 999999);
+    let val = el.substr(epos + 1, 999999);
+    val = val.replace(/^\"|\"$/g, '');
+
+    if((dwUnit=="0")&&(key=='x'||key=='width')&&!isNaN(val)) {
+      const convX = convertX(Number(val), dwUnit);
+      console.log(key, val, convX)
+      val = convX.toString();
+    }
+
+    if((dwUnit=="0")&&(key=='y'||key=='height')&&!isNaN(val)) {
+      const convY = convertY(Number(val), dwUnit);
+      val = convY.toString();
+    }
     
-    pp[`${key}`] = `${val.replace(/^\"|\"$/g, '')}`;
+    pp[`${key}`] = `${val}`;
   })
 
   // console.log(category, found[2]);
@@ -486,3 +539,31 @@ const parsing_cols = (colsStr) => {
   
   return pp;
 }
+
+// PBUnit = (PixelX x 6144 + PPI x 7) / (PPI x 14)
+// pbu x좌표를 pixel 로 변환  aUnit: 0 => pbu  1 => pixel
+const convertX = (aX, aUnit = "1") => {
+  let cX = aX;
+  const ppi = 96;
+
+  if(aUnit=="0") {
+    cX = Math.round((aX * ( ppi * 14 ) - ppi * 7) / 6144);
+  } 
+
+  return cX;
+}
+
+// In the Y axis: PBUnit = (PixelY x 768 + PPI) / (PPI x 2)
+// pbu x좌표를 pixel 로 변환  aUnit: 0 => pbu  1 => pixel
+const convertY = (aY, aUnit = "1") => {
+  let cY = aY;
+  const ppi = 96;
+
+  if(aUnit=="0") {
+    cY = Math.round((aY * ( ppi * 2 ) - ppi) / 768);
+  } 
+
+  return cY;
+}
+
+

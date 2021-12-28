@@ -237,6 +237,13 @@
                     </v-col>
                     <v-col cols="auto">
                       <v-checkbox
+                        v-model="chk_sqls.lookup"
+                        label="Lookupdisplay"
+                        hide-details
+                      ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-checkbox
                         v-model="chk_sqls.compute"
                         label="Computed Field"
                         hide-details
@@ -610,6 +617,7 @@
       selDw: "",
       tabSrc: 'src',
       // dwType: params.dwtype,
+      dwInfo: {},
       ctrls: {
         header: [],
         detail: [],
@@ -632,6 +640,7 @@
         show: true,
         style: true,
         editor: true,
+        lookup: true,
         compute: false,
       },
       chk_freeform: {
@@ -720,7 +729,7 @@
           this.errShow=false;
       },
       analysis_datawindow(srcTxt) {
-        const is_dev = false;
+        const is_dev = false; // true; //
         let is_err = false;
         // console.log('analysis datawindow')
         try{
@@ -740,9 +749,16 @@
             this.dbcols = rSql.columns;
           }
           if(is_dev) console.log('grouping', this.group1)
+
+          // Datawindow
+          if("datawindow" in this.group1) {
+            this.dwInfo = common.parsing_dw_info(this.group1);
+            if(is_dev) console.log('parsing_datawindow', this.dwInfo.units, this.dwInfo)
+          }
+
           // Controls
           if(("text" in this.group1)||("compute" in this.group1)||("column" in this.group1)) {
-            this.ctrls_ini = common.parsing_controls(this.group1);
+            this.ctrls_ini = common.parsing_controls(this.group1, this.dwInfo.units);
             this.ctrls = this.ctrls_ini;
             if(is_dev) console.log('parsing_controls', this.ctrls)
           }
